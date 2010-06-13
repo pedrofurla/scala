@@ -91,6 +91,11 @@ sealed abstract class Option[+A] extends Product {
   def filter(p: A => Boolean): Option[A] = 
     if (isEmpty || p(this.get)) this else None
     
+  /** The inverse of filter.
+   */
+  def filterNot(p: A => Boolean): Option[A] =
+    filter(!p(_))
+    
   /** Necessary to keep Option from being implicitly converted to
    *  Iterable in for comprehensions.
    */

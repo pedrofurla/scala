@@ -6,8 +6,7 @@
 
 package scala.tools.nsc
 
-class GenericRunnerSettings(error: String => Unit)
-extends Settings(error) {
+class GenericRunnerSettings(error: String => Unit) extends Settings(error) {
   val howtorun =
     ChoiceSetting(
       "-howtorun",

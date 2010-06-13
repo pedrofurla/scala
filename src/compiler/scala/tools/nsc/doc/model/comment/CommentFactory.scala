@@ -25,6 +25,7 @@ trait CommentFactory { thisFactory: ModelFactory with CommentFactory =>
   import global.reporter
 
   private val commentCache = mutable.HashMap.empty[(global.Symbol, TemplateImpl), Comment]
+  def getCommentCache() = commentCache
 
   def addCommentBody(sym: global.Symbol, inTpl: => TemplateImpl, docStr: String, docPos: global.Position): global.Symbol = {
     commentCache += (sym, inTpl) -> parse(docStr, docPos)
@@ -127,6 +128,7 @@ trait CommentFactory { thisFactory: ModelFactory with CommentFactory =>
     * @param comment The raw comment string (including start and end markers) to be parsed.
     * @param pos     The position of the comment in source. */
   protected def parse(comment: String, pos: Position): Comment = {
+    println("parse(%s)".format(comment))
 
     /** The cleaned raw comment as a list of lines. Cleaning removes comment start and end markers, line start markers
       * and unnecessary whitespace. */

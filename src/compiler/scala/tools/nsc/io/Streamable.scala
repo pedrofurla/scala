@@ -19,8 +19,7 @@ import Path.fail
  *  @since  2.8
  */
 
-object Streamable
-{
+object Streamable {
   /** Traits which can be viewed as a sequence of bytes.  Source types
    *  which know their length should override def length: Long for more
    *  efficient method implementations.
@@ -106,4 +105,10 @@ object Streamable
     def slurp(): String = slurp(creationCodec)
     def slurp(codec: Codec) = chars(codec).mkString
   }
+
+  def slurpString(is: InputStream)(implicit codec: Codec): String =
+    new Chars { val inputStream = is } slurp codec
+  
+  def slurpBytes(is: InputStream): Array[Byte] =
+    new Bytes { val inputStream = is } toByteArray
 }
