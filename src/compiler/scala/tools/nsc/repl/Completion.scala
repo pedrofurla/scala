@@ -13,11 +13,12 @@ import util.returning
 
 object Completion {  
   def looksLikeInvocation(code: String) = (
-        (code != null)
-    &&  (code startsWith ".")
-    && !(code == ".")
-    && !(code startsWith "./")
-    && !(code startsWith "..")
+    (code == ".") || (
+      (code != null)
+      &&  (code startsWith ".")
+      && !(code startsWith "./")
+      && !(code startsWith "..")
+    )
   )
   
   object Forwarder {
@@ -36,7 +37,7 @@ class Completion(val repl: Interpreter) extends CompletionOutput {
   private var verbosity: Int = 0
   def resetVerbosity() = verbosity = 0
   
-  import repl.{ isCompletionDebug, isReplDebug }
+  import repl.{ publicMembers, isCompletionDebug, isReplDebug }
   def DBG(msg: => Any) = if (isCompletionDebug) println(msg.toString)
   def debugging[T](msg: String): T => T = (res: T) => returning[T](res)(x => DBG(msg + x))
   
@@ -57,7 +58,7 @@ class Completion(val repl: Interpreter) extends CompletionOutput {
 
     // for some reason any's members don't show up in subclasses, which
     // we need so 5.<tab> offers asInstanceOf etc.
-    private def anyMembers = AnyClass.tpe.nonPrivateMembers
+    private def anyMembers = publicMembers(AnyClass.tpe)
 
     def tos(sym: Symbol) = sym.name.decode.toString
     def memberNamed(s: String) = members find (x => tos(x) == s)
@@ -66,7 +67,7 @@ class Completion(val repl: Interpreter) extends CompletionOutput {
     
     // XXX we'd like to say "filterNot (_.isDeprecated)" but this causes the
     // compiler to crash for reasons not yet known.
-    def members     = (effectiveTp.nonPrivateMembers ++ anyMembers) filter (_.isPublic)
+    def members     = (publicMembers(effectiveTp) ++ anyMembers) filter (_.isPublic)
     def methods     = members filter (_.isMethod)
     def packages    = members filter (_.isPackage)
     def aliases     = members filter (_.isAliasType)
@@ -98,7 +99,7 @@ class Completion(val repl: Interpreter) extends CompletionOutput {
       def asString = new MethodSymbolOutput(sym).methodString()
       
       if (isCompletionDebug)
-        repl.power.showAtAllPhases(asString)
+        repl.showAtAllPhases(asString)
 
       atPhase(currentRun.typerPhase)(asString)
     }
@@ -289,6 +290,10 @@ class Completion(val repl: Interpreter) extends CompletionOutput {
 
     // This is jline's entry point for completion.
     override def complete(_buf: String, cursor: Int, candidates: JList[String]): Int = {
+      if (!repl.initLatch.hasFlipped) {
+        DBG("Aborting completion, repl latch has not flipped.")
+        return cursor
+      }
       val buf = onull(_buf)
       verbosity = if (isConsecutiveTabs(buf, cursor)) verbosity + 1 else 0
       DBG("\ncomplete(%s, %d) last = (%s, %d), verbosity: %s".format(buf, cursor, lastBuf, lastCursor, verbosity))

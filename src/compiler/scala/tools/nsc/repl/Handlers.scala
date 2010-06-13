@@ -182,7 +182,8 @@ trait Handlers {
     /** Complete list of names imported by a wildcard */
     def wildcardImportedNames: List[Name] = (
       for (tpe <- targetType ; if importsWildcard) yield
-        tpe.nonPrivateMembers filter (x => x.isMethod && x.isPublic) map (_.name) distinct
+        publicMembers(tpe) filter (x => x.isMethod && x.isPublic) map (_.name) distinct
+        // tpe.nonPrivateMembers filter (x => x.isMethod && x.isPublic) map (_.name) distinct
     ).toList.flatten
 
     /** The individual names imported by this statement */

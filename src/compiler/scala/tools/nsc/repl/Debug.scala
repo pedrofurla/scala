@@ -21,7 +21,7 @@ object Debug {
 
     settings = ( args collect { case SettingsParam(s) => s } headOption ) getOrElse REPLSettings()
     createInterpreter()
-    in = InteractiveReader.createDefault(repl)
+    in = Reader.Interactive.createDefault(repl)
 
     // rebind exit so people don't accidentally call System.exit by way of predef
     repl quietlyRun """def exit = println("Type :quit to resume program execution.")"""

@@ -67,12 +67,7 @@ object JarUtil {
     catch { case _: Exception => None }
   }
   
-  def findAll(clazz: JClass): List[File] = findAll(clazz, x => x)
-  // find(clazz) match {
-  //   case Some(jar)  => jar.parent.files filter isJarOrZip toList
-  //   case _          => Nil
-  // }
-  
+  def findAll(clazz: JClass): List[File] = findAll(clazz, x => x)  
   def findAll(clazz: JClass, where: Path => Path): List[File] = find(clazz) match {
     case Some(jar)  => where(jar.parent).toDirectory.files filter isJarOrZip toList
     case _          => Nil

@@ -55,6 +55,7 @@ package object repl {
         else str
     }
   
+  def flagsToString(flags: Long): String = symtab.Flags.flagsToString(flags)
   def typeString[T: OptManifest](x: T): String = TypeStrings(x)
   def typeStringJava(x: Any): String = TypeStrings.applyJava(x)
   

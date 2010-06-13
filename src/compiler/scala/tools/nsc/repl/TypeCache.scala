@@ -7,13 +7,45 @@ package scala.tools.nsc
 package repl
 
 import scala.collection.mutable.HashMap
+import symtab.Types
+import symtab.Flags._
+
+class PhaseLogic[T <: Global](global: T) {
+  import global._
+  import definitions._
+  
+  class Phaser(run: Run) {
+    def atTyper[T](op: => T): T = atPhase(run.typerPhase.next)(op)
+  }
+  
+  def apply(run: Run): Phaser = new Phaser(run)
+}  
 
 trait TypeCache {
   self: Interpreter =>
   
   import compiler._
   
-  def atTyper[T](op: => T): T = atPhase(currentRun.typerPhase.next)(op)
+  /** Like nonPrivateMembers, but even more exclusive.
+   */
+  def publicMembers(tpe: Type) = tpe.findMember(nme.ANYNAME, PRIVATE | PROTECTED | BRIDGES, 0, false).alternatives
+  
+  def allPhases: List[Phase] = phaseNames map (currentRun phaseNamed _)
+  
+  // lazy val allPhases: List[Phase] = phaseNames map (currentRun phaseNamed _)
+  def atAllPhases[T](op: => T): List[(String, T)] = allPhases map (ph => (ph.name, atPhase(ph)(op)))
+  def showAtAllPhases(op: => Any): Unit =
+    atAllPhases(op.toString) foreach { case (ph, op) => Console.println("%15s -> %s".format(ph, op take 240)) }
+  
+  private lazy val phaseLogic: PhaseLogic[compiler.type] = new PhaseLogic[compiler.type](compiler)
+  private def phaser(run: Run) = phaseLogic(run)
+
+  def atPhase[T](ph: Phase)(op: => T): T = compiler.atPhase(ph)(op)
+  def atPhaseNamed[T](name: String)(op: => T): T = atPhase(currentRun phaseNamed name)(op)
+  def atTyper[T](op: => T): T = phaser(currentRun).atTyper[T](op)
+  
+  // 
+  // def atTyper[T](op: => T): T = atPhase(currentRun.typerPhase.next)(op)
 
   type Decl = Req#Decl
   
@@ -66,9 +98,10 @@ trait TypeCache {
   def treeOf(name: Name)    = latest(name) map (_.tree)
   def tpeOf(name: Name)     = latest(name) map (_.tpe)
   def symOf(name: Name)     = latest(name) map (_.sym)
-  
   def runOf(name: Name)     = reqOf(name) map (_.objectRun)
-  def reqOf(name: Name)     = reqHistory.reverse find (_.declaredNames contains name)
+  
+  def reqOf(name: Name): Option[Req]    = reqHistory.reverse find (_.declaredNames contains name)
+  def reqOf(name: String): Option[Req]  = reqOf(name: Name)
 }
 
 

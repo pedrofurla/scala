@@ -8,7 +8,25 @@ package repl
 
 trait Scratch {
   
+  def timed(s: String) = """
+    {
+      val t1 = System.currentTimeMillis()
+      val res = { %s }
+      val t2 = System.currentTimeMillis()
+      val ms = (t2 - t1).toInt
+      println(ms + " milliseconds")
+    
+      res
+    }
+  """ format s
   
+  // scala> :wrap timed
+  // Setting wrapper: (x: String) => line17$object.$iw.$iw.`timed`(x)
+  // 
+  // scala> (1 to 1000000) sum
+  // 36 milliseconds
+  // res2: Int = 1784293664
+
   // 
   // def allImplicits = flatCollect(allHandlers) {
   //   case x: MemberHandler if x.definesImplicit => x.declaredNames

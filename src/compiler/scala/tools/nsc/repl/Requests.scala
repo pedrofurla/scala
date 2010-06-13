@@ -17,17 +17,24 @@ trait Requests extends Imports {
   import compiler._
   import Predef.error
   
+  private var _userTransformers: List[String => String] = Nil
+  def addUserTransformer(f: String => String) = _userTransformers :+= f
+  def clearUserTransformers() = _userTransformers = Nil
+  def userTransformers: List[String => String] = _userTransformers
+  
   abstract class SourceCodeUnit(val objectName: String) {
+    type SourceWrapper = (String, String)
+
     def handlers: List[MemberHandler]
     def onSuccess(): Unit
-    def preamble: String
-    def postamble: String
+    def outerWrapper: SourceWrapper
+    final def wrappers: List[SourceWrapper] = List(outerWrapper)
     def codeFn(handler: MemberHandler, pw: PrintWriter): Unit
 
     def genSource(): String = stringFromWriter { pw =>
-      pw println preamble
+      wrappers foreach (w => pw println w._1)
       handlers foreach (h => codeFn(h, pw))
-      pw println postamble
+      wrappers.reverse foreach (w => pw println w._2)
     }
     
     // compile the object containing the code
@@ -90,12 +97,13 @@ trait Requests extends Imports {
     
     // Generate source for the object that computes this request
     object ObjectSourceCodeUnit extends SourceCodeUnit(srcObjectName) {
-      val handlers = self.handlers
-      val preamble = """
+      val handlers = self.handlers      
+      private val preamble = """
         |object %s {
         |  %s%s
       """.stripMargin.format(srcObjectName, importsPreamble, indentCode(line))     
-      val postamble = importsTrailer + "\n}"
+      private val postamble = importsTrailer + "\n}"
+      val outerWrapper = ((preamble, postamble))
       
       def codeFn(handler: MemberHandler, pw: PrintWriter) = handler.extraCodeToEvaluate(self, pw)
       def onSuccess(): Unit = {
@@ -119,7 +127,7 @@ trait Requests extends Imports {
 
       // first line evaluates object to make sure constructor is run
       // initial "" so later code can uniformly be: + etc
-      val preamble = """
+      private val preamble = """
       |object %s {
       |  %s
       |  val scala_repl_result: String = {
@@ -127,12 +135,13 @@ trait Requests extends Imports {
       |    (""
       """.stripMargin.format(resObjectName, getter, srcObjectName + accessPath)
 
-      val postamble = """
+      private val postamble = """
       |    )
       |  }
       |}
       """.stripMargin
-      
+
+      val outerWrapper = ((preamble, postamble))
       def codeFn(handler: MemberHandler, pw: PrintWriter) = handler.resultExtractionCode(self, pw)
       def onSuccess(): Unit = ()
     }
@@ -158,32 +167,39 @@ trait Requests extends Imports {
     }
   }
   
+  // Treat a single bare expression specially. This is necessary due to it being hard to
+  // modify code at a textual level, and it being hard to submit an AST to the compiler.
+  def isBareExpression(trees: List[Tree]) =
+    (trees.size == 1) && (trees.head match {
+      case _: Assign                        => false
+      case _:TermTree | _:Ident | _:Select  => true
+      case _                                => false
+    })
+  
+  def wrapBareExpression(orig: String, line: String, isSynthetic: Boolean) = {
+    // use synthetic vars to avoid filling up the resXX slots
+    val varName     = if (isSynthetic) getSynthVarName else getVarName
+    val assignment  = (s: String) => "val " + varName + " =\n" + s
+    val fs          = userTransformers :+ assignment
+    val transformed = fs.foldLeft(line)((res, f) => f(res))
+
+    Req.fromLine(orig, transformed, isSynthetic)
+  }
+
   /** Build a request from the user.  "trees" is the the code in "line" after being parsed.
    */  
   object Req {
     def fromLine(line: String): Either[IR.Result, Req] = fromLine(line, false)
     def fromLine(line: String, isSynthetic: Boolean): Either[IR.Result, Req] = fromLine(line, line, isSynthetic)
-    def fromLine(orig: String, line: String, isSynthetic: Boolean): Either[IR.Result, Req] = {
+    def fromLine(orig: String, line: String, isSynthetic: Boolean): Either[IR.Result, Req] = {      
       val trees = parse(indentCode(line)) match {
         case None         => return Left(IR.Incomplete)
         case Some(Nil)    => return Left(IR.Error) // parse error or empty input
         case Some(trees)  => trees
       }
-
-      // use synthetic vars to avoid filling up the resXX slots
-      def varName = if (isSynthetic) getSynthVarName else getVarName
-
-      // Treat a single bare expression specially. This is necessary due to it being hard to
-      // modify code at a textual level, and it being hard to submit an AST to the compiler.
-      if (trees.size == 1) trees.head match {
-        case _:Assign                         => // we don't want to include assignments
-        case _:TermTree | _:Ident | _:Select  => // ... but do want these as valdefs.
-          return fromLine(orig, "val %s =\n%s".format(varName, line), isSynthetic)
-        case _                                =>
-      }
-
-      // figure out what kind of request
-      Right(apply(orig, line, trees))
+      
+      if (isBareExpression(trees)) wrapBareExpression(orig, line, isSynthetic)
+      else Right(apply(orig, line, trees))
     }
 
     def apply(orig: String, line: String, trees: List[Tree]): Req = new Req(orig, line, trees)
@@ -300,8 +316,19 @@ trait Requests extends Imports {
       "%s %s %d: latest is #%s".format(x.name, msg, xs.size, xs.head.req.id)
     }
 
+    // println("sym = " + sym + " flags = " + flagsToString(sym.flags))
+    // See ticket #3193: we normalize to avoid displaying types which should not be seen.
+    def shouldNormalize(tp: Type) = atTyper(tp match {
+      case TypeRef(_, sym, _) if !sym.isPublic    => true
+      case _                                      => false
+    })
+
     def declNamed(name: Name)         = decls find (_.name == name) getOrElse error("No decl named '%s'".format(name))
-    def typeOf(name: Name): String    = atTyper(declNamed(name).tpe.toString)    
+    def typeOf(name: Name): String    = atTyper {
+      val tpe = declNamed(name).tpe
+      if (shouldNormalize(tpe)) tpe.normalize.toString
+      else tpe.toString
+    }
     def typeOfEnc(name: Name)         = typeOf(compiler encode name)
 
     private def declaresString =

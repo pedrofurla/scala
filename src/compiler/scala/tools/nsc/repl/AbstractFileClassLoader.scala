@@ -14,21 +14,19 @@ class AbstractFileClassLoader(root: AbstractFile, parent: ClassLoader)
     extends ClassLoader(parent)
     with ScalaClassLoader
 {
-  // override def getBytesForClass(name: String): Array[Byte] = classes.getOrElseUpdate(name, {
   override def getBytesForClass(name: String): Array[Byte] = {
-    def default = super.getBytesForClass(name)
-    
-    var file: AbstractFile = root
-    val pathParts = name.split("[./]").toList
-    for (dirPart <- pathParts.init) {
-      file = file.lookupName(dirPart, true)
-      if (file == null)
-        return default
+    def default   = super.getBytesForClass(name)
+    val pathParts = name split "[./]" toList 
+    val file      = pathParts.init.foldLeft(root) {
+      (f, part) => 
+        Option(f.lookupName(part, true)) getOrElse { return default }
     }
-    file = file.lookupName(pathParts.last+".class", false)
-    if (file == null) default else file.toByteArray
+    
+    file.lookupName(pathParts.last + ".class", false) match {
+      case null => default
+      case f    => f.toByteArray
+    }
   }
-  // })
 
   override def findClass(name: String): Class[_] = {
     val bytes = getBytesForClass(name)

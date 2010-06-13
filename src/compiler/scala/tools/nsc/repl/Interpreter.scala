@@ -242,6 +242,7 @@ class Interpreter(val settings: REPLSettings)
    */
   def compileString(code: String): Boolean =
     compileSources(new BatchSourceFile("<script>", code))
+
   def compileAndSaveRun(label: String, code: String) = {
     if (code contains "// show") {
       DBG(Strings.ppsrc(code))

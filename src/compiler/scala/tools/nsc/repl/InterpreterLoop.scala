@@ -31,10 +31,10 @@ class InterpreterLoop(in0: Option[BufferedReader], protected val out: PrintWrite
   def this() = this(None, new PrintWriter(Console.out))
 
   /** The input stream from which commands come, set by main() */
-  var in: InteractiveReader = _
-  def ifJline[T](f: JLineReader => T): Option[T] = in match {
-    case x: JLineReader => Some(f(x))
-    case _              => None
+  var in: Reader.Interactive = _
+  def ifJline[T](f: Reader.JLine => T): Option[T] = in match {
+    case x: Reader.JLine  => Some(f(x))
+    case _                => None
   }
 
   /** The context class loader at the time this object was created */
@@ -165,7 +165,7 @@ class InterpreterLoop(in0: Option[BufferedReader], protected val out: PrintWrite
     val oldReplay = replayCommandStack
     
     try file applyReader { reader =>
-      in = new SimpleReader(reader, out, false)
+      in = new Reader.Simple(reader, out, false)
       plushln("Loading " + file + "...")
       loop()
     }
@@ -395,12 +395,12 @@ class InterpreterLoop(in0: Option[BufferedReader], protected val out: PrintWrite
     
     // sets in to some kind of reader depending on environmental cues
     in = in0 match {
-      case Some(in0)  => new SimpleReader(in0, out, true)
+      case Some(in0)  => new Reader.Simple(in0, out, true)
       case None       =>        
         // the interpreter is passed as an argument to expose tab completion info
-        if (settings.Xnojline.value || Properties.isEmacsShell) new SimpleReader
-        else if (settings.noCompletion.value) InteractiveReader.createDefault()
-        else InteractiveReader.createDefault(repl)
+        if (settings.Xnojline.value || Properties.isEmacsShell) new Reader.Simple
+        else if (settings.noCompletion.value) Reader.Interactive.createDefault()
+        else Reader.Interactive.createDefault(repl)
     }
     
     try {

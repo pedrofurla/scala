@@ -108,11 +108,11 @@ trait Power {
     }
     def mkTypedTree(code: String) = mkTypedTrees(code).head
     def mkType(id: String): compiler.Type = stringToTypeOpt(id).get
-    
-    lazy val allPhases: List[Phase] = phaseNames map (currentRun phaseNamed _)
-    def atAllPhases[T](op: => T): List[(String, T)] = allPhases map (ph => (ph.name, atPhase(ph)(op)))
-    def showAtAllPhases(op: => Any): Unit =
-      atAllPhases(op.toString) foreach { case (ph, op) => Console.println("%15s -> %s".format(ph, op take 240)) }
+    // 
+    // lazy val allPhases: List[Phase] = phaseNames map (currentRun phaseNamed _)
+    // def atAllPhases[T](op: => T): List[(String, T)] = allPhases map (ph => (ph.name, atPhase(ph)(op)))
+    // def showAtAllPhases(op: => Any): Unit =
+    //   atAllPhases(op.toString) foreach { case (ph, op) => Console.println("%15s -> %s".format(ph, op take 240)) }
   }
   
   def unleash(): Unit = quietly {

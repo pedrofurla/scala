@@ -4,6 +4,7 @@
  */
 
 package scala.tools.nsc
+package repl
 
 /** A command line for the interpreter.
  *

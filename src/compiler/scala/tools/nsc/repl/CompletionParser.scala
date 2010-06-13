@@ -1,10 +1,13 @@
-// /* NEST (New Scala Test)
-//  * Copyright 2007-2010 LAMP/EPFL
-//  * @author Paul Phillips
-//  */
-// 
-// package scala.tools.nsc
-// package repl
+/* NEST (New Scala Test)
+ * Copyright 2007-2010 LAMP/EPFL
+ * @author Paul Phillips
+ */
+
+package scala.tools.nsc
+package repl
+
+class CompletionParser { }
+
 // 
 // import scala.tools.cmd.ParserUtil
 // import scala.util.parsing.combinator._

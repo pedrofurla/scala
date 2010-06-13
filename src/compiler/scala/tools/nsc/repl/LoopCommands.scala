@@ -99,6 +99,7 @@ trait LoopCommands {
        LineArg("h?", "search the history", searchHistory),
        VarArgs("javap", "disassemble a class", printJavap),
        OneArg("load", "load and interpret a Scala file", load),
+       VarArgs("phase", "execute all code during the given compiler phase", setPhase),
        OneArg("pickled", "show a type's scala signature data", showPickled),
        NoArgs("quit", "exit the interpreter", () => Result(false, None)),
        NoArgs("replay", "reset execution and replay all previous commands", replay),
@@ -109,8 +110,50 @@ trait LoopCommands {
        LineArg("tokens", "tokenize the given source", x => tokenizer(x)),
        LineArg("tree", "obtain the compiler Tree for the given identifier", x => bindTree(x): Unit),
        LineArg("type", "obtain the compiler Type for the given identifier", x => bindType(x): Unit),
-       NoArgs("unleash", "import all the compiler magic", () => repl.unleash())
+       NoArgs("unleash", "import all the compiler magic", () => repl.unleash()),
+       VarArgs("wrap", "wrap all bare expression in the given String => String", setWrap)
     )
+  }
+  
+  private def phaseNames = repl.compiler.phaseNames
+  def setPhase(args: List[String]) = {
+    if (args.isEmpty) {
+      println("Cleared phase wrapper.")
+    }
+    else if (args.size > 1) {
+      println("Only one argument to :phase.")
+    }
+    else if (phaseNames contains args.head) {
+      val fmt = "$replvals.repl.atPhaseNamed(\"" + args.head + "\") { %s }\n"      
+      val f = fmt format (_: String)
+
+      println("Added: " + fmt)
+      repl.addUserTransformer(f)
+    }
+    else {
+      println("Never heard of it.  Valid phases are: " + phaseNames.mkString(" "))
+    }
+  }
+  
+  def setOneWrapper(arg: String): Unit = {
+    val req   = repl reqOf arg getOrElse { return }
+    val path  = req pathTo arg
+    val expr = "(x: String) => " + path + "(x)"
+    println("Setting wrapper: " + expr)
+    val f = repl.evalExpr[String => String](expr)
+    
+    repl addUserTransformer f
+  }
+  
+  def setWrap(args: List[String]) = {    
+    repl.clearUserTransformers()
+    if (args.isEmpty) {
+      println("Cleared wrappers.")
+    }
+    else {
+      args foreach setOneWrapper
+      // println(args.mkString("Set wrappers to: ", ", ", ""))
+    }
   }
   
   /** Custom commands */
@@ -183,7 +226,7 @@ trait LoopCommands {
     repl.SymBinder(arg, println("Cannot locate symbol '%s'".format(arg)))
   
   def bindType(arg: String) =
-    repl.TypeBinder(arg, println("Cannot locate type '%s'".format(arg)))
+    repl.atTyper[Global#Type](repl.TypeBinder(arg, println("Cannot locate type '%s'".format(arg))))
 
   /** create a new interpreter and replay all commands so far */
   def replay() {
