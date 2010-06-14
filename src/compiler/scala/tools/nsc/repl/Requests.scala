@@ -55,8 +55,8 @@ trait Requests extends Imports {
       case PolyType(Nil, rt)  => rt
       case _                  => tpe
     }
-    def atTyper[T](op: => T): T = atPhase(objectRun.typerPhase.next)(op)
-    def memberAtTyper[T](sym: Symbol, name: Name) = atTyper(sym.info member name)
+    def afterTyper[T](op: => T): T = atPhase(objectRun.typerPhase.next)(op)
+    def memberafterTyper[T](sym: Symbol, name: Name) = afterTyper(sym.info nonPrivateMember name)
   
     // Given a path like a.b.c, returns a list of Symbols: List(a, b, c)
     def pathSymbols(outerName: String, path: String): List[Symbol] = {
@@ -64,7 +64,7 @@ trait Requests extends Imports {
       val segments  = accessPath split '.' toList ;
       def follow(sym: Symbol, name: String) =
         if (name == "") sym
-        else memberAtTyper(sym, newTermName(name))
+        else memberafterTyper(sym, newTermName(name))
 
       segments.scanLeft(outer)(follow)
     }
@@ -294,9 +294,9 @@ trait Requests extends Imports {
     
     lazy val decls: List[Req#Decl] =
       for (handler <- handlers ; name <- handler.declaredNames) yield {
-        def memberSym = wrapperChain.last.info member name
-        val sym = atTyper(memberSym)
-        val tpe = atTyper(memberSym.tpe)
+        def memberSym = wrapperChain.last.info decl name
+        val sym = afterTyper(memberSym)
+        val tpe = afterTyper(memberSym.tpe)
 
         Decl(name, handler.member, sym, depoly(tpe))
       }
@@ -318,13 +318,13 @@ trait Requests extends Imports {
 
     // println("sym = " + sym + " flags = " + flagsToString(sym.flags))
     // See ticket #3193: we normalize to avoid displaying types which should not be seen.
-    def shouldNormalize(tp: Type) = atTyper(tp match {
+    def shouldNormalize(tp: Type) = afterTyper(tp match {
       case TypeRef(_, sym, _) if !sym.isPublic    => true
       case _                                      => false
     })
 
     def declNamed(name: Name)         = decls find (_.name == name) getOrElse error("No decl named '%s'".format(name))
-    def typeOf(name: Name): String    = atTyper {
+    def typeOf(name: Name): String    = afterTyper {
       val tpe = declNamed(name).tpe
       if (shouldNormalize(tpe)) tpe.normalize.toString
       else tpe.toString

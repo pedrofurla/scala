@@ -11,6 +11,8 @@ import java.nio.channels.ClosedByInterruptException
 import jline.{ ConsoleReader, ArgumentCompletor, History => JHistory }
 
 object Reader {
+  val msgEINTR = "Interrupted system call"
+
   /** Reads using standard JDK API */
   class Simple(
     in: BufferedReader, 
@@ -56,15 +58,13 @@ object Reader {
   
   /** Reads lines from an input stream */
   trait Interactive {
-    import Interactive._
-
     protected def readOneLine(prompt: String): String
     def interactive: Boolean
 
     def readLine(prompt: String): String =
       try readOneLine(prompt)
       catch {
-        case e: ClosedByInterruptException          => println("Closed by interrupt!") ; System.exit(-1) ; error("")
+        case e: ClosedByInterruptException          => error("Reader closed by interrupt.")
         case e: IOException if restartSystemCall(e) => readLine(prompt)
       }
 
@@ -81,8 +81,6 @@ object Reader {
   }
 
   object Interactive {
-    val msgEINTR = "Interrupted system call"
-
     def createDefault(): Interactive = createDefault(null)
 
     /** Create an interactive reader.  Uses <code>Reader.JLine</code> if the

@@ -217,7 +217,7 @@ trait LoopCommands {
   }
   
   def baseType(arg: String): Unit =
-    repl.atTyper[List[Global#Type]](bindType(arg).baseTypeSeq.toList) foreach println
+    repl.afterTyper[List[Global#Type]](bindType(arg).baseTypeSeq.toList) foreach println
 
   def bindTree(arg: String) =
     repl.TreeBinder(arg, println("Cannot locate tree '%s'".format(arg)))
@@ -226,7 +226,7 @@ trait LoopCommands {
     repl.SymBinder(arg, println("Cannot locate symbol '%s'".format(arg)))
   
   def bindType(arg: String) =
-    repl.atTyper[Global#Type](repl.TypeBinder(arg, println("Cannot locate type '%s'".format(arg))))
+    repl.afterTyper[Global#Type](repl.TypeBinder(arg, println("Cannot locate type '%s'".format(arg))))
 
   /** create a new interpreter and replay all commands so far */
   def replay() {

@@ -15,7 +15,7 @@ class PhaseLogic[T <: Global](global: T) {
   import definitions._
   
   class Phaser(run: Run) {
-    def atTyper[T](op: => T): T = atPhase(run.typerPhase.next)(op)
+    def afterTyper[T](op: => T): T = atPhase(run.typerPhase.next)(op)
   }
   
   def apply(run: Run): Phaser = new Phaser(run)
@@ -27,6 +27,7 @@ trait TypeCache {
   import compiler._
   
   /** Like nonPrivateMembers, but even more exclusive.
+   *  XXX we are not getting modules, e.g. object State in scala.actors.Actor.
    */
   def publicMembers(tpe: Type) = tpe.findMember(nme.ANYNAME, PRIVATE | PROTECTED | BRIDGES, 0, false).alternatives
   
@@ -42,10 +43,10 @@ trait TypeCache {
 
   def atPhase[T](ph: Phase)(op: => T): T = compiler.atPhase(ph)(op)
   def atPhaseNamed[T](name: String)(op: => T): T = atPhase(currentRun phaseNamed name)(op)
-  def atTyper[T](op: => T): T = phaser(currentRun).atTyper[T](op)
+  def afterTyper[T](op: => T): T = phaser(currentRun).afterTyper[T](op)
   
   // 
-  // def atTyper[T](op: => T): T = atPhase(currentRun.typerPhase.next)(op)
+  // def afterTyper[T](op: => T): T = atPhase(currentRun.typerPhase.next)(op)
 
   type Decl = Req#Decl
   

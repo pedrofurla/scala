@@ -80,7 +80,6 @@ class Interpreter(val settings: REPLSettings)
             with Naming
             with Power 
             with Requests
-            with SymbolizedREPL
             with TypeCache {
   
   import settings.out

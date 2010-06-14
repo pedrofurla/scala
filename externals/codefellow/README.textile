@@ -1,0 +1,77 @@
+
+h1. CodeFellow
+
+*Scala development tool for Vim and Sbt*
+
+h2. Features
+
+The following features are already implemented in Vim:
+
+* Member completion 
+* Scope completion 
+* Get type information for expressions
+* Support for multi-module builds (each module will have it's own classpath)
+
+Planned:
+
+* Too many :-)
+
+h2. Installation
+
+1. Build CodeFellow
+
+bc. git clone git://github.com/romanroe/codefellow.git
+cd codefellow
+sbt update publish-local
+
+2. Install the Vim plugin
+
+bc. cp <<codefellow_dir>>/vim/plugin/codefellow.vim ~/.vim/plugin/
+
+3. Add the CodeFellow plugin to your project (project/plugins/Plugins.scala)
+
+bc. import sbt._
+class Plugins(info: ProjectInfo) extends PluginDefinition(info) {
+  val a = "de.tuxed" % "codefellow-plugin" % "0.1"
+}
+
+4. Mixin the CodeFellow trait to your project definition
+
+bc. class YourProject(info: ProjectInfo)
+extends ParentProject(info)
+with de.tuxed.codefellow.plugin.CodeFellowPlugin { 
+  ...
+}
+
+5. Run the plugin:
+
+bc. sbt codefellow
+
+6. Start the CodeFellow deamon from your project root directory (this step will get merged with the above one in the future)
+
+bc. java -cp <codefellow_dir>>/project/boot/scala-2.8.0.RC5/lib/scala-library.jar:\
+         <codefellow_dir>>/project/boot/scala-2.8.0.RC5/lib/scala-compiler.jar:\
+         <codefellow_dir>>/codefellow-core/target/scala_2.8.0.RC5/classes \
+         de.tuxed.codefellow.Launch
+
+7. Start Vim and open a Scala file that belongs to your project
+
+h2. Usage
+
+*Note:* The first invocation of a CodeFellow feature might take a couple of seconds since the compiler daemon for each module in your build will be started on demand.
+
+The following key bindings are available:
+
+|_. Key |_. Mode |_. Description |
+|Ctrl+s Ctrl+m | insert mode | Activate member completion function and trigger omni completion (triggers buffer save) |
+|Ctrl+s Ctrl+s | insert mode | Activate scope completion function and trigger omni completion (triggers buffer save) |
+|Ctrl+s Ctrl+t | command mode | Print type information of expression under cursor |
+
+h2. Screencast
+
+Check out the "screencast":http://github.com/downloads/romanroe/codefellow/codefellow_sc_1d.avi to see CodeFellow in action!
+
+h2. Acknowledgement
+
+* Almost all functionality for the code completion is already implemented in the Scala compiler. CodeFellow would not be possible without the work of the Scala compiler team!
+* I learned most about the Scala compiler by looking at and using the source code from "aemoncannon's":http://github.com/aemoncannon emacs mode "ensime":http://github.com/aemoncannon/ensime. Thank you!
