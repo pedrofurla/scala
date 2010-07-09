@@ -990,6 +990,8 @@ trait Namers { self: Analyzer =>
                 val module = companionModuleOf(meth.owner, context)
                 module.initialize // call type completer (typedTemplate), adds the
                                   // module's templateNamer to classAndNamerOfModule
+                if (!classAndNamerOfModule.contains(module))
+                  return // fix #3649 (prevent crash in erroneous source code)
                 val (cdef, nmr) = classAndNamerOfModule(module)
                 moduleNamer = Some(cdef, nmr)
                 (cdef, nmr)
@@ -1033,9 +1035,11 @@ trait Namers { self: Analyzer =>
             }))
             val defRhs = copyUntyped(vparam.rhs)
 
+            val staticFlag = if (isConstr) STATIC else 0
+
             val defaultTree = atPos(vparam.pos.focus) {
               DefDef(
-                Modifiers(meth.flags & (PRIVATE | PROTECTED | FINAL)) | SYNTHETIC | DEFAULTPARAM | oflag,
+                Modifiers(meth.flags & (PRIVATE | PROTECTED | FINAL)) | SYNTHETIC | DEFAULTPARAM | oflag | staticFlag,
                 name, deftParams, defvParamss, defTpt, defRhs)
             }
             if (!isConstr)
