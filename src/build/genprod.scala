@@ -323,7 +323,7 @@ import scala.collection.generic.CanBuildFrom
       b.result
     }
 
-    def flatMap[B, To](f: (El1, El2) => Traversable[B])(implicit cbf: CanBuildFrom[Repr1, B, To]): To = {
+    def flatMap[B, To](f: (El1, El2) => TraversableOnce[B])(implicit cbf: CanBuildFrom[Repr1, B, To]): To = {
       val b = cbf(coll1.repr)
       val elems2 = coll2.iterator
 
@@ -434,7 +434,7 @@ import scala.collection.generic.CanBuildFrom
      b.result
     }
 
-    def flatMap[B, To](f: (El1, El2, El3) => Traversable[B])(implicit cbf: CanBuildFrom[Repr1, B, To]): To = {
+    def flatMap[B, To](f: (El1, El2, El3) => TraversableOnce[B])(implicit cbf: CanBuildFrom[Repr1, B, To]): To = {
       val b = cbf(coll1.repr)
       val elems2 = coll2.iterator
       val elems3 = coll3.iterator

@@ -104,7 +104,7 @@ trait AugmentedIterableIterator[+T, +Repr <: Parallel] extends RemainsIterator[T
     cb
   }
   
-  def flatmap2combiner[S, That](f: T => Traversable[S], pbf: CanCombineFrom[Repr, S, That]): Combiner[S, That] = {
+  def flatmap2combiner[S, That](f: T => TraversableOnce[S], pbf: CanCombineFrom[Repr, S, That]): Combiner[S, That] = {
     val cb = pbf(repr)
     while (hasNext) {
       val traversable = f(next)

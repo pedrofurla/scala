@@ -110,7 +110,7 @@ extends SeqView[T, Coll]
   protected override def newSliced(f: Int, u: Int): Transformed[T] = new Sliced { val from = f; val until = u }
   protected override def newAppended[U >: T](that: Traversable[U]): Transformed[U] = new Appended[U] { val rest = that }
   protected override def newMapped[S](f: T => S): Transformed[S] = new Mapped[S] { val mapping = f }
-  protected override def newFlatMapped[S](f: T => Traversable[S]): Transformed[S] = new FlatMapped[S] { val mapping = f }
+  protected override def newFlatMapped[S](f: T => TraversableOnce[S]): Transformed[S] = new FlatMapped[S] { val mapping = f }
   protected override def newDroppedWhile(p: T => Boolean): Transformed[T] = new DroppedWhile { val pred = p }
   protected override def newTakenWhile(p: T => Boolean): Transformed[T] = new TakenWhile { val pred = p }
   protected override def newZipped[S](that: Iterable[S]): Transformed[(T, S)] = new Zipped[S] { val other = that }
@@ -128,7 +128,7 @@ extends SeqView[T, Coll]
   override def splitAt(n: Int): (This, This) = (take(n), drop(n))
   override def ++[U >: T, That](xs: TraversableOnce[U])(implicit bf: CanBuildFrom[This, U, That]): That = newAppended(xs.toTraversable).asInstanceOf[That]
   override def map[S, That](f: T => S)(implicit bf: CanBuildFrom[This, S, That]): That = newMapped(f).asInstanceOf[That] 
-  override def flatMap[S, That](f: T => Traversable[S])(implicit bf: CanBuildFrom[This, S, That]): That = newFlatMapped(f).asInstanceOf[That]
+  override def flatMap[S, That](f: T => TraversableOnce[S])(implicit bf: CanBuildFrom[This, S, That]): That = newFlatMapped(f).asInstanceOf[That]
   override def collect[S, That](pf: PartialFunction[T, S])(implicit bf: CanBuildFrom[This, S, That]): That = filter(pf.isDefinedAt).map(pf)(bf)
   override def takeWhile(p: T => Boolean): This = newTakenWhile(p).asInstanceOf[This]
   override def dropWhile(p: T => Boolean): This = newDroppedWhile(p).asInstanceOf[This]

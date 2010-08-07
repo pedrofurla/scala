@@ -22,7 +22,7 @@ trait TraversableMethods[+A, +This <: TraversableLike[A, This] with Traversable[
   def foreach[U](f: A => U): Unit
   
   // maps/iteration
-  def flatMap[B, That](f: A => Traversable[B])(implicit bf: CanBuildFrom[This, B, That]): That
+  def flatMap[B, That](f: A => TraversableOnce[B])(implicit bf: CanBuildFrom[This, B, That]): That
   def map[B, That](f: A => B)(implicit bf: CanBuildFrom[This, B, That]): That
   def collect[B, That](pf: PartialFunction[A, B])(implicit bf: CanBuildFrom[This, B, That]): That
   def scanLeft[B, That](z: B)(op: (B, A) => B)(implicit bf: CanBuildFrom[This, B, That]): That // could be fold or new collection too - where to put it?
