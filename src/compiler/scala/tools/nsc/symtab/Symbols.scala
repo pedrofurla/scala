@@ -1074,6 +1074,7 @@ trait Symbols extends reflect.generic.Symbols { self: SymbolTable =>
     /** A clone of this symbol, but with given owner */
     final def cloneSymbol(owner: Symbol): Symbol = {
       val newSym = cloneSymbolImpl(owner)
+      // newSym.privateWithin = privateWithin // ?
       newSym.setInfo(info.cloneInfo(newSym))
         .setFlag(this.rawflags).setAnnotations(this.annotations)
     }
@@ -1506,7 +1507,7 @@ trait Symbols extends reflect.generic.Symbols { self: SymbolTable =>
       else if (isVariable) "var"
       else if (isPackage) "package"
       else if (isModule) "object"
-      else if (isMethod) "def"
+      else if (isSourceMethod) "def"
       else if (isTerm && (!hasFlag(PARAM) || hasFlag(PARAMACCESSOR))) "val"
       else ""
 
