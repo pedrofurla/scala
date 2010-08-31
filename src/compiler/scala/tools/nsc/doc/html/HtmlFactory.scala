@@ -65,10 +65,6 @@ class HtmlFactory(val universe: Universe, indexModel:DocFactory#IndexModel) {
     new page.Index(universe) writeFor this
 
     val written = mutable.HashSet.empty[DocTemplateEntity]
-
-    for(letter <- indexModel) {
-      new html.page.ReferenceIndex(letter._1,indexModel, universe) writeFor this
-    }
     
     def writeTemplate(tpl: DocTemplateEntity): Unit =
       if (!(written contains tpl)) {
@@ -78,6 +74,10 @@ class HtmlFactory(val universe: Universe, indexModel:DocFactory#IndexModel) {
       }
 
     writeTemplate(universe.rootPackage)
+    
+    //for(letter <- indexModel) {
+    //  new html.page.ReferenceIndex(letter._1,indexModel, universe) writeFor this
+    //}
     
   }
   
