@@ -16,7 +16,7 @@ import scala.collection._
 /** A class that can generate Scaladoc sites to some fixed root folder.
   * @author David Bernard
   * @author Gilles Dubochet */
-class HtmlFactory(val universe: Universe, indexModel:DocFactory#IndexModel) {
+class HtmlFactory(val universe: Universe, indexModel: DocFactory#IndexModel) {
 
   /** The character encoding to be used for generated Scaladoc sites. This value is currently always UTF-8. */
   def encoding: String = "UTF-8"
@@ -75,9 +75,9 @@ class HtmlFactory(val universe: Universe, indexModel:DocFactory#IndexModel) {
 
     writeTemplate(universe.rootPackage)
     
-    //for(letter <- indexModel) {
-    //  new html.page.ReferenceIndex(letter._1,indexModel, universe) writeFor this
-    //}
+    for(letter <- indexModel) {
+      new html.page.ReferenceIndex(letter._1,indexModel, universe) writeFor this
+    }
     
   }
   
