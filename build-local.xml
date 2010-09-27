@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="non-sabbus" default="docs-lib-only">
+	<import file="build.xml"/>
+
+	<property name="env.ANT_OPTS" 
+	 value="-Xms1536M -Xmx1536M -Xss1M -XX:MaxPermSize=128M -XX:+UnlockExperimentalVMOptions -XX:+AggressiveOpts  -XX:+UseG1GC -XX:+UseFastAccessorMethods" />
+  <!--  to find max heap usage: -Xaprof ; currently at 980M for locker.comp -->
+  <echo message="Using ANT_OPTS: ${env.ANT_OPTS}" />
+	
+	<target name="docs-lib-only" depends="docs.pre-lib" unless="docs.lib.available">
+    <stopwatch name="docs.lib.timer"/>
+    <mkdir dir="${build-docs.dir}/library-local"/>
+    <scaladoc
+      destdir="${build-docs.dir}/library-local"
+      doctitle="Scala Standard Library"
+      docversion="${version.number}"
+      docsourceurl="https://lampsvn.epfl.ch/trac/scala/browser/scala/trunk/src/€{FILE_PATH}.scala#L1"
+      sourcepath="${src.dir}"
+      classpathref="pack.classpath">
+      <src>
+        <files includes="${src.dir}/actors"/>
+        <files includes="${src.dir}/library/scala"/>
+        <files includes="${src.dir}/swing"/>
+        <files includes="${src.dir}/continuations/library"/>
+      </src>
+      <include name="**/*.scala"/>
+      <exclude name="reflect/Code.scala"/>
+      <exclude name="reflect/Manifest.scala"/>
+      <exclude name="reflect/Print.scala"/>
+      <exclude name="reflect/Symbol.scala"/>
+      <exclude name="reflect/Tree.scala"/>
+      <exclude name="reflect/Type.scala"/>
+      <exclude name="reflect/TypedCode.scala"/>
+      <exclude name="runtime/*Array.scala"/>
+      <exclude name="runtime/*$.scala"/>
+      <exclude name="runtime/ScalaRunTime.scala"/>
+      <exclude name="runtime/StreamCons.scala"/>
+      <exclude name="runtime/StringAdd.scala"/>
+      <exclude name="scala/swing/test/**"/>
+    </scaladoc>
+    <stopwatch name="docs.lib.timer" action="total"/>
+  </target>
+	
+</project>
