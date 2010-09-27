@@ -52,20 +52,23 @@ class DocFactory(val reporter: Reporter, val settings: doc.Settings) { processor
     assert(settings.docformat.value == "html")
     if (!reporter.hasErrors) {
       val modelFactory = (new model.ModelFactory(compiler, settings) with model.comment.CommentFactory with model.TreeFactory)
+      val universe = modelFactory.makeModel
       println("model contains " + modelFactory.templatesCount + " documentable templates")
-      Some(modelFactory.makeModel)
+      Some(universe)
     }
     else None
   }
 
   /** Generate document(s) for all `files` containing scaladoc documenataion.
     * @param files The list of paths (relative to the compiler's source path, or absolute) of files to document. */
-  def document(files: List[String]): Unit = //indexModel(docModel)
-    universe(files) foreach { docModel => (new html.HtmlFactory(docModel, null)).generate } 
+  def document(files: List[String]): Unit = 
+    universe(files) foreach { docModel => (new html.HtmlFactory(docModel, indexModel(docModel))).generate } 
    	
   
   import collection._
+  /** SortedMap[symbol name, SortedSet[owner template]] */
   type SymbolMap = immutable.SortedMap[String,SortedSet[model.TemplateEntity]]
+  /** Map[symbol's first letter, SymbolMap] */
   type IndexModel = Map[Char, SymbolMap] 
   
   def indexModel(universe:Universe)={
