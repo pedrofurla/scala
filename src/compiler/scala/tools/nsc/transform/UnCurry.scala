@@ -55,6 +55,7 @@ abstract class UnCurry extends InfoTransform with TypingTransformers {
   
   private val uncurry: TypeMap = new TypeMap {
     def apply(tp0: Type): Type = {
+      // tp0.typeSymbolDirect.initialize
       val tp = expandAlias(tp0)
       tp match {
         case MethodType(params, MethodType(params1, restpe)) =>
@@ -187,7 +188,7 @@ abstract class UnCurry extends InfoTransform with TypingTransformers {
      *  additional parameter sections of a case class are skipped.
      */
     def uncurryTreeType(tp: Type): Type = tp match {
-      case MethodType(params, MethodType(params1, restpe)) if (inPattern) =>
+      case MethodType(params, MethodType(params1, restpe)) if inPattern =>
         uncurryTreeType(MethodType(params, restpe))
       case _ =>
         uncurry(tp)
@@ -203,14 +204,12 @@ abstract class UnCurry extends InfoTransform with TypingTransformers {
     private val nonLocalReturnKeys = new HashMap[Symbol, Symbol]
 
     /** Return non-local return key for given method */
-    private def nonLocalReturnKey(meth: Symbol) = nonLocalReturnKeys.get(meth) match {
-      case Some(k) => k
-      case None =>
-        val k = meth.newValue(meth.pos, unit.fresh.newName(meth.pos, "nonLocalReturnKey"))
-          .setFlag(SYNTHETIC).setInfo(ObjectClass.tpe)
-        nonLocalReturnKeys(meth) = k
-        k
-    }
+    private def nonLocalReturnKey(meth: Symbol) = 
+      nonLocalReturnKeys.getOrElseUpdate(meth, {
+        meth.newValue(meth.pos, unit.fresh.newName(meth.pos, "nonLocalReturnKey"))
+          .setFlag (SYNTHETIC)
+          .setInfo (ObjectClass.tpe)
+      })
 
     /** Generate a non-local return throw with given return expression from given method.
      *  I.e. for the method's non-local return key, generate:
@@ -397,26 +396,14 @@ abstract class UnCurry extends InfoTransform with TypingTransformers {
           def arrayToSequence(tree: Tree, elemtp: Type) = {
             atPhase(phase.next) {
               localTyper.typedPos(pos) {
-                val predef = gen.mkAttributedRef(PredefModule)
-                val meth = 
-                  if ((elemtp <:< AnyRefClass.tpe) && !isPhantomClass(elemtp.typeSymbol))
-                    TypeApply(Select(predef, "wrapRefArray"), List(TypeTree(elemtp)))
-                  else if (isValueClass(elemtp.typeSymbol))
-                    Select(predef, "wrap"+elemtp.typeSymbol.name+"Array")
-                  else
-                    TypeApply(Select(predef, "genericWrapArray"), List(TypeTree(elemtp)))
                 val pt = arrayType(elemtp)
                 val adaptedTree = // might need to cast to Array[elemtp], as arrays are not covariant
                   if (tree.tpe <:< pt) tree
-                  else gen.mkCast(
-                    if (elemtp.typeSymbol == AnyClass && isValueClass(tree.tpe.typeArgs.head.typeSymbol))
-                      gen.mkRuntimeCall("toObjectArray", List(tree))
-                    else 
-                      tree,
-                    arrayType(elemtp))
-                Apply(meth, List(adaptedTree))
+                  else gen.mkCastArray(tree, elemtp, pt)
+                
+                gen.mkWrapArray(adaptedTree, elemtp)
               }
-            } 
+            }
           }
 
           // when calling into java varargs, make sure it's an array - see bug #1360
@@ -641,7 +628,10 @@ abstract class UnCurry extends InfoTransform with TypingTransformers {
           }
           tree1
       }
-    } setType uncurryTreeType(tree.tpe)
+    } setType {
+      assert(tree.tpe != null, tree + " tpe is null")
+      uncurryTreeType(tree.tpe)
+    }
 
     def postTransform(tree: Tree): Tree = atPhase(phase.next) {
       def applyUnary(): Tree = {

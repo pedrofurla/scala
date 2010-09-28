@@ -365,7 +365,7 @@ class Global(var settings: Settings, var reporter: Reporter) extends SymbolTable
     val global: Global.this.type = Global.this
     val runsAfter = List[String]("")
     val runsRightAfter = Some("tailcalls")
-  } with SpecializeTypes 
+  } with SpecializeTypes
 
   // phaseName = "erasure"
   object erasure extends {
@@ -519,10 +519,12 @@ class Global(var settings: Settings, var reporter: Reporter) extends SymbolTable
     phasesSet += analyzer.namerFactory      //   note: types are there because otherwise
     phasesSet += analyzer.packageObjects    //   consistency check after refchecks would fail.
     phasesSet += analyzer.typerFactory
-    phasesSet += superAccessors             // add super accessors
-    phasesSet += pickler                    // serialize symbol tables
-    phasesSet += refchecks                  // perform reference and override checking, translate nested objects
-    // phasesSet += devirtualize               // Desugar virtual classes
+    phasesSet += superAccessors			       // add super accessors
+    phasesSet += pickler			       // serialize symbol tables
+    phasesSet += refchecks			       // perform reference and override checking, translate nested objects
+    
+//    if (false && settings.YvirtClasses)
+//	phasesSet += devirtualize		       // Desugar virtual classes4
     
     phasesSet += uncurry                    // uncurry, translate function values to anonymous classes
     phasesSet += tailCalls                  // replace tail calls by jumps
@@ -693,6 +695,7 @@ class Global(var settings: Settings, var reporter: Reporter) extends SymbolTable
 
     /** add unit to be compiled in this run */
     private def addUnit(unit: CompilationUnit) {
+//      unit.parseSettings()
       unitbuf += unit
       compiledFiles += unit.source.file.path
     }
@@ -752,12 +755,11 @@ class Global(var settings: Settings, var reporter: Reporter) extends SymbolTable
         if (settings.check contains globalPhase.prev.name) {
           if (globalPhase.prev.checkable) {
             phase = globalPhase
+            inform("[Now checking: " + phase.prev.name + "]")
             if (globalPhase.id >= icodePhase.id) icodeChecker.checkICodes
             else checker.checkTrees
           } 
-          else if (!settings.check.doAllPhases) {
-            warning("It is not possible to check the result of the "+globalPhase.name+" phase")
-          }
+          else inform("[Not checkable: " + globalPhase.prev.name + "]")
         }
         if (settings.Ystatistics.value) statistics.print(phase)
         advancePhase

@@ -449,6 +449,7 @@ trait Definitions extends reflect.generic.StandardDefinitions {
 
     // special attributes
     lazy val SerializableAttr: Symbol = getClass("scala.serializable")
+    lazy val SerialVersionUIDAttr: Symbol = getClass("scala.SerialVersionUID")
     lazy val DeprecatedAttr: Symbol = getClass("scala.deprecated")
     lazy val DeprecatedNameAttr: Symbol = getClass("scala.deprecatedName")
     lazy val MigrationAnnotationClass: Symbol = getClass("scala.annotation.migration")
@@ -588,9 +589,14 @@ trait Definitions extends reflect.generic.StandardDefinitions {
 
     val boxedClass = new HashMap[Symbol, Symbol]
     val boxedModule = new HashMap[Symbol, Symbol]
-    val unboxMethod = new HashMap[Symbol, Symbol] // Type -> Method
-    val boxMethod = new HashMap[Symbol, Symbol] // Type -> Method
-    val primitiveCompanions = new HashSet[Symbol]
+    val unboxMethod = new HashMap[Symbol, Symbol]     // Type -> Method
+    val boxMethod = new HashMap[Symbol, Symbol]       // Type -> Method
+    val primitiveCompanions = new HashSet[Symbol]     // AnyVal -> Companion
+    
+    /** Maps a companion object like scala.Int to scala.runtime.Int. */
+    def getPrimitiveCompanion(sym: Symbol) =
+      if (primitiveCompanions(sym)) Some(getModule("scala.runtime." + sym.name))
+      else None
 
     def isUnbox(m: Symbol) = unboxMethod.valuesIterator contains m
     def isBox(m: Symbol) = boxMethod.valuesIterator contains m

@@ -737,7 +737,7 @@ trait ParallelMatching extends ast.TreeDSL
       def duplicate = body.duplicate setType bodyTpe
       
       def isFinal = true
-      def isLabellable = !cond(body)  { case _: Throw | _: Literal => true }
+      def isLabellable = !cond(body)  { case _: Literal => true }
       def isNotReached = referenceCount == 0
       def isReachedOnce = referenceCount == 1
       def isReachedTwice = referenceCount > 1
@@ -881,7 +881,7 @@ trait ParallelMatching extends ast.TreeDSL
       
       typer typed (tpe match {
         case ct: ConstantType => ct.value match {
-            case v @ Constant(null) if scrutTree.tpe.isAnyRef   => scrutTree ANY_EQ NULL
+            case v @ Constant(null) if scrutTree.tpe.isAnyRef   => scrutTree OBJ_EQ NULL
             case v                                              => scrutTree MEMBER_== Literal(v)
           }
         case _: SingletonType if useEqTest                      =>
@@ -916,7 +916,7 @@ trait ParallelMatching extends ast.TreeDSL
 
       outerAccessor(tpe2test.typeSymbol) match {
         case NoSymbol => ifDebug(cunit.warning(scrut.pos, "no outer acc for " + tpe2test.typeSymbol)) ; cond
-        case outerAcc => cond AND (((scrut AS_ANY tpe2test) DOT outerAcc)() ANY_EQ theRef)
+        case outerAcc => cond AND (((scrut AS_ANY tpe2test) DOT outerAcc)() OBJ_EQ theRef)
       }
     }
   }
