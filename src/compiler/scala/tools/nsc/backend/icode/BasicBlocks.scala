@@ -1,5 +1,5 @@
 /* NSC -- new Scala compiler
- * Copyright 2005-2010 LAMP/EPFL
+ * Copyright 2005-2011 LAMP/EPFL
  * @author  Martin Odersky
  */
 
@@ -15,7 +15,10 @@ import backend.icode.analysis.ProgramPoint
 
 trait BasicBlocks {
   self: ICodes =>
+  
   import opcodes._
+  import global.{ settings, log, nme }
+  import nme.isExceptionResultName
 
   /** This class represents a basic block. Each
    *  basic block contains a list of instructions that are
@@ -84,8 +87,6 @@ trait BasicBlocks {
      * Once closed is called, only the `instrs' array should be used.
      */
     private var instructionList: List[Instruction] = Nil
-
-    private var _lastInstruction: Instruction = null
 
     private var instrs: Array[Instruction] = _
 
@@ -249,10 +250,21 @@ trait BasicBlocks {
       } */
       assert(!closed || ignore, "BasicBlock closed")
 
-      if (!ignore) {
+      if (ignore) {
+        if (settings.debug.value) {
+          /** Trying to pin down what it's likely to see after a block has been
+           *  put into ignore mode so we hear about it if there's a problem.
+           */
+          instr match {
+            case JUMP(_) | RETURN(_) | THROW(_) | SCOPE_EXIT(_)               => // ok
+            case STORE_LOCAL(local) if isExceptionResultName(local.sym.name)  => // ok
+            case x => log("Ignoring instruction, possibly at our peril, at " + pos + ": " + x)
+          }
+        }
+      }
+      else {
         instr.setPos(pos)
-        instructionList = instr :: instructionList
-        _lastInstruction = instr
+        instructionList ::= instr
       }
     }
     
@@ -291,7 +303,7 @@ trait BasicBlocks {
     /** Close the block */
     def close {
       assert(!closed || ignore)
-      assert(instructionList.length > 0, "Empty block.")
+      assert(instructionList.nonEmpty, "Empty block.")
       closed = true
       setFlag(DIRTYSUCCS)
       instructionList = instructionList.reverse
@@ -318,7 +330,9 @@ trait BasicBlocks {
      *  added to this basic block. It makes the generation of THROW
      *  and RETURNs easier.
      */
-    def enterIgnoreMode = ignore = true
+    def enterIgnoreMode = {
+      ignore = true
+    }
 
     def exitIgnoreMode {
       assert(ignore, "Exit ignore mode when not in ignore mode.")
@@ -358,7 +372,7 @@ trait BasicBlocks {
         case CZJUMP(succ, fail, _, _)   => fail :: succ :: Nil
         case SWITCH(_, labels)          => labels
         case RETURN(_)                  => Nil
-        case THROW()                    => Nil
+        case THROW(_)                   => Nil
         case _ =>
           if (closed) {
             dump
@@ -407,40 +421,50 @@ trait BasicBlocks {
 
     private def succString = if (successors.isEmpty) "[S: N/A]" else successors.distinct.mkString("[S: ", ", ", "]")
     private def predString = if (predecessors.isEmpty) "[P: N/A]" else predecessors.distinct.mkString("[P: ", ", ", "]")
-    def fullString: String = List("Block", label, succString, predString) mkString " "
 
     override def toString(): String = "" + label
 
-    def flagsString: String =
-      ("block " + label + (
-         if (hasFlag(LOOP_HEADER)) " <loopheader> "
-         else if (hasFlag(IGNORING)) " <ignore> "
-         else if (hasFlag(EX_HEADER)) " <exheader> "
-         else if (hasFlag(CLOSED)) " <closed> "
-         else if (hasFlag(DIRTYSUCCS)) " <dirtysuccs> "
-         else if (hasFlag(DIRTYPREDS)) " <dirtypreds> "
-         else ""
-      ))
-  }
+    def blockContents = {
+      def posStr(p: Position) = if (p.isDefined) p.line.toString else "<??>"
+      val xs = this.toList map (instr => posStr(instr.pos) + "\t" + instr)
+      xs.mkString(fullString + " {\n  ", "\n  ", "\n}")
+    }
+    def predContents = predecessors.map(_.blockContents).mkString(predecessors.size + " preds:\n", "\n", "\n")
+    def succContents = successors.map(_.blockContents).mkString(successors.size + " succs:\n", "\n", "\n")
 
+    def fullString: String = List("Block", label, succString, predString, flagsString) mkString " "    
+    def flagsString: String = BBFlags.flagsToString(flags)
+  }
 }
 
 object BBFlags {
+  val flagMap = Map[Int, String](
+    LOOP_HEADER -> "loopheader",
+    IGNORING -> "ignore",
+    EX_HEADER -> "exheader",
+    CLOSED -> "closed",
+    DIRTYSUCCS -> "dirtysuccs",
+    DIRTYPREDS -> "dirtypreds"
+  )
+  def flagsToString(flags: Int) = {
+    flagMap collect { case (bit, name) if (bit & flags) != 0 => "<" + name + ">" } mkString " "
+  }
+
   /** This block is a loop header (was translated from a while). */
-  final val LOOP_HEADER = 0x00000001
+  final val LOOP_HEADER = (1 << 0)
   
   /** Ignoring mode: emit instructions are dropped. */
-  final val IGNORING    = 0x00000002
+  final val IGNORING    = (1 << 1)
   
   /** This block is the header of an exception handler. */
-  final val EX_HEADER   = 0x00000004
+  final val EX_HEADER   = (1 << 2)
   
   /** This block is closed. No new instructions can be added. */
-  final val CLOSED      = 0x00000008
+  final val CLOSED      = (1 << 3)
 
   /** Code has been changed, recompute successors. */
-  final val DIRTYSUCCS     = 0x00000010
+  final val DIRTYSUCCS  = (1 << 4)
 
   /** Code has been changed, recompute predecessors. */
-  final val DIRTYPREDS  = 0x00000020
+  final val DIRTYPREDS  = (1 << 5)
 }

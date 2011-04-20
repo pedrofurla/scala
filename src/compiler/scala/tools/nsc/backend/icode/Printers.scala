@@ -1,5 +1,5 @@
 /* NSC -- new scala compiler
- * Copyright 2005-2010 LAMP/EPFL
+ * Copyright 2005-2011 LAMP/EPFL
  * @author  Martin Odersky
  */
 
@@ -58,9 +58,7 @@ trait Printers { self: ICodes =>
       case x :: xs  => pr(x); print(sep); printList(pr)(xs, sep)
     }
 
-    private var clazz: IClass = _
     def printClass(cls: IClass) {
-      this.clazz = cls;
       print(cls.symbol.toString()); print(" extends ");
       printList(cls.symbol.info.parents, ", ");
       indent; println(" {");
@@ -83,7 +81,7 @@ trait Printers { self: ICodes =>
       print("("); printList(printParam)(m.params, ", "); print(")");
       print(": "); print(m.symbol.info.resultType)
 
-      if (!m.isDeferred) {
+      if (!m.isAbstractMethod) {
         println(" {")
         println("locals: " + m.locals.mkString("", ", ", ""))
         println("startBlock: " + m.code.startBlock)
@@ -127,7 +125,7 @@ trait Printers { self: ICodes =>
     def printInstruction(i: Instruction) {
 //      if (settings.Xdce.value)
 //        print(if (i.useful) "   " else " * ");
-      if (i.pos.isDefined) print(i.pos.line.toString + "\t") else print("undef\t")
+      if (i.pos.isDefined) print(i.pos.line.toString + "\t") else print("?\t")
       println(i.toString())
     }
   }

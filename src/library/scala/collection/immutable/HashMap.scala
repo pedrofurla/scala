@@ -1,6 +1,6 @@
 /*                     __                                               *\
 **     ________ ___   / /  ___     Scala API                            **
-**    / __/ __// _ | / /  / _ |    (c) 2003-2010, LAMP/EPFL             **
+**    / __/ __// _ | / /  / _ |    (c) 2003-2011, LAMP/EPFL             **
 **  __\ \/ /__/ __ |/ /__/ __ |    http://scala-lang.org/               **
 ** /____/\___/_/ |_/____/_/ | |                                         **
 **                          |/                                          **
@@ -12,11 +12,8 @@ package scala.collection
 package immutable
 
 import generic._
-import annotation.unchecked.uncheckedVariance
-
-
-import parallel.immutable.ParHashTrie
-
+import annotation.unchecked.{ uncheckedVariance=> uV }
+import parallel.immutable.ParHashMap
 
 /** This class implements immutable maps using a hash trie.
  *  
@@ -35,8 +32,8 @@ import parallel.immutable.ParHashTrie
  *  @define mayNotTerminateInf
  *  @define willNotTerminateInf
  */
-@serializable @SerialVersionUID(2L)
-class HashMap[A, +B] extends Map[A,B] with MapLike[A, B, HashMap[A, B]] with Parallelizable[ParHashTrie[A, B]] {
+@SerialVersionUID(2L)
+class HashMap[A, +B] extends Map[A,B] with MapLike[A, B, HashMap[A, B]] with Serializable with CustomParallelizable[(A, B), ParHashMap[A, B]] {
 
   override def size: Int = 0
 
@@ -62,7 +59,7 @@ class HashMap[A, +B] extends Map[A,B] with MapLike[A, B, HashMap[A, B]] with Par
   def - (key: A): HashMap[A, B] =
     removed0(key, computeHash(key), 0)
 
-  protected def elemHashCode(key: A) = if (key == null) 0 else key.##
+  protected def elemHashCode(key: A) = key.##
 
   protected final def improve(hcode: Int) = {
     var h: Int = hcode + ~(hcode << 9)
@@ -71,13 +68,13 @@ class HashMap[A, +B] extends Map[A,B] with MapLike[A, B, HashMap[A, B]] with Par
     h ^ (h >>> 10)
   }
   
-  protected def computeHash(key: A) = improve(elemHashCode(key))
+  private[collection] def computeHash(key: A) = improve(elemHashCode(key))
   
   protected type Merger[B1] = ((A, B1), (A, B1)) => (A, B1)
 
-  protected def get0(key: A, hash: Int, level: Int): Option[B] = None
+  private[collection] def get0(key: A, hash: Int, level: Int): Option[B] = None
 
-  def updated0[B1 >: B](key: A, hash: Int, level: Int, value: B1, kv: (A, B1), merger: Merger[B1]): HashMap[A, B1] = 
+  private[collection] def updated0[B1 >: B](key: A, hash: Int, level: Int, value: B1, kv: (A, B1), merger: Merger[B1]): HashMap[A, B1] = 
     new HashMap.HashMap1(key, hash, value, kv)
 
   protected def removed0(key: A, hash: Int, level: Int): HashMap[A, B] = this
@@ -90,7 +87,7 @@ class HashMap[A, +B] extends Map[A,B] with MapLike[A, B, HashMap[A, B]] with Par
   
   protected def merge0[B1 >: B](that: HashMap[A, B1], level: Int, merger: Merger[B1]): HashMap[A, B1] = that
   
-  def par = ParHashTrie.fromTrie(this)
+  override def par = ParHashMap.fromTrie(this)
   
 }
 
@@ -101,7 +98,7 @@ class HashMap[A, +B] extends Map[A,B] with MapLike[A, B, HashMap[A, B]] with Par
  *  @author  Tiark Rompf
  *  @since   2.3
  */
-object HashMap extends ImmutableMapFactory[HashMap] {
+object HashMap extends ImmutableMapFactory[HashMap] with BitOperations.Int {
   /** $mapCanBuildFromInfo */
   implicit def canBuildFrom[A, B]: CanBuildFrom[Coll, (A, B), HashMap[A, B]] = new MapCanBuildFrom[A, B]
   def empty[A, B]: HashMap[A, B] = EmptyHashMap.asInstanceOf[HashMap[A, B]]
@@ -112,9 +109,13 @@ object HashMap extends ImmutableMapFactory[HashMap] {
   
   // TODO: add HashMap2, HashMap3, ...
   
-  class HashMap1[A,+B](private[HashMap] var key: A, private[HashMap] var hash: Int, private[HashMap] var value: (B @uncheckedVariance), private[HashMap] var kv: (A,B @uncheckedVariance)) extends HashMap[A,B] {
+  class HashMap1[A,+B](private[HashMap] var key: A, private[HashMap] var hash: Int, private[collection] var value: (B @uV), private[collection] var kv: (A,B @uV)) extends HashMap[A,B] {
     override def size = 1
-
+    
+    private[collection] def getKey = key
+    private[collection] def getHash = hash
+    private[collection] def computeHashFor(k: A) = computeHash(k)
+    
     override def get0(key: A, hash: Int, level: Int): Option[B] = 
       if (hash == this.hash && key == this.key) Some(value) else None
 
@@ -179,7 +180,9 @@ object HashMap extends ImmutableMapFactory[HashMap] {
     }
   }
 
-  private class HashMapCollision1[A,+B](private[HashMap] var hash: Int, var kvs: ListMap[A,B @uncheckedVariance]) extends HashMap[A,B] {
+  private[collection] class HashMapCollision1[A, +B](private[HashMap] var hash: Int, var kvs: ListMap[A, B @uV])
+          extends HashMap[A, B @uV] {
+               
     override def size = kvs.size
 
     override def get0(key: A, hash: Int, level: Int): Option[B] = 
@@ -210,7 +213,7 @@ object HashMap extends ImmutableMapFactory[HashMap] {
     override def foreach[U](f: ((A, B)) => U): Unit = kvs.foreach(f)
     override def split: Seq[HashMap[A, B]] = {
       val (x, y) = kvs.splitAt(kvs.size / 2)
-      def newhm(lm: ListMap[A, B @uncheckedVariance]) = new HashMapCollision1(hash, lm)
+      def newhm(lm: ListMap[A, B @uV]) = new HashMapCollision1(hash, lm)
       List(newhm(x), newhm(y))
     }
     protected override def merge0[B1 >: B](that: HashMap[A, B1], level: Int, merger: Merger[B1]): HashMap[A, B1] = {
@@ -221,8 +224,12 @@ object HashMap extends ImmutableMapFactory[HashMap] {
     }
   }
   
-  class HashTrieMap[A,+B](private[HashMap] var bitmap: Int, private[HashMap] var elems: Array[HashMap[A,B @uncheckedVariance]],
-      private[HashMap] var size0: Int) extends HashMap[A,B] {
+  class HashTrieMap[A, +B](
+    private[HashMap] var bitmap: Int,
+    private[collection] var elems: Array[HashMap[A, B @uV]],
+    private[HashMap] var size0: Int
+  ) extends HashMap[A, B @uV] {
+        
 /*
     def this (level: Int, m1: HashMap1[A,B], m2: HashMap1[A,B]) = {
       this(((m1.hash >>> level) & 0x1f) | ((m2.hash >>> level) & 0x1f), {
@@ -306,83 +313,13 @@ object HashMap extends ImmutableMapFactory[HashMap] {
         this
       }
     }
-
-/*
-    override def iterator = {   // TODO: optimize (use a stack to keep track of pos)
-      
-      def iter(m: HashTrieMap[A,B], k: => Stream[(A,B)]): Stream[(A,B)] = {
-        def horiz(elems: Array[HashMap[A,B]], i: Int, k: => Stream[(A,B)]): Stream[(A,B)] = {
-          if (i < elems.length) {
-            elems(i) match {
-              case m: HashTrieMap[A,B] => iter(m, horiz(elems, i+1, k))
-              case m: HashMap1[A,B] => new Stream.Cons(m.ensurePair, horiz(elems, i+1, k))
-            }
-          } else k
-        }
-        horiz(m.elems, 0, k)
-      }
-      iter(this, Stream.empty).iterator
-    }
-*/
-
-
-    override def iterator = new Iterator[(A,B)] {
-      private[this] var depth = 0
-      private[this] var arrayStack = new Array[Array[HashMap[A,B]]](6)
-      private[this] var posStack = new Array[Int](6)
-
-      private[this] var arrayD = elems
-      private[this] var posD = 0
-
-      private[this] var subIter: Iterator[(A,B)] = null // to traverse collision nodes
-
-      def hasNext = (subIter ne null) || depth >= 0
-      
-      def next: (A,B) = {
-        if (subIter ne null) {
-          val el = subIter.next
-          if (!subIter.hasNext)
-            subIter = null
-          el
-        } else
-          next0(arrayD, posD)
-      }
-      
-      @scala.annotation.tailrec private[this] def next0(elems: Array[HashMap[A,B]], i: Int): (A,B) = {
-        if (i == elems.length-1) { // reached end of level, pop stack
-          depth -= 1
-          if (depth >= 0) {
-            arrayD = arrayStack(depth)
-            posD = posStack(depth)
-            arrayStack(depth) = null
-          } else {
-            arrayD = null
-            posD = 0
-          }
-        } else
-          posD += 1
-
-        elems(i) match {
-          case m: HashTrieMap[A,B] => // push current pos onto stack and descend
-            if (depth >= 0) {
-              arrayStack(depth) = arrayD
-              posStack(depth) = posD
-            }
-            depth += 1
-            arrayD = m.elems
-            posD = 0
-            next0(m.elems, 0)
-          case m: HashMap1[A,B] => m.ensurePair
-          case m =>
-            subIter = m.iterator
-            subIter.next
-        }
-      }
+    
+    override def iterator: Iterator[(A, B)] = new TrieIterator[(A, B)](elems.asInstanceOf[Array[Iterable[(A, B)]]]) {
+      final override def getElem(cc: AnyRef): (A, B) = cc.asInstanceOf[HashMap1[A, B]].ensurePair
     }
 
 /*
 
-import collection.immutable._
 def time(block: =>Unit) = { val t0 = System.nanoTime; block; println("elapsed: " + (System.nanoTime - t0)/1000000.0) }
 var mOld = OldHashMap.empty[Int,Int]
 var mNew = HashMap.empty[Int,Int]
@@ -411,14 +348,7 @@ time { mNew.iterator.foreach( p => ()) }
     }
     
     private def printBitmap(bm: Int) {
-      var i = 32
-      var b = bm
-      while (i != 0) {
-	print((b & 1) + " ")
-	b = b >>> 1
-	i -= 1
-      }
-      println
+      println(bitString(bm, " "))
     }
     
     private def posOf(n: Int, bm: Int) = {
@@ -501,13 +431,10 @@ time { mNew.iterator.foreach( p => ()) }
             // condition below is due to 2 things:
             // 1) no unsigned int compare on JVM
             // 2) 0 (no lsb) should always be greater in comparison
-            // also, search for unsigned compare Scala to find Dave's solution
-            // and compare a and b defined as below:
             val a = thislsb - 1
             val b = thatlsb - 1
-            // ! our case indeed is more specific, but this didn't help:
-            // if ((thislsb > 0 && thislsb < thatlsb) || thatlsb == 0 || (thatlsb < 0 && thislsb != 0)) {
-            if ((a < b) ^ (a < 0) ^ (b < 0)) {
+
+            if (unsignedCompare(thislsb - 1, thatlsb - 1)) {
               // println("an element from this trie")
               val m = thiselems(thisi)
               totalelems += m.size
@@ -529,9 +456,8 @@ time { mNew.iterator.foreach( p => ()) }
         new HashTrieMap[A, B1](this.bitmap | that.bitmap, merged, totalelems)
       case hm: HashMapCollision1[_, _] => that.merge0(this, level, merger)
       case hm: HashMap[_, _] => this
-      case _ => error("section supposed to be unreachable.")
+      case _ => sys.error("section supposed to be unreachable.")
     }
-    
   }
   
   private def check[K](x: HashMap[K, _], y: HashMap[K, _], xy: HashMap[K, _]) = { // TODO remove this debugging helper
@@ -553,7 +479,8 @@ time { mNew.iterator.foreach( p => ()) }
     } else true
   }
   
-  @serializable  @SerialVersionUID(2L) private class SerializationProxy[A,B](@transient private var orig: HashMap[A, B]) {
+  @SerialVersionUID(2L)
+  private class SerializationProxy[A,B](@transient private var orig: HashMap[A, B]) extends Serializable {
     private def writeObject(out: java.io.ObjectOutputStream) {
       val s = orig.size
       out.writeInt(s)
@@ -575,6 +502,4 @@ time { mNew.iterator.foreach( p => ()) }
     
     private def readResolve(): AnyRef = orig
   }
-
 }
-

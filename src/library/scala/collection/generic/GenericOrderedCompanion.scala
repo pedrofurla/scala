@@ -1,6 +1,6 @@
 /*                     __                                               *\
 **     ________ ___   / /  ___     Scala API                            **
-**    / __/ __// _ | / /  / _ |    (c) 2003-2010, LAMP/EPFL             **
+**    / __/ __// _ | / /  / _ |    (c) 2003-2011, LAMP/EPFL             **
 **  __\ \/ /__/ __ |/ /__/ __ |    http://scala-lang.org/               **
 ** /____/\___/_/ |_/____/_/ | |                                         **
 **                          |/                                          **
@@ -17,6 +17,11 @@ import mutable.Builder
 
 
 
+/** This class represents companions of classes which require the ordered trait
+ *  for their element types.
+ *
+ *  @author Aleksandar Prokopec
+ */
 abstract class GenericOrderedCompanion[+CC[X] <: Traversable[X]] {
   type Coll = CC[_]
   

@@ -2,12 +2,20 @@
 // code by Gilles Dubochet with contributions by Pedro Furlanetto
 
 $(document).ready(function(){
-    var prefilters = $("#ancestors > ol > li").filter(function(){
-        var name = $(this).attr("name");
-        return name == "scala.Any" || name == "scala.AnyRef";
-    });
-    prefilters.removeClass("in");
-    prefilters.addClass("out");
+    var isHiddenClass;
+    if (document.title == 'scala.AnyRef') {
+        isHiddenClass = function (name) {
+            return name == 'scala.Any';
+        };
+    } else {
+        isHiddenClass = function (name) {
+            return name == 'scala.Any' || name == 'scala.AnyRef';
+        };
+    }
+
+    $("#linearization li").filter(function(){
+        return isHiddenClass($(this).attr("name"));
+    }).removeClass("in").addClass("out");
     filter();
 
     var input = $("#textfilter input");
@@ -23,7 +31,7 @@ $(document).ready(function(){
         filter();
     });
 
-    $("#ancestors > ol > li").click(function(){
+    $("#linearization li").click(function(){
         if ($(this).hasClass("in")) {
             $(this).removeClass("in");
             $(this).addClass("out");
@@ -34,19 +42,47 @@ $(document).ready(function(){
         };
         filter();
     });
+
+/*
     $("#ancestors > ol > li.hideall").click(function() {
-        $("#ancestors > ol > li.in").removeClass("in").addClass("out");
+        $("#linearization li.in").removeClass("in").addClass("out");
+        $("#linearization li:first").removeClass("out").addClass("in");
         filter();
     })
     $("#ancestors > ol > li.showall").click(function() {
         var filtered =
-            $("#ancestors > ol > li.out").filter(function() {
-                var name = $(this).attr("name");
-                return !(name == "scala.Any" || name == "scala.AnyRef");
+            $("#linearization li.out").filter(function() {
+                return ! isHiddenClass($(this).attr("name"));
             });
         filtered.removeClass("out").addClass("in");
         filter();
     });
+*/
+
+
+    $("#ancestors > ol > li.hideall").click(function() {
+        if ($(this).hasClass("out")) {
+            $(this).removeClass("out").addClass("in");
+            $("#ancestors > ol > li.showall").removeClass("in").addClass("out");
+            $("#linearization li.in").removeClass("in").addClass("out");
+            $("#linearization li:first").removeClass("out").addClass("in");
+            filter();
+        };
+    })
+    $("#ancestors > ol > li.showall").click(function() {
+        if($(this).hasClass("out")){
+            $(this).removeClass("out").addClass("in");
+            $("#ancestors > ol > li.hideall").removeClass("in").addClass("out");
+            var filtered =
+                $("#linearization li.out").filter(function() {
+                    return ! isHiddenClass($(this).attr("name"));
+                });
+            filtered.removeClass("out").addClass("in");
+            filter();
+        };
+    });
+
+
     $("#visbl > ol > li.public").click(function() {
         if ($(this).hasClass("out")) {
             $(this).removeClass("out").addClass("in");
@@ -60,24 +96,6 @@ $(document).ready(function(){
             $("#visbl > ol > li.public").removeClass("in").addClass("out");
             filter();
         };
-    });
-    $("#impl > ol > li.concrete").click(function() {
-        if ($(this).hasClass("out")) {
-            $(this).removeClass("out").addClass("in");            
-            $("li[data-isabs='false']").show();
-        } else {
-            $(this).removeClass("in").addClass("out");
-            $("li[data-isabs='false']").hide();
-        }
-    });
-    $("#impl > ol > li.abstract").click(function() {
-        if ($(this).hasClass("out")) {
-            $(this).removeClass("out").addClass("in");                        
-            $("li[data-isabs='true']").show();
-        } else {
-            $(this).removeClass("in").addClass("out");
-            $("li[data-isabs='true']").hide();
-        }
     });
     $("#order > ol > li.alpha").click(function() {
         if ($(this).hasClass("out")) {
@@ -111,44 +129,51 @@ $(document).ready(function(){
             $(this.getTip()).html(this.getTrigger().attr("name"))
         }        
     });   
-    var docAllSigs = $(".signature");
-    function commentShowFct(fullComment){
+
+    /* Add toggle arrows */
+    var docAllSigs = $("#template li").has(".fullcomment").find(".signature");
+    
+    function commentToggleFct(signature){
+        var parent = signature.parent();
+        var shortComment = $(".shortcomment", parent);
+        var fullComment = $(".fullcomment", parent);
         var vis = $(":visible", fullComment);
+        signature.toggleClass("closed").toggleClass("opened");
         if (vis.length > 0) {
-            fullComment.slideUp(100);
+            shortComment.slideDown(50);
+            fullComment.slideUp(50);
+            signature.addClass("closed");
+            signature.removeClass("opened");
         }
         else {
-            fullComment.slideDown(100);
+            shortComment.slideUp(50);
+            fullComment.slideDown(50);
+            signature.removeClass("closed");
+            signature.addClass("opened");
         }
     };
-    var docShowSigs = docAllSigs.filter(function(){
-        return $("+ div.fullcomment", $(this)).length > 0;
-    });
-    docShowSigs.css("cursor", "pointer");
-    docShowSigs.click(function(){
-        commentShowFct($("+ div.fullcomment", $(this)));
-    });
-    function commentToggleFct(shortComment){
-        var vis = $("~ div.fullcomment:visible", shortComment);
-        if (vis.length > 0) {
-            shortComment.slideDown(100);
-            vis.slideUp(100);
-        }
-        else {
-            var hid = $("~ div.fullcomment:hidden", shortComment);
-            hid.slideDown(100);
-            shortComment.slideUp(100);
-        }
-    };
-    var docToggleSigs = docAllSigs.filter(function(){
-        return $("+ .shortcomment", $(this)).length > 0;
-    });
-    docToggleSigs.css("cursor", "pointer");
-    docToggleSigs.click(function(){
-        commentToggleFct($("+ .shortcomment", $(this)));
-    });
-    $(".shortcomment").click(function(){
+    docAllSigs.addClass("closed");
+    docAllSigs.click(function() {
         commentToggleFct($(this));
+    });
+    
+    /* Linear super types and known subclasses */
+    function toggleShowContentFct(outerElement){
+      var content = $(".hiddenContent", outerElement);
+      var vis = $(":visible", content);
+      if (vis.length > 0) {
+        content.slideUp(100);
+        $(".showElement", outerElement).show();
+        $(".hideElement", outerElement).hide();
+      }
+      else {
+        content.slideDown(100);
+        $(".showElement", outerElement).hide();
+        $(".hideElement", outerElement).show();
+      }
+    };
+    $(".toggleContainer").click(function() {
+      toggleShowContentFct($(this));
     });
 });
 
@@ -235,8 +260,10 @@ function filter() {
         //var name1 = qualName1.slice(qualName1.indexOf("#") + 1);
         var showByOwned = true;
         if ($(this).parents(".parent").length == 0) {
-           // owner filtering must not happen in "inherited from" member lists
-            var owner1 = qualName1.slice(0, qualName1.indexOf("#"));
+            // owner filtering must not happen in "inherited from" member lists
+            var ownerIndex = qualName1.indexOf("#");
+            if (ownerIndex < 0) { ownerIndex = qualName1.lastIndexOf("."); }
+            var owner1 = qualName1.slice(0, ownerIndex);
             for (out in outOwners) {
                 if (outOwners[out] == owner1) {
                     showByOwned = false;

@@ -1,5 +1,5 @@
 /* NSC -- new Scala compiler
- * Copyright 2005-2010 LAMP/EPFL
+ * Copyright 2005-2011 LAMP/EPFL
  *
  * @author  Paul Phillips
  */
@@ -193,7 +193,7 @@ trait TreeDSL {
       def defaultPos  = sym.pos
       
       final def ===(rhs: Tree): ResultTreeType =
-        atPos(sym.pos)(mkTree(rhs) setSymbol sym)
+        atPos(pos)(mkTree(rhs) setSymbol sym)
     }
     trait ValCreator {
       self: VODDStart =>
@@ -238,9 +238,9 @@ trait TreeDSL {
     }
 
     class IfStart(cond: Tree, thenp: Tree) {
-      def THEN(x: Tree) = new IfStart(cond, x)
+      def THEN(x: Tree)     = new IfStart(cond, x)
       def ELSE(elsep: Tree) = If(cond, thenp, elsep)
-      def ENDIF = If(cond, thenp, EmptyTree)
+      def ENDIF             = If(cond, thenp, EmptyTree)
     }
     class TryStart(body: Tree, catches: List[CaseDef], fin: Tree) {
       def CATCH(xs: CaseDef*) = new TryStart(body, xs.toList, fin)
@@ -281,13 +281,22 @@ trait TreeDSL {
       if (args.isEmpty) New(TypeTree(sym.tpe))
       else New(TypeTree(sym.tpe), List(args.toList))
 
-    def VAR(name: Name, tp: Type): ValTreeStart = VAR(name) withType tp
-    def VAR(name: Name): ValTreeStart           = new ValTreeStart(name) withFlags Flags.MUTABLE
-    def VAL(name: Name, tp: Type): ValTreeStart = VAL(name) withType tp
-    def VAL(name: Name): ValTreeStart           = new ValTreeStart(name)
-    def VAL(sym: Symbol): ValSymStart           = new ValSymStart(sym)
+    def DEF(name: Name, tp: Type): DefTreeStart     = DEF(name) withType tp
+    def DEF(name: Name): DefTreeStart               = new DefTreeStart(name)
+    def DEF(sym: Symbol): DefSymStart               = new DefSymStart(sym)
 
-    def DEF(sym: Symbol): DefSymStart = new DefSymStart(sym)
+    def VAL(name: Name, tp: Type): ValTreeStart     = VAL(name) withType tp
+    def VAL(name: Name): ValTreeStart               = new ValTreeStart(name)
+    def VAL(sym: Symbol): ValSymStart               = new ValSymStart(sym)
+
+    def VAR(name: Name, tp: Type): ValTreeStart     = VAL(name, tp) withFlags Flags.MUTABLE
+    def VAR(name: Name): ValTreeStart               = VAL(name) withFlags Flags.MUTABLE
+    def VAR(sym: Symbol): ValSymStart               = VAL(sym) withFlags Flags.MUTABLE
+
+    def LAZYVAL(name: Name, tp: Type): ValTreeStart = VAL(name, tp) withFlags Flags.LAZY
+    def LAZYVAL(name: Name): ValTreeStart           = VAL(name) withFlags Flags.LAZY
+    def LAZYVAL(sym: Symbol): ValSymStart           = VAL(sym) withFlags Flags.LAZY
+
     def AND(guards: Tree*) =
       if (guards.isEmpty) EmptyTree
       else guards reduceLeft gen.mkAnd
@@ -299,10 +308,8 @@ trait TreeDSL {
     def IF(tree: Tree)    = new IfStart(tree, EmptyTree)
     def TRY(tree: Tree)   = new TryStart(tree, Nil, EmptyTree)
     def BLOCK(xs: Tree*)  = Block(xs.init.toList, xs.last)
-    def NOT(tree: Tree)   = Select(tree, getMember(BooleanClass, nme.UNARY_!))
-    
-    private val _SOME     = scalaDot(nme.Some)
-    def SOME(xs: Tree*)   = Apply(_SOME, List(makeTupleTerm(xs.toList, true)))
+    def NOT(tree: Tree)   = Select(tree, getMember(BooleanClass, nme.UNARY_!))    
+    def SOME(xs: Tree*)   = Apply(scalaDot(nme.Some), List(makeTupleTerm(xs.toList, true)))
     
     /** Typed trees from symbols. */
     def THIS(sym: Symbol)             = gen.mkAttributedThis(sym)

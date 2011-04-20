@@ -1,6 +1,6 @@
 /*                     __                                               *\
 **     ________ ___   / /  ___     Scala API                            **
-**    / __/ __// _ | / /  / _ |    (c) 2003-2010, LAMP/EPFL             **
+**    / __/ __// _ | / /  / _ |    (c) 2003-2011, LAMP/EPFL             **
 **  __\ \/ /__/ __ |/ /__/ __ |    http://scala-lang.org/               **
 ** /____/\___/_/ |_/____/_/ | |                                         **
 **                          |/                                          **
@@ -36,8 +36,8 @@ trait SortedMap[A, +B] extends Map[A, B]
     SortedMap.newBuilder[A, B]
 
   override def empty: SortedMap[A, B] = SortedMap.empty
-
   override def updated [B1 >: B](key: A, value: B1): SortedMap[A, B1] = this + ((key, value))
+  override def keySet: immutable.SortedSet[A] = SortedSet.empty ++ (this map (_._1))
 
   /** Add a key/value pair to this map. 
    *  @param    kv the key/value pair
@@ -61,8 +61,8 @@ trait SortedMap[A, +B] extends Map[A, B]
    *
    *  @param xs     the traversable object.
    */
-  override def ++[B1 >: B](xs: TraversableOnce[(A, B1)]): SortedMap[A, B1] = 
-    ((repr: SortedMap[A, B1]) /: xs) (_ + _)
+  override def ++[B1 >: B](xs: GenTraversableOnce[(A, B1)]): SortedMap[A, B1] = 
+    ((repr: SortedMap[A, B1]) /: xs.seq) (_ + _)
 }
 
 /** $factoryInfo

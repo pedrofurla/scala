@@ -1,5 +1,5 @@
 /* NSC -- new Scala compiler
- * Copyright 2005-2010 LAMP/EPFL
+ * Copyright 2005-2011 LAMP/EPFL
  * @author  Martin Odersky
  */
 
@@ -7,8 +7,7 @@
 package scala.tools.nsc
 package backend.icode.analysis
 
-import scala.collection.mutable.{Map, HashMap}
-import scala.tools.nsc.symtab.Flags.DEFERRED
+import scala.collection.mutable.{ Map, HashMap }
 
 /** A modified copy-propagation like analysis. It 
  *  is augmented with a record-like value which is used
@@ -302,7 +301,7 @@ abstract class CopyPropagation {
                   out.bindings += (LocalVar(local) -> v)
               }
             case Nil =>
-              Predef.error("Incorrect icode in " + method + ". Expecting something on the stack.")
+              sys.error("Incorrect icode in " + method + ". Expecting something on the stack.")
           }
           out.stack = out.stack drop 1;
           
@@ -356,13 +355,11 @@ abstract class CopyPropagation {
         }
         
         case BOX(tpe) =>
-          val top = out.stack.head
-          top match {
-            case Deref(loc) => 
-              out.stack = Boxed(loc) :: out.stack.tail
-            case _ =>
-              out.stack = Unknown :: out.stack.drop(1)
+          val top = out.stack.head match {
+            case Deref(loc) => Boxed(loc)
+            case _          => Unknown
           }
+          out.stack = top :: out.stack.tail
 
         case UNBOX(tpe) =>
           val top = out.stack.head
@@ -372,14 +369,10 @@ abstract class CopyPropagation {
           }
           
         case NEW(kind) =>
-          val v1 = 
-            kind match {
-              case REFERENCE(cls) =>
-                Record(cls, new HashMap[Symbol, Value])
-              // bq: changed from _ to null, otherwise would be unreachable
-              case null =>
-                Unknown
-            }
+          val v1 = kind match {
+            case REFERENCE(cls) => Record(cls, new HashMap[Symbol, Value])
+            case _              => Unknown
+          }
           out.stack = v1 :: out.stack
 
         case CREATE_ARRAY(elem, dims) =>
@@ -407,7 +400,7 @@ abstract class CopyPropagation {
           if (kind != UNIT)
             out.stack = out.stack.drop(1)
           
-        case THROW() =>
+        case THROW(_) =>
           out.stack = out.stack.drop(1)
           
         case DROP(kind) =>
@@ -425,7 +418,7 @@ abstract class CopyPropagation {
         case SCOPE_ENTER(_) | SCOPE_EXIT(_) =>
           ()
         
-        case LOAD_EXCEPTION() =>
+        case LOAD_EXCEPTION(_) =>
           out.stack = Unknown :: Nil
 
         case _ =>
@@ -508,9 +501,9 @@ abstract class CopyPropagation {
      */
     final def invalidateRecords(state: copyLattice.State) {
       def shouldRetain(sym: Symbol): Boolean = {
-        if (sym.hasFlag(symtab.Flags.MUTABLE))
+        if (sym.isMutable)
           log("dropping binding for " + sym.fullName)
-        !sym.hasFlag(symtab.Flags.MUTABLE)
+        !sym.isMutable
       }
       state.stack = state.stack map { v => v match {
         case Record(cls, bindings) =>

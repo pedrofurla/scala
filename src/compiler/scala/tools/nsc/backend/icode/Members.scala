@@ -1,5 +1,5 @@
 /* NSC -- new scala compiler
- * Copyright 2005-2010 LAMP/EPFL
+ * Copyright 2005-2011 LAMP/EPFL
  * @author  Martin Odersky
  */
 
@@ -9,7 +9,6 @@ package backend
 package icode
 
 import java.io.PrintWriter
-
 import scala.collection.{ mutable, immutable }
 import mutable.{ HashMap, ListBuffer }
 import symtab.Flags.{ DEFERRED }
@@ -27,6 +26,7 @@ trait Members { self: ICodes =>
    * other multi-block piece of code, like exception handlers.
    */
   class Code(label: String, method: IMethod) {
+    def this(method: IMethod) = this(method.symbol.simpleName.toString, method)
 
     /** The set of all blocks */
     val blocks: ListBuffer[BasicBlock] = new ListBuffer
@@ -190,10 +190,8 @@ trait Members { self: ICodes =>
     def addHandler(e: ExceptionHandler) = exh ::= e
 
     /** Is this method deferred ('abstract' in Java sense)?
-     *  This differs from sym.isDeferred because the symbol only examines the
-     *  flag, which may not be set in the other covered cases.
      */
-    def isDeferred = (symbol hasFlag DEFERRED) || symbol.owner.isInterface || native
+    def isAbstractMethod = symbol.isDeferred || symbol.owner.isInterface || native
     
     def isStatic: Boolean = symbol.isStaticMember
     
@@ -207,9 +205,9 @@ trait Members { self: ICodes =>
       } toSet
       
       if (code != null) {
-        Console.println("[checking locals of " + this + "]")
+        log("[checking locals of " + this + "]")
         locals filterNot localsSet foreach { l =>
-          Console.println("Local " + l + " is not declared in " + this)
+          log("Local " + l + " is not declared in " + this)
         }
       }
     }
@@ -221,8 +219,7 @@ trait Members { self: ICodes =>
      * This method should be most effective after heavy inlining.
      */
     def normalize: Unit = if (this.code ne null) {
-      import scala.collection.mutable.{Map, HashMap}      
-      val nextBlock: Map[BasicBlock, BasicBlock] = HashMap.empty
+      val nextBlock: mutable.Map[BasicBlock, BasicBlock] = mutable.HashMap.empty
       for (b <- code.blocks.toList
         if b.successors.length == 1; 
         val succ = b.successors.head; 

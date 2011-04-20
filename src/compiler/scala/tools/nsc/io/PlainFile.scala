@@ -1,5 +1,5 @@
 /* NSC -- new Scala compiler
- * Copyright 2005-2010 LAMP/EPFL
+ * Copyright 2005-2011 LAMP/EPFL
  * @author  Martin Odersky
  */
 
@@ -7,7 +7,7 @@
 package scala.tools.nsc
 package io
 
-import java.io.{ File => JFile, FileInputStream, FileOutputStream, IOException }
+import java.io.{ FileInputStream, FileOutputStream, IOException }
 import PartialFunction._
 
 object PlainFile {

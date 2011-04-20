@@ -1,6 +1,6 @@
 /*                     __                                               *\
 **     ________ ___   / /  ___     Scala API                            **
-**    / __/ __// _ | / /  / _ |    (c) 2006-2010, LAMP/EPFL             **
+**    / __/ __// _ | / /  / _ |    (c) 2006-2011, LAMP/EPFL             **
 **  __\ \/ /__/ __ |/ /__/ __ |    http://scala-lang.org/               **
 ** /____/\___/_/ |_/____/_/ | |                                         **
 **                          |/                                          **
@@ -59,8 +59,8 @@ trait Position {
    * and then -- if necessary -- using the columns to break a tie.
    *
    * @param `that' a `Position' to compare to this `Position'
-   * @return true if this position's line or (in case of a tie wrt. line numbers)
-   *         its column is smaller than the corresponding components of `that'
+   * @return true if this position's line number or (in case of equal line numbers)
+   *         column is smaller than the corresponding components of `that'
    */
   def <(that: Position) = {
     this.line < that.line || 

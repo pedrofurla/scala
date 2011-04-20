@@ -1,6 +1,6 @@
 /*                     __                                               *\
 **     ________ ___   / /  ___     Scala API                            **
-**    / __/ __// _ | / /  / _ |    (c) 2003-2010, LAMP/EPFL             **
+**    / __/ __// _ | / /  / _ |    (c) 2003-2011, LAMP/EPFL             **
 **  __\ \/ /__/ __ |/ /__/ __ |    http://scala-lang.org/               **
 ** /____/\___/_/ |_/____/_/ | |                                         **
 **                          |/                                          **
@@ -12,6 +12,7 @@ package scala.collection
 package generic
 
 import mutable.Builder
+import annotation.migration
 import annotation.unchecked.uncheckedVariance
 
 /** A template class for companion objects of ``regular`` collection classes
@@ -24,7 +25,7 @@ import annotation.unchecked.uncheckedVariance
  *  @define coll  collection
  *  @define Coll  CC
  */
-trait GenericTraversableTemplate[+A, +CC[X] <: Traversable[X]] extends HasNewBuilder[A, CC[A] @uncheckedVariance] { 
+trait GenericTraversableTemplate[+A, +CC[X] <: GenTraversable[X]] extends HasNewBuilder[A, CC[A] @uncheckedVariance] { 
 
   /** Applies a function `f` to all elements of this $coll.
    *
@@ -38,7 +39,7 @@ trait GenericTraversableTemplate[+A, +CC[X] <: Traversable[X]] extends HasNewBui
    *  @usecase def foreach(f: A => Unit): Unit
    */
   def foreach[U](f: A => U): Unit
-
+  
   /** Selects the first element of this $coll.
    *
    *  @return  the first element of this $coll.
@@ -66,6 +67,8 @@ trait GenericTraversableTemplate[+A, +CC[X] <: Traversable[X]] extends HasNewBui
    */
   def genericBuilder[B]: Builder[B, CC[B]] = companion.newBuilder[B]
 
+  private def sequential: TraversableOnce[A] = this.asInstanceOf[TraversableOnce[A]].seq
+
   /** Converts this $coll of pairs into two collections of the first and second
    *  half of each pair.
    *
@@ -76,15 +79,40 @@ trait GenericTraversableTemplate[+A, +CC[X] <: Traversable[X]] extends HasNewBui
    *  @return       a pair ${coll}s, containing the first, respectively second
    *                half of each element pair of this $coll.
    */
-  def unzip[A1, A2](implicit asPair: A => /*<:<!!!*/ (A1, A2)): (CC[A1], CC[A2]) = {
+  def unzip[A1, A2](implicit asPair: A => (A1, A2)): (CC[A1], CC[A2]) = {
     val b1 = genericBuilder[A1]
     val b2 = genericBuilder[A2]
-    for (xy <- this) {
+    for (xy <- sequential) {
       val (x, y) = asPair(xy)
       b1 += x
       b2 += y
     }
     (b1.result, b2.result)
+  }
+  
+  /** Converts this $coll of triples into three collections of the first, second,
+   *  and third element of each triple.
+   *
+   *  @param A1     the type of the first member of the element triples
+   *  @param A2     the type of the second member of the element triples
+   *  @param A3     the type of the third member of the element triples
+   *  @param asPair an implicit conversion which asserts that the element type
+   *                of this $coll is a triple.
+   *  @return       a triple ${coll}s, containing the first, second, respectively
+   *                third member of each element triple of this $coll.
+   */
+  def unzip3[A1, A2, A3](implicit asTriple: A => (A1, A2, A3)): (CC[A1], CC[A2], CC[A3]) = {
+    val b1 = genericBuilder[A1]
+    val b2 = genericBuilder[A2]
+    val b3 = genericBuilder[A3]
+    
+    for (xyz <- sequential) {
+      val (x, y, z) = asTriple(xyz)
+      b1 += x
+      b2 += y
+      b3 += z
+    }
+    (b1.result, b2.result, b3.result)
   }
 
   /** Converts this $coll of traversable collections into
@@ -96,9 +124,9 @@ trait GenericTraversableTemplate[+A, +CC[X] <: Traversable[X]] extends HasNewBui
    *  @return a new $coll resulting from concatenating all element ${coll}s.
    *  @usecase def flatten[B]: $Coll[B]
    */
-  def flatten[B](implicit asTraversable: A => /*<:<!!!*/ Traversable[B]): CC[B] = {
+  def flatten[B](implicit asTraversable: A => /*<:<!!!*/ TraversableOnce[B]): CC[B] = {
     val b = genericBuilder[B]
-    for (xs <- this)
+    for (xs <- sequential)
       b ++= asTraversable(xs)
     b.result
   }
@@ -111,23 +139,31 @@ trait GenericTraversableTemplate[+A, +CC[X] <: Traversable[X]] extends HasNewBui
    *          element type of this $coll is a `Traversable`.
    *  @return a two-dimensional $coll of ${coll}s which has as ''n''th row
    *          the ''n''th column of this $coll. 
+   *  @throws `IllegalArgumentException` if all collections in this $coll
+   *          are not of the same size.
    */
-  def transpose[B](implicit asTraversable: A => /*<:<!!!*/ Traversable[B]): CC[CC[B] @uncheckedVariance] = {
+  @migration(2, 9, "As of 2.9, transpose throws an exception if collections are not uniformly sized.")
+  def transpose[B](implicit asTraversable: A => /*<:<!!!*/ TraversableOnce[B]): CC[CC[B] @uncheckedVariance] = {
     if (isEmpty)
       return genericBuilder[CC[B]].result
-      
-    val bs: IndexedSeq[Builder[B, CC[B]]] = IndexedSeq.fill(asTraversable(head).size)(genericBuilder[B])
-    for (xs <- this) {
+    
+    def fail = throw new IllegalArgumentException("transpose requires all collections have the same size")
+    
+    val headSize = asTraversable(head).size
+    val bs: IndexedSeq[Builder[B, CC[B]]] = IndexedSeq.fill(headSize)(genericBuilder[B])
+    for (xs <- sequential) {
       var i = 0
       for (x <- asTraversable(xs)) {
+        if (i >= headSize) fail
         bs(i) += x
         i += 1
       }
+      if (i != headSize)
+        fail
     }
     val bb = genericBuilder[CC[B]]
     for (b <- bs) bb += b.result
     bb.result
   }
 }
-
 

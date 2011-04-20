@@ -1,6 +1,6 @@
 /*                     __                                               *\
 **     ________ ___   / /  ___     Scala API                            **
-**    / __/ __// _ | / /  / _ |    (c) 2002-2010, LAMP/EPFL             **
+**    / __/ __// _ | / /  / _ |    (c) 2002-2011, LAMP/EPFL             **
 **  __\ \/ /__/ __ |/ /__/ __ |    http://scala-lang.org/               **
 ** /____/\___/_/ |_/____/_/ | |                                         **
 **                          |/                                          **
@@ -412,10 +412,10 @@ object Array extends FallbackArrayBuilding {
    *  @param x the selector value
    *  @return  sequence wrapped in a [[scala.Some]], if x is a Seq, otherwise `None`
    */
-  def unapplySeq[T](x: Array[T]): Option[IndexedSeq[T]] = 
+  def unapplySeq[T](x: Array[T]): Option[IndexedSeq[T]] =
     if (x == null) None else Some(x.toIndexedSeq) 
     // !!! the null check should to be necessary, but without it 2241 fails. Seems to be a bug
-    // in pattern matcher.
+    // in pattern matcher.  @PP: I noted in #4364 I think the behavior is correct.
 
   /** Creates an array containing several copies of an element.
    *
@@ -423,7 +423,7 @@ object Array extends FallbackArrayBuilding {
    *  @param elem the element composing the resulting array
    *  @return     an array composed of n elements all equal to elem
    */
-  @deprecated("use `Array.fill' instead")
+  @deprecated("use `Array.fill' instead", "2.8.0")
   def make[T: ClassManifest](n: Int, elem: T): Array[T] = {
     val a = new Array[T](n)
     var i = 0
@@ -437,7 +437,7 @@ object Array extends FallbackArrayBuilding {
   /** Creates an array containing the values of a given function `f` 
    *  over given range `[0..n)`
    */
-  @deprecated("use `Array.tabulate' instead")
+  @deprecated("use `Array.tabulate' instead", "2.8.0")
   def fromFunction[T: ClassManifest](f: Int => T)(n: Int): Array[T] = {
     val a = new Array[T](n)
     var i = 0
@@ -451,28 +451,28 @@ object Array extends FallbackArrayBuilding {
   /** Creates an array containing the values of a given function `f` 
    *  over given range `[0..n1, 0..n2)`
    */
-  @deprecated("use `Array.tabulate' instead")
+  @deprecated("use `Array.tabulate' instead", "2.8.0")
   def fromFunction[T: ClassManifest](f: (Int, Int) => T)(n1: Int, n2: Int): Array[Array[T]] =
     fromFunction(i => fromFunction(f(i, _))(n2))(n1)
   
   /** Creates an array containing the values of a given function `f` 
    *  over given range `[0..n1, 0..n2, 0..n3)`
    */
-  @deprecated("use `Array.tabulate' instead")
+  @deprecated("use `Array.tabulate' instead", "2.8.0")
   def fromFunction[T: ClassManifest](f: (Int, Int, Int) => T)(n1: Int, n2: Int, n3: Int): Array[Array[Array[T]]] = 
     fromFunction(i => fromFunction(f(i, _, _))(n2, n3))(n1)
 
   /** Creates an array containing the values of a given function `f` 
    *  over given range `[0..n1, 0..n2, 0..n3, 0..n4)`
    */
-  @deprecated("use `Array.tabulate' instead")
+  @deprecated("use `Array.tabulate' instead", "2.8.0")
   def fromFunction[T: ClassManifest](f: (Int, Int, Int, Int) => T)(n1: Int, n2: Int, n3: Int, n4: Int): Array[Array[Array[Array[T]]]] = 
     fromFunction(i => fromFunction(f(i, _, _, _))(n2, n3, n4))(n1)
 
   /** Creates an array containing the values of a given function `f` 
    *  over given range `[0..n1, 0..n2, 0..n3, 0..n4, 0..n5)`
    */
-  @deprecated("use `Array.tabulate' instead")
+  @deprecated("use `Array.tabulate' instead", "2.8.0")
   def fromFunction[T: ClassManifest](f: (Int, Int, Int, Int, Int) => T)(n1: Int, n2: Int, n3: Int, n4: Int, n5: Int): Array[Array[Array[Array[Array[T]]]]] = 
     fromFunction(i => fromFunction(f(i, _, _, _, _))(n2, n3, n4, n5))(n1)
 }
@@ -483,59 +483,59 @@ object Array extends FallbackArrayBuilding {
  *  @author Martin Odersky
  *  @version 1.0
  */
-final class Array[T](_length: Int) {
+final class Array[T](_length: Int) extends java.io.Serializable with java.lang.Cloneable {
 
    /** Multidimensional array creation */
-   @deprecated("use `Array.ofDim' instead")
+   @deprecated("use `Array.ofDim' instead", "2.8.0")
    def this(dim1: Int, dim2: Int) = {
      this(dim1)
      throw new Error()
    }
 
    /** Multidimensional array creation */
-   @deprecated("use `Array.ofDim' instead")
+   @deprecated("use `Array.ofDim' instead", "2.8.0")
    def this(dim1: Int, dim2: Int, dim3: Int) = {
      this(dim1)
      throw new Error()
    }
 
    /** Multidimensional array creation */
-   @deprecated("use `Array.ofDim' instead")
+   @deprecated("use `Array.ofDim' instead", "2.8.0")
    def this(dim1: Int, dim2: Int, dim3: Int, dim4: Int) = {
      this(dim1)
      throw new Error()
    }
 
    /** Multidimensional array creation */
-   @deprecated("use `Array.ofDim' instead")
+   @deprecated("use `Array.ofDim' instead", "2.8.0")
    def this(dim1: Int, dim2: Int, dim3: Int, dim4: Int, dim5: Int) = {
      this(dim1);
      throw new Error()
    }
 
    /** Multidimensional array creation */
-   @deprecated("use `Array.ofDim' instead")
+   @deprecated("use `Array.ofDim' instead", "2.8.0")
    def this(dim1: Int, dim2: Int, dim3: Int, dim4: Int, dim5: Int, dim6: Int) = {
      this(dim1)
      throw new Error()
    }
 
    /** Multidimensional array creation */
-   @deprecated("use `Array.ofDim' instead")
+   @deprecated("use `Array.ofDim' instead", "2.8.0")
    def this(dim1: Int, dim2: Int, dim3: Int, dim4: Int, dim5: Int, dim6: Int, dim7: Int) = {
      this(dim1)
      throw new Error()
    }
 
    /** Multidimensional array creation */
-   @deprecated("use `Array.ofDim' instead")
+   @deprecated("use `Array.ofDim' instead", "2.8.0")
    def this(dim1: Int, dim2: Int, dim3: Int, dim4: Int, dim5: Int, dim6: Int, dim7: Int, dim8: Int) = {
      this(dim1)
      throw new Error()
    }
 
    /** Multidimensional array creation */
-   @deprecated("use `Array.ofDim' instead")
+   @deprecated("use `Array.ofDim' instead", "2.8.0")
    def this(dim1: Int, dim2: Int, dim3: Int, dim4: Int, dim5: Int, dim6: Int, dim7: Int, dim8: Int, dim9: Int) = {
      this(dim1)
      throw new Error()
@@ -545,43 +545,28 @@ final class Array[T](_length: Int) {
   def length: Int = throw new Error()
 
   /** The element at given index. 
-   *  <p>
-   *    Indices start a `0`; `xs.apply(0)` is the first 
-   *    element of array `xs`.
-   *  </p>
-   *  <p>
-   *    Note the indexing syntax `xs(i)` is a shorthand for
-   *    `xs.apply(i)`.
-   *  </p>
+   *  
+   *  Indices start at `0`; `xs.apply(0)` is the first element of array `xs`.
+   *  Note the indexing syntax `xs(i)` is a shorthand for `xs.apply(i)`.
    *
-   *  @param i   the index
-   *  @throws ArrayIndexOutOfBoundsException if `i < 0` or
-   *          `length <= i`
+   *  @param    i   the index
+   *  @return       the element at the given index
+   *  @throws       ArrayIndexOutOfBoundsException if `i < 0` or `length <= i`
    */
   def apply(i: Int): T = throw new Error()
 
-  /** <p>
-   *    Update the element at given index. 
-   *  </p>
-   *  <p>
-   *    Indices start a `0`; `xs.apply(0)` is the first 
-   *    element of array `xs`.
-   *  </p>
-   *  <p>
-   *    Note the indexing syntax `xs(i) = x` is a shorthand 
-   *    for `xs.update(i, x)`.
-   *  </p>
+  /** Update the element at given index.
+   *  
+   *  Indices start at `0`; `xs.apply(0)` is the first element of array `xs`.
+   *  Note the indexing syntax `xs(i)` is a shorthand for `xs.apply(i)`.
    *
-   *  @param i   the index
-   *  @param x   the value to be written at index `i`
-   *  @throws ArrayIndexOutOfBoundsException if `i < 0` or
-   *          `length <= i`
+   *  @param    i   the index
+   *  @param    x   the value to be written at index `i`
+   *  @throws       ArrayIndexOutOfBoundsException if `i < 0` or `length <= i`
    */
   def update(i: Int, x: T) { throw new Error() }
   
-  /** <p>
-   *    Clone the Array.
-   *  </p>
+  /** Clone the Array.
    *
    *  @return A clone of the Array.
    */

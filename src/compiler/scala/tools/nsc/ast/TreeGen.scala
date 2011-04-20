@@ -1,5 +1,5 @@
 /* NSC -- new Scala compiler
- * Copyright 2005-2010 LAMP/EPFL
+ * Copyright 2005-2011 LAMP/EPFL
  * @author  Martin Odersky
  */
 
@@ -22,19 +22,18 @@ abstract class TreeGen {
   def rootId(name: Name)          = Select(Ident(nme.ROOTPKG), name)
   def rootScalaDot(name: Name)    = Select(rootId(nme.scala_) setSymbol ScalaPackage, name)
   def scalaDot(name: Name)        = Select(Ident(nme.scala_) setSymbol ScalaPackage, name)
-  def scalaAnyRefConstr           = scalaDot(nme.AnyRef.toTypeName)
-  def scalaUnitConstr             = scalaDot(nme.Unit.toTypeName)
-  def scalaScalaObjectConstr      = scalaDot(nme.ScalaObject.toTypeName)
-  def productConstr               = scalaDot(nme.Product.toTypeName)
-  
-  private def isRootOrEmptyPackageClass(s: Symbol) = s.isRoot || s.isEmptyPackageClass
+  def scalaAnyRefConstr           = scalaDot(tpnme.AnyRef)
+  def scalaUnitConstr             = scalaDot(tpnme.Unit)
+  def scalaScalaObjectConstr      = scalaDot(tpnme.ScalaObject)
+  def productConstr               = scalaDot(tpnme.Product)
+  def serializableConstr          = scalaDot(tpnme.Serializable)
   
   def scalaFunctionConstr(argtpes: List[Tree], restpe: Tree, abstractFun: Boolean = false): Tree = {
     val cls = if (abstractFun)
       mkAttributedRef(AbstractFunctionClass(argtpes.length))
     else
       mkAttributedRef(FunctionClass(argtpes.length))
-    AppliedTypeTree(cls, argtpes ::: List(restpe))
+    AppliedTypeTree(cls, argtpes :+ restpe)
   }
 
   /** Builds a reference to value whose type is given stable prefix.
@@ -54,32 +53,20 @@ abstract class TreeGen {
     case NoPrefix =>
       EmptyTree
     case ThisType(clazz) =>
-      if (isRootOrEmptyPackageClass(clazz)) EmptyTree
+      if (clazz.isEffectiveRoot) EmptyTree
       else mkAttributedThis(clazz)
     case SingleType(pre, sym) =>
-      val qual = mkAttributedStableRef(pre, sym)
-      qual.tpe match {
-        case MethodType(List(), restpe) =>
-          Apply(qual, List()) setType restpe
-        case _ =>
-          qual
-      }
+      applyIfNoArgs(mkAttributedStableRef(pre, sym))
     case TypeRef(pre, sym, args) =>
       if (sym.isRoot) {
         mkAttributedThis(sym)
       } else if (sym.isModuleClass) {
-        val qual = mkAttributedRef(pre, sym.sourceModule)
-        qual.tpe match {
-          case MethodType(List(), restpe) =>
-            Apply(qual, List()) setType restpe
-          case _ =>
-            qual
-        }
+        applyIfNoArgs(mkAttributedRef(pre, sym.sourceModule))
       } else if (sym.isModule || sym.isClass) {
         assert(phase.erasedTypes, tpe)
         mkAttributedThis(sym)
       } else if (sym.isType) {
-        assert(termSym != NoSymbol)
+        assert(termSym != NoSymbol, tpe)
         mkAttributedIdent(termSym) setType tpe
       } else {
         mkAttributedRef(pre, sym)
@@ -95,20 +82,27 @@ abstract class TreeGen {
       // I am unclear whether this is reachable, but
       // the following implementation looks logical -Lex
       val firstStable = parents.find(_.isStable)
-      assert(!firstStable.isEmpty)
+      assert(!firstStable.isEmpty, tpe)
       mkAttributedQualifier(firstStable.get)
 
     case _ =>
       abort("bad qualifier: " + tpe)
+  }
+  /** If this is a reference to a method with an empty
+   *  parameter list, wrap it in an apply.
+   */
+  private def applyIfNoArgs(qual: Tree) = qual.tpe match {
+    case MethodType(Nil, restpe) => Apply(qual, Nil) setType restpe
+    case _                       => qual
   }
 
   /** Builds a reference to given symbol with given stable prefix. */
   def mkAttributedRef(pre: Type, sym: Symbol): Tree = {
     val qual = mkAttributedQualifier(pre)
     qual match {
-      case EmptyTree                                              => mkAttributedIdent(sym)
-      case This(clazz) if isRootOrEmptyPackageClass(qual.symbol)  => mkAttributedIdent(sym)
-      case _                                                      => mkAttributedSelect(qual, sym)
+      case EmptyTree                                  => mkAttributedIdent(sym)
+      case This(clazz) if qual.symbol.isEffectiveRoot => mkAttributedIdent(sym)
+      case _                                          => mkAttributedSelect(qual, sym)
     }
   }
 
@@ -127,8 +121,8 @@ abstract class TreeGen {
   def stableTypeFor(tree: Tree): Option[Type] = tree match {
     case Ident(_) if tree.symbol.isStable =>
       Some(singleType(tree.symbol.owner.thisType, tree.symbol))
-    case Select(qual, _) if   {assert((tree.symbol ne null) && (qual.tpe ne null)); 
-                            tree.symbol.isStable && qual.tpe.isStable} =>
+    case Select(qual, _) if ((tree.symbol ne null) && (qual.tpe ne null)) && // turned assert into guard for #4064
+                            tree.symbol.isStable && qual.tpe.isStable =>
       Some(singleType(qual.tpe, tree.symbol))
     case _ =>
       None
@@ -152,30 +146,26 @@ abstract class TreeGen {
     stabilize(mkAttributedRef(sym))
 
   def mkAttributedThis(sym: Symbol): Tree =
-    This(sym.name) setSymbol sym setType sym.thisType
+    This(sym.name.toTypeName) setSymbol sym setType sym.thisType
 
   def mkAttributedIdent(sym: Symbol): Tree =
     Ident(sym.name) setSymbol sym setType sym.tpe
 
   def mkAttributedSelect(qual: Tree, sym: Symbol): Tree = {
-    def tpe = qual.tpe
-    
-    def isUnqualified(n: Name)        = n match { case nme.ROOT | nme.EMPTY_PACKAGE_NAME => true ; case _ => false }
-    def hasUnqualifiedName(s: Symbol) = s != null && isUnqualified(s.name.toTermName)
-    def isInPkgObject(s: Symbol)      = s != null && s.owner.isPackageObjectClass && s.owner.owner == tpe.typeSymbol
-    
-    if (hasUnqualifiedName(qual.symbol))
+    // Tests involving the repl fail without the .isEmptyPackage condition.
+    if (qual.symbol != null && (qual.symbol.isEffectiveRoot || qual.symbol.isEmptyPackage))
       mkAttributedIdent(sym)
     else {
-      val pkgQualifier            =
-        if (!isInPkgObject(sym)) qual else {
+      val pkgQualifier =
+        if (sym != null && sym.owner.isPackageObjectClass && sym.owner.owner == qual.tpe.typeSymbol) {
           val obj = sym.owner.sourceModule
-          Select(qual, nme.PACKAGEkw) setSymbol obj setType singleType(tpe, obj)
+          Select(qual, nme.PACKAGEkw) setSymbol obj setType singleType(qual.tpe, obj)
         }
-      val tree = Select(pkgQualifier, sym)
+        else qual
       
+      val tree = Select(pkgQualifier, sym)
       if (pkgQualifier.tpe == null) tree
-      else tree setType (tpe memberType sym)
+      else tree setType (qual.tpe memberType sym)
     }
   }
   
@@ -229,6 +219,22 @@ abstract class TreeGen {
 
   /** Builds a list with given head and tail. */
   def mkNil: Tree = mkAttributedRef(NilModule)
+  
+  /** Builds a tree representing an undefined local, as in
+   *    var x: T = _
+   *  which is appropriate to the given Type.
+   */
+  def mkZero(tp: Type): Tree = {
+    val sym = tp.typeSymbol
+    val tree =
+      if (sym == UnitClass) Literal(())
+      else if (sym == BooleanClass) Literal(false)
+      else if (isValueClass(sym)) Literal(0)
+      else if (NullClass.tpe <:< tp) Literal(null: Any)
+      else abort("Cannot determine zero for " + tp)
+    
+    tree setType tp
+  }
 
   /** Builds a tuple */
   def mkTuple(elems: List[Tree]): Tree =
@@ -270,7 +276,6 @@ abstract class TreeGen {
       mval.owner.info.decls.enter(mval)
     }
     ValDef(mval, EmptyTree)
-    //ValDef(mval, newModule(accessor, mval.tpe))
   }
   
   // def m: T = { if (m$ eq null) m$ = new m$class(...) m$ }
@@ -278,10 +283,8 @@ abstract class TreeGen {
   def mkCachedModuleAccessDef(accessor: Symbol, mvar: Symbol) =
     DefDef(accessor, mkCached(mvar, newModule(accessor, mvar.tpe)))
 
-  // def m: T = new tpe(...)
-  // where (...) are eventual outer accessors
-  def mkModuleAccessDef(accessor: Symbol, tpe: Type) =
-    DefDef(accessor, newModule(accessor, tpe))
+  def mkModuleAccessDef(accessor: Symbol, msym: Symbol) =
+    DefDef(accessor, Select(This(msym.owner), msym))
 
   def newModule(accessor: Symbol, tpe: Type) =
     New(TypeTree(tpe), 
@@ -303,7 +306,7 @@ abstract class TreeGen {
     Apply(Select(monitor, Object_synchronized), List(body))
 
   def wildcardStar(tree: Tree) =
-    atPos(tree.pos) { Typed(tree, Ident(nme.WILDCARD_STAR.toTypeName)) }
+    atPos(tree.pos) { Typed(tree, Ident(tpnme.WILDCARD_STAR)) }
 
   def paramToArg(vparam: Symbol) = {
     val arg = Ident(vparam)
@@ -346,16 +349,20 @@ abstract class TreeGen {
       mkCast(mkRuntimeCall("toObjectArray", List(tree)), pt)
     else
       mkCast(tree, pt)
+  
+  /** Translate names in Select/Ident nodes to type names.
+   */
+  def convertToTypeName(tree: Tree): Option[RefTree] = tree match {
+    case Select(qual, name) => Some(Select(qual, name.toTypeName))
+    case Ident(name)        => Some(Ident(name.toTypeName))
+    case _                  => None
+  }
 
   /** Try to convert Select(qual, name) to a SelectFromTypeTree.
    */
-  def convertToSelectFromType(qual: Tree, name: Name): Tree = {
-    def selFromType(qual1: Tree) = SelectFromTypeTree(qual1 setPos qual.pos, name)
-    qual match {
-      case Select(qual1, name) => selFromType(Select(qual1, name.toTypeName))
-      case Ident(name) => selFromType(Ident(name.toTypeName))
-      case _ => EmptyTree
-    }
+  def convertToSelectFromType(qual: Tree, origName: Name) = convertToTypeName(qual) match {
+    case Some(qual1)  => SelectFromTypeTree(qual1 setPos qual.pos, origName.toTypeName)
+    case _            => EmptyTree
   }
 
   /** Used in situations where you need to access value of an expression several times
@@ -365,7 +372,7 @@ abstract class TreeGen {
     if (treeInfo.isPureExpr(expr)) {
       within(() => if (used) expr.duplicate else { used = true; expr })
     } else {
-      val temp = owner.newValue(expr.pos.makeTransparent, unit.fresh.newName(expr.pos, "ev$"))
+      val temp = owner.newValue(expr.pos.makeTransparent, unit.freshTermName("ev$"))
         .setFlag(SYNTHETIC).setInfo(expr.tpe)
       val containing = within(() => Ident(temp) setPos temp.pos.focus setType expr.tpe)
       ensureNonOverlapping(containing, List(expr))
@@ -385,7 +392,7 @@ abstract class TreeGen {
           () => if (used(idx)) expr.duplicate else { used(idx) = true; expr }
         }
       } else {
-        val temp = owner.newValue(expr.pos.makeTransparent, unit.fresh.newName(expr.pos, "ev$"))
+        val temp = owner.newValue(expr.pos.makeTransparent, unit.freshTermName("ev$"))
           .setFlag(SYNTHETIC).setInfo(expr.tpe)
         vdefs += ValDef(temp, expr)
         exprs1 += (() => Ident(temp) setPos temp.pos.focus setType expr.tpe)

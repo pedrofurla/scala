@@ -1,6 +1,6 @@
 /*                     __                                               *\
 **     ________ ___   / /  ___     Scala API                            **
-**    / __/ __// _ | / /  / _ |    (c) 2006-2010, LAMP/EPFL             **
+**    / __/ __// _ | / /  / _ |    (c) 2006-2011, LAMP/EPFL             **
 **  __\ \/ /__/ __ |/ /__/ __ |    http://scala-lang.org/               **
 ** /____/\___/_/ |_/____/_/ | |                                         **
 **                          |/                                          **
@@ -76,8 +76,7 @@ trait Mappable {
  */
 trait Binders extends AbstractSyntax with Mappable {
   /** A `Scope' keeps track of one or more syntactic elements that represent bound names.
-   * The elements it contains share the same scope and must all be distinct (wrt. ==)
-   *
+   * The elements it contains share the same scope and must all be distinct, as determined by `=='.   *
    * A `NameElement' `n' in the AST that is conceptually bound by a `Scope' `s', is replaced by a 
    * `BoundElement(n, s)'. (For example, in `val x:Int=x+1', the first `x' is modelled by a
    * Scope `s' that contains `x' and the second `x' is represented by a `BoundElement(`x', s)')

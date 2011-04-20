@@ -1,6 +1,6 @@
 /*                     __                                               *\
 **     ________ ___   / /  ___     Scala API                            **
-**    / __/ __// _ | / /  / _ |    (c) 2003-2010, LAMP/EPFL             **
+**    / __/ __// _ | / /  / _ |    (c) 2003-2011, LAMP/EPFL             **
 **  __\ \/ /__/ __ |/ /__/ __ |    http://scala-lang.org/               **
 ** /____/\___/_/ |_/____/_/ | |                                         **
 **                          |/                                          **
@@ -59,7 +59,7 @@ object ArrayStack extends SeqFactory[ArrayStack] {
  *  @define mayNotTerminateInf
  *  @define willNotTerminateInf
  */
-@cloneable @serializable @SerialVersionUID(8565219180626620510L)
+@cloneable @SerialVersionUID(8565219180626620510L)
 class ArrayStack[T] private(private var table : Array[AnyRef],
                             private var index : Int)
 extends Seq[T]
@@ -67,6 +67,7 @@ extends Seq[T]
    with GenericTraversableTemplate[T, ArrayStack]
    with Cloneable[ArrayStack[T]]
    with Builder[T, ArrayStack[T]]
+   with Serializable
 {
   def this() = this(new Array[AnyRef](1), 0)
 
@@ -112,8 +113,8 @@ extends Seq[T]
    *  
    *  @return the element on top of the stack
    */
-  def pop: T = {
-    if (index == 0) error("Stack empty")
+  def pop(): T = {
+    if (index == 0) sys.error("Stack empty")
     index -= 1
     val x = table(index).asInstanceOf[T]
     table(index) = null
@@ -121,7 +122,7 @@ extends Seq[T]
   } 
 
   /** View the top element of the stack. */
-  @deprecated("use top instead")
+  @deprecated("use top instead", "2.8.0")
   def peek = top
 
   /** View the top element of the stack.
@@ -139,7 +140,7 @@ extends Seq[T]
    *  the top equal to the element that was previously at the top.
    *  If the stack is empty, an exception is thrown.
    */
-  def dup = push(top)
+  def dup() = push(top)
 
   /** Empties the stack. */
   def clear {
@@ -159,7 +160,7 @@ extends Seq[T]
    *  @param x  The source of elements to push.
    *  @return   A reference to this stack.
    */
-  override def ++=(xs: TraversableOnce[T]): this.type = { xs foreach += ; this }
+  override def ++=(xs: TraversableOnce[T]): this.type = { xs.seq foreach += ; this }
 
   /** Does the same as `push`, but returns the updated stack.
    *  
@@ -214,7 +215,7 @@ extends Seq[T]
   def iterator: Iterator[T] = new Iterator[T] {
     var currentIndex = index
     def hasNext = currentIndex > 0
-    def next = {
+    def next() = {
       currentIndex -= 1
       table(currentIndex).asInstanceOf[T]
     }
@@ -228,5 +229,5 @@ extends Seq[T]
     }
   }
 
-  override def clone = new ArrayStack[T](ArrayStack.clone(table), index)
+  override def clone() = new ArrayStack[T](ArrayStack.clone(table), index)
 }

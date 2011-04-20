@@ -1,5 +1,5 @@
 /* NSC -- new Scala compiler
- * Copyright 2005-2010 LAMP/EPFL
+ * Copyright 2005-2011 LAMP/EPFL
  * @author  Martin Odersky
  */
 
@@ -62,18 +62,18 @@ abstract class TreeBrowsers {
       t
     }
 
-    def browse(units: Iterator[CompilationUnit]): Unit =
-      browse(units.toList)
+    def browse(pName: String, units: Iterator[CompilationUnit]): Unit =
+      browse(pName, units.toList)
 
     /** print the whole program */
-    def browse(units: List[CompilationUnit]): Unit = {
+    def browse(pName: String, units: List[CompilationUnit]): Unit = {
       var unitList: List[UnitTree] = Nil
 
       for (i <- units)
         unitList = UnitTree(i) :: unitList
       val tm = new ASTTreeModel(ProgramTree(unitList))
 
-      val frame = new BrowserFrame()
+      val frame = new BrowserFrame(pName)
       frame.setTreeModel(tm)
 
       val lock = new Lock()
@@ -94,7 +94,7 @@ abstract class TreeBrowsers {
 
     /** Return the index'th child of parent */
     def getChild(parent: Any, index: Int): AnyRef =
-      packChildren(parent).drop(index).head
+      packChildren(parent)(index)
 
     /** Return the number of children this 'parent' has */
     def getChildCount(parent: Any): Int =
@@ -102,16 +102,16 @@ abstract class TreeBrowsers {
 
     /** Return the index of the given child */
     def getIndexOfChild(parent: Any, child: Any): Int =
-      packChildren(parent).dropWhile(c => c != child).length
+      packChildren(parent) indexOf child
 
     /** Return the root node */
     def getRoot(): AnyRef = program
 
     /** Test whether the given node is a leaf */
-    def isLeaf(node: Any): Boolean = packChildren(node).length == 0
+    def isLeaf(node: Any): Boolean = packChildren(node).isEmpty
 
     def removeTreeModelListener(l: TreeModelListener): Unit =
-      listeners filterNot (_ == l)
+      listeners = listeners filterNot (_ == l)
 
     /** we ignore this message for now */
     def valueForPathChanged(path: TreePath, newValue: Any) = ()
@@ -131,8 +131,8 @@ abstract class TreeBrowsers {
    * @author Iulian Dragos
    * @version 1.0
    */
-  class BrowserFrame {
-    val frame = new JFrame("Scala AST")
+  class BrowserFrame(phaseName: String = "unknown") {
+    val frame = new JFrame("Scala AST [" + phaseName + "]")
     val topLeftPane = new JPanel(new BorderLayout())
     val topRightPane = new JPanel(new BorderLayout())
     val bottomPane = new JPanel(new BorderLayout())
@@ -345,7 +345,7 @@ abstract class TreeBrowsers {
         ("Apply", EMPTY)
 
       case Super(qualif, mix) =>
-        ("Super", qualif.toString() + ", mix: " + mix.toString())
+        ("Super", "mix: " + mix.toString())
 
       case This(qualifier) =>
         ("This", qualifier)
@@ -486,7 +486,7 @@ abstract class TreeBrowsers {
         List(qual) ::: args
 
       case Super(qualif, mix) =>
-        Nil
+        List(qualif)
 
       case This(qualif) =>
         Nil
@@ -652,6 +652,12 @@ abstract class TreeBrowsers {
                         toDocument(result) :: ")")
         )
 
+      case NullaryMethodType(result) =>
+        Document.group(
+          Document.nest(4,"NullaryMethodType(" :/:
+                        toDocument(result) :: ")")
+        )
+
       case PolyType(tparams, result) =>
         Document.group(
           Document.nest(4,"PolyType(" :/:
@@ -684,7 +690,7 @@ abstract class TreeBrowsers {
                         toDocument(thistpe) :/: ", " :/:
                         toDocument(supertpe) ::")"))
       case _ =>
-        Predef.error("Unknown case: " + t.toString() +", "+ t.getClass)
+        sys.error("Unknown case: " + t.toString() +", "+ t.getClass)
     }
   }
 

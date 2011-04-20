@@ -1,5 +1,5 @@
 /* NSC -- new scala compiler
- * Copyright 2004-2010 LAMP/EPFL
+ * Copyright 2004-2011 LAMP/EPFL
  */
 
 
@@ -65,6 +65,10 @@ abstract class TypeParser {
     busy = false
   }
 
+  class TypeParamsType(override val typeParams: List[Symbol]) extends LazyType {
+    override def complete(sym: Symbol) { throw new AssertionError("cyclic type dereferencing") }
+  }
+
   /* the names `classTParams' and `newTParams' stem from the forJVM version (ClassfileParser.sigToType())
   *  but there are differences that should be kept in mind.
   *  forMSIL, a nested class knows nothing about any type-params in the nesting class,
@@ -79,7 +83,7 @@ abstract class TypeParser {
     for (cnstrnt <- tvarCILDef.Constraints) {
       ts += getCLRType(cnstrnt) // TODO we're definitely not at or after erasure, no need to call objToAny, right?
     }
-    TypeBounds(definitions.NothingClass.tpe, intersectionType(ts.toList, clazz))
+    TypeBounds.upper(intersectionType(ts.toList, clazz))
     // TODO variance???
   }
 
@@ -88,7 +92,12 @@ abstract class TypeParser {
     val flags = Flags.JAVA | Flags.STATIC | Flags.IMPLICIT; // todo: static? shouldn't be final instead?
     val viewMethodType = (msym: Symbol) => JavaMethodType(msym.newSyntheticValueParams(List(fromTpe)), toTpe)
     val vmsym = createMethod(nme.view_ + viewSuffix, flags, viewMethodType, null, true);
-    if (addToboxMethodMap) definitions.boxMethod(clazz) = vmsym
+    // !!! this used to mutate a mutable map in definitions, but that map became
+    // immutable and this kept "working" with a no-op.  So now it's commented out
+    // since I retired the deprecated code which allowed for that bug.
+    //
+    // if (addToboxMethodMap) definitions.boxMethod(clazz) = vmsym
+    
     if (isAddressOf) clrTypes.addressOfViews += vmsym
     vmsym
   }
@@ -146,8 +155,8 @@ abstract class TypeParser {
     val canBeTakenAddressOf = (typ.IsValueType || typ.IsEnum) && (typ.FullName != "System.Enum")
 
     if(canBeTakenAddressOf) {
-      clazzBoxed = clazz.owner.newClass(clazz.name + "Boxed")
-      clazzMgdPtr = clazz.owner.newClass(clazz.name + "MgdPtr")
+      clazzBoxed = clazz.owner.newClass(clazz.name.toTypeName append "Boxed")
+      clazzMgdPtr = clazz.owner.newClass(clazz.name.toTypeName append "MgdPtr")
       clrTypes.mdgptrcls4clssym(clazz) =  clazzMgdPtr
       /* adding typMgdPtr to clrTypes.sym2type should happen early (before metadata for supertypes is parsed,
          before metadata for members are parsed) so that clazzMgdPtr can be found by getClRType. */
@@ -162,7 +171,7 @@ abstract class TypeParser {
       clazzMgdPtr.setInfo(classInfoMgdPtr)
     }
 
-/* TODO CLR generics
+/* START CLR generics (snippet 1) */
     // first pass
     for (tvarCILDef <- typ.getSortedTVars() ) {
       val tpname = newTypeName(tvarCILDef.Name.replaceAll("!", "")) // TODO are really all type-params named in all assemblies out there? (NO)
@@ -177,16 +186,16 @@ abstract class TypeParser {
       val tpsym = classTParams(tvarCILDef.Number)
       tpsym.setInfo(sig2typeBounds(tvarCILDef)) // we never skip bounds unlike in forJVM
     }
-*/
+/* END CLR generics (snippet 1) */
     val ownTypeParams = newTParams.toList
-/* TODO CLR generics
+/* START CLR generics (snippet 2) */
     if (!ownTypeParams.isEmpty) {
       clazz.setInfo(new TypeParamsType(ownTypeParams))
       if(typ.IsValueType && !typ.IsEnum) {
         clazzBoxed.setInfo(new TypeParamsType(ownTypeParams))
       }
     }
-*/
+/* END CLR generics (snippet 2) */
     instanceDefs = new Scope
     staticDefs = new Scope
 
@@ -305,8 +314,8 @@ abstract class TypeParser {
 	    val flags = translateAttributes(getter);
 	    val owner: Symbol = if (getter.IsStatic) statics else clazz;
 	    val methodSym = owner.newMethod(NoPosition, name).setFlag(flags)
-            val mtype: Type = if (gparamsLength == 0) PolyType(List(), propType) // .NET properties can't be polymorphic
-                              else methodType(getter, getter.ReturnType)(methodSym)
+      val mtype: Type = if (gparamsLength == 0) NullaryMethodType(propType) // .NET properties can't be polymorphic
+                        else methodType(getter, getter.ReturnType)(methodSym)
         methodSym.setInfo(mtype);
 	    methodSym.setFlag(Flags.ACCESSOR);
 	    (if (getter.IsStatic) staticDefs else instanceDefs).enter(methodSym)
@@ -461,18 +470,22 @@ abstract class TypeParser {
     val flags = translateAttributes(method);
     val owner = if (method.IsStatic()) statics else clazz;
     val methodSym = owner.newMethod(NoPosition, getName(method)).setFlag(flags)
-    // TODO CLR generics val newMethodTParams = populateMethodTParams(method, methodSym)
+    /* START CLR generics (snippet 3) */
+    val newMethodTParams = populateMethodTParams(method, methodSym)
+    /* END CLR generics (snippet 3) */
 
     val rettype = if (method.IsConstructor()) clazz.tpe
                   else getCLSType(method.asInstanceOf[MethodInfo].ReturnType);
     if (rettype == null) return;
     val mtype = methodType(method, rettype);
     if (mtype == null) return;
-/* TODO CLR generics
+/* START CLR generics (snippet 4) */
     val mInfo = if (method.IsGeneric) polyType(newMethodTParams, mtype(methodSym))
                 else mtype(methodSym)
-*/
+/* END CLR generics (snippet 4) */
+/* START CLR non-generics (snippet 4)
     val mInfo = mtype(methodSym) 
+   END CLR non-generics (snippet 4) */
     methodSym.setInfo(mInfo)
     (if (method.IsStatic()) staticDefs else instanceDefs).enter(methodSym);
     if (method.IsConstructor())
@@ -647,7 +660,12 @@ abstract class TypeParser {
 
   private def getCLSType(typ: MSILType): Type = { // getCLS returns non-null for types GenMSIL can handle, be they CLS-compliant or not
     if (typ.IsTMVarUsage())
-      null // TODO after generics: getCLRType(typ)
+    /* START CLR generics (snippet 5) */
+      getCLRType(typ)
+    /* END CLR generics (snippet 5) */
+    /* START CLR non-generics (snippet 5)
+      null
+       END CLR non-generics (snippet 5) */
     else if ( /* TODO hack if UBYE, uncommented, "ambiguous reference to overloaded definition" ensues, for example for System.Math.Max(x, y) */
               typ == clrTypes.USHORT || typ == clrTypes.UINT || typ == clrTypes.ULONG
       /*  || typ == clrTypes.UBYTE    */
@@ -694,19 +712,23 @@ abstract class TypeParser {
      if (res != null) res
      else if (tMSIL.isInstanceOf[ConstructedType]) {
        val ct = tMSIL.asInstanceOf[ConstructedType]
-       /* TODO CLR generics: uncomment next two lines and comment out the hack after them
+       /* START CLR generics (snippet 6) */
              val cttpArgs = ct.typeArgs.map(tmsil => getCLRType(tmsil)).toList
              appliedType(getCLRType(ct.instantiatedType), cttpArgs)
-             */
+       /* END CLR generics (snippet 6) */
+       /* START CLR non-generics (snippet 6)
        getCLRType(ct.instantiatedType)
+          END CLR non-generics (snippet 6) */
      } else if (tMSIL.isInstanceOf[TMVarUsage]) {
-        /* TODO CLR generics: uncomment next lines and comment out the hack after them
+        /* START CLR generics (snippet 7) */
              val tVarUsage = tMSIL.asInstanceOf[TMVarUsage]
              val tVarNumber = tVarUsage.Number
              if (tVarUsage.isTVar) classTParams(tVarNumber).typeConstructor // shouldn't fail, just return definitions.AnyClass.tpe at worst
              else methodTParams(tVarNumber).typeConstructor // shouldn't fail, just return definitions.AnyClass.tpe at worst
-             */
+        /* END CLR generics (snippet 7) */
+       /* START CLR non-generics (snippet 7)
         null // definitions.ObjectClass.tpe 
+          END CLR non-generics (snippet 7) */
      } else if (tMSIL.IsArray()) {
         var elemtp = getCLRType(tMSIL.GetElementType())
         // cut&pasted from ClassfileParser
@@ -803,7 +825,7 @@ abstract class TypeParser {
       flags = flags | Flags.PRIVATE;
     else if (field.IsFamily() || field.IsFamilyOrAssembly())
       flags = flags | Flags.PROTECTED;
-    if (field.IsInitOnly())
+    if (field.IsInitOnly() || field.IsLiteral())
       flags = flags | Flags.FINAL;
     else
       flags = flags | Flags.MUTABLE;

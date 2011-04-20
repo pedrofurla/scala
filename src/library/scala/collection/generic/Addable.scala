@@ -1,6 +1,6 @@
 /*                     __                                               *\
 **     ________ ___   / /  ___     Scala API                            **
-**    / __/ __// _ | / /  / _ |    (c) 2003-2010, LAMP/EPFL             **
+**    / __/ __// _ | / /  / _ |    (c) 2003-2011, LAMP/EPFL             **
 **  __\ \/ /__/ __ |/ /__/ __ |    http://scala-lang.org/               **
 ** /____/\___/_/ |_/____/_/ | |                                         **
 **                          |/                                          **
@@ -16,11 +16,12 @@ package generic
  *  @tparam   A    the type of the elements of the $coll
  *  @tparam   Repr the type of the $coll itself
  *  @author   Martin Odersky
- *  @version 2.8
- *  @since   2.8
- *  @define  $coll collection
- *  @define  $Coll Addable
+ *  @version  2.8
+ *  @since    2.8
+ *  @define   coll collection
+ *  @define   Coll Addable
  */
+@deprecated("Will be removed after scala 2.9", "2.8.0")
 trait Addable[A, +Repr <: Addable[A, Repr]] { self => 
 
   /** The representation object of type `Repr` which contains the collection's elements
@@ -51,5 +52,5 @@ trait Addable[A, +Repr <: Addable[A, Repr]] { self =>
    *  @param elems     the collection containing the added elements.
    *  @return a new $coll with the given elements added.
    */
-  def ++ (xs: TraversableOnce[A]): Repr = (repr /: xs) (_ + _)
+  def ++ (xs: GenTraversableOnce[A]): Repr = (repr /: xs.seq) (_ + _)
 }

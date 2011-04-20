@@ -154,7 +154,7 @@ public abstract class Type extends MemberInfo {
 				 fullName.length()),
 	      declType);
 
-	Module = module;
+	Module = module; // null only for TMVarUsage and for PrimitiveType
 	Attributes = attr;
 	this.baseType = baseType;
 	if (DeclaringType == null) {
@@ -313,6 +313,18 @@ public abstract class Type extends MemberInfo {
     public boolean IsTMVarUsage() {
         // overridden in TMVarUsage
         return false;
+    }
+    
+    public boolean IsNestedType() {
+        return DeclaringType != null;
+    }
+    
+    public boolean IsDefinitelyInternal() {
+      if(IsNestedType()) {
+        return IsNestedPrivate(); 
+      } else {
+        return IsNotPublic();
+      }
     }
 
     //public final boolean IsCOMObject;

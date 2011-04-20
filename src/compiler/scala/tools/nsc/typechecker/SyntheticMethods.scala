@@ -1,5 +1,5 @@
 /* NSC -- new Scala compiler
- * Copyright 2005-2010 LAMP/EPFL
+ * Copyright 2005-2011 LAMP/EPFL
  * @author Martin Odersky
  */
 
@@ -8,35 +8,48 @@ package typechecker
 
 import symtab.Flags
 import symtab.Flags._
+import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
-/** <ul>
- *    <li>
- *      <code>productArity</code>, <code>element</code> implementations added
- *      to case classes
- *    </li>
- *    <li>
- *      <code>equals</code>, <code>hashCode</code> and </code>toString</code>
- *      methods are added to case classes, unless they are defined in the
- *      class or a baseclass different from <code>java.lang.Object</code>
- *    </li>
- *    <li>
- *      <code>toString</code> method is added to case objects, unless they
- *      are defined in the class or a baseclass different from
- *      <code>java.lang.Object</code>
- *    </li>
- *  </ul>
+/** Synthetic method implementations for case classes and case objects.
+ * 
+ *  Added to all case classes/objects:
+ *    def productArity: Int
+ *    def productElement(n: Int): Any
+ *    def productPrefix: String
+ *    def productIterator: Iterator[Any]
+ *
+ *  Selectively added to case classes/objects, unless a non-default
+ *  implementation already exists:
+ *    def equals(other: Any): Boolean
+ *    def hashCode(): Int
+ *    def canEqual(other: Any): Boolean
+ *    def toString(): String
+ *
+ *  Special handling:
+ *    protected def readResolve(): AnyRef
  */
 trait SyntheticMethods extends ast.TreeDSL {
   self: Analyzer =>
   
   import global._                  // the global environment
   import definitions._             // standard classes and methods
+  
+  /** In general case classes/objects are not given synthetic equals methods if some
+   *  non-AnyRef implementation is inherited.  However if you let a case object inherit
+   *  an implementation from a case class, it creates an asymmetric equals with all the
+   *  associated badness: see ticket #883.  So if it sees such a thing this has happened
+   *  (by virtue of the symbol being in createdMethodSymbols) it re-overrides it with
+   *  reference equality.
+   *
+   *  TODO: remove once (deprecated) case class inheritance is dropped form nsc.
+   */  
+  private val createdMethodSymbols = new mutable.HashSet[Symbol]
 
-  // @S: type hack: by default, we are used from global.analyzer context
-  // so this cast won't fail. If we aren't in global.analyzer, we have
-  // to override this method anyways.
-  protected def typer : Typer = global.typer.asInstanceOf[Typer]
+  /** Clear the cache of createdMethodSymbols.  */
+  def resetSynthetics() {
+    createdMethodSymbols.clear()
+  }
 
   /** Add the synthetic methods to case classes.  Note that a lot of the
    *  complexity herein is a consequence of case classes inheriting from
@@ -44,35 +57,25 @@ trait SyntheticMethods extends ast.TreeDSL {
    *  the opportunity for removal arises, this can be simplified.
    */
   def addSyntheticMethods(templ: Template, clazz: Symbol, context: Context): Template = {
-
-    val localContext  = if (reporter.hasErrors) context makeSilent false else context
-    val localTyper    = newTyper(localContext)
+    val localTyper = newTyper(
+      if (reporter.hasErrors) context makeSilent false else context
+    )
 
     def hasOverridingImplementation(meth: Symbol): Boolean = {
       val sym = clazz.info nonPrivateMember meth.name
-      sym.alternatives exists { sym =>
-        sym != meth && !(sym hasFlag DEFERRED) && !(sym hasFlag (SYNTHETIC | SYNTHETICMETH)) && 
-        (clazz.thisType.memberType(sym) matches clazz.thisType.memberType(meth))
+      def isOverride(s: Symbol) = {
+        s != meth && !s.isDeferred && !s.isSynthetic && !createdMethodSymbols(s) &&
+        (clazz.thisType.memberType(s) matches clazz.thisType.memberType(meth))
       }
+      sym.alternatives exists isOverride
     }
 
     def syntheticMethod(name: Name, flags: Int, tpeCons: Symbol => Type) =
       newSyntheticMethod(name, flags | OVERRIDE, tpeCons)
 
-    /** Note: at this writing this is the only place the SYNTHETICMETH is ever created.
-     *  The flag is commented "synthetic method, but without SYNTHETIC flag", an explanation
-     *  for which I now attempt to reverse engineer the motivation.
-     *
-     *  In general case classes/objects are not given synthetic equals methods if some
-     *  non-AnyRef implementation is inherited.  However if you let a case object inherit
-     *  an implementation from a case class, it creates an asymmetric equals with all the
-     *  associated badness: see ticket #883.  So if it sees such a thing (which is marked
-     *  SYNTHETICMETH) it re-overrides it with reference equality.
-     *
-     *  In other words it only exists to support (deprecated) case class inheritance.
-     */
     def newSyntheticMethod(name: Name, flags: Int, tpeCons: Symbol => Type) = {
-      val method = clazz.newMethod(clazz.pos.focus, name) setFlag (flags | SYNTHETICMETH)
+      val method = clazz.newMethod(clazz.pos.focus, name.toTermName) setFlag flags
+      createdMethodSymbols += method
       method setInfo tpeCons(method)
       clazz.info.decls.enter(method)
     }
@@ -87,12 +90,12 @@ trait SyntheticMethods extends ast.TreeDSL {
     import CODE._
 
     def productPrefixMethod: Tree = typer.typed {
-      val method = syntheticMethod(nme.productPrefix, 0, sym => PolyType(Nil, StringClass.tpe))
+      val method = syntheticMethod(nme.productPrefix, 0, sym => NullaryMethodType(StringClass.tpe))
       DEF(method) === LIT(clazz.name.decode)
     }
 
     def productArityMethod(nargs: Int): Tree = {
-      val method = syntheticMethod(nme.productArity, 0, sym => PolyType(Nil, IntClass.tpe))
+      val method = syntheticMethod(nme.productArity, 0, sym => NullaryMethodType(IntClass.tpe))
       typer typed { DEF(method) === LIT(nargs) }
     }
 
@@ -135,9 +138,6 @@ trait SyntheticMethods extends ast.TreeDSL {
         }
       }
     }
-    
-    def hashCodeTarget: Name = nme.hashCode_
-      // if (settings.Yjenkins.value) "hashCodeJenkins" else nme.hashCode_
 
     /** The equality method for case modules:
      *   def equals(that: Any) = this eq that
@@ -180,7 +180,7 @@ trait SyntheticMethods extends ast.TreeDSL {
       
       // returns (Apply, Bind)
       def makeTrees(acc: Symbol, cpt: Type): (Tree, Bind) = {
-        val varName     = context.unit.fresh.newName(clazz.pos.focus, acc.name + "$")
+        val varName     = context.unit.freshTermName(acc.name + "$")
         val isRepeated  = isRepeatedParamType(cpt)
         val binding     = if (isRepeated) Star(WILD()) else WILD()
         val eqMethod: Tree  =
@@ -219,8 +219,8 @@ trait SyntheticMethods extends ast.TreeDSL {
     def newAccessorMethod(tree: Tree): Tree = tree match {
       case DefDef(_, _, _, _, _, rhs) =>
         var newAcc = tree.symbol.cloneSymbol
-        newAcc.name = context.unit.fresh.newName(tree.symbol.pos.focus, tree.symbol.name + "$")
-        newAcc setFlag SYNTHETIC resetFlag (ACCESSOR | PARAMACCESSOR | PRIVATE)
+        newAcc.name = context.unit.freshTermName(tree.symbol.name + "$")
+        newAcc setFlag SYNTHETIC resetFlag (ACCESSOR | PARAMACCESSOR | PRIVATE | PROTECTED)
         newAcc.privateWithin = NoSymbol
         newAcc = newAcc.owner.info.decls enter newAcc
         val result = typer typed { DEF(newAcc) === rhs.duplicate }
@@ -230,9 +230,9 @@ trait SyntheticMethods extends ast.TreeDSL {
     
     def needsReadResolve = (
       // only nested objects inside objects should get readResolve automatically
-      // otherwise after de-serialization we get null references for lazy accessors (nested object -> lazy val + class def)  
-      clazz.isSerializable &&
-      ((!clazz.owner.isPackageClass && clazz.owner.isModuleClass) || clazz.owner.isPackageClass)
+      // otherwise after de-serialization we get null references for lazy accessors (nested object -> lazy val + class def)
+      // since the bitmap gets serialized but the moduleVar not
+      clazz.isSerializable && (clazz.owner.isPackageClass || clazz.owner.isModuleClass)
     )
 
     // A buffer collecting additional methods for the template body
@@ -241,8 +241,6 @@ trait SyntheticMethods extends ast.TreeDSL {
     if (!phase.erasedTypes) try {
       if (clazz.isCase) {
         val isTop = clazz.ancestors forall (x => !x.isCase)
-        // case classes are automatically marked serializable
-        clazz.setSerializable()
 
         if (isTop) {
           // If this case class has fields with less than public visibility, their getter at this
@@ -258,7 +256,7 @@ trait SyntheticMethods extends ast.TreeDSL {
         
         // methods for case classes only
         def classMethods = List(
-          Object_hashCode -> (() => forwardingMethod(nme.hashCode_, "_" + hashCodeTarget)),
+          Object_hashCode -> (() => forwardingMethod(nme.hashCode_, "_" + nme.hashCode_)),
           Object_toString -> (() => forwardingMethod(nme.toString_, "_" + nme.toString_)),
           Object_equals   -> (() => equalsClassMethod)
         )
@@ -284,7 +282,7 @@ trait SyntheticMethods extends ast.TreeDSL {
           // if there's a synthetic method in a parent case class, override its equality
           // with eq (see #883)
           val otherEquals = clazz.info.nonPrivateMember(Object_equals.name) 
-          if (otherEquals.owner != clazz && (otherEquals hasFlag SYNTHETICMETH)) ts += equalsModuleMethod
+          if (otherEquals.owner != clazz && createdMethodSymbols(otherEquals)) ts += equalsModuleMethod
         }
 
         val methods = (if (clazz.isModuleClass) objectMethods else classMethods) ++ everywhereMethods
@@ -293,12 +291,6 @@ trait SyntheticMethods extends ast.TreeDSL {
       }
 
       if (clazz.isModuleClass) {
-        if (!clazz.isSerializable) {
-          val comp = companionClassOf(clazz, context)
-          if (comp.isCase || comp.isSerializable)
-            clazz.setSerializable()
-        }
-        
         def hasReadResolve = {
           val sym = clazz.info member nme.readResolve // any member, including private
           sym.isTerm && !sym.isDeferred

@@ -1,6 +1,6 @@
 /*                     __                                               *\
 **     ________ ___   / /  ___     Scala API                            **
-**    / __/ __// _ | / /  / _ |    (c) 2006-2010, LAMP/EPFL             **
+**    / __/ __// _ | / /  / _ |    (c) 2006-2011, LAMP/EPFL             **
 **  __\ \/ /__/ __ |/ /__/ __ |    http://scala-lang.org/               **
 ** /____/\___/_/ |_/____/_/ | |                                         **
 **                          |/                                          **
@@ -63,12 +63,13 @@ private[scala] trait PropertiesTrait
    *  or "version (unknown)" if it cannot be determined.
    */   
   val versionString         = "version " + scalaPropOrElse("version.number", "(unknown)")
-  val copyrightString       = scalaPropOrElse("copyright.string", "(c) 2002-2010 LAMP/EPFL")
+  val copyrightString       = scalaPropOrElse("copyright.string", "(c) 2002-2011 LAMP/EPFL")
   
   /** This is the encoding to use reading in source files, overridden with -encoding
    *  Note that it uses "prop" i.e. looks in the scala jar, not the system properties.
    */
   def sourceEncoding        = scalaPropOrElse("file.encoding", "UTF-8")
+  def sourceReader          = scalaPropOrElse("source.reader", "scala.tools.nsc.io.SourceReader")
   
   /** This is the default text encoding, overridden (unreliably) with
    *  JAVA_OPTS="-Dfile.encoding=Foo"

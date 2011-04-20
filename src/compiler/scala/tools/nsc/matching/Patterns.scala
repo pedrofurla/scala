@@ -1,5 +1,5 @@
 /* NSC -- new Scala compiler
- * Copyright 2005-2010 LAMP/EPFL
+ * Copyright 2005-2011 LAMP/EPFL
  * Author: Paul Phillips
  */
 
@@ -206,7 +206,7 @@ trait Patterns extends ast.TreeDSL {
 
     // @pre: is not right-ignoring (no star pattern) ; no exhaustivity check
     override def simplify(pv: PatternVar) = {
-      pv.sym setFlag Flags.TRANS_FLAG
+      pv.sym setFlag NO_EXHAUSTIVE
       this rebindTo elems.foldRight(gen.mkNil)(listFolder)
     }
     override def description = "UnSeq(%s => %s)".format(tptArg, resTypesString)
@@ -263,6 +263,7 @@ trait Patterns extends ast.TreeDSL {
   object Pattern {
     // a small tree -> pattern cache
     private val cache = new collection.mutable.HashMap[Tree, Pattern]
+    def clear() = cache.clear()
     
     def unadorn(x: Tree): Tree = x match {
       case Typed(expr, _) => unadorn(expr)
@@ -300,7 +301,7 @@ trait Patterns extends ast.TreeDSL {
       p match {
         case WildcardPattern()  => p
         case _: LiteralPattern  => p
-        case _                  => tracing("Pattern", p)
+        case _                  => tracing("Pattern")(p)
       }
     }
     def unapply(other: Any): Option[(Tree, List[Symbol])] = other match {
@@ -348,7 +349,7 @@ trait Patterns extends ast.TreeDSL {
     def apply(x: Apply): Pattern = {
       val Apply(fn, args) = x
       def isModule  = x.symbol.isModule || x.tpe.termSymbol.isModule
-      def isTuple   = isTupleType(fn.tpe)
+      def isTuple   = isTupleTypeOrSubtype(fn.tpe)
 
       if (fn.isType) {
         if (isTuple) TuplePattern(x)
@@ -474,7 +475,7 @@ trait Patterns extends ast.TreeDSL {
 
     def isSymValid = (sym != null) && (sym != NoSymbol)
     def isModule = sym.isModule || tpe.termSymbol.isModule
-    def isCaseClass = tpe.typeSymbol hasFlag Flags.CASE
+    def isCaseClass = tpe.typeSymbol.isCase
     def isObject = isSymValid && prefix.isStable  // XXX not entire logic
     
     def unadorn(t: Tree): Tree = Pattern unadorn t
@@ -496,7 +497,7 @@ trait Patterns extends ast.TreeDSL {
     }
 
     def equalsCheck =
-      tracing("equalsCheck",
+      tracing("equalsCheck")(
         if (sym.isValue) singleType(NoPrefix, sym)
         else tpe.narrow
       )

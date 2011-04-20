@@ -1,5 +1,5 @@
 /* NSC -- new scala compiler
- * Copyright 2005-2010 LAMP/EPFL
+ * Copyright 2005-2011 LAMP/EPFL
  * @author Nikolay Mihaylov
  */
 
@@ -15,6 +15,7 @@ import scala.tools.nsc.symtab._
 
 import ch.epfl.lamp.compiler.msil.{Type => MsilType, _}
 import ch.epfl.lamp.compiler.msil.emit._
+import ch.epfl.lamp.compiler.msil.util.PECustomMod
 
 abstract class GenMSIL extends SubComponent {
   import global._
@@ -42,14 +43,19 @@ abstract class GenMSIL extends SubComponent {
 
       //classes is ICodes.classes, a HashMap[Symbol, IClass]
       classes.values foreach codeGenerator.findEntryPoint
+      if( opt.showClass.isDefined && (codeGenerator.entryPoint == null) ) { // TODO introduce dedicated setting instead
+        val entryclass = opt.showClass.get.toString 
+        warning("Couldn't find entry class " + entryclass)
+      }
 
       codeGenerator.initAssembly
 
-      classes.values foreach codeGenerator.createTypeBuilder
-      classes.values foreach codeGenerator.createClassMembers
+      val classesSorted = classes.values.toList.sortBy(c => c.symbol.id) // simplifies comparing cross-compiler vs. .exe output 
+      classesSorted foreach codeGenerator.createTypeBuilder
+      classesSorted foreach codeGenerator.createClassMembers
 
       try {
-        classes.values foreach codeGenerator.genClass
+        classesSorted foreach codeGenerator.genClass
       } finally {
         codeGenerator.writeAssembly
       }
@@ -68,7 +74,7 @@ abstract class GenMSIL extends SubComponent {
 
     val MODULE_INSTANCE_NAME = "MODULE$"
 
-    import clrTypes.{VOID => MVOID, BOOLEAN => MBOOL, UBYTE => MBYTE, SHORT => MSHORT,
+    import clrTypes.{VOID => MVOID, BOOLEAN => MBOOL, BYTE => MBYTE, SHORT => MSHORT,
                    CHAR => MCHAR, INT => MINT, LONG => MLONG, FLOAT => MFLOAT,
                    DOUBLE => MDOUBLE, OBJECT => MOBJECT, STRING => MSTRING,
                    STRING_ARRAY => MSTRING_ARRAY,
@@ -98,18 +104,16 @@ abstract class GenMSIL extends SubComponent {
     val JOBJECT = definitions.ObjectClass
     val JSTRING = definitions.StringClass
 
-    var JSTRING_SUBSTRING_INT_INT: Symbol = _
-
     val SystemConvert = clrTypes.getType("System.Convert")
 
     val objParam = Array(MOBJECT)
 
 //     val toBool:   MethodInfo = SystemConvert.GetMethod("ToBoolean", objParam)
-    val toByte:   MethodInfo = SystemConvert.GetMethod("ToByte", objParam)
-    val toShort:  MethodInfo = SystemConvert.GetMethod("ToInt16", objParam)
-    val toChar:   MethodInfo = SystemConvert.GetMethod("ToChar", objParam)
-    val toInt:    MethodInfo = SystemConvert.GetMethod("ToInt32", objParam)
-    val toLong:   MethodInfo = SystemConvert.GetMethod("ToInt64", objParam)
+    val toSByte:  MethodInfo = SystemConvert.GetMethod("ToSByte",  objParam)
+    val toShort:  MethodInfo = SystemConvert.GetMethod("ToInt16",  objParam)
+    val toChar:   MethodInfo = SystemConvert.GetMethod("ToChar",   objParam)
+    val toInt:    MethodInfo = SystemConvert.GetMethod("ToInt32",  objParam)
+    val toLong:   MethodInfo = SystemConvert.GetMethod("ToInt64",  objParam)
     val toFloat:  MethodInfo = SystemConvert.GetMethod("ToSingle", objParam)
     val toDouble: MethodInfo = SystemConvert.GetMethod("ToDouble", objParam)
 
@@ -139,58 +143,6 @@ abstract class GenMSIL extends SubComponent {
       // FIXME: for some reason the upper two lines map to null
       mapType(definitions.NullClass, EXCEPTION)
       mapType(definitions.NothingClass, EXCEPTION)
-
-      val jEmpty = new Array[Type](0)
-      val jString1 = Array(JSTRING.tpe)
-      val jInt1 = Array(definitions.IntClass.tpe)
-      val jInt2 = Array(definitions.IntClass.tpe, definitions.IntClass.tpe)
-      val jLong1 = Array(definitions.LongClass.tpe)
-      val jStringInt = Array(JSTRING.tpe, definitions.IntClass.tpe)
-      val jChar2 = Array(definitions.CharClass.tpe, definitions.CharClass.tpe)
-
-      val mObject1 = Array(MOBJECT)
-      val mString1 = Array(MSTRING)
-      val mString2 = Array(MSTRING, MSTRING)
-      val mChar1 = Array(MCHAR)
-      val mCharInt = Array(MCHAR, MINT)
-
-      JSTRING_SUBSTRING_INT_INT = lookupMethod(JSTRING, "substring", jInt2)
-
-      mapMethod(JOBJECT, "clone", MOBJECT, "MemberwiseClone")
-      mapMethod(JOBJECT, nme.equals_, MOBJECT, "Equals")
-      mapMethod(JOBJECT, nme.hashCode_, MOBJECT, "GetHashCode")
-      mapMethod(JOBJECT, nme.toString_, MOBJECT, "ToString")
-      mapMethod(JOBJECT, nme.finalize_, MOBJECT, "Finalize")
-      mapMethod(JOBJECT, nme.wait_, jEmpty, MMONITOR, "Wait", mObject1)
-      mapMethod(JOBJECT, nme.wait_, jLong1, MMONITOR, "Wait", Array(MOBJECT, MINT))
-      mapMethod(JOBJECT, nme.notify_, jEmpty, MMONITOR, "Pulse", mObject1)
-      mapMethod(JOBJECT, nme.notifyAll_, jEmpty, MMONITOR, "PulseAll", mObject1)
-
-      mapMethod(JSTRING, "compareTo",MSTRING, "CompareTo")
-      mapMethod(JSTRING, "length", MSTRING, "get_Length")
-      mapMethod(JSTRING, "charAt", MSTRING, "get_Chars")
-
-      mapMethod(JSTRING, "concat", jString1, MSTRING, "Concat", mString2)
-      mapMethod(JSTRING, "indexOf", jInt1, MSTRING, "IndexOf", mChar1)
-      mapMethod(JSTRING, "indexOf", jInt2, MSTRING, "IndexOf", mCharInt)
-
-      mapMethod(JSTRING, "indexOf", jString1, MSTRING, "IndexOf")
-      mapMethod(JSTRING, "indexOf", jStringInt, MSTRING, "IndexOf")
-      mapMethod(JSTRING, "lastIndexOf", jInt1, MSTRING, "LastIndexOf", mChar1)
-      mapMethod(JSTRING, "lastIndexOf", jInt2, MSTRING, "LastIndexOf", mCharInt)
-      mapMethod(JSTRING, "lastIndexOf", jString1, MSTRING, "LastIndexOf")
-      mapMethod(JSTRING, "lastIndexOf", jStringInt, MSTRING, "LastIndexOf")
-
-      mapMethod(JSTRING, "toLowerCase", jEmpty, MSTRING, "ToLower")
-      mapMethod(JSTRING, "toUpperCase", jEmpty, MSTRING, "ToUpper")
-      mapMethod(JSTRING, "startsWith", jString1, MSTRING, "StartsWith")
-      mapMethod(JSTRING, "endsWith", jString1, MSTRING, "EndsWith")
-      mapMethod(JSTRING, "substring", jInt1, MSTRING, "Substring")
-      mapMethod(JSTRING, "substring", jInt2, MSTRING, "Substring")
-      mapMethod(JSTRING, "trim", jEmpty, MSTRING, "Trim")
-      mapMethod(JSTRING, "intern", jEmpty, MSTRING, "Intern", mString1)
-      mapMethod(JSTRING, "replace", jChar2, MSTRING, "Replace")
-      mapMethod(JSTRING, "toCharArray", MSTRING, "ToCharArray")
 
       mapType(definitions.BooleanClass, MBOOL)
       mapType(definitions.ByteClass, MBYTE)
@@ -299,15 +251,38 @@ abstract class GenMSIL extends SubComponent {
       }
     }
 
+    /**
+     * Mutates `member` adding CLR attributes (if any) based on sym.annotations. 
+     * Please notice that CLR custom modifiers are a different beast (see customModifiers below) 
+     * and thus shouldn't be added by this method.   
+     */
     def addAttributes(member: ICustomAttributeSetter, annotations: List[AnnotationInfo]) {
+      val attributes = annotations.map(_.atp.typeSymbol).collect {
+        case definitions.TransientAttr => null // TODO this is just an example 
+      }
       return // TODO: implement at some point
     }
-/*
+
+    /**
+     * What's a CLR custom modifier? Intro available as source comments in compiler.msil.CustomModifier.
+     * It's basically a marker associated with a location (think of FieldInfo, ParameterInfo, and PropertyInfo) 
+     * and thus that marker (be it optional or required) becomes part of the signature of that location. 
+     * Some annotations will become CLR attributes (see addAttributes above), others custom modifiers (this method).   
+     */
+    def customModifiers(annotations: List[AnnotationInfo]): Array[CustomModifier] = {
+      annotations.map(_.atp.typeSymbol).collect {
+        case definitions.VolatileAttr  => new CustomModifier(true, CustomModifier.VolatileMarker) 
+      } toArray
+    }
+      
+    
+    
+    /*
       if (settings.debug.value)
         log("creating annotations: " + annotations + " for member : " + member)
       for (annot@ AnnotationInfo(typ, annArgs, nvPairs) <- annotations ;
            if annot.isConstant)
-           //!typ.typeSymbol.hasFlag(Flags.JAVA)
+           //!typ.typeSymbol.isJavaDefined
       {
 //        assert(consts.length <= 1,
 //               "too many constant arguments for annotations; "+consts.toString())
@@ -457,14 +432,17 @@ abstract class GenMSIL extends SubComponent {
         code.Emit(OpCodes.Ret)
       }
       createTypes()
-      val filename = outDir.getPath() 
-      if (settings.debug.value)
-        log("Output path: " + filename)
+      var outDirName: String = null
       try {
-        // massembly.Save(filename + "\\" + assemName + ".msil") /* use SingleFileILPrinterVisitor */
-        massembly.Save(filename, srcPath.getPath())  /* use MultipleFilesILPrinterVisitor */
+        if (settings.Ygenjavap.isDefault) { // we reuse the JVM-sounding setting because it's conceptually similar
+          outDirName = outDir.getPath()
+          massembly.Save(outDirName + "\\" + assemName + ".msil") /* use SingleFileILPrinterVisitor */
+        } else {
+          outDirName = srcPath.getPath()
+          massembly.Save(settings.Ygenjavap.value, outDirName)  /* use MultipleFilesILPrinterVisitor */
+        }
       } catch {
-        case e:IOException => abort("Could not write to " + filename + ": " + e.getMessage())
+        case e:IOException => abort("Could not write to " + outDirName + ": " + e.getMessage())
       }
     }
 
@@ -479,6 +457,12 @@ abstract class GenMSIL extends SubComponent {
         tBuilder.CreateType()
         tBuilder.setSourceFilepath(iclass.cunit.source.file.path)
       }
+    }
+
+    private[GenMSIL] def ilasmFileName(iclass: IClass) : String = {
+      val singleBackslashed = iclass.cunit.source.file.toString
+      val doubleBackslashed = singleBackslashed.replace("\\", "\\\\")
+      doubleBackslashed
     }
 
     private[GenMSIL] def genClass(iclass: IClass) {
@@ -510,7 +494,7 @@ abstract class GenMSIL extends SubComponent {
       }
 
       val line = sym.pos.line
-      tBuilder.setPosition(line, iclass.cunit.source.file.name)
+      tBuilder.setPosition(line, ilasmFileName(iclass))
 
       if (isTopLevelModule(sym)) {
         if (sym.companionClass == NoSymbol)
@@ -590,13 +574,18 @@ abstract class GenMSIL extends SubComponent {
 
       labels.clear
 
-      var linearization = if(m.exh != Nil) msilLinearizer.linearize(m)
+      var linearization = if(!m.exh.isEmpty) msilLinearizer.linearize(m)
                           else linearizer.linearize(m)
 
-      if (m.exh != Nil)
+      if (!m.exh.isEmpty)
         linearization = computeExceptionMaps(linearization, m)
 
       makeLabels(linearization)
+
+      // debug val blocksInM = m.code.blocks.toList.sortBy(bb => bb.label)
+      // debug val blocksInL = linearization.sortBy(bb => bb.label)
+      // debug val MButNotL  = (blocksInM.toSet) diff (blocksInL.toSet) // if non-empty, a jump to B fails to find a label for B (case CJUMP, case CZJUMP)
+      // debug if(!MButNotL.isEmpty) { }
 
       genBlocks(linearization)
 
@@ -809,7 +798,7 @@ abstract class GenMSIL extends SubComponent {
           NEW(REFERENCE(definitions.ThrowableClass)),
           DUP(REFERENCE(definitions.ObjectClass)),
           CALL_METHOD(definitions.ThrowableClass.primaryConstructor, Static(true)),
-          THROW()
+          THROW(definitions.ThrowableClass)
         ))
         b.close
         endExBlock(b) = rest
@@ -844,6 +833,9 @@ abstract class GenMSIL extends SubComponent {
             val fInfo = getType(field.owner).GetField(msilName(field))
             fields(field) = fInfo
             fInfo
+        }
+        if (fieldInfo.IsVolatile) {
+          mcode.Emit(OpCodes.Volatile)
         }
         if (!fieldInfo.IsLiteral) {
           if (loadAddr) {
@@ -883,7 +875,7 @@ abstract class GenMSIL extends SubComponent {
             } else if (typ == clrTypes.FLOAT) {
               mcode.Emit(OpCodes.Ldc_R4, value.asInstanceOf[Float])
             } else if (typ == clrTypes.DOUBLE) {
-              mcode.Emit(OpCodes.Ldc_R4, value.asInstanceOf[Double])
+              mcode.Emit(OpCodes.Ldc_R8, value.asInstanceOf[Double])
             } else {
               /* TODO one more case is described in Partition II, 16.2: bytearray(...) */
               abort("Unknown type for static literal field: " + fieldInfo)
@@ -949,7 +941,7 @@ abstract class GenMSIL extends SubComponent {
         }
 
         if (currentLineNr != lastLineNr) {
-          mcode.setPosition(currentLineNr)
+          mcode.setPosition(currentLineNr, ilasmFileName(clasz)) // method.sourceFile contains just the filename
           lastLineNr = currentLineNr
         }
 
@@ -983,7 +975,7 @@ abstract class GenMSIL extends SubComponent {
           case LOAD_ARRAY_ITEM(kind) =>
             (kind: @unchecked) match {
               case BOOL           => mcode.Emit(OpCodes.Ldelem_I1)
-              case BYTE           => mcode.Emit(OpCodes.Ldelem_U1)
+              case BYTE           => mcode.Emit(OpCodes.Ldelem_I1) // I1 for System.SByte, i.e. a scala.Byte 
               case SHORT          => mcode.Emit(OpCodes.Ldelem_I2)
               case CHAR           => mcode.Emit(OpCodes.Ldelem_U2)
               case INT            => mcode.Emit(OpCodes.Ldelem_I4)
@@ -1097,7 +1089,8 @@ abstract class GenMSIL extends SubComponent {
                 case SuperCall(_) =>
                   mcode.Emit(OpCodes.Call, constructorInfo)
                   if (isStaticModule(clasz.symbol) &&
-                     notInitializedModules.contains(clasz.symbol))
+                      notInitializedModules.contains(clasz.symbol) &&
+                      method.symbol.isClassConstructor)
                     {
                       notInitializedModules -= clasz.symbol
                       mcode.Emit(OpCodes.Ldarg_0)
@@ -1106,18 +1099,7 @@ abstract class GenMSIL extends SubComponent {
               }
 
             } else {
-              // java.lang.String.substring(int start_incl, int end_excl)
-              // System.String.Substring(int start_incl, int length)
-              if (msym == JSTRING_SUBSTRING_INT_INT) {
-                val endLocal = mcode.DeclareLocal(MINT)
-                endLocal.SetLocalSymInfo("$substring_end")
-                mcode.Emit(OpCodes.Stloc, endLocal)
-                mcode.Emit(OpCodes.Dup) // duplicate start_incl
-                mcode.Emit(OpCodes.Neg)
-                mcode.Emit(OpCodes.Ldloc, endLocal) // load end_excl
-                mcode.Emit(OpCodes.Add) // compute length (-start + end)
-              }
-
+              
               var doEmit = true
               getTypeOpt(msym.owner) match {
                 case Some(typ) if (typ.IsEnum) => {
@@ -1252,11 +1234,6 @@ abstract class GenMSIL extends SubComponent {
           //  is permitted in the host environment."
           case CHECK_CAST(tpknd) =>
             val tMSIL = msilType(tpknd)
-            if (tMSIL.IsValueType) {
-              // calling emitUnbox does nothing because there's no unbox method for tMSIL
-              mcode.Emit(OpCodes.Unbox, tMSIL)
-              mcode.Emit(OpCodes.Ldobj, tMSIL)
-            } else
               mcode.Emit(OpCodes.Castclass, tMSIL)
 
           // no SWITCH is generated when there's
@@ -1321,7 +1298,7 @@ abstract class GenMSIL extends SubComponent {
               mcode.Emit(OpCodes.Leave, label)
             }
 
-          case THROW() =>
+          case THROW(_) =>
             mcode.Emit(OpCodes.Throw)
 
           case DROP(kind) =>
@@ -1340,7 +1317,7 @@ abstract class GenMSIL extends SubComponent {
           case MONITOR_EXIT() =>
             mcode.Emit(OpCodes.Call, MMONITOR_EXIT)
 
-          case SCOPE_ENTER(_) | SCOPE_EXIT(_) | LOAD_EXCEPTION() =>
+          case SCOPE_ENTER(_) | SCOPE_EXIT(_) | LOAD_EXCEPTION(_) =>
             ()
         }
 
@@ -1386,7 +1363,7 @@ abstract class GenMSIL extends SubComponent {
             log("Converting from: " + src + " to: " + dst)
 
           dst match {
-            case BYTE =>   mcode.Emit(OpCodes.Conv_U1)
+            case BYTE =>   mcode.Emit(OpCodes.Conv_I1) // I1 for System.SByte, i.e. a scala.Byte
             case SHORT =>  mcode.Emit(OpCodes.Conv_I2)
             case CHAR =>   mcode.Emit(OpCodes.Conv_U2)
             case INT =>    mcode.Emit(OpCodes.Conv_I4)
@@ -1629,9 +1606,9 @@ abstract class GenMSIL extends SubComponent {
      * not exist in the classpath: the type checker will be very confused.
      */
     def msilName(sym: Symbol): String = {
-      val suffix: String = if (sym.hasFlag(Flags.MODULE) && !sym.isMethod &&
+      val suffix: String = if (sym.hasModuleFlag && !sym.isMethod &&
                                !sym.isImplClass &&
-                               !sym.hasFlag(Flags.JAVA)) "$" else ""
+                               !sym.isJavaDefined) "$" else ""
       // Flags.JAVA: "symbol was not defined by a scala-class" (java, or .net-class)
 
       if (sym == definitions.NothingClass)
@@ -1683,14 +1660,24 @@ abstract class GenMSIL extends SubComponent {
 
       if (!sym.isClassConstructor) {
         if (sym.isStaticMember)
-          mf = mf | FieldAttributes.Static
+          mf = mf | FieldAttributes.Static // coincidentally, same value as for MethodAttributes.Static ...
         else {
           mf = mf | MethodAttributes.Virtual
           if (sym.isFinal && !getType(sym.owner).IsInterface)
             mf = mf | MethodAttributes.Final
-          if (sym.hasFlag(Flags.DEFERRED) || getType(sym.owner).IsInterface)
+          if (sym.isDeferred || getType(sym.owner).IsInterface)
             mf = mf | MethodAttributes.Abstract
         }
+      }
+
+      if (sym.isStaticMember) {
+        mf = mf | MethodAttributes.Static
+      }
+
+      // constructors of module classes should be private
+      if (sym.isPrimaryConstructor && isTopLevelModule(sym.owner)) {
+        mf |= MethodAttributes.Private
+        mf &= ~(MethodAttributes.Public)
       }
 
       mf.toShort
@@ -1733,6 +1720,7 @@ abstract class GenMSIL extends SubComponent {
     val localBuilders: HashMap[Local, LocalBuilder] = new HashMap()
 
     private[GenMSIL] def findEntryPoint(cls: IClass) {
+
       def isEntryPoint(sym: Symbol):Boolean = {
         if (isStaticModule(sym.owner) && msilName(sym) == "main")
           if (sym.tpe.paramTypes.length == 1) {
@@ -1747,12 +1735,15 @@ abstract class GenMSIL extends SubComponent {
         false
       }
 
-      for (m <- cls.methods) {
-        if (isEntryPoint(m.symbol)) {
-          if (entryPoint == null)
-            entryPoint = m.symbol
+      if((entryPoint == null) && opt.showClass.isDefined) {  // TODO introduce dedicated setting instead 
+        val entryclass = opt.showClass.get.toString 
+        val cfn = cls.symbol.fullName
+        if(cfn == entryclass) {
+          for (m <- cls.methods; if isEntryPoint(m.symbol)) { entryPoint = m.symbol }
+          if(entryPoint == null) { warning("Couldn't find main method in class " + cfn) }
         }
       }
+
       if (firstSourceName == "")
         if (cls.symbol.sourceFile != null) // is null for nested classes
           firstSourceName = cls.symbol.sourceFile.name
@@ -1794,22 +1785,25 @@ abstract class GenMSIL extends SubComponent {
      * Get an MSIL type from a symbol. First look in the clrTypes.types map, then
      * lookup the name using clrTypes.getType
      */
-    def getTypeOpt(sym: Symbol): Option[MsilType] = types.get(sym) match {
-      case typ @ Some(_) => typ
-      case None =>
-        def typeString(sym: Symbol): String = {
-          val s = if (sym.isNestedClass) typeString(sym.owner) +"+"+ sym.simpleName
-                  else sym.fullName
-          if (sym.isModuleClass && !sym.isTrait) s + "$" else s
-        }
-        val name = typeString(sym)
-        val typ = clrTypes.getType(name)
-        if (typ == null)
-          None
-        else {
-          types(sym) = typ
-          Some(typ)
-        }
+    def getTypeOpt(sym: Symbol): Option[MsilType] = {
+      val tmp = types.get(sym)
+      tmp match {
+        case typ @ Some(_) => typ
+        case None =>
+          def typeString(sym: Symbol): String = {
+            val s = if (sym.isNestedClass) typeString(sym.owner) +"+"+ sym.simpleName
+                    else sym.fullName
+            if (sym.isModuleClass && !sym.isTrait) s + "$" else s
+          }
+          val name = typeString(sym)
+          val typ = clrTypes.getType(name)
+          if (typ == null)
+            None
+          else {
+            types(sym) = typ
+            Some(typ)
+          }
+      }
     }
 
     def mapType(sym: Symbol, mType: MsilType) {
@@ -1897,10 +1891,30 @@ abstract class GenMSIL extends SubComponent {
           log("Adding field: " + sym.fullName)
 
         var attributes = msilFieldFlags(sym)
-        val fBuilder = mtype.DefineField(msilName(sym), msilType(sym.tpe), attributes)
+        val fieldTypeWithCustomMods = 
+          new PECustomMod(msilType(sym.tpe), 
+                          customModifiers(sym.annotations)) 
+        val fBuilder = mtype.DefineField(msilName(sym), 
+                                         fieldTypeWithCustomMods, 
+                                         attributes)
         fields(sym) = fBuilder
         addAttributes(fBuilder, sym.annotations)
       } // all iclass.fields iterated over
+
+      if (isStaticModule(iclass.symbol)) {
+        val sc = iclass.lookupStaticCtor
+        if (sc.isDefined) {
+          val m = sc.get
+          val oldLastBlock = m.code.blocks.last
+          val lastBlock = m.code.newBlock
+          oldLastBlock.replaceInstruction(oldLastBlock.length - 1, JUMP(lastBlock))
+          // call object's private ctor from static ctor
+          lastBlock.emit(CIL_NEWOBJ(iclass.symbol.primaryConstructor))
+          lastBlock.emit(DROP(toTypeKind(iclass.symbol.tpe)))
+          lastBlock emit RETURN(UNIT)
+          lastBlock.close
+        }
+      }
 
       if (iclass.symbol != definitions.ArrayClass) {
       for (m: IMethod <- iclass.methods) {
@@ -1925,7 +1939,7 @@ abstract class GenMSIL extends SubComponent {
         } else {
           var resType = msilType(m.returnType)
           val method =
-            ownerType.DefineMethod(getMethodName(sym), attr, resType, paramTypes)
+            ownerType.DefineMethod(msilName(sym), attr, resType, paramTypes)
           for (i <- 0.until(paramTypes.length)) {
             method.DefineParameter(i, ParameterAttributes.None, msilName(m.params(i).sym))
           }
@@ -1941,7 +1955,9 @@ abstract class GenMSIL extends SubComponent {
       if (isStaticModule(iclass.symbol)) {
         addModuleInstanceField(iclass.symbol)
         notInitializedModules += iclass.symbol
-        addStaticInit(iclass.symbol)
+        if (iclass.lookupStaticCtor.isEmpty) {
+          addStaticInit(iclass.symbol)
+        }
       }
 
     } // createClassMembers0
@@ -1995,7 +2011,8 @@ abstract class GenMSIL extends SubComponent {
         case Some(sym) => sym
         case None =>
           //val mclass = types(moduleClassSym)
-          val mClass = clrTypes.getType(moduleClassSym.fullName + "$")
+          val nameInMetadata = nestingAwareFullClassname(moduleClassSym)
+          val mClass = clrTypes.getType(nameInMetadata)
           val mfield = mClass.GetField("MODULE$")
           assert(mfield ne null, "module not found " + showsym(moduleClassSym))
           fields(moduleClassSym) = mfield
@@ -2004,6 +2021,21 @@ abstract class GenMSIL extends SubComponent {
 
       //fields(moduleClassSym)
     }
+
+    def nestingAwareFullClassname(csym: Symbol) : String = {
+      val suffix = moduleSuffix(csym)
+      val res = if (csym.isNestedClass)
+        nestingAwareFullClassname(csym.owner) + "+" + csym.encodedName
+      else
+        csym.fullName
+      res + suffix
+    }
+
+  /** cut&pasted from GenJVM */
+  def moduleSuffix(sym: Symbol) =
+    if (sym.hasFlag(Flags.MODULE) && !sym.isMethod &&
+       !sym.isImplClass && !sym.hasFlag(Flags.JAVA)) "$"
+    else "";
 
     /** Adds a static initializer which creates an instance of the module
      *  class (calls the primary constructor). A special primary constructor
@@ -2049,8 +2081,9 @@ abstract class GenMSIL extends SubComponent {
       val iclass = classes(sym)
 
       for (m <- sym.tpe.nonPrivateMembers
-           if m.owner != definitions.ObjectClass && !m.hasFlag(Flags.PROTECTED) &&
-           m.isMethod && !m.isClassConstructor && !m.isStaticMember && !m.hasFlag(Flags.CASE))
+           if m.owner != definitions.ObjectClass && !m.isProtected &&
+           m.isMethod && !m.isClassConstructor && !m.isStaticMember && !m.isCase &&
+           !m.isDeferred)
         {
           if (settings.debug.value)
             log("   Mirroring method: " + m)
@@ -2060,7 +2093,7 @@ abstract class GenMSIL extends SubComponent {
             paramNames(i) = "x_" + i
 
           // CHECK: verify if getMethodName is better than msilName
-          val mirrorMethod = mirrorTypeBuilder.DefineMethod(getMethodName(m),
+          val mirrorMethod = mirrorTypeBuilder.DefineMethod(msilName(m),
                                                             (MethodAttributes.Public |
                                                             MethodAttributes.Static).toShort,
                                                             msilType(m.tpe.resultType),
@@ -2152,25 +2185,29 @@ abstract class GenMSIL extends SubComponent {
       case UNIT   => code.Emit(OpCodes.Ldsfld, boxedUnit)
       case BOOL | BYTE | SHORT | CHAR | INT | LONG | FLOAT | DOUBLE =>
         code.Emit(OpCodes.Box, msilType(boxType))
-      case REFERENCE(cls) if (definitions.boxMethod.contains(cls)) =>
+      case REFERENCE(cls) if clrTypes.isValueType(cls) => 
         code.Emit(OpCodes.Box, (msilType(boxType)))
-      case REFERENCE(_) | ARRAY(_) => ()
+      case REFERENCE(_) | ARRAY(_) =>
+        warning("Tried to BOX a non-valuetype.")
+        ()
     }
 
     def emitUnbox(code: ILGenerator, boxType: TypeKind) = (boxType: @unchecked) match {
       case UNIT   => code.Emit(OpCodes.Pop)
       case BOOL   => code.Emit(OpCodes.Unbox, MBOOL); code.Emit(OpCodes.Ldind_I1)
-      case BYTE   => code.Emit(OpCodes.Call, toByte)
+      case BYTE   => code.Emit(OpCodes.Call, toSByte)
       case SHORT  => code.Emit(OpCodes.Call, toShort)
       case CHAR   => code.Emit(OpCodes.Call, toChar)
       case INT    => code.Emit(OpCodes.Call, toInt)
       case LONG   => code.Emit(OpCodes.Call, toLong)
       case FLOAT  => code.Emit(OpCodes.Call, toFloat)
       case DOUBLE => code.Emit(OpCodes.Call, toDouble)
-      case REFERENCE(cls) if (definitions.unboxMethod.contains(cls)) =>
+      case REFERENCE(cls) if clrTypes.isValueType(cls) =>
         code.Emit(OpCodes.Unbox, msilType(boxType))
         code.Emit(OpCodes.Ldobj, msilType(boxType))
-      case REFERENCE(_) | ARRAY(_) => ()
+      case REFERENCE(_) | ARRAY(_) =>
+        warning("Tried to UNBOX a non-valuetype.")
+        ()
     }
 
     // #####################################################################
@@ -2197,23 +2234,13 @@ abstract class GenMSIL extends SubComponent {
     }
 
     private def getMethod(sym: Symbol): MethodInfo = {
-    //private def getMethod(sym: Symbol): MethodInfo = sym match {
-//       case SRToInt => toInt
-//       case SRToDouble => toDouble
-//       case SRToLong => toLong
-//       case SRToChar => toChar
-//       case SRToFloat => toFloat
-//       case SRToBool => toBool
-//       case SRToByte => toByte
-//       case SRToShort => toShort
-//       case _ =>
 
         methods.get(sym) match {
         case Some(method) => method
         case None =>
           val mClass = getType(sym.owner)
           try {
-            val method = mClass.GetMethod(getMethodName(sym), msilParamTypes(sym),
+            val method = mClass.GetMethod(msilName(sym), msilParamTypes(sym),
                                           msilType(sym.tpe.resultType))
             if (method eq null) {
               java.lang.System.out.println("Cannot find method " + sym.owner + "::" + msilName(sym))
@@ -2331,25 +2358,6 @@ abstract class GenMSIL extends SubComponent {
 
         case _ => abort("member not found: " + name + " of " + clazz)
       }
-    }
-
-    def getMethodName(methodSym: Symbol): String = {
-      val name = methodSym.name
-      val params = methodSym.tpe.paramTypes
-      if (name == nme.finalize_ && params.length == 0)
-        "Finalize"
-      else if (name == nme.toString_ && params.length == 0)
-        "ToString"
-      else if (name == nme.hashCode_ && params.length == 0)
-        "GetHashCode"
-      else if (name == nme.equals_ && params.length == 1 &&
-              params(0) == definitions.ObjectClass.tpe)
-        "Equals"
-      // FIXME: why is there no nme.clone_ ?
-      else if (name.toString() == "clone" && params.length == 0)
-        "Clone"
-      else
-        msilName(methodSym)
     }
 
     private def showsym(sym: Symbol): String = (sym.toString +

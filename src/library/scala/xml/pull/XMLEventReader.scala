@@ -1,6 +1,6 @@
 /*                     __                                               *\
 **     ________ ___   / /  ___     Scala API                            **
-**    / __/ __// _ | / /  / _ |    (c) 2003-2010, LAMP/EPFL             **
+**    / __/ __// _ | / /  / _ |    (c) 2003-2011, LAMP/EPFL             **
 **  __\ \/ /__/ __ |/ /__/ __ |    http://scala-lang.org/               **
 ** /____/\___/_/ |_/____/_/ | |                                         **
 **                          |/                                          **
@@ -24,8 +24,7 @@ import scala.xml.parsing.{ ExternalSources, MarkupHandler, MarkupParser }
  *  @author Burak Emir
  *  @author Paul Phillips
  */
-class XMLEventReader(src: Source) extends ProducerConsumerIterator[XMLEvent]
-{
+class XMLEventReader(src: Source) extends ProducerConsumerIterator[XMLEvent] {
   // We implement a pull parser as an iterator, but since we may be operating on
   // a stream (e.g. XML over a network) there may be arbitrarily long periods when
   // the queue is empty.  Fortunately the ProducerConsumerIterator is ideally

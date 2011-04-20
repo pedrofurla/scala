@@ -1,6 +1,6 @@
 /*                     __                                               *\
 **     ________ ___   / /  ___     Scala API                            **
-**    / __/ __// _ | / /  / _ |    (c) 2003-2010, LAMP/EPFL             **
+**    / __/ __// _ | / /  / _ |    (c) 2003-2011, LAMP/EPFL             **
 **  __\ \/ /__/ __ |/ /__/ __ |    http://scala-lang.org/               **
 ** /____/\___/_/ |_/____/_/ | |                                         **
 **                          |/                                          **
@@ -24,8 +24,7 @@ package mutable
  *  @version 1.0, 08/07/2003
  *  @since   2.8
  */
-@serializable
-class RevertibleHistory[Evt <: Undoable, Pub] extends History[Evt, Pub] with Undoable {
+class RevertibleHistory[Evt <: Undoable, Pub] extends History[Evt, Pub] with Undoable with Serializable {
 
   /** Rollback the full history.
    */
