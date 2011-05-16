@@ -13,6 +13,7 @@ package scala.collection
 import generic._
 import Seq.fill
 import TraversableView.NoBuilder
+import annotation.bridge
 
 /** A template trait for non-strict views of sequences.
  *  $seqViewInfo
@@ -92,6 +93,10 @@ trait SeqViewLike[+A,
     val replaced = _replaced
   } with Patched[B]
   protected def newPrepended[B >: A](elem: B): Transformed[B] = new { protected[this] val fst = elem } with Prepended[B]
+  
+  // see comment in IterableViewLike.
+  protected override def newTaken(n: Int): Transformed[A] = newSliced(SliceInterval(0, n))
+  protected override def newDropped(n: Int): Transformed[A] = newSliced(SliceInterval(n, Int.MaxValue))
 
   override def reverse: This = newReversed.asInstanceOf[This]
 
@@ -125,8 +130,12 @@ trait SeqViewLike[+A,
   override def diff[B >: A](that: GenSeq[B]): This = 
     newForced(thisSeq diff that).asInstanceOf[This]
 
+  @bridge def diff[B >: A](that: Seq[B]): This = diff(that: GenSeq[B])
+
   override def intersect[B >: A](that: GenSeq[B]): This = 
     newForced(thisSeq intersect that).asInstanceOf[This]
+
+  @bridge def intersect[B >: A](that: Seq[B]): This = intersect(that: GenSeq[B])
 
   override def sorted[B >: A](implicit ord: Ordering[B]): This =
     newForced(thisSeq sorted ord).asInstanceOf[This]

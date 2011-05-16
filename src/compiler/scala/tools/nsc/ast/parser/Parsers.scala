@@ -1569,20 +1569,12 @@ self =>
      *                |  val Pattern1 `=' Expr
      */
     def enumerators(): List[Enumerator] = {
-      val newStyle = in.token != VAL
-      if (!newStyle)
-        deprecationWarning(in.offset, "for (val x <- ... ) has been deprecated; use for (x <- ... ) instead")
       val enums = new ListBuffer[Enumerator]
       generator(enums, false)
       while (isStatSep) {
         in.nextToken()
-        if (newStyle) {
-          if (in.token == IF) enums += makeFilter(in.offset, guard())
-          else generator(enums, true)
-        } else {
-          if (in.token == VAL) generator(enums, true) 
-          else enums += makeFilter(in.offset, expr())
-        }
+        if (in.token == IF) enums += makeFilter(in.offset, guard())
+        else generator(enums, true)
       }
       enums.toList
     }
@@ -2188,12 +2180,12 @@ self =>
     }
     
     /** Def    ::= val PatDef
-     *           | var VarDef
+     *           | var PatDef
      *           | def FunDef
      *           | type [nl] TypeDef
      *           | TmplDef 
-     *  Dcl    ::= val ValDcl
-     *           | var ValDcl
+     *  Dcl    ::= val PatDcl
+     *           | var PatDcl
      *           | def FunDcl
      *           | type [nl] TypeDcl
      */

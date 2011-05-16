@@ -12,7 +12,7 @@ package scala.collection
 import generic._
 import immutable.{ List, Stream }
 import annotation.unchecked.uncheckedVariance
-
+import annotation.bridge
 
 /** A template trait for iterable collections of type `Iterable[A]`.
  *  $iterableInfo
@@ -90,9 +90,49 @@ self =>
     iterator.next
   
   override /*TraversableLike*/ def slice(from: Int, until: Int): Repr = {
-    val lo = from max 0
-    if (until <= lo) newBuilder.result
-    else newBuilder ++= (iterator drop lo take (until - lo)) result
+    val lo = math.max(from, 0)
+    val elems = until - lo
+    val b = newBuilder
+    if (elems <= 0) b.result
+    else {
+      b.sizeHintBounded(elems, this)
+      var i = 0
+      val it = iterator drop lo
+      while (i < elems && it.hasNext) {
+        b += it.next
+        i += 1
+      }
+      b.result      
+    }
+  }
+
+  override /*TraversableLike*/ def take(n: Int): Repr = {
+    val b = newBuilder
+    
+    if (n <= 0) b.result
+    else {
+      b.sizeHintBounded(n, this)
+      var i = 0
+      val it = iterator
+      while (i < n && it.hasNext) {
+        b += it.next
+        i += 1
+      }
+      b.result
+    }
+  }
+
+  override /*TraversableLike*/ def drop(n: Int): Repr = {
+    val b = newBuilder
+    val lo = math.max(0, n)
+    b.sizeHint(this, -lo)
+    var i = 0
+    val it = iterator
+    while (i < n && it.hasNext) {
+      it.next
+      i += 1
+    }
+    b ++= it result
   }
 
   override /*TraversableLike*/ def takeWhile(p: A => Boolean): Repr = {
@@ -197,6 +237,10 @@ self =>
     b.result
   }
   
+  @bridge
+  def zip[A1 >: A, B, That](that: Iterable[B])(implicit bf: CanBuildFrom[Repr, (A1, B), That]): That = 
+    zip(that: GenIterable[B])(bf)
+
   def zipAll[B, A1 >: A, That](that: GenIterable[B], thisElem: A1, thatElem: B)(implicit bf: CanBuildFrom[Repr, (A1, B), That]): That = {  
     val b = bf(repr)
     val these = this.iterator
@@ -209,6 +253,10 @@ self =>
       b += ((thisElem, those.next))
     b.result
   }
+
+  @bridge
+  def zipAll[B, A1 >: A, That](that: Iterable[B], thisElem: A1, thatElem: B)(implicit bf: CanBuildFrom[Repr, (A1, B), That]): That =
+    zipAll(that: GenIterable[B], thisElem, thatElem)(bf)
   
   def zipWithIndex[A1 >: A, That](implicit bf: CanBuildFrom[Repr, (A1, Int), That]): That = {
     val b = bf(repr)
@@ -228,7 +276,10 @@ self =>
         return false
 
     !these.hasNext && !those.hasNext
-  }                                                                                         
+  }
+
+  @bridge
+  def sameElements[B >: A](that: Iterable[B]): Boolean = sameElements(that: GenIterable[B])
 
   override /*TraversableLike*/ def toStream: Stream[A] = iterator.toStream
   

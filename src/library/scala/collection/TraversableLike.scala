@@ -10,8 +10,7 @@ package scala.collection
 
 import generic._
 import mutable.{ Builder, ListBuffer }
-import annotation.tailrec
-import annotation.migration
+import annotation.{tailrec, migration, bridge}
 import annotation.unchecked.{ uncheckedVariance => uV }
 import parallel.ParIterable
 
@@ -68,7 +67,7 @@ import parallel.ParIterable
  */
 trait TraversableLike[+A, +Repr] extends HasNewBuilder[A, Repr] 
                                     with FilterMonadic[A, Repr]
-                                    with TraversableOnceLike[A]
+                                    with TraversableOnce[A]
                                     with GenTraversableLike[A, Repr]
                                     with Parallelizable[A, ParIterable[A]]
 {
@@ -153,6 +152,10 @@ trait TraversableLike[+A, +Repr] extends HasNewBuilder[A, Repr]
     b.result
   }
   
+  @bridge
+  def ++[B >: A, That](that: TraversableOnce[B])(implicit bf: CanBuildFrom[Repr, B, That]): That =
+    ++(that: GenTraversableOnce[B])(bf)
+
   /** Concatenates this $coll with the elements of a traversable collection.
    *  It differs from ++ in that the right operand determines the type of the
    *  resulting collection rather than the left one.
@@ -434,10 +437,14 @@ trait TraversableLike[+A, +Repr] extends HasNewBuilder[A, Repr]
   def take(n: Int): Repr = slice(0, n)
 
   def drop(n: Int): Repr = 
-    if (n <= 0) newBuilder ++= thisCollection result
+    if (n <= 0) {
+      val b = newBuilder
+      b.sizeHint(this)
+      b ++= thisCollection result
+    }
     else sliceWithKnownDelta(n, Int.MaxValue, -n)
 
-  def slice(from: Int, until: Int): Repr = sliceWithKnownBound(from max 0, until)
+  def slice(from: Int, until: Int): Repr = sliceWithKnownBound(math.max(from, 0), until)
   
   // Precondition: from >= 0, until > 0, builder already configured for building.
   private[this] def sliceInternal(from: Int, until: Int, b: Builder[A, Repr]): Repr = {

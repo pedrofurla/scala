@@ -79,8 +79,6 @@ trait Types extends reflect.generic.Types { self: SymbolTable =>
   private var explainSwitch = false
   private final val emptySymbolSet = immutable.Set.empty[Symbol]
 
-  private final val alternativeNarrow = false
-
   private final val LogPendingSubTypesThreshold = 50
   private final val LogPendingBaseTypesThreshold = 50
   private final val LogVolatileThreshold = 50
@@ -317,21 +315,12 @@ trait Types extends reflect.generic.Types { self: SymbolTable =>
 
     /** Map to a singleton type which is a subtype of this type.
      *  The fallback implemented here gives
-     *    T.narrow  =  (T {}).this.type
+     *    T.narrow  = T' forSome { type T' <: T with Singleton }
      *  Overridden where we know more about where types come from.
-     *
-     *  todo: change to singleton type of an existentially defined variable
-     *  of the right type instead of making this a `this` of a refined type.
      */
     def narrow: Type =
       if (phase.erasedTypes) this
-      else if (alternativeNarrow) { // investigate why this does not work!
-        val tparam = commonOwner(this) freshExistential ".type" setInfo singletonBounds(this)
-        tparam.tpe
-      } else {
-        val cowner = commonOwner(this)
-        refinedType(List(this), cowner, EmptyScope, cowner.pos).narrow
-      }
+      else commonOwner(this) freshExistential ".type" setInfo singletonBounds(this) tpe
 
     /** For a TypeBounds type, itself;
      *  for a reference denoting an abstract type, its bounds,
@@ -1372,7 +1361,7 @@ trait Types extends reflect.generic.Types { self: SymbolTable =>
     // parents forall (p => p.isNullable && !p.typeSymbol.isAbstractType);
 
     override def safeToString: String =
-      parents.mkString("", " with ", "") +
+      parents.mkString(" with ") +
       (if (settings.debug.value || parents.isEmpty || (decls.elems ne null))
         decls.mkString("{", "; ", "}") else "")
   }
@@ -1910,8 +1899,6 @@ A type's typeSymbol should never be inspected directly.
           pre.prefixString + sym.nameString
       
       var str = monopart + (if (args.isEmpty) "" else args.mkString("[", ",", "]"))
-      //if (sym.nameString startsWith "moduleType")
-      //  str += ("_in_"+sym.ownerChain)
       if (sym.isPackageClass)
         packagePrefix + str
       else if (sym.isModuleClass)
@@ -1930,19 +1917,19 @@ A type's typeSymbol should never be inspected directly.
       else str
     }
 
-    override def prefixString =
+    override def prefixString = "" + (
       if (settings.debug.value) 
         super.prefixString
       else if (sym.printWithoutPrefix) 
         ""
       else if (sym.isPackageClass) 
         sym.fullName + "."
-      else if (isStable && (sym.name endsWith ".type"))
-        sym.name.toString dropRight 4
+      else if (isStable && nme.isSingletonName(sym.name))
+        nme.dropSingletonName(sym.name) + "."
       else 
         super.prefixString
-    
-      override def kind = "TypeRef"
+    )
+    override def kind = "TypeRef"
   }
 
   object TypeRef extends TypeRefExtractor {
@@ -2006,8 +1993,7 @@ A type's typeSymbol should never be inspected directly.
 
     override def finalResultType: Type = resultType.finalResultType
 
-    override def safeToString: String =
-      params.map(_.defString).mkString("(", ",", ")") + resultType
+    override def safeToString = paramString(this) + resultType
 
     override def cloneInfo(owner: Symbol) = {
       val vparams = cloneSymbols(params, owner)
@@ -2099,8 +2085,7 @@ A type's typeSymbol should never be inspected directly.
 
     override def isHigherKinded = !typeParams.isEmpty
     
-    override def safeToString: String =
-      (typeParams map (_.defString) mkString ("[", ",", "]"))+ resultType
+    override def safeToString = typeParamsString(this) + resultType
 
     override def cloneInfo(owner: Symbol) = {
       val tparams = cloneSymbols(typeParams, owner)
@@ -2263,7 +2248,7 @@ A type's typeSymbol should never be inspected directly.
         tv.suspended = true
         suspended += tv
       }
-      def resumeAll: Unit = {
+      def resumeAll(): Unit = {
         for(tv <- suspended) {
           tv.suspended = false
         }
@@ -2451,32 +2436,31 @@ A type's typeSymbol should never be inspected directly.
         }
       }
 
-    override val isHigherKinded = typeArgs.isEmpty && !params.isEmpty
+    override val isHigherKinded = typeArgs.isEmpty && params.nonEmpty
 
     override def normalize: Type =
-      if  (constr.instValid) constr.inst
-      else if (isHigherKinded) {  // get here when checking higher-order subtyping of the typevar by itself (TODO: check whether this ever happens?)
-        typeFun(params, applyArgs(params map (_.typeConstructor)))
-      } else {
-        super.normalize
-      }
+      if (constr.instValid) constr.inst
+      // get here when checking higher-order subtyping of the typevar by itself
+      // TODO: check whether this ever happens?
+      else if (isHigherKinded) typeFun(params, applyArgs(params map (_.typeConstructor)))
+      else super.normalize
 
     override def typeSymbol = origin.typeSymbol
-    override def safeToString: String = {
-      def varString = "?"+(if (settings.explaintypes.value) level else "")+
-                          origin+
-                          (if(typeArgs.isEmpty) "" else (typeArgs map (_.safeToString)).mkString("[ ", ", ", " ]")) // +"#"+tid //DEBUG
-      if (constr.inst eq null) "<null " + origin + ">"
-      // else if (settings.debug.value) varString+"(@"+constr.## +")"+constr.toString
-      else if (constr.inst eq NoType) varString
-      else constr.inst.toString
-    }
     override def isStable = origin.isStable
     override def isVolatile = origin.isVolatile
+
+    private def levelString = if (settings.explaintypes.value) level else ""
+    override def safeToString = constr.inst match {
+      case null   => "<null " + origin + ">"
+      case NoType => "?" + levelString + origin + typeArgsString(this)
+      case x      => "" + x
+    }
     override def kind = "TypeVar"
 
     def cloneInternal = {
-      assert(!suspended) // cloning a suspended type variable when it's suspended will cause the clone to never be resumed with the current implementation 
+      // cloning a suspended type variable when it's suspended will cause the clone
+      // to never be resumed with the current implementation
+      assert(!suspended) 
       TypeVar(origin, constr cloneInternal, typeArgs, params) // @M TODO: clone args/params?
     }
   }
@@ -2523,14 +2507,12 @@ A type's typeSymbol should never be inspected directly.
     override def withSelfsym(sym: Symbol) = 
       AnnotatedType(annotations, underlying, sym)
 
-    /** Drop the annotations on the bounds, unless but the low and high bounds are
-     *  exactly tp. */
-    override def bounds: TypeBounds = {
-       val oftp = underlying.bounds
-       oftp match {
-         case TypeBounds(lo, hi) if ((lo eq this) && (hi eq this)) => TypeBounds(this,this)
-         case _ => oftp
-       }
+    /** Drop the annotations on the bounds, unless but the low and high
+     *  bounds are exactly tp.
+     */
+    override def bounds: TypeBounds = underlying.bounds match {
+      case TypeBounds(_: this.type, _: this.type) => TypeBounds(this, this)
+      case oftp                                   => oftp
     }
 
     // ** Replace formal type parameter symbols with actual type arguments. * /
@@ -3788,7 +3770,7 @@ A type's typeSymbol should never be inspected directly.
    */
   object commonOwnerMap extends TypeMap {
     var result: Symbol = _
-    def init = { result = NoSymbol }
+    def init() = { result = NoSymbol }
     def apply(tp: Type): Type = {
       assert(tp ne null)
       tp.normalize match {
@@ -3818,20 +3800,7 @@ A type's typeSymbol should never be inspected directly.
       if (phase.flatClasses) {
         sym
       } else if (sym.isModuleClass) {
-        val adaptedSym = adaptToNewRun(pre, sym.sourceModule)
-        // Handle nested objects properly
-        val result0 = if (adaptedSym.isLazy) adaptedSym.lazyAccessor else adaptedSym.moduleClass
-        val result = if (result0 == NoSymbol)
-          // The only possible way we got here is when
-          // object is defined inside the method and unfortunately
-          // we have no way of retrieving that information (and using it)
-          // at this point, so just use the old symbol.
-          // This also means that sym.sourceModule == adaptedSym since 
-          // pre == NoPrefix. see #4215
-          sym
-        else result0
-
-        result
+        adaptToNewRun(pre, sym.sourceModule).moduleClass
       } else if ((pre eq NoPrefix) || (pre eq NoType) || sym.isPackageClass) {
         sym
       } else {
@@ -4736,7 +4705,7 @@ A type's typeSymbol should never be inspected directly.
   def specializesSym(tp: Type, sym: Symbol): Boolean =
     tp.typeSymbol == NothingClass ||
     tp.typeSymbol == NullClass && (sym.owner isSubClass ObjectClass) ||
-    (tp.member(sym.name).alternatives exists
+    (tp.nonPrivateMember(sym.name).alternatives exists
       (alt => sym == alt || specializesSym(tp.narrow, alt, sym.owner.thisType, sym)))
 
   /** Does member `sym1' of `tp1' have a stronger type

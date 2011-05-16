@@ -146,6 +146,9 @@ sealed abstract class Option[+A] extends Product with Serializable {
   def flatMap[B](f: A => Option[B]): Option[B] = 
     if (isEmpty) None else f(this.get)
 
+  def flatten[B](implicit ev: A <:< Option[B]): Option[B] =
+    if (isEmpty) None else ev(this.get)
+
   /** Returns this $option if it is nonempty '''and''' applying the predicate $p to
    * this $option's value returns true. Otherwise, return $none.
    *
@@ -222,7 +225,7 @@ sealed abstract class Option[+A] extends Product with Serializable {
    * if it is nonempty, or an empty iterator if the option is empty.
    */
   def iterator: Iterator[A] = 
-    if (isEmpty) Iterator.empty else Iterator.single(this.get)
+    if (isEmpty) collection.Iterator.empty else collection.Iterator.single(this.get)
 
   /** Returns a singleton list containing the $option's value
    * if it is nonempty, or the empty list if the $option is empty.

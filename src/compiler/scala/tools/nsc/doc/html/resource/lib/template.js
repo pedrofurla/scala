@@ -42,8 +42,6 @@ $(document).ready(function(){
         };
         filter();
     });
-
-/*
     $("#ancestors > ol > li.hideall").click(function() {
         $("#linearization li.in").removeClass("in").addClass("out");
         $("#linearization li:first").removeClass("out").addClass("in");
@@ -57,32 +55,6 @@ $(document).ready(function(){
         filtered.removeClass("out").addClass("in");
         filter();
     });
-*/
-
-
-    $("#ancestors > ol > li.hideall").click(function() {
-        if ($(this).hasClass("out")) {
-            $(this).removeClass("out").addClass("in");
-            $("#ancestors > ol > li.showall").removeClass("in").addClass("out");
-            $("#linearization li.in").removeClass("in").addClass("out");
-            $("#linearization li:first").removeClass("out").addClass("in");
-            filter();
-        };
-    })
-    $("#ancestors > ol > li.showall").click(function() {
-        if($(this).hasClass("out")){
-            $(this).removeClass("out").addClass("in");
-            $("#ancestors > ol > li.hideall").removeClass("in").addClass("out");
-            var filtered =
-                $("#linearization li.out").filter(function() {
-                    return ! isHiddenClass($(this).attr("name"));
-                });
-            filtered.removeClass("out").addClass("in");
-            filter();
-        };
-    });
-
-
     $("#visbl > ol > li.public").click(function() {
         if ($(this).hasClass("out")) {
             $(this).removeClass("out").addClass("in");
@@ -112,8 +84,9 @@ $(document).ready(function(){
         };
     });
     initInherit();
-    //http://flowplayer.org/tools/tooltip.html
-    $(".extype").tooltip({
+
+    // Create tooltips
+    $(".extype").add(".defval").tooltip({
         tip: "#tooltip",
         position:"top center",
         predelay: 500,
@@ -121,14 +94,6 @@ $(document).ready(function(){
             $(this.getTip()).text(this.getTrigger().attr("name"));
         }
     });
-    $(".defval").tooltip({
-        tip: "#tooltip",
-        position:"top center",
-        predelay: 500,        
-        onBeforeShow: function(ev) {
-            $(this.getTip()).html(this.getTrigger().attr("name"))
-        }        
-    });   
 
     /* Add toggle arrows */
     var docAllSigs = $("#template li").has(".fullcomment").find(".signature");
@@ -140,16 +105,12 @@ $(document).ready(function(){
         var vis = $(":visible", fullComment);
         signature.toggleClass("closed").toggleClass("opened");
         if (vis.length > 0) {
-            shortComment.slideDown(50);
-            fullComment.slideUp(50);
-            signature.addClass("closed");
-            signature.removeClass("opened");
+            shortComment.slideDown(100);
+            fullComment.slideUp(100);
         }
         else {
-            shortComment.slideUp(50);
-            fullComment.slideDown(50);
-            signature.removeClass("closed");
-            signature.addClass("opened");
+            shortComment.slideUp(100);
+            fullComment.slideDown(100);
         }
     };
     docAllSigs.addClass("closed");
@@ -175,6 +136,9 @@ $(document).ready(function(){
     $(".toggleContainer").click(function() {
       toggleShowContentFct($(this));
     });
+    
+    // Set parent window title
+    windowTitle();
 });
 
 function orderAlpha() {
@@ -295,5 +259,11 @@ function filter() {
 
 function windowTitle()
 {
-    parent.document.title=document.title;
+    try {
+        parent.document.title=document.title;
+    }
+    catch(e) {
+      // Chrome doesn't allow settings the parent's title when
+      // used on the local file system.
+    }
 };

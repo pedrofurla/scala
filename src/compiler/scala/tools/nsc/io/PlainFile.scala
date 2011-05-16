@@ -44,8 +44,10 @@ class PlainFile(val givenPath: Path) extends AbstractFile {
   override def sizeOption = Some(givenPath.length.toInt)
   
   override def hashCode(): Int = fpath.hashCode
-  override def equals(that: Any): Boolean =
-    cond(that) { case other: PlainFile  => fpath == other.fpath }
+  override def equals(that: Any): Boolean = that match {
+    case x: PlainFile => fpath == x.fpath
+    case _            => false
+  }
 
   /** Is this abstract file a directory? */
   def isDirectory: Boolean = givenPath.isDirectory
@@ -76,10 +78,10 @@ class PlainFile(val givenPath: Path) extends AbstractFile {
   }
 
   /** Does this abstract file denote an existing file? */
-  def create: Unit = if (!exists) givenPath.createFile()
+  def create(): Unit = if (!exists) givenPath.createFile()
 
   /** Delete the underlying file or directory (recursively). */
-  def delete: Unit =
+  def delete(): Unit =
     if (givenPath.isFile) givenPath.delete()
     else if (givenPath.isDirectory) givenPath.toDirectory.deleteRecursively()
 

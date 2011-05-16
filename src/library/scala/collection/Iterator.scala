@@ -6,12 +6,11 @@
 **                          |/                                          **
 \*                                                                      */
 
-
-
 package scala.collection
 
 import mutable.ArrayBuffer
 import annotation.{ tailrec, migration }
+import immutable.Stream
 
 /** The `Iterator` object provides various functions for
  *  creating specialized iterators.
@@ -253,6 +252,8 @@ import Iterator.empty
 trait Iterator[+A] extends TraversableOnce[A] {
   self =>
 
+  def seq: Iterator[A] = this
+  
   /** Tests whether this iterator can provide another element.
    *  @return  `true` if a subsequent call to `next` will yield an element,
    *           `false` otherwise.
@@ -973,8 +974,8 @@ trait Iterator[+A] extends TraversableOnce[A] {
   }
   
   /** Copies selected values produced by this iterator to an array.
-   *  Fills the given array `xs` with at most `len` values produced by this 
-   *  iterator, after skipping `start` values.
+   *  Fills the given array `xs` starting at index `start` with at most
+   *  `len` values produced by this iterator.
    *  Copying will stop once either the end of the current iterator is reached,
    *  or the end of the array is reached, or `len` elements have been copied.
    *
@@ -984,13 +985,12 @@ trait Iterator[+A] extends TraversableOnce[A] {
    *  @param  start  the starting index.
    *  @param  len    the maximal number of elements to copy.
    *  @tparam B      the type of the elements of the array. 
-   * 
    *
    *  @usecase def copyToArray(xs: Array[A], start: Int, len: Int): Unit
    */
   def copyToArray[B >: A](xs: Array[B], start: Int, len: Int): Unit = {
     var i = start
-    val end = start + len min xs.length
+    val end = start + math.min(len, xs.length)
     while (hasNext && i < end) {
       xs(i) = next()
       i += 1
