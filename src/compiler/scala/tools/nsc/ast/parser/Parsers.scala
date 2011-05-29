@@ -13,7 +13,7 @@ import scala.collection.mutable.ListBuffer
 import util.{ SourceFile, OffsetPosition, FreshNameCreator }
 import scala.reflect.internal.{ ModifierFlags => Flags }
 import Tokens._
-import scala.reflect.Chars.{ isScalaLetter }
+import scala.reflect.internal.Chars.{ isScalaLetter }
 
 /** Historical note: JavaParsers started life as a direct copy of Parsers
  *  but at a time when that Parsers had been replaced by a different one.
@@ -1429,11 +1429,17 @@ self =>
      */
     def simpleExpr(): Tree = {
       var canApply = true
+      val start = in.offset
       val t =
-        if (isLiteral) atPos(in.offset)(literal(false))
+        if (isLiteral) atPos(start)(literal(false))
         else in.token match {
           case XMLSTART =>
-            xmlLiteral()
+            // Using setPos here because the generated tree has its position
+            // off by one and I'm not sure where to fix it.
+            //   <a></a>
+            //    ^--- This was positioned at the a, not the <
+            val lit = xmlLiteral()
+            lit setPos r2p(start, start, in.offset)
           case IDENTIFIER | BACKQUOTED_IDENT | THIS | SUPER =>
             path(true, false)
           case USCORE =>

@@ -167,6 +167,12 @@ class IMain(val settings: Settings, protected val out: PrintWriter) extends Impo
   lazy val compiler: global.type = global
 
   import global._
+
+  private implicit def privateTreeOps(t: Tree): List[Tree] = {
+    (new Traversable[Tree] {
+      def foreach[U](f: Tree => U): Unit = t foreach { x => f(x) ; () }
+    }).toList
+  }
   
   object naming extends {
     val global: imain.global.type = imain.global
@@ -333,7 +339,7 @@ class IMain(val settings: Settings, protected val out: PrintWriter) extends Impo
   /** Stubs for work in progress. */
   def handleTypeRedefinition(name: TypeName, old: Request, req: Request) = {
     for (t1 <- old.simpleNameOfType(name) ; t2 <- req.simpleNameOfType(name)) {
-      DBG("Redefining type '%s'\n  %s -> %s".format(name, t1, t2))
+      repldbg("Redefining type '%s'\n  %s -> %s".format(name, t1, t2))
     }
   }
 
@@ -343,7 +349,7 @@ class IMain(val settings: Settings, protected val out: PrintWriter) extends Impo
       //   assertion failed: fatal: <refinement> has owner value x, but a class owner is required
       // so DBG is by-name now to keep it in the family.  (It also traps the assertion error,
       // but we don't want to unnecessarily risk hosing the compiler's internal state.)
-      DBG("Redefining term '%s'\n  %s -> %s".format(name, t1, t2))
+      repldbg("Redefining term '%s'\n  %s -> %s".format(name, t1, t2))
     }
   }
   def recordRequest(req: Request) {
@@ -356,16 +362,14 @@ class IMain(val settings: Settings, protected val out: PrintWriter) extends Impo
     // warning about serially defining companions.  It'd be easy
     // enough to just redefine them together but that may not always
     // be what people want so I'm waiting until I can do it better.
-    if (!settings.nowarnings.value) {
-      for {
-        name   <- req.definedNames filterNot (x => req.definedNames contains x.companionName)
-        oldReq <- definedNameMap get name.companionName
-        newSym <- req.definedSymbols get name
-        oldSym <- oldReq.definedSymbols get name.companionName
-      } {
-        printMessage("warning: previously defined %s is not a companion to %s.".format(oldSym, newSym))
-        printMessage("Companions must be defined together; you may wish to use :paste mode for this.")
-      }
+    for {
+      name   <- req.definedNames filterNot (x => req.definedNames contains x.companionName)
+      oldReq <- definedNameMap get name.companionName
+      newSym <- req.definedSymbols get name
+      oldSym <- oldReq.definedSymbols get name.companionName
+    } {
+      replwarn("warning: previously defined %s is not a companion to %s.".format(oldSym, newSym))
+      replwarn("Companions must be defined together; you may wish to use :paste mode for this.")
     }
     
     // Updating the defined name map
@@ -398,11 +402,19 @@ class IMain(val settings: Settings, protected val out: PrintWriter) extends Impo
     }
   }
   
+  private[nsc] def replwarn(msg: => String): Unit =
+    if (!settings.nowarnings.value)
+      printMessage(msg)
+  
   def isParseable(line: String): Boolean = {
     beSilentDuring {
-      parse(line) match {
+      try parse(line) match {
         case Some(xs) => xs.nonEmpty  // parses as-is
         case None     => true         // incomplete
+      }
+      catch { case x: Exception =>    // crashed the compiler
+        replwarn("Exception in isParseable(\"" + line + "\"): " + x)
+        false
       }
     }
   }
@@ -426,45 +438,98 @@ class IMain(val settings: Settings, protected val out: PrintWriter) extends Impo
    */
   private def buildRequest(line: String, trees: List[Tree]): Request = new Request(line, trees)
   
+  // rewriting "5 // foo" to "val x = { 5 // foo }" creates broken code because
+  // the close brace is commented out.  Strip single-line comments.
+  // ... but for error message output reasons this is not used, and rather than
+  // enclosing in braces it is constructed like "val x =\n5 // foo".
+  private def removeComments(line: String): String = {
+    showCodeIfDebugging(line) // as we're about to lose our // show
+    line.lines map (s => s indexOf "//" match {
+      case -1   => s
+      case idx  => s take idx
+    }) mkString "\n"
+  }
+  private def safePos(t: Tree, alt: Int): Int =
+    try t.pos.startOrPoint
+    catch { case _: UnsupportedOperationException => alt }
+    
+  // Given an expression like 10 * 10 * 10 we receive the parent tree positioned
+  // at a '*'.  So look at each subtree and find the earliest of all positions.
+  private def earliestPosition(tree: Tree): Int = {
+    var pos = Int.MaxValue
+    tree foreach { t =>
+      pos = math.min(pos, safePos(t, Int.MaxValue))
+    }
+    pos
+  }
+
   private def requestFromLine(line: String, synthetic: Boolean): Either[IR.Result, Request] = {
-    val trees = parse(indentCode(line)) match {
+    val content = indentCode(line)
+    val trees = parse(content) match {
       case None         => return Left(IR.Incomplete)
       case Some(Nil)    => return Left(IR.Error) // parse error or empty input
       case Some(trees)  => trees
     }
-    
-    // use synthetic vars to avoid filling up the resXX slots
-    def varName = if (synthetic) freshInternalVarName() else freshUserVarName()
+    repltrace(
+      trees map { t => 
+        t map { t0 => t0.getClass + " at " + safePos(t0, -1) + "\n" }
+      } mkString
+    )
+    // If the last tree is a bare expression, pinpoint where it begins using the
+    // AST node position and snap the line off there.  Rewrite the code embodied
+    // by the last tree as a ValDef instead, so we can access the value.
+    trees.last match {
+      case _:Assign                        => // we don't want to include assignments
+      case _:TermTree | _:Ident | _:Select => // ... but do want other unnamed terms.
+        // The position of the last tree, and the source code split there.
+        val lastpos  = earliestPosition(trees.last)
+        val (l1, l2) = content splitAt lastpos
+        val prefix   = if (l1.trim == "") "" else l1 + ";\n"
+        val varName  = if (synthetic) freshInternalVarName() else freshUserVarName()
+        // Note to self: val source needs to have this precise structure so that
+        // error messages print the user-submitted part without the "val res0 = " part.
+        val combined   = prefix + "val " + varName + " =\n" + l2
 
-    // Treat a single bare expression specially. This is necessary due to it being hard to
-    // modify code at a textual level, and it being hard to submit an AST to the compiler.
-    if (trees.size == 1) trees.head match {
-      case _:Assign                         => // we don't want to include assignments
-      case _:TermTree | _:Ident | _:Select  => // ... but do want these as valdefs.
-        requestFromLine("val %s =\n%s".format(varName, line), synthetic) match {
+        repldbg(List(
+          "    line" -> line,
+          " content" -> content,
+          "     was" -> l2,
+          "combined" -> combined) map {
+            case (label, s) => label + ": '" + s + "'"
+          } mkString "\n"
+        )
+      
+        // Rewriting    "foo ; bar ; 123"
+        // to           "foo ; bar ; val resXX = 123"
+        requestFromLine(combined, synthetic) match {
           case Right(req) => return Right(req withOriginalLine line)
           case x          => return x
         }
-      case _                                =>
+      case _ => 
     }
-        
-    // figure out what kind of request
     Right(buildRequest(line, trees))
   }
+  
+  def typeCleanser(sym: Symbol, memberName: Name): Type = {
+    // the types are all =>T; remove the =>
+    val tp1 = afterTyper(sym.info.nonPrivateDecl(memberName).tpe match {
+      case NullaryMethodType(tp) => tp
+      case tp                    => tp
+    })
+    // normalize non-public types so we don't see protected aliases like Self
+    afterTyper(tp1 match {
+      case TypeRef(_, sym, _) if !sym.isPublic  => tp1.normalize
+      case tp                                   => tp
+    })
+  }
 
-  /** 
-   *    Interpret one line of input.  All feedback, including parse errors
-   *    and evaluation results, are printed via the supplied compiler's 
-   *    reporter.  Values defined are available for future interpreted
-   *    strings.
+  /**
+   *  Interpret one line of input. All feedback, including parse errors
+   *  and evaluation results, are printed via the supplied compiler's 
+   *  reporter. Values defined are available for future interpreted strings.
    *  
-   *  
-   *    The return value is whether the line was interpreter successfully,
-   *    e.g. that there were no parse errors.
-   *  
-   *
-   *  @param line ...
-   *  @return     ...
+   *  The return value is whether the line was interpreter successfully,
+   *  e.g. that there were no parse errors.
    */
   def interpret(line: String): IR.Result = interpret(line, false)
   def interpret(line: String, synthetic: Boolean): IR.Result = {
@@ -524,7 +589,7 @@ class IMain(val settings: Settings, protected val out: PrintWriter) extends Impo
       )
     bindRep.callOpt("set", value) match {
       case Some(_)  => interpret("val %s = %s.value".format(name, bindRep.evalPath))
-      case _        => DBG("Set failed in bind(%s, %s, %s)".format(name, boundType, value)) ; IR.Error
+      case _        => repldbg("Set failed in bind(%s, %s, %s)".format(name, boundType, value)) ; IR.Error
     }
   }
   def rebind(p: NamedParam): IR.Result = {
@@ -765,25 +830,13 @@ class IMain(val settings: Settings, protected val out: PrintWriter) extends Impo
     def lookupTypeOf(name: Name) = typeOf.getOrElse(name, typeOf(global.encode(name.toString)))
     def simpleNameOfType(name: TypeName) = (compilerTypeOf get name) map (_.typeSymbol.simpleName)
     
-    private def typeMap[T](f: Type => T): Map[Name, T] = {
-      def toType(name: Name): T = {
-        // the types are all =>T; remove the =>
-        val tp1 = lineAfterTyper(resultSymbol.info.nonPrivateDecl(name).tpe match {
-          case NullaryMethodType(tp)  => tp
-          case tp                 => tp
-        })
-        // normalize non-public types so we don't see protected aliases like Self
-        lineAfterTyper(tp1 match {
-          case TypeRef(_, sym, _) if !sym.isPublic  => f(tp1.normalize)
-          case tp                                   => f(tp)
-        })
-      }
-      termNames ++ typeNames map (x => x -> toType(x)) toMap
-    }
+    private def typeMap[T](f: Type => T): Map[Name, T] =
+      termNames ++ typeNames map (x => x -> f(typeCleanser(resultSymbol, x))) toMap
+
     /** Types of variables defined by this request. */
     lazy val compilerTypeOf = typeMap[Type](x => x)
     /** String representations of same. */
-    lazy val typeOf         = typeMap[String](_.toString)
+    lazy val typeOf         = typeMap[String](tp => afterTyper(tp.toString))
     
     // lazy val definedTypes: Map[Name, Type] = {
     //   typeNames map (x => x -> afterTyper(resultSymbol.info.nonPrivateDecl(x).tpe)) toMap
@@ -921,38 +974,70 @@ class IMain(val settings: Settings, protected val out: PrintWriter) extends Impo
     }
   }
   
+  // Since people will be giving us ":t def foo = 5" even though that is not an
+  // expression, we have a means of typing declarations too.
+  private def typeOfDeclaration(code: String): Option[Type] = {
+    repldbg("typeOfDeclaration(" + code + ")")
+    val obname = freshInternalVarName()
+    
+    interpret("object " + obname + " {\n" + code + "\n}\n", true) match {
+      case IR.Success =>
+        val sym = symbolOfTerm(obname)
+        if (sym == NoSymbol) None else {
+          // TODO: bitmap$n is not marked synthetic.
+          val decls = sym.tpe.decls.toList filterNot (x => x.isConstructor || x.isPrivate || (x.name.toString contains "$"))
+          repldbg("decls: " + decls)
+          decls.lastOption map (decl => typeCleanser(sym, decl.name))
+        }
+      case _          =>
+        None
+    }
+  }
+  
   // XXX literals.
   // 1) Identifiers defined in the repl.
   // 2) A path loadable via getModule.
   // 3) Try interpreting it as an expression.
   private var typeOfExpressionDepth = 0
-  def typeOfExpression(expr: String): Option[Type] = {
-    DBG("typeOfExpression(" + expr + ")")
+  def typeOfExpression(expr: String, silent: Boolean = true): Option[Type] = {
+    repldbg("typeOfExpression(" + expr + ")")
     if (typeOfExpressionDepth > 2) {
-      DBG("Terminating typeOfExpression recursion for expression: " + expr)
+      repldbg("Terminating typeOfExpression recursion for expression: " + expr)
       return None
     }
 
     def asQualifiedImport = {
       val name = expr.takeWhile(_ != '.')
       importedTermNamed(name) flatMap { sym =>
-        typeOfExpression(sym.fullName + expr.drop(name.length))
+        typeOfExpression(sym.fullName + expr.drop(name.length), true)
       }
     }
     def asModule = safeModule(expr) map (_.tpe)
-    def asExpr = beSilentDuring {
+    def asExpr = {
       val lhs = freshInternalVarName()
-      val line = "lazy val " + lhs + " = { " + expr + " } "
+      val line = "lazy val " + lhs + " =\n" + expr
 
       interpret(line, true) match {
-        case IR.Success => typeOfExpression(lhs)
+        case IR.Success => typeOfExpression(lhs, true)
         case _          => None
       }
     }
+    def evaluate() = {
+      typeOfExpressionDepth += 1
+      try typeOfTerm(expr) orElse asModule orElse asExpr orElse asQualifiedImport
+      finally typeOfExpressionDepth -= 1
+    }
     
-    typeOfExpressionDepth += 1
-    try typeOfTerm(expr) orElse asModule orElse asExpr orElse asQualifiedImport
-    finally typeOfExpressionDepth -= 1
+    // Don't presently have a good way to suppress undesirable success output
+    // while letting errors through, so it is first trying it silently: if there
+    // is an error, and errors are desired, then it re-evaluates non-silently
+    // to induce the error message.
+    beSilentDuring(evaluate()) orElse beSilentDuring(typeOfDeclaration(expr)) orElse {
+      if (!silent)
+        evaluate()
+      
+      None
+    }
   }
   // def compileAndTypeExpr(expr: String): Option[Typer] = {
   //   class TyperRun extends Run {
@@ -1006,17 +1091,13 @@ class IMain(val settings: Settings, protected val out: PrintWriter) extends Impo
      */
     if (code.lines exists (_.trim endsWith "// show")) {
       echo(code)
-      parse(code) foreach (ts => ts foreach (t => withoutUnwrapping(DBG(asCompactString(t)))))
+      parse(code) foreach (ts => ts foreach (t => withoutUnwrapping(repldbg(asCompactString(t)))))
     }
   }
   // debugging
   def debugging[T](msg: String)(res: T) = {
-    DBG(msg + " " + res)
+    repldbg(msg + " " + res)
     res
-  }
-  def DBG(s: => String) = if (isReplDebug) {
-    try repldbg(s)
-    catch { case x: AssertionError => repldbg("Assertion error printing debug string:\n  " + x) }
   }
 }
 

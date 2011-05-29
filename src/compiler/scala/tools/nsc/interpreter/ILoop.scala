@@ -419,10 +419,12 @@ class ILoop(in0: Option[BufferedReader], protected val out: PrintWriter)
     try newJavap()
     catch { case _: Exception => null }
   
+  // Still todo: modules.
   private def typeCommand(line: String): Result = {
-    intp.typeOfExpression(line) match {
-      case Some(tp) => tp.toString
-      case _        => "Failed to determine type."
+    if (line.trim == "") ":type <expression>"
+    else intp.typeOfExpression(line, false) match {
+      case Some(tp) => intp.afterTyper(tp.toString)
+      case _        => "" // the error message was already printed
     }
   }
   
