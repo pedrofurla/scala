@@ -407,15 +407,15 @@ class Template(tpl: DocTemplateEntity) extends HtmlPage {
             <dd>{ for(body <- comment.since.toList) yield {bodyToHtml(body)} }</dd>
           } else NodeSeq.Empty
 
-        val note: Seq[scala.xml.Node] =
-          if(!comment.note.isEmpty && !isReduced) {
-            <dt>Note</dt>
+        val exceptions: Seq[scala.xml.Node] =
+          if(!comment.throws.isEmpty && !isReduced) {
+            <dt>Exceptions thrown</dt>
             <dd>{
-              val noteXml: List[scala.xml.NodeSeq] = (for(note <- comment.note ) yield <span class="cmt">{bodyToHtml(note)}</span> )
-              noteXml.reduceLeft(_ ++ Text(", ") ++ _)
+              val exceptionsXml: Iterable[scala.xml.NodeSeq] = (for(exception <- comment.throws ) yield <span class="cmt">{Text(exception._1) ++ bodyToHtml(exception._2)}</span> )
+              exceptionsXml.reduceLeft(_ ++ Text("") ++ _)
             }</dd>
           } else NodeSeq.Empty
-
+  
         val seeAlso: Seq[scala.xml.Node] =             
           if(!comment.see.isEmpty && !isReduced) {
             <dt>See also</dt>
@@ -425,7 +425,7 @@ class Template(tpl: DocTemplateEntity) extends HtmlPage {
             }</dd>
           } else NodeSeq.Empty
           
-        example ++ version ++ sinceVersion ++ note ++ seeAlso
+        example ++ version ++ sinceVersion ++ exceptions ++ seeAlso 
         
       case None => NodeSeq.Empty
     } 
