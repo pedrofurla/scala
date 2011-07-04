@@ -12,7 +12,9 @@ import annotation.elidable
 import scala.tools.util.PathResolver.Defaults
 import scala.collection.mutable.HashSet
 
-trait ScalaSettings extends AbsScalaSettings with StandardScalaSettings {
+trait ScalaSettings extends AbsScalaSettings
+                       with StandardScalaSettings
+                       with Warnings {
   self: MutableSettings =>
   
   import Defaults.scalaUserClassPath
@@ -79,9 +81,6 @@ trait ScalaSettings extends AbsScalaSettings with StandardScalaSettings {
   val showPhases    = BooleanSetting    ("-Xshow-phases", "Print a synopsis of compiler phases.")
   val sourceReader  = StringSetting     ("-Xsource-reader", "classname", "Specify a custom method for reading source files.", "")
 
-  val Xwarnfatal    = BooleanSetting    ("-Xfatal-warnings", "Fail the compilation if there are any warnings.")
-  val Xchecknull    = BooleanSetting    ("-Xcheck-null", "Emit warning on selection of nullable reference.")
-
   // Experimental Extensions
   val Xexperimental = BooleanSetting    ("-Xexperimental", "Enable experimental extensions.") .
                           withPostSetHook(set => List(YdepMethTpes, YmethodInfer) foreach (_.value = set.value)) //YvirtClasses, 
@@ -109,6 +108,8 @@ trait ScalaSettings extends AbsScalaSettings with StandardScalaSettings {
   val Xdce          = BooleanSetting    ("-Ydead-code", "Perform dead code elimination.")
   val debug         = BooleanSetting    ("-Ydebug", "Increase the quantity of debugging output.")
   // val doc           = BooleanSetting    ("-Ydoc", "Generate documentation")
+  val termConflict  = ChoiceSetting     ("-Yresolve-term-conflict", "strategy", "Resolve term conflicts",
+    List("package", "object", "error"), "error")
   val inline        = BooleanSetting    ("-Yinline", "Perform inlining when possible.")
   val Xlinearizer   = ChoiceSetting     ("-Ylinearizer", "which", "Linearizer to use", List("normal", "dfs", "rpo", "dump"), "rpo")
   val log           = PhasesSetting     ("-Ylog", "Log operations during")
@@ -159,11 +160,6 @@ trait ScalaSettings extends AbsScalaSettings with StandardScalaSettings {
   val exposeEmptyPackage = BooleanSetting("-Yexpose-empty-package", "Internal only: expose the empty package.").internalOnly()
   
   def stop = stopAfter
-
-  /**
-   * Warnings
-   */
-  val Ywarndeadcode = BooleanSetting    ("-Ywarn-dead-code", "Emit warnings for dead code")
 
   /**
    * IDE-specific settings
