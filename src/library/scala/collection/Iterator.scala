@@ -507,7 +507,14 @@ trait Iterator[+A] extends TraversableOnce[A] {
    */
   def span(p: A => Boolean): (Iterator[A], Iterator[A]) = {
     val self = buffered
-    val leading = new Iterator[A] {
+
+    /**
+     * Giving a name to following iterator (as opposed to trailing) because
+     * anonymous class is represented as a structural type that trailing
+     * iterator is referring (the finish() method) and thus triggering
+     * handling of structural calls. It's not what's intended here.
+     */
+    class Leading extends Iterator[A] {
       private var isDone = false
       val lookahead = new mutable.Queue[A]
       def advance() = {
@@ -528,6 +535,7 @@ trait Iterator[+A] extends TraversableOnce[A] {
         lookahead.dequeue()
       }
     }
+    val leading = new Leading
     val trailing = new Iterator[A] {
       private lazy val it = {
         leading.finish()
@@ -684,8 +692,8 @@ trait Iterator[+A] extends TraversableOnce[A] {
    *  $mayNotTerminateInf
    *
    *  @param elem  the element to test.
-   *  @return      `true` if this iterator produces some value that
-   *               is equal to `elem` (as determined by `==`), `false` otherwise.
+   *  @return     `true` if this iterator produces some value that is
+   *               is equal (wrt `==`) to `elem`, `false` otherwise.
    */
   def contains(elem: Any): Boolean = exists(_ == elem)
 
@@ -776,7 +784,7 @@ trait Iterator[+A] extends TraversableOnce[A] {
    *  Iterator[Seq[A]], with configurable sequence size, step, and
    *  strategy for dealing with elements which don't fit evenly.
    * 
-   *  Typical uses can be achieved via methods `grouped' and `sliding'.
+   *  Typical uses can be achieved via methods `grouped` and `sliding`.
    */
   class GroupedIterator[B >: A](self: Iterator[A], size: Int, step: Int) extends Iterator[Seq[B]] {
     require(size >= 1 && step >= 1, "size=%d and step=%d, but both must be positive".format(size, step))
@@ -879,8 +887,7 @@ trait Iterator[+A] extends TraversableOnce[A] {
 
   /** Returns an iterator which groups this iterator into fixed size 
    *  blocks.  Example usages:
-   *
-   *  <pre>
+   *  {{{
    *    // Returns List(List(1, 2, 3), List(4, 5, 6), List(7)))
    *    (1 to 7).iterator grouped 3 toList
    *    // Returns List(List(1, 2, 3), List(4, 5, 6))
@@ -889,7 +896,7 @@ trait Iterator[+A] extends TraversableOnce[A] {
    *    // Illustrating that withPadding's argument is by-name.
    *    val it2 = Iterator.iterate(20)(_ + 5)
    *    (1 to 7).iterator grouped 3 withPadding it2.next toList
-   *  </pre>
+   *  }}}
    */
   def grouped[B >: A](size: Int): GroupedIterator[B] =
     new GroupedIterator[B](self, size, size)
@@ -897,9 +904,8 @@ trait Iterator[+A] extends TraversableOnce[A] {
   /** Returns an iterator which presents a "sliding window" view of
    *  another iterator.  The first argument is the window size, and
    *  the second is how far to advance the window on each iteration;
-   *  defaults to 1.  Example usages:
-   * 
-   *  <pre>
+   *  defaults to `1`.  Example usages:
+   *  {{{
    *    // Returns List(List(1, 2, 3), List(2, 3, 4), List(3, 4, 5))
    *    (1 to 5).iterator.sliding(3).toList
    *    // Returns List(List(1, 2, 3, 4), List(4, 5))
@@ -910,7 +916,7 @@ trait Iterator[+A] extends TraversableOnce[A] {
    *    // Illustrating that withPadding's argument is by-name.
    *    val it2 = Iterator.iterate(20)(_ + 5)
    *    (1 to 5).iterator.sliding(4, 3).withPadding(it2.next).toList
-   *  </pre>
+   *  }}}
    */
   def sliding[B >: A](size: Int, step: Int = 1): GroupedIterator[B] =
     new GroupedIterator[B](self, size, step)
@@ -975,7 +981,7 @@ trait Iterator[+A] extends TraversableOnce[A] {
       result
     }
   }
-  
+
   /** Copies selected values produced by this iterator to an array.
    *  Fills the given array `xs` starting at index `start` with at most
    *  `len` values produced by this iterator.
@@ -1009,7 +1015,7 @@ trait Iterator[+A] extends TraversableOnce[A] {
     while (hasNext && that.hasNext)
       if (next != that.next)
         return false
-    
+
     !hasNext && !that.hasNext
   }
 
@@ -1020,7 +1026,8 @@ trait Iterator[+A] extends TraversableOnce[A] {
     else Stream.empty[A]
 
   /** Converts this iterator to a string.  
-   *  @return `"empty iterator"` or `"non-empty iterator"`, depending on whether or not the iterator is empty.
+   *  @return `"empty iterator"` or `"non-empty iterator"`, depending on
+   *           whether or not the iterator is empty.
    */
   override def toString = (if (hasNext) "non-empty" else "empty")+" iterator"
 

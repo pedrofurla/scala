@@ -123,6 +123,8 @@ abstract class ExplicitOuter extends InfoTransform
    *      Remove protected flag from all members of traits.
    *    </li>
    *  </ol>
+   *  Note: this transformInfo need not be reflected as the JVM reflection already 
+   *  elides outer pointers.
    */
   def transformInfo(sym: Symbol, tp: Type): Type = tp match {
     case MethodType(params, restpe1) =>
@@ -529,9 +531,5 @@ abstract class ExplicitOuter extends InfoTransform
 
   class Phase(prev: scala.tools.nsc.Phase) extends super.Phase(prev) {
     override val checkable = false
-    override def run() {
-      super.run
-      Pattern.clear()    // clear the cache
-    }
   }
 }

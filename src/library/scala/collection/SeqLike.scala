@@ -395,8 +395,8 @@ trait SeqLike[+A, +Repr] extends IterableLike[A, Repr] with GenSeqLike[A, Repr] 
    *  $mayNotTerminateInf
    *
    *  @param elem  the element to test.
-   *  @return     `true` if this $coll has an element that is equal
-   *              (as determined by `==`) to `elem`, `false` otherwise.
+   *  @return     `true` if this $coll has an element that is
+   *               is equal (wrt `==`) to `elem`, `false` otherwise.
    */
   def contains(elem: Any): Boolean = exists (_ == elem)
 
@@ -575,7 +575,7 @@ trait SeqLike[+A, +Repr] extends IterableLike[A, Repr] with GenSeqLike[A, Repr] 
   /** Sorts this $coll according to a comparison function.
    *  $willNotTerminateInf
    * 
-   *  The sort is stable. That is, elements that are equal (as determined by `lt`) appear in the
+   *  The sort is stable. That is, elements that are equal wrt `lt` appear in the
    *  same order in the sorted sequence as in the original.
    *
    *  @param  lt  the comparison function which tests whether
@@ -614,7 +614,7 @@ trait SeqLike[+A, +Repr] extends IterableLike[A, Repr] with GenSeqLike[A, Repr] 
 
   /** Sorts this $coll according to an Ordering.
    * 
-   *  The sort is stable. That is, elements that are equal (as determined by `lt`) appear in the
+   *  The sort is stable. That is, elements that are equal wrt `lt` appear in the
    *  same order in the sorted sequence as in the original.
    *
    *  @see scala.math.Ordering
@@ -683,9 +683,8 @@ trait SeqLike[+A, +Repr] extends IterableLike[A, Repr] with GenSeqLike[A, Repr] 
   def equalsWith[B](that: Seq[B])(f: (A,B) => Boolean): Boolean = corresponds(that)(f)
 
  /** 
-   * returns a projection that can be used to call non-strict <code>filter</code>,
-   * <code>map</code>, and <code>flatMap</code> methods that build projections
-   * of the collection.
+   * returns a projection that can be used to call non-strict `filter`,
+   * `map`, and `flatMap` methods that build projections of the collection.
    */
   @deprecated("use `view` instead", "2.8.0")
   override def projection = view
@@ -729,10 +728,10 @@ object SeqLike {
       }
       arr
     }
-    
+
     var m, i = 0
     def mi = m + i
-    
+
     while (mi < S.length) {
       if (W(i) == S(mi)) {
         i += 1
@@ -781,7 +780,7 @@ object SeqLike {
   }
 
   /** Finds a particular index at which one sequence occurs in another sequence.
-   *  Like indexOf, but finds the latest occurrence rather than earliest.
+   *  Like `indexOf`, but finds the latest occurrence rather than earliest.
    *  
    *  @see  SeqLike#indexOf
    */

@@ -53,15 +53,9 @@ trait Position {
   /** Compare this position to another, by first comparing their line numbers,
    * and then -- if necessary -- using the columns to break a tie.
    *
-<<<<<<< HEAD
-   * @param `that' a `Position' to compare to this `Position'
-   * @return true if this position's line number or (in case of equal line numbers)
-   *         column is smaller than the corresponding components of `that'
-=======
    * @param `that` a `Position` to compare to this `Position`
    * @return true if this position's line number or (in case of equal line numbers)
    *         column is smaller than the corresponding components of `that`
->>>>>>> 88c0f3c32f94663e6da88ba025e56ae987a6a891
    */
   def <(that: Position) = {
     this.line < that.line || 

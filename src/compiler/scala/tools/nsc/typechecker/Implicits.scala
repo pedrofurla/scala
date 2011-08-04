@@ -13,7 +13,7 @@ package typechecker
 
 import annotation.tailrec
 import scala.collection.{ mutable, immutable }
-import mutable.{ HashMap, LinkedHashMap, ListBuffer }
+import mutable.{ LinkedHashMap, ListBuffer }
 import scala.util.matching.Regex
 import symtab.Flags._
 import util.Statistics._
@@ -83,7 +83,7 @@ trait Implicits {
   private type InfoMap = LinkedHashMap[Symbol, List[ImplicitInfo]] // A map from class symbols to their associated implicits
   private val implicitsCache = new LinkedHashMap[Type, Infoss]
   private val infoMapCache = new LinkedHashMap[Symbol, InfoMap]
-  private val improvesCache = new HashMap[(ImplicitInfo, ImplicitInfo), Boolean]
+  private val improvesCache = perRunCaches.newMap[(ImplicitInfo, ImplicitInfo), Boolean]()
   
   def resetImplicits() { 
     implicitsCache.clear()
@@ -175,7 +175,7 @@ trait Implicits {
   /** An extractor for types of the form ? { name: ? }
    */
   object HasMember {
-    private val hasMemberCache = new mutable.HashMap[Name, Type]
+    private val hasMemberCache = perRunCaches.newMap[Name, Type]()
     def apply(name: Name): Type = hasMemberCache.getOrElseUpdate(name, memberWildcardType(name, WildcardType))
     def unapply(pt: Type): Option[Name] = pt match {
       case RefinedType(List(WildcardType), decls) =>
@@ -219,7 +219,7 @@ trait Implicits {
   object Function1 {
     val Sym = FunctionClass(1)
     def unapply(tp: Type) = tp match {
-      case TypeRef(_, Sym, arg1 :: arg2 :: _) => Some(arg1, arg2)
+      case TypeRef(_, Sym, arg1 :: arg2 :: _) => Some((arg1, arg2))
       case _                                  => None
     }
   }
@@ -388,7 +388,7 @@ trait Implicits {
      *  Detect infinite search trees for implicits.
      *
      *  @param info    The given implicit info describing the implicit definition
-     *  @pre           <code>info.tpe</code> does not contain an error
+     *  @pre           `info.tpe` does not contain an error
      */
     private def typedImplicit(info: ImplicitInfo, ptChecked: Boolean): SearchResult = {
       printInference("[typedImplicit] " + info)
@@ -935,7 +935,9 @@ trait Implicits {
       
       val infoMap = new InfoMap
       getParts(tp)(infoMap, new mutable.HashSet(), Set())
-      printInference("[companionImplicitMap] "+tp+" = "+infoMap)
+      printInference(
+        ptBlock("companionImplicitMap " + tp, infoMap.toSeq.map({ case (k, v) => ("" + k, v.mkString(", ")) }): _*)
+      )
       infoMap
     }
 
@@ -1117,7 +1119,7 @@ trait Implicits {
             // refinement is not generated yet
             if (hasLength(parents, 1)) findManifest(parents.head)
             else if (full) manifestFactoryCall("intersectionType", tp, parents map findSubManifest: _*)
-            else mot(erasure.erasure.intersectionDominator(parents), from, to)
+            else mot(erasure.intersectionDominator(parents), from, to)
           case ExistentialType(tparams, result) =>
             mot(tp1.skolemizeExistential, from, to)
           case _ =>

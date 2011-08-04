@@ -8,12 +8,11 @@ package scala.tools.nsc
 package matching
 
 import PartialFunction._
-import scala.collection.{ mutable, immutable }
+import scala.collection.{ mutable }
 import util.Position
 import transform.ExplicitOuter
 import symtab.Flags
 import mutable.ListBuffer
-import immutable.IntMap
 import annotation.elidable
 
 trait ParallelMatching extends ast.TreeDSL
@@ -43,7 +42,7 @@ trait ParallelMatching extends ast.TreeDSL
     lazy val (rows, targets)                    = expand(roots, cases).unzip
     lazy val expansion: Rep                     = make(roots, rows)
 
-    private val shortCuts = mutable.HashMap[Int, Symbol]()
+    private val shortCuts = perRunCaches.newMap[Int, Symbol]()
 
     final def createShortCut(theLabel: Symbol): Int = {
       val key = shortCuts.size + 1
@@ -312,7 +311,7 @@ trait ParallelMatching extends ast.TreeDSL
           val r       = remake(newRows ++ defaultRows, includeScrut = false)
           val r2      = make(r.tvars, r.rows map (x => x rebind bindVars(tag, x.subst)))
 
-          CASE(Literal(tag)) ==> r2.toTree
+          CASE(Literal(Constant(tag))) ==> r2.toTree
         }
       
       lazy val defaultTree = remake(defaultRows, includeScrut = false).toTree
@@ -835,7 +834,7 @@ trait ParallelMatching extends ast.TreeDSL
       typer typed {
         tpe match {
           case ConstantType(Constant(null)) if isRef  => scrutTree OBJ_EQ NULL
-          case ConstantType(Constant(value))          => scrutTree MEMBER_== Literal(value)
+          case ConstantType(const)                    => scrutTree MEMBER_== Literal(const)
           case SingleType(NoPrefix, sym)              => genEquals(sym)
           case SingleType(pre, sym) if sym.isStable   => genEquals(sym)
           case ThisType(sym) if sym.isModule          => genEquals(sym)

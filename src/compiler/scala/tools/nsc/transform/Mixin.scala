@@ -25,7 +25,7 @@ abstract class Mixin extends InfoTransform with ast.TreeDSL {
   /** This map contains a binding (class -> info) if
    *  the class with this info at phase mixinPhase has been treated for mixin composition 
    */
-  private val treatedClassInfos = collection.mutable.Map[Symbol, Type]()
+  private val treatedClassInfos = perRunCaches.newMap[Symbol, Type]()
 
 // --------- helper functions -----------------------------------------------
 
@@ -95,8 +95,7 @@ abstract class Mixin extends InfoTransform with ast.TreeDSL {
     atPhase(currentRun.picklerPhase.next) {
       var bcs = base.info.baseClasses.dropWhile(mixinClass !=).tail
       var sym: Symbol = NoSymbol
-      if (settings.debug.value)
-        log("starting rebindsuper " + base + " " + member + ":" + member.tpe +
+      debuglog("starting rebindsuper " + base + " " + member + ":" + member.tpe +
             " " + mixinClass + " " + base.info.baseClasses + "/" + bcs)
       while (!bcs.isEmpty && sym == NoSymbol) {
         if (settings.debug.value) {
@@ -132,7 +131,7 @@ abstract class Mixin extends InfoTransform with ast.TreeDSL {
   /** Add given member to given class, and mark member as mixed-in.
    */
   def addMember(clazz: Symbol, member: Symbol): Symbol = {
-    if (settings.debug.value) log("new member of " + clazz + ":" + member.defString)
+    debuglog("new member of " + clazz + ":" + member.defString)
     clazz.info.decls enter member
     member.setFlag(MIXEDIN)
   }
@@ -199,15 +198,15 @@ abstract class Mixin extends InfoTransform with ast.TreeDSL {
           }
         }
       }
-      if (settings.debug.value) log("new defs of " + clazz + " = " + clazz.info.decls);
+      debuglog("new defs of " + clazz + " = " + clazz.info.decls);
     }
   }
 
   /** Map a lazy, mixedin field accessor to it's trait member accessor */
-  val initializer = new mutable.HashMap[Symbol, Symbol]
+  val initializer = perRunCaches.newMap[Symbol, Symbol]
   
   /** Deferred bitmaps that will be added during the transformation of a class */
-  val deferredBitmaps: collection.mutable.Map[Symbol, List[Tree]] = new collection.mutable.HashMap[Symbol, List[Tree]]
+  val deferredBitmaps = perRunCaches.newMap[Symbol, List[Tree]]()
   
   /** Add all members to be mixed in into a (non-trait-) class
    *  These are:
@@ -477,7 +476,7 @@ abstract class Mixin extends InfoTransform with ast.TreeDSL {
      *  For each class, fields defined by the class come after inherited fields. Mixed-in
      *  fields count as fields defined by the class itself.
      */
-    private val fieldOffset: mutable.Map[Symbol, Int] = new mutable.HashMap[Symbol, Int]
+    private val fieldOffset = perRunCaches.newMap[Symbol, Int]()
 
     /** The first transform; called in a pre-order traversal at phase mixin
      *  (that is, every node is processed before its children).
@@ -609,7 +608,7 @@ abstract class Mixin extends InfoTransform with ast.TreeDSL {
 
       /** Attribute given tree and anchor at given position */
       def attributedDef(pos: Position, tree: Tree): Tree = {
-        if (settings.debug.value) log("add new def to " + clazz + ": " + tree)
+        debuglog("add new def to " + clazz + ": " + tree)
         typedPos(pos)(tree)
       }
 
@@ -669,8 +668,7 @@ abstract class Mixin extends InfoTransform with ast.TreeDSL {
           val rhs0 = (Super(clazz, tpnme.EMPTY) DOT stat.symbol.alias)(vparams map (v => Ident(v.symbol)): _*)
           val rhs1 = localTyper.typed(atPos(stat.pos)(rhs0), stat.symbol.tpe.resultType)
           val rhs2 = atPhase(currentRun.mixinPhase)(transform(rhs1))
-          if (settings.debug.value)
-            log("complete super acc " + stat.symbol + stat.symbol.locationString +
+          debuglog("complete super acc " + stat.symbol + stat.symbol.locationString +
                 " " + rhs1 + " " + stat.symbol.alias + stat.symbol.alias.locationString +
                 "/" + stat.symbol.alias.owner.hasFlag(lateINTERFACE))//debug
           treeCopy.DefDef(stat, mods, name, tparams, List(vparams), tpt, rhs2)
@@ -999,7 +997,7 @@ abstract class Mixin extends InfoTransform with ast.TreeDSL {
         var fieldsCheckinitTransient = 0
 
         for (f <- clazz0.info.decls.iterator) {
-          if (settings.debug.value) log(f.fullName + " -> " + fields)
+          debuglog(f.fullName + " -> " + fields)
 
           if (fieldWithBitmap(f)) {
             val (idx, _) =

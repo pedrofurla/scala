@@ -10,7 +10,6 @@ package icode
 
 import java.io.PrintWriter
 import scala.collection.{ mutable, immutable }
-import mutable.{ HashMap, ListBuffer }
 import symtab.Flags.{ DEFERRED }
   
 trait ReferenceEquality {
@@ -29,7 +28,7 @@ trait Members { self: ICodes =>
     def this(method: IMethod) = this(method.symbol.simpleName.toString, method)
 
     /** The set of all blocks */
-    val blocks: ListBuffer[BasicBlock] = new ListBuffer
+    val blocks = mutable.ListBuffer[BasicBlock]()
 
     /** The start block of the method */
     var startBlock: BasicBlock = null
@@ -255,10 +254,9 @@ trait Members { self: ICodes =>
     }
     
     def dump() {
-      val printer = new TextPrinter(new PrintWriter(Console.out, true),
-                                    new DumpLinearizer)
-      printer.printMethod(this)
-    }    
+      Console.println("dumping IMethod(" + symbol + ")")
+      newTextPrinter() printMethod this
+    }
   }
 
   /** Represent local variables and parameters */

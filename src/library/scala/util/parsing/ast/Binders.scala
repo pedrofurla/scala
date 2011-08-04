@@ -8,7 +8,7 @@
 
 package scala.util.parsing.ast
 
-import scala.collection.mutable.Map
+import scala.collection.mutable
 
 //DISCLAIMER: this code is highly experimental!
 
@@ -68,14 +68,6 @@ trait Mappable {
  * @author Adriaan Moors 
  */
 trait Binders extends AbstractSyntax with Mappable {
-<<<<<<< HEAD
-  /** A `Scope' keeps track of one or more syntactic elements that represent bound names.
-   * The elements it contains share the same scope and must all be distinct, as determined by `=='.   *
-   * A `NameElement' `n' in the AST that is conceptually bound by a `Scope' `s', is replaced by a 
-   * `BoundElement(n, s)'. (For example, in `val x:Int=x+1', the first `x' is modelled by a
-   * Scope `s' that contains `x' and the second `x' is represented by a `BoundElement(`x', s)')
-   * The term (`x+1') in scope of the Scope becomes an `UnderBinder(s, `x+1').
-=======
   /** A `Scope` keeps track of one or more syntactic elements that represent bound names.
    *  The elements it contains share the same scope and must all be distinct, as determined by `==`.
    *
@@ -83,7 +75,6 @@ trait Binders extends AbstractSyntax with Mappable {
    *  `BoundElement(n, s)`. (For example, in `val x:Int=x+1`, the first `x` is modelled by a
    *  Scope `s` that contains `x` and the second `x` is represented by a `BoundElement(x, s)`)
    *  The term (`x+1`) in scope of the Scope becomes an `UnderBinder(s, x+1)`.
->>>>>>> 88c0f3c32f94663e6da88ba025e56ae987a6a891
    *
    *  A `NameElement` `n` is bound by a `Scope` `s` if it is wrapped as a `BoundElement(n, s)`, and
    *  `s` has a binder element that is semantically equal (`equals` or `==`) to `n`.
@@ -93,8 +84,8 @@ trait Binders extends AbstractSyntax with Mappable {
    *  (`id` is solely used for this textual representation.)
    */
   class Scope[binderType <: NameElement] extends Iterable[binderType]{
-    private val substitution: Map[binderType, Element] = 
-      new scala.collection.mutable.LinkedHashMap[binderType, Element] // a LinkedHashMap is ordered by insertion order -- important!
+    private val substitution: mutable.Map[binderType, Element] = 
+      new mutable.LinkedHashMap[binderType, Element] // a LinkedHashMap is ordered by insertion order -- important!
     
     /** Returns a unique number identifying this Scope (only used for representation purposes). */
     val id: Int = _Binder.genId
@@ -245,7 +236,7 @@ trait Binders extends AbstractSyntax with Mappable {
        })
     }*/
     
-    def cloneElementWithSubst(subst: scala.collection.immutable.Map[NameElement, NameElement]) = element.gmap(new Mapper { def apply[t <% Mappable[t]](x :t): t = x match{
+    def cloneElementWithSubst(subst: Map[NameElement, NameElement]) = element.gmap(new Mapper { def apply[t <% Mappable[t]](x :t): t = x match{
       case substable: NameElement if subst.contains(substable) => subst.get(substable).asInstanceOf[t] // TODO: wrong... substitution is not (necessarily) the identity function	
          //Console.println("substed: "+substable+"-> "+subst.get(substable)+")");
       case x => x // Console.println("subst: "+x+"(keys: "+subst.keys+")");x
@@ -258,7 +249,7 @@ trait Binders extends AbstractSyntax with Mappable {
     }})
 
     def extract: elementT = cloneElementNoBoundElements
-    def extract(subst: scala.collection.immutable.Map[NameElement, NameElement]): elementT = cloneElementWithSubst(subst)
+    def extract(subst: Map[NameElement, NameElement]): elementT = cloneElementWithSubst(subst)
     
     /** Get a string representation of element, normally we don't allow direct access to element, but just getting a string representation is ok. */
     def elementToString: String = element.toString

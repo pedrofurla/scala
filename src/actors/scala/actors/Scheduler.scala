@@ -38,17 +38,17 @@ object Scheduler extends DelegatingScheduler {
     sched
   }
 
-  /* Only <code>ForkJoinScheduler</code> implements this method.
+  /* Only `ForkJoinScheduler` implements this method.
    */
   @deprecated("snapshot will be removed", "2.8.0")
   def snapshot() {
     if (sched.isInstanceOf[ForkJoinScheduler]) {
       sched.asInstanceOf[ForkJoinScheduler].snapshot()
     } else
-      sys.error("scheduler does not implement snapshot", "2.8.0")
+      sys.error("scheduler does not implement snapshot")
   }
 
-  /* Only <code>ForkJoinScheduler</code> implements this method.
+  /* Only `ForkJoinScheduler` implements this method.
    */
   @deprecated("restart will be removed", "2.8.0")
   def restart() {
