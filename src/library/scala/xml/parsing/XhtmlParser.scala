@@ -13,7 +13,11 @@ import scala.io.Source
 
 /** An XML Parser that preserves `CDATA` blocks and knows about
  *  [[scala.xml.parsing.HtmlEntities]].
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author (c) David Pollak, 2007 WorldWide Conferencing, LLC.
  */
 class XhtmlParser(val input: Source) extends ConstructingHandler with MarkupParser with ExternalSources  {

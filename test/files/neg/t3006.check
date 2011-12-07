@@ -1,5 +1,9 @@
 t3006.scala:8: error: type mismatch;
+<<<<<<< HEAD
  found   : java.lang.String("H")
+=======
+ found   : String("H")
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  required: Int
   println(A(3) + "H")
                  ^

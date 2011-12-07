@@ -27,6 +27,7 @@ trait StdTokenParsers extends TokenParsers {
 
   /** A parser which matches a single keyword token.
    *
+<<<<<<< HEAD
    * @param chars    The character string making up the matched keyword. 
    * @return a `Parser` that matches the given string
    */
@@ -44,6 +45,25 @@ trait StdTokenParsers extends TokenParsers {
 
   /** A parser which matches an identifier */
   def ident: Parser[String] = 
+=======
+   * @param chars    The character string making up the matched keyword.
+   * @return a `Parser` that matches the given string
+   */
+//  implicit def keyword(chars: String): Parser[String] = accept(Keyword(chars)) ^^ (_.chars)
+    implicit def keyword(chars: String): Parser[String] =
+      keywordCache.getOrElseUpdate(chars, accept(Keyword(chars)) ^^ (_.chars))
+
+  /** A parser which matches a numeric literal */
+  def numericLit: Parser[String] =
+    elem("number", _.isInstanceOf[NumericLit]) ^^ (_.chars)
+
+  /** A parser which matches a string literal */
+  def stringLit: Parser[String] =
+    elem("string literal", _.isInstanceOf[StringLit]) ^^ (_.chars)
+
+  /** A parser which matches an identifier */
+  def ident: Parser[String] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     elem("identifier", _.isInstanceOf[Identifier]) ^^ (_.chars)
 }
 

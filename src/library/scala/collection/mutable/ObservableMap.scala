@@ -25,13 +25,22 @@ import script._
  *  @since   1
  */
 trait ObservableMap[A, B] extends Map[A, B] with Publisher[Message[(A, B)] with Undoable]
+<<<<<<< HEAD
 { 
   
+=======
+{
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   type Pub <: ObservableMap[A, B]
 
   abstract override def += (kv: (A, B)): this.type = {
     val (key, value) = kv
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     get(key) match {
       case None =>
         super.+=(kv)
@@ -61,8 +70,13 @@ trait ObservableMap[A, B] extends Map[A, B] with Publisher[Message[(A, B)] with 
 
   abstract override def clear(): Unit = {
     super.clear
+<<<<<<< HEAD
     publish(new Reset with Undoable { 
       def undo(): Unit = throw new UnsupportedOperationException("cannot undo") 
+=======
+    publish(new Reset with Undoable {
+      def undo(): Unit = throw new UnsupportedOperationException("cannot undo")
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     })
   }
 }

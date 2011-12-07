@@ -13,9 +13,16 @@ package scala.swing
 import event._
 
 /**
+<<<<<<< HEAD
  * A frame that can be used for main application windows. Shuts down the 
  * framework and quits the application when closed.
  */
 class MainFrame extends Frame {
+=======
+ * A frame that can be used for main application windows. Shuts down the
+ * framework and quits the application when closed.
+ */
+class MainFrame(gc: java.awt.GraphicsConfiguration = null) extends Frame(gc) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def closeOperation() { sys.exit(0) }
 }

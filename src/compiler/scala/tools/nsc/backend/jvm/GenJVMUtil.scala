@@ -30,17 +30,28 @@ trait GenJVMUtil {
     LONG   -> new JObjectType("java.lang.Long"),
     FLOAT  -> new JObjectType("java.lang.Float"),
     DOUBLE -> new JObjectType("java.lang.Double")
+<<<<<<< HEAD
   ) 
+=======
+  )
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   // Don't put this in per run caches.
   private val javaNameCache = new mutable.WeakHashMap[Symbol, String]() ++= List(
     NothingClass        -> RuntimeNothingClass.fullName('/'),
     RuntimeNothingClass -> RuntimeNothingClass.fullName('/'),
     NullClass           -> RuntimeNullClass.fullName('/'),
+<<<<<<< HEAD
     RuntimeNullClass    -> RuntimeNullClass.fullName('/')    
   )
 
   /** This trait may be used by tools who need access to 
+=======
+    RuntimeNullClass    -> RuntimeNullClass.fullName('/')
+  )
+
+  /** This trait may be used by tools who need access to
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  utility methods like javaName and javaType. (for instance,
    *  the Eclipse plugin uses it).
    */
@@ -63,6 +74,7 @@ trait GenJVMUtil {
       GE -> LT
     )
 
+<<<<<<< HEAD
     /** Specialized array conversion to prevent calling 
      *  java.lang.reflect.Array.newInstance via TraversableOnce.toArray
      */
@@ -70,6 +82,15 @@ trait GenJVMUtil {
     def mkArray(xs: Traversable[JType]): Array[JType] = { val a = new Array[JType](xs.size); xs.copyToArray(a); a }
     def mkArray(xs: Traversable[String]): Array[String] = { val a = new Array[String](xs.size); xs.copyToArray(a); a }
     
+=======
+    /** Specialized array conversion to prevent calling
+     *  java.lang.reflect.Array.newInstance via TraversableOnce.toArray
+     */
+
+    def mkArray(xs: Traversable[JType]): Array[JType] = { val a = new Array[JType](xs.size); xs.copyToArray(a); a }
+    def mkArray(xs: Traversable[String]): Array[String] = { val a = new Array[String](xs.size); xs.copyToArray(a); a }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     /** Return the a name of this symbol that can be used on the Java
      *  platform.  It removes spaces from names.
@@ -84,7 +105,11 @@ trait GenJVMUtil {
      *  references from method signatures to these types, because such classes can
      *  not exist in the classpath: the type checker will be very confused.
      */
+<<<<<<< HEAD
     def javaName(sym: Symbol): String =      
+=======
+    def javaName(sym: Symbol): String =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       javaNameCache.getOrElseUpdate(sym, {
         if (sym.isClass || (sym.isModule && !sym.isMethod))
           sym.javaBinaryName

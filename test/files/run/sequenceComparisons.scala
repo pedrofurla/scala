@@ -104,10 +104,17 @@ object Test {
       val scrut = s1f(seq)
       
       for (Method(f, (trueList, falseList), descr) <- methodList) {
+<<<<<<< HEAD
         for (s <- trueList; val rhs = s2f(s))
           assertOne(scrut, rhs, f(scrut, rhs), descr)
         
         for (s <- falseList; val rhs = s2f(s))
+=======
+        for (s <- trueList; rhs = s2f(s))
+          assertOne(scrut, rhs, f(scrut, rhs), descr)
+        
+        for (s <- falseList; rhs = s2f(s))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           assertOne(scrut, rhs, !f(scrut, rhs), "!(" + descr + ")")
       }
     }

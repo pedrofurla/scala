@@ -26,6 +26,7 @@ abstract class Future[+T] extends Responder[T] with Function0[T] {
   @volatile
   private[actors] var fvalue: Option[Any] = None
   private[actors] def fvalueTyped = fvalue.get.asInstanceOf[T]
+<<<<<<< HEAD
   
   @deprecated("this member is going to be removed in a future release", "2.8.0")
   def ch: InputChannel[Any] = inputChannel
@@ -34,6 +35,8 @@ abstract class Future[+T] extends Responder[T] with Function0[T] {
   protected def value: Option[Any] = fvalue
   @deprecated("this member is going to be removed in a future release", "2.8.0")
   protected def value_=(x: Option[Any]) { fvalue = x }
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** Tests whether the future's result is available.
    *
@@ -169,11 +172,19 @@ object Futures {
    *  options. The result of a future that resolved during the
    *  time span is its value wrapped in `Some`. The result of a
    *  future that did not resolve during the time span is `None`.
+<<<<<<< HEAD
    *  
    *  Note that some of the futures might already have been awaited,
    *  in which case their value is returned wrapped in `Some`.
    *  Passing a timeout of 0 causes `awaitAll` to return immediately.
    *  
+=======
+   *
+   *  Note that some of the futures might already have been awaited,
+   *  in which case their value is returned wrapped in `Some`.
+   *  Passing a timeout of 0 causes `awaitAll` to return immediately.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param  timeout the time span in ms after which waiting is
    *                  aborted
    *  @param  fts     the futures to be awaited
@@ -208,8 +219,13 @@ object Futures {
     Actor.timer.schedule(timerTask, timeout)
 
     def awaitWith(partFuns: Seq[PartialFunction[Any, Pair[Int, Any]]]) {
+<<<<<<< HEAD
       val reaction: PartialFunction[Any, Unit] = new PartialFunction[Any, Unit] {
         def isDefinedAt(msg: Any) = msg match {
+=======
+      val reaction: PartialFunction[Any, Unit] = new scala.runtime.AbstractPartialFunction[Any, Unit] {
+        def _isDefinedAt(msg: Any) = msg match {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           case TIMEOUT => true
           case _ => partFuns exists (_ isDefinedAt msg)
         }

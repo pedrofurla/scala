@@ -26,22 +26,34 @@ object BorderPanel {
   private[swing] def wrapPosition(s: String): Position.Value = s match {
     case BorderLayout.NORTH => Position.North
     case BorderLayout.SOUTH => Position.South
+<<<<<<< HEAD
     case BorderLayout.WEST => Position.West	
+=======
+    case BorderLayout.WEST => Position.West
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     case BorderLayout.EAST => Position.East
     case BorderLayout.CENTER => Position.Center
   }
 }
 
 /**
+<<<<<<< HEAD
  * A container that arranges its children around a central component that 
  * takes most of the space. The other children are placed on one of four 
  * borders: north, east, south, west.
  * 
+=======
+ * A container that arranges its children around a central component that
+ * takes most of the space. The other children are placed on one of four
+ * borders: north, east, south, west.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * @see javax.swing.BorderLayout
  */
 class BorderPanel extends Panel with LayoutContainer {
   import BorderPanel._
   def layoutManager = peer.getLayout.asInstanceOf[BorderLayout]
+<<<<<<< HEAD
   override lazy val peer = new javax.swing.JPanel(new BorderLayout) with SuperMixin 
     
   type Constraints = Position.Value
@@ -52,6 +64,18 @@ class BorderPanel extends Panel with LayoutContainer {
   protected def areValid(c: Constraints): (Boolean, String) = (true, "")
   protected def add(c: Component, l: Constraints) {
     // we need to remove previous components with the same constraints as the new one, 
+=======
+  override lazy val peer = new javax.swing.JPanel(new BorderLayout) with SuperMixin
+
+  type Constraints = Position.Value
+
+  protected def constraintsFor(comp: Component) =
+    wrapPosition(layoutManager.getConstraints(comp.peer).asInstanceOf[String])
+
+  protected def areValid(c: Constraints): (Boolean, String) = (true, "")
+  protected def add(c: Component, l: Constraints) {
+    // we need to remove previous components with the same constraints as the new one,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // otherwise the layout manager loses track of the old one
     val old = layoutManager.getLayoutComponent(l.toString)
     if(old != null) peer.remove(old)

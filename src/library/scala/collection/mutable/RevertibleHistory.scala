@@ -16,10 +16,17 @@ package mutable
  *  an undo operation. Type variable `Evt` refers to the type
  *  of the published events, `Pub` denotes the publisher type.
  *  Type `Pub` is typically a subtype of `Publisher`.
+<<<<<<< HEAD
  *  
  *  @tparam Evt   type of the events
  *  @tparam Pub   type of the publisher
  *  
+=======
+ *
+ *  @tparam Evt   type of the events
+ *  @tparam Pub   type of the publisher
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author  Matthias Zenger
  *  @version 1.0, 08/07/2003
  *  @since   2.8

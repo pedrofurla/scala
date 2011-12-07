@@ -42,7 +42,10 @@ Export-Package:
  scala.reflect.internal,
  scala.reflect.internal.settings,
  scala.reflect.runtime,
+<<<<<<< HEAD
  scala.reflect.std,
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  scala.reflect.internal.transform,
  ch.epfl.lamp.compiler.msil,
  ch.epfl.lamp.compiler.msil.emit,

@@ -39,12 +39,17 @@ final class RichChar(val self: Char) extends IntegralProxy[Char] {
   def getNumericValue: Int              = Character.getNumericValue(self)
   def getDirectionality: Byte           = Character.getDirectionality(self)
   def reverseBytes: Char                = Character.reverseBytes(self)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // Java 5 Character methods not added:
   //
   // public static boolean isDefined(char ch)
   // public static boolean isJavaIdentifierStart(char ch)
   // public static boolean isJavaIdentifierPart(char ch)
+<<<<<<< HEAD
 
   @deprecated("Use ch.toLower instead", "2.8.0")
   def toLowerCase: Char = toLower
@@ -55,4 +60,6 @@ final class RichChar(val self: Char) extends IntegralProxy[Char] {
   def isLowerCase: Boolean = isLower
   @deprecated("Use ch.isUpper instead", "2.8.0")
   def isUpperCase: Boolean = isUpper
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

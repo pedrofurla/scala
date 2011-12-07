@@ -15,6 +15,7 @@ import annotation.elidable
  *  out of the way.
  */
 trait MatchSupport extends ast.TreeDSL { self: ParallelMatching =>
+<<<<<<< HEAD
   
   import global.{ typer => _, _ }
   import CODE._
@@ -31,12 +32,34 @@ trait MatchSupport extends ast.TreeDSL { self: ParallelMatching =>
     import definitions._
     implicit def enrichType(x: Type): RichType = new RichType(x)
     
+=======
+
+  import global.{ typer => _, _ }
+  import CODE._
+
+  /** Debugging support: enable with -Ypmat-debug **/
+  private final def trace = settings.Ypmatdebug.value
+
+  def impossible:           Nothing = abort("this never happens")
+
+  def treeCollect[T](tree: Tree, pf: PartialFunction[Tree, T]): List[T] =
+    tree filter (pf isDefinedAt _) map (x => pf(x))
+
+  object Types {
+    import definitions._
+    implicit def enrichType(x: Type): RichType = new RichType(x)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val subrangeTypes = Set(ByteClass, ShortClass, CharClass, IntClass)
 
     class RichType(undecodedTpe: Type) {
       def tpe = decodedEqualsType(undecodedTpe)
       def isAnyRef = tpe <:< AnyRefClass.tpe
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       // These tests for final classes can inspect the typeSymbol
       private def is(s: Symbol) = tpe.typeSymbol eq s
       def      isByte = is(ByteClass)
@@ -48,7 +71,11 @@ trait MatchSupport extends ast.TreeDSL { self: ParallelMatching =>
       def     isArray = is(ArrayClass)
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   object Debug {
     def typeToString(t: Type): String = t match {
       case NoType => "x"
@@ -65,7 +92,11 @@ trait MatchSupport extends ast.TreeDSL { self: ParallelMatching =>
       case Typed(expr, tpt)     => "%s: %s".format(treeToString(expr), treeToString(tpt))
       case x                    =>  x.toString + " (" + x.getClass + ")"
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // Formatting for some error messages
     private val NPAD = 15
     def pad(s: String): String = "%%%ds" format (NPAD-1) format s
@@ -73,15 +104,26 @@ trait MatchSupport extends ast.TreeDSL { self: ParallelMatching =>
       case x: Tree    => treeToString(x)
       case x          => x.toString
     })
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // pretty print for debugging
     def pp(x: Any): String = pp(x, false)
     def pp(x: Any, newlines: Boolean): String = {
       val stripStrings = List("""java\.lang\.""", """\$iw\.""")
+<<<<<<< HEAD
       
       def clean(s: String): String =
         stripStrings.foldLeft(s)((s, x) => s.replaceAll(x, ""))
       
+=======
+
+      def clean(s: String): String =
+        stripStrings.foldLeft(s)((s, x) => s.replaceAll(x, ""))
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       def pplist(xs: List[Any]): String =
         if (newlines) (xs map ("    " + _ + "\n")).mkString("\n", "", "")
         else xs.mkString("(", ", ", ")")
@@ -94,7 +136,11 @@ trait MatchSupport extends ast.TreeDSL { self: ParallelMatching =>
         case x              => x.toString
       })
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     @elidable(elidable.FINE) def TRACE(f: String, xs: Any*): Unit = {
       if (trace) {
         val msg = if (xs.isEmpty) f else f.format(xs map pp: _*)
@@ -119,14 +165,22 @@ trait MatchSupport extends ast.TreeDSL { self: ParallelMatching =>
     def indent(s: Any) = s.toString() split "\n" map ("  " + _) mkString "\n"
     def indentAll(s: Seq[Any]) = s map ("  " + _.toString() + "\n") mkString
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Drops the 'i'th element of a list.
    */
   def dropIndex[T](xs: List[T], n: Int) = {
     val (l1, l2) = xs splitAt n
     l1 ::: (l2 drop 1)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Extract the nth element of a list and return it and the remainder.
    */
   def extractIndex[T](xs: List[T], n: Int): (T, List[T]) =

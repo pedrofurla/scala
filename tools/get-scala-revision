@@ -1,5 +1,6 @@
 #!/bin/sh
 #
+<<<<<<< HEAD
 # Usage: get-scala-rev [dir]
 # Figures out current scala revision of an svn checkout or
 # a git-svn mirror (or a git clone.)
@@ -27,4 +28,22 @@ else
   echo "${DIR} doesn't appear to be git or svn dir." >&2
   echo 0
   exit 1
+=======
+# Usage: get-scala-revision [dir]
+# Figures out current scala revision of a git clone.
+#
+# If no dir is given, current working dir is used.
+
+[ -n "$1" ] && cd "$1"
+
+# dev should be a tag at the merge-base of master and the
+# most recent release.
+if [ -z $(git tag -l dev) ]; then
+  # no dev tag available - this will generate dev-g<sha>
+  echo "dev-g$(git describe HEAD --abbrev=7 --always)"
+else
+  # dev tag exists - this generates dev-NNNN-g<sha>
+  # where NNNN is the number of commits since dev.
+  git describe HEAD --abbrev=7 --match dev
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 fi

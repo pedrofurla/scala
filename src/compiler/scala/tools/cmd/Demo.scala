@@ -8,7 +8,11 @@ package cmd
 
 /** A sample command specification for illustrative purposes.
  *  First take advantage of the meta-options:
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *    // this command creates an executable runner script "demo"
  *    % scala scala.tools.cmd.Demo --self-update demo
  *
@@ -32,7 +36,11 @@ trait DemoSpec extends Spec with Meta.StdOpts with Interpolation {
 
   val optIsUnary      = "unary"         / "a unary option"              --?  ;
   ("action" / "a body which may be run") --> println("Hello, I am the --action body.")
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   heading("Binary options:")
   val optopt          = "str"       / "an optional String"        --|
   val optoptInt       = ("int"      / "an optional Int") .        --^[Int]
@@ -59,16 +67,27 @@ class Demo(args: List[String]) extends {
 
   def helpMsg = DemoSpec.helpMsg
   def demoSpecMethods = this.getClass.getMethods.toList
+<<<<<<< HEAD
   private def isDemo(m: Method) = (m.getName startsWith "opt") && !(m.getName contains "$") && (m.getParameterTypes.isEmpty)  
+=======
+  private def isDemo(m: Method) = (m.getName startsWith "opt") && !(m.getName contains "$") && (m.getParameterTypes.isEmpty)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   def demoString(ms: List[Method]) = {
     val longest   = ms map (_.getName.length) max
     val formatStr = "    %-" + longest + "s: %s"
     val xs        = ms map (m => formatStr.format(m.getName, m.invoke(this)))
+<<<<<<< HEAD
     
     xs mkString ("Demo(\n  ", "\n  ", "\n)\n")
   }
     
+=======
+
+    xs mkString ("Demo(\n  ", "\n  ", "\n)\n")
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def toString = demoString(demoSpecMethods filter isDemo)
 }
 
@@ -78,7 +97,11 @@ object Demo {
 
     if (args.isEmpty)
       println(runner.helpMsg)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     println(runner)
   }
 }

@@ -13,6 +13,10 @@ import mutable.{ Builder, SetBuilder }
 
 abstract class ImmutableSetFactory[CC[X] <: immutable.Set[X] with SetLike[X, CC[X]]]
   extends SetFactory[CC] {
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def newBuilder[A]: Builder[A, CC[A]] = new SetBuilder[A, CC[A]](empty[A])
 }

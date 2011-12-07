@@ -11,9 +11,15 @@ package mutable
 
 /** A stack implements a data structure which allows to store and retrieve
  *  objects in a last-in-first-out (LIFO) fashion.
+<<<<<<< HEAD
  *  
  *  @tparam A   type of the elements in this stack proxy.
  *  
+=======
+ *
+ *  @tparam A   type of the elements in this stack proxy.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author  Matthias Zenger
  *  @version 1.0, 10/05/2004
  *  @since   1
@@ -49,6 +55,7 @@ trait StackProxy[A] extends Stack[A] with Proxy {
 
   override def pushAll(xs: TraversableOnce[A]): this.type = { self pushAll xs; this }
 
+<<<<<<< HEAD
   /** Pushes all elements provided by an `Iterable` object on top of the
    *  stack. The elements are pushed in the order they are given out by
    *  the iterator.
@@ -59,6 +66,8 @@ trait StackProxy[A] extends Stack[A] with Proxy {
   override def ++=(xs: TraversableOnce[A]): this.type = { self ++= xs ; this }
 
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def push(elem1: A, elem2: A, elems: A*): this.type = {
     self.push(elem1).push(elem2).pushAll(elems)
     this

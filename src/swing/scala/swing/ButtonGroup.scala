@@ -13,15 +13,26 @@ import javax.swing.{AbstractButton => JAbstractButton,Icon}
 import scala.collection.{ mutable, immutable }
 
 /**
+<<<<<<< HEAD
  * A button mutex. At most one of its associated buttons is selected 
  * at a time.
  * 
+=======
+ * A button mutex. At most one of its associated buttons is selected
+ * at a time.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * @see javax.swing.ButtonGroup
  */
 class ButtonGroup(initialButtons: AbstractButton*) {
   val peer: javax.swing.ButtonGroup = new javax.swing.ButtonGroup
+<<<<<<< HEAD
   
   val buttons: mutable.Set[AbstractButton] = new mutable.Set[AbstractButton] { 
+=======
+
+  val buttons: mutable.Set[AbstractButton] = new mutable.Set[AbstractButton] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def -=(b: AbstractButton): this.type = { peer.remove(b.peer); this }
     def +=(b: AbstractButton): this.type = { peer.add(b.peer); this }
     def contains(b: AbstractButton) = this.iterator.contains(b)
@@ -33,7 +44,11 @@ class ButtonGroup(initialButtons: AbstractButton*) {
     }
   }
   buttons ++= initialButtons
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   //1.6: def deselectAll() { peer.clearSelection }
   def selected: Option[AbstractButton] = buttons.find(_.selected)
   def select(b: AbstractButton) { peer.setSelected(b.peer.getModel, true) }

@@ -26,11 +26,19 @@ import java.awt.event._
 
 /**
  * A text component that allows single line text input and display.
+<<<<<<< HEAD
  * 
  * @see javax.swing.JTextField
  */
 class TextField(text0: String, columns0: Int) extends TextComponent with TextComponent.HasColumns with Action.Trigger.Wrapper {
   override lazy val peer: JTextField = new JTextField(text0, columns0) with SuperMixin 
+=======
+ *
+ * @see javax.swing.JTextField
+ */
+class TextField(text0: String, columns0: Int) extends TextComponent with TextComponent.HasColumns with Action.Trigger.Wrapper {
+  override lazy val peer: JTextField = new JTextField(text0, columns0) with SuperMixin
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def this(text: String) = this(text, 0)
   def this(columns: Int) = this("", columns)
   def this() = this("")
@@ -42,11 +50,19 @@ class TextField(text0: String, columns0: Int) extends TextComponent with TextCom
   def horizontalAlignment: Alignment.Value = Alignment(peer.getHorizontalAlignment)
   /** @see javax.swing.JTextField#setHorizontalAlignment() */
   def horizontalAlignment_=(x: Alignment.Value) { peer.setHorizontalAlignment(x.id) }
+<<<<<<< HEAD
   
   private lazy val actionListener = Swing.ActionListener { e =>
     publish(EditDone(TextField.this))
   }
   
+=======
+
+  private lazy val actionListener = Swing.ActionListener { e =>
+    publish(EditDone(TextField.this))
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected override def onFirstSubscribe() {
     super.onFirstSubscribe
     peer.addActionListener(actionListener)
@@ -54,14 +70,24 @@ class TextField(text0: String, columns0: Int) extends TextComponent with TextCom
       override def focusLost(e: java.awt.event.FocusEvent) { publish(EditDone(TextField.this)) }
     })
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected override def onLastUnsubscribe() {
     super.onLastUnsubscribe
     peer.removeActionListener(actionListener)
   }
+<<<<<<< HEAD
   
   def verifier: String => Boolean = s => Option(peer.getInputVerifier) forall (_ verify peer)
   def verifier_=(v: String => Boolean) { 
+=======
+
+  def verifier: String => Boolean = s => Option(peer.getInputVerifier) forall (_ verify peer)
+  def verifier_=(v: String => Boolean) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     peer.setInputVerifier(new InputVerifier {
       private val old = Option(peer.getInputVerifier)
       def verify(c: JComponent) = v(text)

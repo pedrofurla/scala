@@ -5,16 +5,27 @@
 
 package scala.tools.nsc
 package symtab
+<<<<<<< HEAD
  
 import java.io.IOException
 import ch.epfl.lamp.compiler.msil.{ Type => MSILType, Attribute => MSILAttribute }
 
+=======
+
+import java.io.IOException
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 import scala.compat.Platform.currentTime
 import scala.tools.nsc.util.{ ClassPath }
 import classfile.ClassfileParser
 import reflect.internal.Flags._
+<<<<<<< HEAD
 import util.Statistics._
 import scala.tools.nsc.io.AbstractFile
+=======
+import reflect.internal.MissingRequirementError
+import util.Statistics._
+import scala.tools.nsc.io.{ AbstractFile, MsilFile }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 /** This class ...
  *
@@ -29,7 +40,11 @@ abstract class SymbolLoaders {
     assert(owner.info.decls.lookup(member.name) == NoSymbol, owner.fullName + "." + member.name)
     owner.info.decls enter member
     member
+<<<<<<< HEAD
   }    
+=======
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   private def realOwner(root: Symbol): Symbol = {
     if (root.isRoot) definitions.EmptyPackageClass else root
@@ -78,6 +93,7 @@ abstract class SymbolLoaders {
     enterClassAndModule(root, name, new SourcefileLoader(src))
   }
 
+<<<<<<< HEAD
   /**
    * A lazy type that completes itself by calling parameter doComplete.
    * Any linked modules/classes or module classes are also initialized.
@@ -91,6 +107,38 @@ abstract class SymbolLoaders {
 
     /**
      * Description of the resource (ClassPath, AbstractFile, MSILType)
+=======
+  /** Initialize toplevel class and module symbols in `owner` from class path representation `classRep`
+   */
+  def initializeFromClassPath(owner: Symbol, classRep: ClassPath[platform.BinaryRepr]#ClassRep) {
+    ((classRep.binary, classRep.source) : @unchecked) match {
+      case (Some(bin), Some(src)) if platform.needCompile(bin, src) =>
+        if (settings.verbose.value) inform("[symloader] picked up newer source file for " + src.path)
+        global.loaders.enterToplevelsFromSource(owner, classRep.name, src)
+      case (None, Some(src)) =>
+        if (settings.verbose.value) inform("[symloader] no class, picked up source file for " + src.path)
+        global.loaders.enterToplevelsFromSource(owner, classRep.name, src)
+      case (Some(bin), _) =>
+        global.loaders.enterClassAndModule(owner, classRep.name, platform.newClassLoader(bin))
+    }
+  }
+
+  /**
+   * A lazy type that completes itself by calling parameter doComplete.
+   * Any linked modules/classes or module classes are also initialized.
+   * Todo: consider factoring out behavior from TopClassCompleter/SymbolLoader into
+   * supertrait SymLoader
+   */
+  abstract class SymbolLoader extends SymLoader {
+
+    /** Load source or class file for `root`, return */
+    protected def doComplete(root: Symbol): Unit
+
+    def sourcefile: Option[AbstractFile] = None
+
+    /**
+     * Description of the resource (ClassPath, AbstractFile, MsilFile)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      * being processed by this loader
      */
     protected def description: String
@@ -104,7 +152,20 @@ abstract class SymbolLoaders {
         case _ => ()
       })
     }
+<<<<<<< HEAD
     override def complete(root: Symbol) : Unit = {
+=======
+
+    override def complete(root: Symbol) {
+      def signalError(ex: Exception) {
+        ok = false
+        if (settings.debug.value) ex.printStackTrace()
+        val msg = ex.getMessage()
+        globalError(
+          if (msg eq null) "i/o error while loading " + root.name
+          else "error while loading " + root.name + ", " + msg);
+      }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       try {
         val start = currentTime
         val currentphase = phase
@@ -116,12 +177,18 @@ abstract class SymbolLoaders {
         setSource(root.companionSymbol) // module -> class, class -> module
       } catch {
         case ex: IOException =>
+<<<<<<< HEAD
           ok = false
           if (settings.debug.value) ex.printStackTrace()
           val msg = ex.getMessage()
           globalError(
             if (msg eq null) "i/o error while loading " + root.name
             else "error while loading " + root.name + ", " + msg);
+=======
+          signalError(ex)
+        case ex: MissingRequirementError =>
+          signalError(ex)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       }
       initRoot(root)
       if (!root.isPackageClass) initRoot(root.companionSymbol)
@@ -131,8 +198,13 @@ abstract class SymbolLoaders {
 
     private def markAbsent(sym: Symbol): Unit = {
       val tpe: Type = if (ok) NoType else ErrorType
+<<<<<<< HEAD
       
       if (sym != NoSymbol) 
+=======
+
+      if (sym != NoSymbol)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         sym setInfo tpe
     }
     private def initRoot(root: Symbol) {
@@ -146,7 +218,11 @@ abstract class SymbolLoaders {
   /**
    * Load contents of a package
    */
+<<<<<<< HEAD
   abstract class PackageLoader[T](classpath: ClassPath[T]) extends SymbolLoader {
+=======
+  class PackageLoader(classpath: ClassPath[platform.BinaryRepr]) extends SymbolLoader {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     protected def description = "package loader "+ classpath.name
 
     def enterPackage(root: Symbol, name: String, completer: SymbolLoader) {
@@ -164,14 +240,22 @@ abstract class SymbolLoaders {
           )
         else if (settings.termConflict.value == "package") {
           global.warning(
+<<<<<<< HEAD
             "Resolving package/object name conflict in favor of package " + 
+=======
+            "Resolving package/object name conflict in favor of package " +
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             preExisting.fullName + ".  The object will be inaccessible."
           )
           root.info.decls.unlink(preExisting)
         }
         else {
           global.warning(
+<<<<<<< HEAD
             "Resolving package/object name conflict in favor of object " + 
+=======
+            "Resolving package/object name conflict in favor of object " +
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             preExisting.fullName + ".  The package will be inaccessible."
           )
           return
@@ -183,6 +267,7 @@ abstract class SymbolLoaders {
       root.info.decls.enter(pkg)
     }
 
+<<<<<<< HEAD
     /**
      * Tells whether a class with both a binary and a source representation
      * (found in classpath and in sourcepath) should be re-compiled. Behaves
@@ -203,11 +288,14 @@ abstract class SymbolLoaders {
 
     protected def newPackageLoader(pkg: ClassPath[T]): SymbolLoader
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     protected def doComplete(root: Symbol) {
       assert(root.isPackageClass, root)
       root.setInfo(new PackageClassInfoType(new Scope(), root))
 
       val sourcepaths = classpath.sourcepaths
+<<<<<<< HEAD
       for (classRep <- classpath.classes if doLoad(classRep)) {
         ((classRep.binary, classRep.source) : @unchecked) match {
           case (Some(bin), Some(src)) if needCompile(bin, src) => 
@@ -294,13 +382,29 @@ abstract class SymbolLoaders {
 
     protected def newPackageLoader(pkg: ClassPath[MSILType]) =
       new NamespaceLoader(pkg)
+=======
+      for (classRep <- classpath.classes if platform.doLoad(classRep)) {
+        initializeFromClassPath(root, classRep)
+      }
+
+      for (pkg <- classpath.packages) {
+        enterPackage(root, pkg.name, new PackageLoader(pkg))
+      }
+
+      openPackageModule(root)
+    }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   }
 
   class ClassfileLoader(val classfile: AbstractFile) extends SymbolLoader {
     private object classfileParser extends ClassfileParser {
       val global: SymbolLoaders.this.global.type = SymbolLoaders.this.global
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     protected def description = "class file "+ classfile.toString
 
     protected def doComplete(root: Symbol) {
@@ -311,17 +415,30 @@ abstract class SymbolLoaders {
     override def sourcefile: Option[AbstractFile] = classfileParser.srcfile
   }
 
+<<<<<<< HEAD
   class MSILTypeLoader(typ: MSILType) extends SymbolLoader {
+=======
+  class MsilFileLoader(msilFile: MsilFile) extends SymbolLoader {
+    private def typ = msilFile.msilType
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private object typeParser extends clr.TypeParser {
       val global: SymbolLoaders.this.global.type = SymbolLoaders.this.global
     }
 
+<<<<<<< HEAD
     protected def description = "MSILType "+ typ.FullName + ", assembly "+ typ.Assembly.FullName
+=======
+    protected def description = "MsilFile "+ typ.FullName + ", assembly "+ typ.Assembly.FullName
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     protected def doComplete(root: Symbol) { typeParser.parse(typ, root) }
   }
 
   class SourcefileLoader(val srcfile: AbstractFile) extends SymbolLoader {
     protected def description = "source file "+ srcfile.toString
+<<<<<<< HEAD
+=======
+    override def fromSource = true
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     override def sourcefile = Some(srcfile)
     protected def doComplete(root: Symbol): Unit = global.currentRun.compileLate(srcfile)
   }

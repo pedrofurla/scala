@@ -19,16 +19,26 @@ import scala.swing.Swing._
  * @see javax.swing.JLabel
  */
 class Label(text0: String, icon0: Icon, align: Alignment.Value) extends Component {
+<<<<<<< HEAD
   override lazy val peer: JLabel = 
     new JLabel(text0, toNullIcon(icon0), align.id) with SuperMixin
   
+=======
+  override lazy val peer: JLabel =
+    new JLabel(text0, toNullIcon(icon0), align.id) with SuperMixin
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def this() = this("", EmptyIcon, Alignment.Center)
   def this(s: String) = this(s, EmptyIcon, Alignment.Center)
   def text: String = peer.getText
   def text_=(s: String) = peer.setText(s)
   def icon: Icon = peer.getIcon
   def icon_=(i: Icon) = peer.setIcon(i)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /**
    * The alignment of the label's contents relative to its bounding box.
    */
@@ -36,7 +46,11 @@ class Label(text0: String, icon0: Icon, align: Alignment.Value) extends Componen
   def xAlignment_=(x: Alignment.Value) { peer.setHorizontalAlignment(x.id) }
   def yAlignment: Alignment.Value = Alignment(peer.getVerticalAlignment)
   def yAlignment_=(x: Alignment.Value) { peer.setVerticalAlignment(x.id) }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** @see javax.swing.JLabel#getHorizontalAlignment() */
   def horizontalAlignment: Alignment.Value = Alignment(peer.getHorizontalAlignment)
   /** @see javax.swing.JLabel#setHorizontalAlignment() */
@@ -44,6 +58,7 @@ class Label(text0: String, icon0: Icon, align: Alignment.Value) extends Componen
 
   def verticalAlignment: Alignment.Value = Alignment(peer.getVerticalAlignment)
   def verticalAlignment_=(x: Alignment.Value) { peer.setVerticalAlignment(x.id) }
+<<<<<<< HEAD
      
   def horizontalTextPosition: Alignment.Value = Alignment(peer.getHorizontalTextPosition)
   def horizontalTextPosition_=(x: Alignment.Value) { peer.setHorizontalTextPosition(x.id) }
@@ -57,6 +72,21 @@ class Label(text0: String, icon0: Icon, align: Alignment.Value) extends Componen
   def iconTextGap: Int = peer.getIconTextGap
   def iconTextGap_=(gap: Int) { peer.setIconTextGap(gap) }
   
+=======
+
+  def horizontalTextPosition: Alignment.Value = Alignment(peer.getHorizontalTextPosition)
+  def horizontalTextPosition_=(x: Alignment.Value) { peer.setHorizontalTextPosition(x.id) }
+
+  def verticalTextPosition: Alignment.Value = Alignment(peer.getVerticalTextPosition)
+  def verticalTextPosition_=(x: Alignment.Value) { peer.setVerticalTextPosition(x.id) }
+
+  def disabledIcon: Icon = peer.getDisabledIcon
+  def disabledIcon_=(icon: Icon) { peer.setDisabledIcon(icon) }
+
+  def iconTextGap: Int = peer.getIconTextGap
+  def iconTextGap_=(gap: Int) { peer.setIconTextGap(gap) }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def displayedMnemonicIndex: Int = peer.getDisplayedMnemonicIndex
   def displayedMnemonicIndex_=(index: Int) { peer.setDisplayedMnemonicIndex(index) }
 }

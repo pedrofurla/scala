@@ -19,6 +19,7 @@ package object actors {
 
   // type of Reactors tracked by termination detector
   private[actors] type TrackedReactor = Reactor[A] forSome { type A >: Null }
+<<<<<<< HEAD
 
   @deprecated("use scheduler.ForkJoinScheduler instead", "2.8.0")
   type FJTaskScheduler2 = scala.actors.scheduler.ForkJoinScheduler
@@ -44,4 +45,6 @@ package object actors {
     case x: scala.actors.scheduler.ActorGC  => x
     case _                                  => null
   }
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

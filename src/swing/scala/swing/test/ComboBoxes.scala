@@ -10,14 +10,22 @@ import javax.swing.{Icon, ImageIcon}
 
 /**
  * Demonstrates how to use combo boxes and custom item renderers.
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * TODO: clean up layout
  */
 object ComboBoxes extends SimpleSwingApplication {
   import ComboBox._
   lazy val ui = new FlowPanel {
    	contents += new ComboBox(List(1,2,3,4))
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val patterns = List("dd MMMMM yyyy",
                         "dd.MM.yy",
                         "MM/dd/yy",
@@ -31,12 +39,20 @@ object ComboBoxes extends SimpleSwingApplication {
     contents += dateBox
     val field = new TextField(20) { editable = false }
     contents += field
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     reactions += {
       case SelectionChanged(`dateBox`) => reformat()
     }
     listenTo(dateBox.selection)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def reformat() {
       try {
         val today = new Date
@@ -50,6 +66,7 @@ object ComboBoxes extends SimpleSwingApplication {
           field.text = "Error: " + e.getMessage
       }
     }
+<<<<<<< HEAD
     
     
     val icons = try { 
@@ -59,6 +76,17 @@ object ComboBoxes extends SimpleSwingApplication {
            new ImageIcon(resourceFromClassloader("images/banana.jpg")))
     } catch {
       case _ => 
+=======
+
+
+    val icons = try {
+      List(new ImageIcon(resourceFromClassloader("images/margarita1.jpg")),
+           new ImageIcon(resourceFromClassloader("images/margarita2.jpg")),
+           new ImageIcon(resourceFromClassloader("images/rose.jpg")),
+           new ImageIcon(resourceFromClassloader("images/banana.jpg")))
+    } catch {
+      case _ =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         println("Couldn't load images for combo box")
         List(Swing.EmptyIcon)
     }
@@ -78,7 +106,11 @@ object ComboBoxes extends SimpleSwingApplication {
     }
     contents += iconBox
   }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def top = new MainFrame {
     title = "ComboBoxes Demo"
    	contents = ui

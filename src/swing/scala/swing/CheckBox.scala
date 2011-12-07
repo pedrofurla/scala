@@ -14,7 +14,11 @@ import javax.swing._
 
 /**
  * Two state button that can either be checked or unchecked.
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * @see javax.swing.JCheckBox
  */
 class CheckBox(text: String) extends ToggleButton {

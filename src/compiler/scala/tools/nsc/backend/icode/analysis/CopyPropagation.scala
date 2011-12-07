@@ -8,7 +8,11 @@ package backend.icode.analysis
 
 import scala.collection.{ mutable, immutable }
 
+<<<<<<< HEAD
 /** A modified copy-propagation like analysis. It 
+=======
+/** A modified copy-propagation like analysis. It
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  is augmented with a record-like value which is used
  *  to represent closures.
  *
@@ -34,6 +38,7 @@ abstract class CopyPropagation {
   }
   /** The value of some location in memory. */
   case class Deref(l: Location) extends Value
+<<<<<<< HEAD
   
   /** The boxed value of some location. */
   case class Boxed(l: Location) extends Value
@@ -44,6 +49,18 @@ abstract class CopyPropagation {
   /** Unknown. */
   case object Unknown extends Value
   
+=======
+
+  /** The boxed value of some location. */
+  case class Boxed(l: Location) extends Value
+
+  /** The constant value c. */
+  case class Const(c: Constant) extends Value
+
+  /** Unknown. */
+  case object Unknown extends Value
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** The bottom record. */
   object AllRecords extends Record(NoSymbol, mutable.HashMap[Symbol, Value]())
 
@@ -54,7 +71,11 @@ abstract class CopyPropagation {
     def emptyBinding = mutable.HashMap[Location, Value]()
 
     class State(val bindings: Bindings, var stack: List[Value]) {
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       override def hashCode = bindings.hashCode + stack.hashCode
       /* comparison with bottom is reference equality! */
       override def equals(that: Any): Boolean = that match {
@@ -72,7 +93,11 @@ abstract class CopyPropagation {
       def getAlias(l: Local): Local = {
         var target = l
         var stop = false
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         while (bindings.isDefinedAt(LocalVar(target)) && !stop) {
           bindings(LocalVar(target)) match {
             case Deref(LocalVar(t)) => target = t
@@ -94,13 +119,21 @@ abstract class CopyPropagation {
       /* Return the binding for the given field of the given record */
       def getBinding(r: Record, f: Symbol): Value = {
         assert(r.bindings contains f, "Record " + r + " does not contain a field " + f)
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         r.bindings(f) match {
           case Deref(LocalVar(l)) => getBinding(l)
           case target             => target
         }
       }
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       /** Return a local which contains the same value as this field, if any.
        * If the field holds a reference to a local, the returned value is the
        * binding of that local.
@@ -110,19 +143,33 @@ abstract class CopyPropagation {
         case target @ Deref(Field(r1, f1))  => getFieldValue(r1, f1) getOrElse target
         case target                         => target
       }
+<<<<<<< HEAD
       
       /** The same as getFieldValue, but never returns Record/Field values. Use
        *  this when you want to find a replacement for a field value (either a local,
        *  or a constant/this value). 
+=======
+
+      /** The same as getFieldValue, but never returns Record/Field values. Use
+       *  this when you want to find a replacement for a field value (either a local,
+       *  or a constant/this value).
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
        */
       def getFieldNonRecordValue(r: Record, f: Symbol): Option[Value] = {
         assert(r.bindings contains f, "Record " + r + " does not contain a field " + f)
 
         r.bindings(f) match {
+<<<<<<< HEAD
           case Deref(LocalVar(l)) => 
             val alias = getAlias(l)
             val derefAlias = Deref(LocalVar(alias))
             
+=======
+          case Deref(LocalVar(l)) =>
+            val alias = getAlias(l)
+            val derefAlias = Deref(LocalVar(alias))
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             Some(getBinding(alias) match {
               case Record(_, _)         => derefAlias
               case Deref(Field(r1, f1)) => getFieldNonRecordValue(r1, f1) getOrElse derefAlias
@@ -158,12 +205,18 @@ abstract class CopyPropagation {
       else if (b eq bottom) a
       else if (a == b) a
       else {
+<<<<<<< HEAD
         //assert(!(a.stack eq exceptionHandlerStack) && !(b.stack eq exceptionHandlerStack)) 
         val resStack = 
+=======
+        //assert(!(a.stack eq exceptionHandlerStack) && !(b.stack eq exceptionHandlerStack))
+        val resStack =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           if (exceptional) exceptionHandlerStack
           else {
 //            if (a.stack.length != b.stack.length)
 //              throw new LubException(a, b, "Invalid stacks in states: ");
+<<<<<<< HEAD
             (a.stack, b.stack).zipped map { (v1, v2) => 
               if (v1 == v2) v1 else Unknown 
             }
@@ -177,6 +230,21 @@ abstract class CopyPropagation {
         */
         val resBindings = mutable.HashMap[Location, Value]()
         
+=======
+            (a.stack, b.stack).zipped map { (v1, v2) =>
+              if (v1 == v2) v1 else Unknown
+            }
+          }
+
+/*        if (a.stack.length != b.stack.length)
+          throw new LubException(a, b, "Invalid stacks in states: ");
+        val resStack = List.map2(a.stack, b.stack) { (v1, v2) =>
+          if (v1 == v2) v1 else Unknown
+        }
+        */
+        val resBindings = mutable.HashMap[Location, Value]()
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         for ((k, v) <- a.bindings if b.bindings.isDefinedAt(k) && v == b.bindings(k))
           resBindings += (k -> v);
         new State(resBindings, resStack)
@@ -201,7 +269,11 @@ abstract class CopyPropagation {
           out(b) = lattice.bottom
           assert(out.contains(b))
           log("Added point: " + b)
+<<<<<<< HEAD
         } 
+=======
+        }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         m.exh foreach { e =>
           in(e.startBlock) = new copyLattice.State(copyLattice.emptyBinding, copyLattice.exceptionHandlerStack);
         }
@@ -215,16 +287,26 @@ abstract class CopyPropagation {
       forwardAnalysis(blockTransfer)
       if (settings.debug.value) {
         linearizer.linearize(method).foreach(b => if (b != method.code.startBlock)
+<<<<<<< HEAD
           assert(in(b) != lattice.bottom, 
+=======
+          assert(in(b) != lattice.bottom,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             "Block " + b + " in " + this.method + " has input equal to bottom -- not visited?"));
       }
     }
 
     def blockTransfer(b: BasicBlock, in: lattice.Elem): lattice.Elem =
       b.foldLeft(in)(interpret)
+<<<<<<< HEAD
     
     import opcodes._
     
+=======
+
+    import opcodes._
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private def retain[A, B](map: mutable.Map[A, B])(p: (A, B) => Boolean) = {
       for ((k, v) <- map ; if !p(k, v)) map -= k
       map
@@ -242,7 +324,11 @@ abstract class CopyPropagation {
         case CONSTANT(k) =>
           if (k.tag != UnitTag)
             out.stack = Const(k) :: out.stack;
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case LOAD_ARRAY_ITEM(_) =>
           out.stack = (Unknown :: out.stack.drop(2))
 
@@ -256,13 +342,21 @@ abstract class CopyPropagation {
             val v1 = in.stack match {
               case (r @ Record(cls, bindings)) :: xs =>
                 Deref(Field(r, field))
+<<<<<<< HEAD
               
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               case Deref(LocalVar(l)) :: _ =>
                 in.getBinding(l) match {
                   case r @ Record(cls, bindings) => Deref(Field(r, field))
                   case _ => Unknown
                 }
+<<<<<<< HEAD
                 
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               case Deref(Field(r, f)) :: _ =>
                 val fld = in.getFieldValue(r, f)
                 fld match {
@@ -270,15 +364,26 @@ abstract class CopyPropagation {
                   	in.getFieldValue(r, f).getOrElse(Unknown)
                   case _ => Unknown
                 }
+<<<<<<< HEAD
                 
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               case _ => Unknown
             }
             out.stack = v1 :: out.stack.drop(1)
           }
+<<<<<<< HEAD
             
         case LOAD_MODULE(module) =>
           out.stack = Unknown :: out.stack
           
+=======
+
+        case LOAD_MODULE(module) =>
+          out.stack = Unknown :: out.stack
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case STORE_ARRAY_ITEM(kind) =>
           out.stack = out.stack.drop(3)
 
@@ -286,10 +391,17 @@ abstract class CopyPropagation {
           cleanReferencesTo(out, LocalVar(local))
           in.stack match {
             case Unknown :: xs => ()
+<<<<<<< HEAD
             case v :: vs => 
               v match {
                 case Deref(LocalVar(other)) =>
                   if (other != local) 
+=======
+            case v :: vs =>
+              v match {
+                case Deref(LocalVar(other)) =>
+                  if (other != local)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                     out.bindings += (LocalVar(local) -> v);
                 case _ =>
                   out.bindings += (LocalVar(local) -> v)
@@ -298,6 +410,7 @@ abstract class CopyPropagation {
               sys.error("Incorrect icode in " + method + ". Expecting something on the stack.")
           }
           out.stack = out.stack drop 1;
+<<<<<<< HEAD
           
         case STORE_THIS(_) =>
           cleanReferencesTo(out, This)
@@ -305,6 +418,15 @@ abstract class CopyPropagation {
           
         case STORE_FIELD(field, isStatic) =>
           if (isStatic) 
+=======
+
+        case STORE_THIS(_) =>
+          cleanReferencesTo(out, This)
+          out.stack = out.stack drop 1
+
+        case STORE_FIELD(field, isStatic) =>
+          if (isStatic)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             out.stack = out.stack.drop(1);
           else {
             out.stack = out.stack.drop(2);
@@ -315,13 +437,21 @@ abstract class CopyPropagation {
               case _ => ();
             }
           }
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case CALL_PRIMITIVE(primitive) =>
           // TODO: model primitives
           out.stack = Unknown :: out.stack.drop(i.consumed)
 
         case CALL_METHOD(method, style) => style match {
+<<<<<<< HEAD
           case Dynamic | InvokeDynamic =>
+=======
+          case Dynamic =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             out = simulateCall(in, method, false)
 
           case Static(onInstance) =>
@@ -341,13 +471,21 @@ abstract class CopyPropagation {
                 out.stack = out.stack.drop(1 + method.info.paramTypes.length)
               } else
                 out = simulateCall(in, method, false)
+<<<<<<< HEAD
             } else 
+=======
+            } else
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               out = simulateCall(in, method, true)
 
           case SuperCall(_) =>
             out = simulateCall(in, method, false)
         }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case BOX(tpe) =>
           val top = out.stack.head match {
             case Deref(loc) => Boxed(loc)
@@ -361,7 +499,11 @@ abstract class CopyPropagation {
             case Boxed(loc) => Deref(loc) :: out.stack.tail
             case _          => out.stack = Unknown :: out.stack.drop(1)
           }
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case NEW(kind) =>
           val v1 = kind match {
             case REFERENCE(cls) => Record(cls, mutable.HashMap[Symbol, Value]())
@@ -371,6 +513,7 @@ abstract class CopyPropagation {
 
         case CREATE_ARRAY(elem, dims) =>
           out.stack = Unknown :: out.stack.drop(dims)
+<<<<<<< HEAD
           
         case IS_INSTANCE(tpe) =>
           out.stack = Unknown :: out.stack.drop(1)
@@ -405,13 +548,53 @@ abstract class CopyPropagation {
           
         case MONITOR_ENTER() =>
           out.stack = out.stack.drop(1);         
+=======
+
+        case IS_INSTANCE(tpe) =>
+          out.stack = Unknown :: out.stack.drop(1)
+
+        case CHECK_CAST(tpe) =>
+          out.stack = Unknown :: out.stack.drop(1)
+
+        case SWITCH(tags, labels) =>
+          out.stack = out.stack.drop(1)
+
+        case JUMP(whereto) =>
+          ()
+
+        case CJUMP(success, failure, cond, kind) =>
+          out.stack = out.stack.drop(2)
+
+        case CZJUMP(success, failure, cond, kind) =>
+          out.stack = out.stack.drop(1)
+
+        case RETURN(kind) =>
+          if (kind != UNIT)
+            out.stack = out.stack.drop(1)
+
+        case THROW(_) =>
+          out.stack = out.stack.drop(1)
+
+        case DROP(kind) =>
+          out.stack = out.stack.drop(1)
+
+        case DUP(kind) =>
+          out.stack = out.stack.head :: out.stack
+
+        case MONITOR_ENTER() =>
+          out.stack = out.stack.drop(1);
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
         case MONITOR_EXIT() =>
           out.stack = out.stack.drop(1)
 
         case SCOPE_ENTER(_) | SCOPE_EXIT(_) =>
           ()
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case LOAD_EXCEPTION(_) =>
           out.stack = Unknown :: Nil
 
@@ -422,7 +605,11 @@ abstract class CopyPropagation {
     } /* def interpret */
 
     /** Remove all references to this local variable from both stack
+<<<<<<< HEAD
      *  and bindings. It is called when a new assignment destroys 
+=======
+     *  and bindings. It is called when a new assignment destroys
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *  previous copy-relations.
      */
     final def cleanReferencesTo(s: copyLattice.State, target: Location) {
@@ -455,7 +642,11 @@ abstract class CopyPropagation {
             cleanRecord(rec);
             true
           case _ => true
+<<<<<<< HEAD
         }) && 
+=======
+        }) &&
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         (loc match {
           case l: Location if (l == target) => false
           case _ => true
@@ -483,12 +674,21 @@ abstract class CopyPropagation {
     }
 
     /** Drop everything known about mutable record fields.
+<<<<<<< HEAD
      *  
      *  A simple escape analysis would help here. Some of the records we 
      *  track never leak to other methods, therefore they can not be changed.
      *  We should not drop their bindings in this case. A closure object 
      *  would be such an example. Some complications: 
      * 
+=======
+     *
+     *  A simple escape analysis would help here. Some of the records we
+     *  track never leak to other methods, therefore they can not be changed.
+     *  We should not drop their bindings in this case. A closure object
+     *  would be such an example. Some complications:
+     *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *   - outer pointers. An closure escapes as an outer pointer to another
      *     nested closure.
      */
@@ -524,8 +724,13 @@ abstract class CopyPropagation {
       val bindings = mutable.HashMap[Symbol, Value]()
 
       debuglog("getBindings for: " + ctor + " acc: " + paramAccessors)
+<<<<<<< HEAD
       
       var paramTypes = ctor.tpe.paramTypes 
+=======
+
+      var paramTypes = ctor.tpe.paramTypes
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       val diff = paramTypes.length - paramAccessors.length
       diff match {
         case 0 => ()
@@ -538,7 +743,11 @@ abstract class CopyPropagation {
           log("giving up on " + ctor + "(diff: " + diff + ")")
           return bindings
       }
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       // this relies on having the same order in paramAccessors and
       // the arguments on the stack. It should be the same!
       for ((p, i) <- paramAccessors.zipWithIndex) {
@@ -559,7 +768,11 @@ abstract class CopyPropagation {
      *  @param m ...
      *  @return  ...
      */
+<<<<<<< HEAD
     final def isPureMethod(m: Symbol): Boolean = 
+=======
+    final def isPureMethod(m: Symbol): Boolean =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       m.isGetter // abstract getters are still pure, as we 'know'
 
     final override def toString(): String = {

@@ -17,7 +17,13 @@ package scala
  */
 case class Tuple1[@specialized(Int, Long, Double) +T1](_1: T1)
   extends Product1[T1]
+<<<<<<< HEAD
 {  
   override def toString() = "(" + _1 + ")"  
   
+=======
+{
+  override def toString() = "(" + _1 + ")"
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

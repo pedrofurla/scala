@@ -3,8 +3,13 @@ compiling Set(A.scala, B.scala)
 Changes: Map()
 builder > A.scala
 compiling Set(A.scala)
+<<<<<<< HEAD
 Changes: Map(class A -> List(Changed(Definition(A.y))[method y changed from (i: Int)java.lang.String to (i: Int)java.lang.String flags: implicit <method>]))
 invalidate B.scala because inherited method changed [Changed(Definition(A.y))[method y changed from (i: Int)java.lang.String to (i: Int)java.lang.String flags: implicit <method>]]
+=======
+Changes: Map(class A -> List(Changed(Definition(A.y))[method y changed from (i: Int)String to (i: Int)String flags: implicit <method>]))
+invalidate B.scala because inherited method changed [Changed(Definition(A.y))[method y changed from (i: Int)String to (i: Int)String flags: implicit <method>]]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 compiling Set(B.scala)
 B.scala:2: error: type mismatch;
  found   : Int(3)

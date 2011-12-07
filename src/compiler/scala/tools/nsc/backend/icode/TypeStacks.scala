@@ -14,7 +14,11 @@ package icode
  */
 trait TypeStacks {
   self: ICodes =>
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   import opcodes._
 
   /* This class simulates the type of the operand
@@ -28,7 +32,11 @@ trait TypeStacks {
 
     def this() = this(Nil)
     def this(that: TypeStack) = this(that.types)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def length: Int = types.length
     def isEmpty     = length == 0
     def nonEmpty    = length != 0
@@ -66,19 +74,32 @@ trait TypeStacks {
       types = types.drop(n)
       prefix
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def apply(n: Int): TypeKind = types(n)
 
     /**
      * A TypeStack agrees with another one if they have the same
+<<<<<<< HEAD
      * length and each type kind agrees position-wise. Two 
+=======
+     * length and each type kind agrees position-wise. Two
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      * types agree if one is a subtype of the other.
      */
     def agreesWith(other: TypeStack): Boolean =
       (types corresponds other.types)((t1, t2) => t1 <:< t2 || t2 <:< t1)
 
+<<<<<<< HEAD
     /* This method returns a String representation of the stack */    
     override def toString() = 
+=======
+    /* This method returns a String representation of the stack */
+    override def toString() =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (types.isEmpty) "[]"
       else types.mkString("[", " ", "]")
 

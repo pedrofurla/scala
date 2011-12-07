@@ -2,7 +2,11 @@ import scala.util.parsing.combinator._
 
 import scala.util.parsing.combinator.syntactical.StandardTokenParsers
 import scala.util.parsing.input._
+<<<<<<< HEAD
 import scala.util.parsing.syntax._
+=======
+import scala.util.parsing.combinator.token._
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 import scala.collection.mutable.HashMap
 

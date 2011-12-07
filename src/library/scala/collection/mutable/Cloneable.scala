@@ -12,9 +12,15 @@ package scala.collection
 package mutable
 
 /** A trait for cloneable collections.
+<<<<<<< HEAD
  *  
  *  @since 2.8
  *  
+=======
+ *
+ *  @since 2.8
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @tparam A    Type of the elements contained in the collection, covariant and with reference types as upperbound.
  */
 @cloneable

@@ -6,19 +6,35 @@
 **                          |/                                          **
 \*                                                                      */
 
+<<<<<<< HEAD
 
 
 package scala.xml
 
 import Utility.{ isNameStart }
+=======
+package scala.xml
+
+import Utility.isNameStart
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 import scala.collection.Iterator
 
 /** Essentially, every method in here is a dummy, returning Zero[T].
  *  It provides a backstop for the unusual collection defined by MetaData,
  *  sort of a linked list of tails.
+<<<<<<< HEAD
  */
 case object Null extends MetaData {    
   override def iterator = Iterator.empty
+=======
+ *
+ *  @author  Burak Emir
+ *  @version 1.0
+ */
+case object Null extends MetaData {
+  override def iterator = Iterator.empty
+  override def size = 0
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def append(m: MetaData, scope: NamespaceBinding = TopScope): MetaData = m
   override def filter(f: MetaData => Boolean): MetaData = this
 
@@ -33,11 +49,16 @@ case object Null extends MetaData {
 
   override def length = 0
   override def length(i: Int) = i
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def strict_==(other: Equality) = other match {
     case x: MetaData  => x.length == 0
     case _            => false
   }
+<<<<<<< HEAD
   override def basisForHashCode: Seq[Any] = Nil
 
   def apply(namespace: String, scope: NamespaceBinding, key: String) = null
@@ -53,6 +74,22 @@ case object Null extends MetaData {
   override def toString(): String = ""
 
   override def buildString(sb: StringBuilder): StringBuilder = sb
+=======
+  override protected def basisForHashCode: Seq[Any] = Nil
+
+  def apply(namespace: String, scope: NamespaceBinding, key: String) = null
+  def apply(key: String) =
+    if (isNameStart(key.head)) null
+    else throw new IllegalArgumentException("not a valid attribute name '"+key+"', so can never match !")
+
+  protected def toString1(sb: StringBuilder) = ()
+  override protected def toString1(): String = ""
+
+  override def toString(): String = ""
+
+  override def buildString(sb: StringBuilder): StringBuilder = sb
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def wellformed(scope: NamespaceBinding) = true
 
   def remove(key: String) = this

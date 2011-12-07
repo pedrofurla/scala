@@ -23,7 +23,11 @@ class VirtualFile(val name: String, override val path: String) extends AbstractF
    * @return     the created virtual file
    */
   def this(name: String) = this(name, name)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def hashCode = path.hashCode
   override def equals(that: Any) = that match {
     case x: VirtualFile => x.path == path
@@ -33,18 +37,30 @@ class VirtualFile(val name: String, override val path: String) extends AbstractF
   //########################################################################
   // Private data
   private var content = new Array[Byte](0)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   //########################################################################
   // Public Methods
   def absolute = this
 
   /** Returns null. */
   final def file: JFile = null
+<<<<<<< HEAD
   
   override def sizeOption: Option[Int] = Some(content.size)
   
   def input : InputStream = new ByteArrayInputStream(content);
   
+=======
+
+  override def sizeOption: Option[Int] = Some(content.size)
+
+  def input : InputStream = new ByteArrayInputStream(content);
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def output: OutputStream = {
     new ByteArrayOutputStream() {
       override def close() {
@@ -53,7 +69,11 @@ class VirtualFile(val name: String, override val path: String) extends AbstractF
       }
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def container: AbstractFile =  unsupported
 
   /** Is this abstract file a directory? */
@@ -68,7 +88,11 @@ class VirtualFile(val name: String, override val path: String) extends AbstractF
   def iterator: Iterator[AbstractFile] = {
     assert(isDirectory, "not a directory '" + this + "'")
     Iterator.empty
+<<<<<<< HEAD
   }	
+=======
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** Does this abstract file denote an existing file? */
   def create() { unsupported }

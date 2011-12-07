@@ -26,20 +26,32 @@ abstract class ICodeCheckers {
    *    </li>
    *    <li>
    *      for method calls: the method exists in the type of the receiver
+<<<<<<< HEAD
    *      and the number and type of arguments match the declared type of 
+=======
+   *      and the number and type of arguments match the declared type of
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *      the method.
    *    </li>
    *    <li>
    *      for object creation: the constructor can be called.
    *    </li>
    *    <li>
+<<<<<<< HEAD
    *      for load/stores: the field/local/param exists and the type 
+=======
+   *      for load/stores: the field/local/param exists and the type
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *      of the value matches that of the target.
    *    </li>
    *  </ul>
    *  <p>
    *    For a control flow graph it checks that type stacks at entry to
+<<<<<<< HEAD
    *    each basic block 'agree': 
+=======
+   *    each basic block 'agree':
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  </p>
    *  <ul>
    *    <li>they have the same length</li>
@@ -99,7 +111,11 @@ abstract class ICodeCheckers {
       println("[[consistency check at the beginning of phase " + globalPhase.name + "]]")
       classes.values foreach check
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private def posStr(p: Position) =
       if (p.isDefined) p.line.toString else "<??>"
 
@@ -108,22 +124,38 @@ abstract class ICodeCheckers {
       val lines = s split "\\n"
       lines map (prefix + _) mkString "\n"
     }
+<<<<<<< HEAD
     
     /** Only called when m1 < m2, so already known that (m1 ne m2).
      */
     private def isConfict(m1: IMember, m2: IMember, canOverload: Boolean) = (
       (m1.symbol.name == m2.symbol.name) && 
+=======
+
+    /** Only called when m1 < m2, so already known that (m1 ne m2).
+     */
+    private def isConfict(m1: IMember, m2: IMember, canOverload: Boolean) = (
+      (m1.symbol.name == m2.symbol.name) &&
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       (!canOverload || (m1.symbol.tpe =:= m2.symbol.tpe))
     )
 
     def check(cls: IClass) {
       logChecker("\n<<-- Checking class " + cls + " -->>")
       clasz = cls
+<<<<<<< HEAD
       
       for (f1 <- cls.fields ; f2 <- cls.fields ; if f1 < f2)
         if (isConfict(f1, f2, false))
           icodeError("Repetitive field name: " + f1.symbol.fullName)
       
+=======
+
+      for (f1 <- cls.fields ; f2 <- cls.fields ; if f1 < f2)
+        if (isConfict(f1, f2, false))
+          icodeError("Repetitive field name: " + f1.symbol.fullName)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       for (m1 <- cls.methods ; m2 <- cls.methods ; if m1 < m2)
         if (isConfict(m1, m2, true))
           icodeError("Repetitive method: " + m1.symbol.fullName)
@@ -161,20 +193,32 @@ abstract class ICodeCheckers {
       }
     }
 
+<<<<<<< HEAD
     /** 
+=======
+    /**
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      * Apply the meet operator of the stack lattice on bl's predecessors.
      * :-). Compute the input to bl by checking that all stacks have the
      * same length, and taking the lub of types at the same positions.
      */
     def meet(bl: BasicBlock) {
       val preds = bl.predecessors
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       def hasNothingType(s: TypeStack) = s.nonEmpty && (s.head == NothingReference)
       def hasNullType(s: TypeStack) = s.nonEmpty && (s.head == NullReference)
 
       /** XXX workaround #1: one stack empty, the other has BoxedUnit.
        *  One example where this arises is:
+<<<<<<< HEAD
        *  
+=======
+       *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
        *  def f(b: Boolean): Unit = synchronized { if (b) () }
        */
       def allUnits(s: TypeStack)   = s.types forall (_ == BoxedUnitReference)
@@ -183,11 +227,19 @@ abstract class ICodeCheckers {
         case (x1, x2) if f(x1)  => x2
         case (x1, x2) if f(x2)  => x1
       }
+<<<<<<< HEAD
       
       /** XXX workaround #2: different stacks heading into an exception
        *  handler which will clear them anyway.  Examples where it arises:
        *
        *  var bippy: Int = synchronized { if (b) 5 else 10 }       
+=======
+
+      /** XXX workaround #2: different stacks heading into an exception
+       *  handler which will clear them anyway.  Examples where it arises:
+       *
+       *  var bippy: Int = synchronized { if (b) 5 else 10 }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
        */
       def isHandlerBlock() = bl.exceptionHandlerStart
 
@@ -214,10 +266,23 @@ abstract class ICodeCheckers {
                 else if (isHandlerBlock)
                   workaround("Ignoring mismatched stacks entering exception handler")
                 else
+<<<<<<< HEAD
                   throw new CheckerException(incompatibleString) 
               }
               else {
                 val newStack = new TypeStack((s1.types, s2.types).zipped map lub)
+=======
+                  throw new CheckerException(incompatibleString)
+              }
+              else {
+                val newStack: TypeStack = try {
+                    new TypeStack((s1.types, s2.types).zipped map lub)
+                } catch {
+                  case t: Exception =>
+                    checkerDebug(t.toString + ": " + s1.types.toString + " vs " + s2.types.toString)
+                    new TypeStack(s1.types)
+                }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 if (newStack.isEmpty || s1.types == s2.types) ()  // not interesting to report
                 else checkerDebug("Checker created new stack:\n  (%s, %s) => %s".format(s1, s2, newStack))
 
@@ -225,12 +290,20 @@ abstract class ICodeCheckers {
               }
           }
         }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         f((s1, s2))
       }
 
       if (preds.nonEmpty) {
+<<<<<<< HEAD
         in(bl) = (preds map out.apply) reduceLeft meet2;      
+=======
+        in(bl) = (preds map out.apply) reduceLeft meet2;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         log("Input changed for block: " + bl +" to: " + in(bl));
       }
     }
@@ -239,13 +312,21 @@ abstract class ICodeCheckers {
     private var basicBlock: BasicBlock = null
     private var stringConcatDepth = 0
     private def stringConcatIndent() = "  " * stringConcatDepth
+<<<<<<< HEAD
     private def currentInstrString: String = {      
+=======
+    private def currentInstrString: String = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       val (indent, str) = this.instruction match {
         case CALL_PRIMITIVE(StartConcat)      =>
           val x = stringConcatIndent()
           stringConcatDepth += 1
           (x, "concat(")
+<<<<<<< HEAD
         case CALL_PRIMITIVE(EndConcat)        => 
+=======
+        case CALL_PRIMITIVE(EndConcat)        =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           if (stringConcatDepth > 0) {
             stringConcatDepth -= 1
             (stringConcatIndent(), ") // end concat")
@@ -255,7 +336,11 @@ abstract class ICodeCheckers {
           (stringConcatIndent(), this.instruction match {
             case CALL_PRIMITIVE(StringConcat(el)) => "..."
             case null                             => "null"
+<<<<<<< HEAD
             case cm @ CALL_METHOD(_, _)           => if (clasz.symbol == cm.hostClass) cm.toShortString else cm.toString      
+=======
+            case cm @ CALL_METHOD(_, _)           => if (clasz.symbol == cm.hostClass) cm.toShortString else cm.toString
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             case x                                => x.toString
           })
       }
@@ -280,12 +365,20 @@ abstract class ICodeCheckers {
      * Check the basic block to be type correct and return the
      * produced type stack.
      */
+<<<<<<< HEAD
     def check(b: BasicBlock, initial: TypeStack): TypeStack = {      
+=======
+    def check(b: BasicBlock, initial: TypeStack): TypeStack = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       this.basicBlock = b
 
       logChecker({
         val prefix = "** Checking " + b.fullString
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         if (initial.isEmpty) prefix
         else prefix + " with initial stack " + initial.types.mkString("[", ", ", "]")
       })
@@ -299,13 +392,21 @@ abstract class ICodeCheckers {
       def sizeString(push: Boolean) = {
         val arrow = if (push) "-> " else "<- "
         val sp    = "   " * stack.length
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         sp + stack.length + arrow
       }
       def printStackString(isPush: Boolean, value: TypeKind, instrString: String) = {
         val pushString = if (isPush) "+" else "-"
         val posString  = posStr(this.instruction.pos)
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         checkerDebug("%-70s %-4s %s %s".format(sizeString(isPush) + value, posString, pushString, instrString))
       }
       def _popStack: TypeKind = {
@@ -323,12 +424,20 @@ abstract class ICodeCheckers {
         }
       }
       def pushStackN(xs: Seq[TypeKind], instrFn: () => String) = {
+<<<<<<< HEAD
         xs foreach { x => 
+=======
+        xs foreach { x =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           stack push x
           printStackString(true, x, instrFn())
         }
       }
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       def popStack     = { checkStack(1) ; (popStackN(1): @unchecked) match { case List(x) => x } }
       def popStack2    = { checkStack(2) ; (popStackN(2): @unchecked) match { case List(x, y) => (x, y) } }
       def popStack3    = { checkStack(3) ; (popStackN(3): @unchecked) match { case List(x, y, z) => (x, y, z) } }
@@ -338,7 +447,11 @@ abstract class ICodeCheckers {
         if (stack.nonEmpty)
           logChecker("Wiping out the " + stack.length + " element stack for exception handler: " + stack)
 
+<<<<<<< HEAD
         1 to stack.length foreach (_ => popStack) 
+=======
+        1 to stack.length foreach (_ => popStack)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       }
 
       def pushStack(xs: TypeKind*): Unit = {
@@ -350,7 +463,11 @@ abstract class ICodeCheckers {
       }
       def isSubtype(k1: TypeKind, k2: TypeKind) = (k1 <:< k2) || {
         import platform.isMaybeBoxed
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         (k1, k2) match {
           case (REFERENCE(_), REFERENCE(_)) if k1.isInterfaceType || k2.isInterfaceType =>
             logChecker("Considering %s <:< %s because at least one is an interface".format(k1, k2))
@@ -372,7 +489,11 @@ abstract class ICodeCheckers {
         if (isSubtype(k1, k2)) ()
         else typeError(k2, k1)
 
+<<<<<<< HEAD
       for (instr <- b) {        
+=======
+      for (instr <- b) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         this.instruction = instr
 
         def checkLocal(local: Local): Unit = {
@@ -382,7 +503,11 @@ abstract class ICodeCheckers {
         }
         def checkField(obj: TypeKind, field: Symbol): Unit = obj match {
           case REFERENCE(sym) =>
+<<<<<<< HEAD
             if (sym.info.member(field.name) == NoSymbol) 
+=======
+            if (sym.info.member(field.name) == NoSymbol)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               icodeError(" " + field + " is not defined in class " + clasz);
           case _ =>
             icodeError(" expected reference type, but " + obj + " found");
@@ -392,7 +517,11 @@ abstract class ICodeCheckers {
         def checkType(tpe: TypeKind, allowed: TypeKind*) = (
           if (allowed exists (k => isSubtype(tpe, k))) ()
           else icodeError(tpe + " is not one of: " + allowed.mkString("{ ", ", ", " }"))
+<<<<<<< HEAD
         ) 
+=======
+        )
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         def checkNumeric(tpe: TypeKind) =
           checkType(tpe, BYTE, CHAR, SHORT, INT, LONG, FLOAT, DOUBLE)
 
@@ -410,7 +539,11 @@ abstract class ICodeCheckers {
           val params = method.info.paramTypes
           checkStack(params.length)
           (
+<<<<<<< HEAD
             popStackN(params.length, mkInstrPrinter(num => "<arg" + num + ">")), 
+=======
+            popStackN(params.length, mkInstrPrinter(num => "<arg" + num + ">")),
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             params.reverse map toTypeKind).zipped foreach ((x, y) => checkType(x, y)
           )
         }
@@ -421,13 +554,18 @@ abstract class ICodeCheckers {
          *  @param receiver ...
          *  @param method   ...
          */
+<<<<<<< HEAD
         def checkMethod(receiver: TypeKind, method: Symbol) = 
+=======
+        def checkMethod(receiver: TypeKind, method: Symbol) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           receiver match {
             case REFERENCE(sym) =>
               checkBool(sym.info.member(method.name) != NoSymbol,
                         "Method " + method + " does not exist in " + sym.fullName);
               if (method.isPrivate)
                 checkBool(method.owner == clasz.symbol,
+<<<<<<< HEAD
                           "Cannot call private method of " + method.owner.fullName 
                           + " from " + clasz.symbol.fullName);
               else if (method.isProtected) {
@@ -436,6 +574,16 @@ abstract class ICodeCheckers {
                   (clasz.symbol.typeOfThis.typeSymbol isSubClass method.owner)  // see pos/bug780.scala
                 )
                 
+=======
+                          "Cannot call private method of " + method.owner.fullName
+                          + " from " + clasz.symbol.fullName);
+              else if (method.isProtected) {
+                val isProtectedOK = (
+                  (clasz.symbol isSubClass method.owner) ||
+                  (clasz.symbol.typeOfThis.typeSymbol isSubClass method.owner)  // see pos/bug780.scala
+                )
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 checkBool(isProtectedOK,
                           "Cannot call protected method of " + method.owner.fullName
                           + " from " + clasz.symbol.fullName);
@@ -484,7 +632,11 @@ abstract class ICodeCheckers {
            // to redo that here
            if (isStatic) ()
            else checkField(popStack, field)
+<<<<<<< HEAD
              
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
            pushStack(toTypeKind(field.tpe))
 
          case LOAD_MODULE(module) =>
@@ -493,17 +645,28 @@ abstract class ICodeCheckers {
            pushStack(toTypeKind(module.tpe));
 
          case STORE_THIS(kind) =>
+<<<<<<< HEAD
            val actualType = popStack           
            if (actualType.isReferenceType) subtypeTest(actualType, kind)
            else icodeError("Expected this reference but found: " + actualType)
            
+=======
+           val actualType = popStack
+           if (actualType.isReferenceType) subtypeTest(actualType, kind)
+           else icodeError("Expected this reference but found: " + actualType)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
          case STORE_ARRAY_ITEM(kind) =>
            popStack3 match {
              case (k, INT, ARRAY(elem)) =>
                subtypeTest(k, kind)
                subtypeTest(k, elem)
              case (a, b, c) =>
+<<<<<<< HEAD
                 icodeError(" expected and array reference, and int and " + kind + 
+=======
+                icodeError(" expected and array reference, and int and " + kind +
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                       " but " + a + ", " + b + ", " + c + " found");
            }
 
@@ -536,7 +699,11 @@ abstract class ICodeCheckers {
              case Test(op, kind, zero) =>
                if (zero) checkType(popStack, kind)
                else checkBinop(kind)
+<<<<<<< HEAD
                
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                pushStack(BOOL)
 
              case Comparison(op, kind) =>
@@ -564,7 +731,11 @@ abstract class ICodeCheckers {
                checkType(b, kind)
                pushStack(kind)
 
+<<<<<<< HEAD
              case Conversion(src, dst) =>             
+=======
+             case Conversion(src, dst) =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                checkNumeric(src)
                checkNumeric(dst)
                checkType(popStack, src)
@@ -599,10 +770,17 @@ abstract class ICodeCheckers {
            val paramCount = method.info.paramTypes.length match {
              case x if style.hasInstance  => x + 1
              case x                       => x
+<<<<<<< HEAD
            }           
            if (style == Static(true))
              checkBool(method.isPrivate || method.isConstructor, "Static call to non-private method.")
             
+=======
+           }
+           if (style == Static(true))
+             checkBool(method.isPrivate || method.isConstructor, "Static call to non-private method.")
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           checkStack(paramCount)
           checkMethodArgs(method)
           if (style.hasInstance)
@@ -683,7 +861,11 @@ abstract class ICodeCheckers {
           case BOX(kind) =>
             checkType(popStack, kind)
             pushStack(REFERENCE(definitions.boxedClass(kind.toType.typeSymbol)))
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           case UNBOX(kind) =>
             popStack
             pushStack(kind)
@@ -691,10 +873,17 @@ abstract class ICodeCheckers {
           case LOAD_EXCEPTION(clasz) =>
             clearStack()
             pushStack(REFERENCE(clasz))
+<<<<<<< HEAD
             
           case SCOPE_ENTER(_) | SCOPE_EXIT(_) =>
             ()
           
+=======
+
+          case SCOPE_ENTER(_) | SCOPE_EXIT(_) =>
+            ()
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           case _ =>
             abort("Unknown instruction: " + instr)
         }
@@ -705,8 +894,13 @@ abstract class ICodeCheckers {
     //////////////// Error reporting /////////////////////////
 
     def icodeError(msg: String) {
+<<<<<<< HEAD
       ICodeCheckers.this.global.globalError(
         "!! ICode checker fatality in " + method + 
+=======
+      ICodeCheckers.this.global.warning(
+        "!! ICode checker fatality in " + method +
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         "\n  at: " + basicBlock.fullString +
         "\n  error message: " + msg
       )

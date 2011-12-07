@@ -22,11 +22,16 @@ trait Reference extends Spec {
 
   def helpMsg     = options.helpMsg
   def propertyArgs: List[String] = Nil
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def isUnaryOption(s: String)  = unary contains toOpt(s)
   def isBinaryOption(s: String) = binary contains toOpt(s)
   def isExpandOption(s: String) = expansionMap contains toOpt(s)
   def isAnyOption(s: String)    = isUnaryOption(s) || isBinaryOption(s) || isExpandOption(s)
+<<<<<<< HEAD
     
   def expandArg(arg: String)      = expansionMap.getOrElse(fromOpt(arg), List(arg))
 
@@ -38,19 +43,40 @@ trait Reference extends Spec {
   protected def creator(args: List[String]): ThisCommandLine
   final def apply(args: String*): ThisCommandLine = creator(propertyArgs ++ args flatMap expandArg)
   
+=======
+
+  def expandArg(arg: String)      = expansionMap.getOrElse(fromOpt(arg), List(arg))
+
+  protected def help(str: => String)        = addHelp(() => str)
+
+  type ThisCommandLine <: CommandLine
+
+  class SpecCommandLine(args: List[String]) extends CommandLine(Reference.this, args) { }
+  protected def creator(args: List[String]): ThisCommandLine
+  final def apply(args: String*): ThisCommandLine = creator(propertyArgs ++ args flatMap expandArg)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   type OptionMagic = Opt.Reference
   protected implicit def optionMagicAdditions(name: String) = new Opt.Reference(programInfo, options, name)
 }
 
 object Reference {
   val MaxLine = 80
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class Accumulators() {
     private var _help     = new ListBuffer[() => String]
     private var _unary   = List[String]()
     private var _binary  = List[String]()
     private var _expand  = Map[String, List[String]]()
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def helpFormatStr     = "    %-" + longestArg + "s %s"
     def defaultFormatStr  = (" " * (longestArg + 7)) + "%s"
 
@@ -59,6 +85,7 @@ object Reference {
 
     def addExpand(opt: String, expanded: List[String]) =
       _expand += (opt -> expanded)
+<<<<<<< HEAD
     
     def mapHelp(g: String => String) = {
       val idx = _help.length - 1
@@ -67,17 +94,35 @@ object Reference {
       _help(idx) = () => g(f())
     }
     
+=======
+
+    def mapHelp(g: String => String) = {
+      val idx = _help.length - 1
+      val f = _help(idx)
+
+      _help(idx) = () => g(f())
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def addHelp(f: () => String)      = _help += f
     def addHelpAlias(f: () => String) = mapHelp { s =>
       val str = "alias for '%s'" format f()
       def noHelp = (helpFormatStr.format("", "")).length == s.length
       val str2 = if (noHelp) str else " (" + str + ")"
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       s + str2
     }
     def addHelpDefault(f: () => String) = mapHelp { s =>
       val str = "(default: %s)" format f()
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (s.length + str.length < MaxLine) s + " " + str
       else defaultFormatStr.format(s, str)
     }
@@ -85,7 +130,11 @@ object Reference {
       val line1     = "%s (default: %s)".format(s, name)
       val envNow    = envOrNone(name) map ("'" + _ + "'") getOrElse "unset"
       val line2     = defaultFormatStr.format("Currently " + envNow)
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       line1 + "\n" + line2
     }
 

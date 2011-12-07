@@ -10,7 +10,11 @@ package scala.concurrent
 
 /** The `FutureTaskRunner</code> trait is a base trait of task runners
  *  that provide some sort of future abstraction.
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author Philipp Haller
  */
 trait FutureTaskRunner extends TaskRunner {

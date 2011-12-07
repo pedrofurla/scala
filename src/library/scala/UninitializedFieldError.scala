@@ -11,6 +11,7 @@
 package scala
 
 /** This class implements errors which are thrown whenever a
+<<<<<<< HEAD
  *  field is used before it has been initialized. 
  *
  *  Such runtime checks are not emitted by default. See the
@@ -22,6 +23,16 @@ package scala
  *  @since 2.7
  */
 final case class UninitializedFieldError(msg: String) 
+=======
+ *  field is used before it has been initialized.
+ *
+ *  Such runtime checks are not emitted by default.
+ *  They can be enabled by the `-Xcheckinit` compiler option.
+ *
+ *  @since 2.7
+ */
+final case class UninitializedFieldError(msg: String)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
            extends RuntimeException(msg) {
   def this(obj: Any) =
     this(if (null != obj) obj.toString() else "null")

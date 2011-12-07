@@ -6,8 +6,11 @@
 **                          |/                                          **
 \*                                                                      */
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 package scala.collection
 
 import generic._
@@ -20,17 +23,28 @@ import scala.annotation.tailrec
  *
  *  This trait just implements `iterator` in terms of `apply` and `length`.
  *  However, see `IndexedSeqOptimized` for an implementation trait that overrides operations
+<<<<<<< HEAD
  *  to make them run faster under the assumption of fast random access with `apply`. 
+=======
+ *  to make them run faster under the assumption of fast random access with `apply`.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *
  *  @define  Coll  IndexedSeq
  *  @define indexedSeqInfo
  *  Indexed sequences support constant-time or near constant-time element
  *  access and length computation. They are defined in terms of abstract methods
  *  `apply` for indexing and `length`.
+<<<<<<< HEAD
  * 
  *  Indexed sequences do not add any new methods wrt `Seq`, but promise
  *  efficient implementations of random access patterns.
  * 
+=======
+ *
+ *  Indexed sequences do not add any new methods wrt `Seq`, but promise
+ *  efficient implementations of random access patterns.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @tparam A    the element type of the $coll
  *  @tparam Repr the type of the actual $coll containing the elements.
  *  @author Martin Odersky
@@ -42,6 +56,12 @@ import scala.annotation.tailrec
 trait IndexedSeqLike[+A, +Repr] extends SeqLike[A, Repr] {
   self =>
 
+<<<<<<< HEAD
+=======
+  def seq: IndexedSeq[A]
+  override def hashCode() = util.MurmurHash3.seqHash(seq)  // TODO - can we get faster via "indexedSeqHash" ?
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override protected[this] def thisCollection: IndexedSeq[A] = this.asInstanceOf[IndexedSeq[A]]
   override protected[this] def toCollection(repr: Repr): IndexedSeq[A] = repr.asInstanceOf[IndexedSeq[A]]
 
@@ -51,29 +71,48 @@ trait IndexedSeqLike[+A, +Repr] extends SeqLike[A, Repr] {
    */
   // pre: start >= 0, end <= self.length
   @SerialVersionUID(1756321872811029277L)
+<<<<<<< HEAD
   protected class Elements(start: Int, end: Int) extends BufferedIterator[A] with Serializable {
+=======
+  protected class Elements(start: Int, end: Int) extends AbstractIterator[A] with BufferedIterator[A] with Serializable {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private def initialSize = if (end <= start) 0 else end - start
     private var index = start
     private def available = (end - index) max 0
 
     def hasNext: Boolean = index < end
 
+<<<<<<< HEAD
     def next: A = {
+=======
+    def next(): A = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (index >= end)
         Iterator.empty.next
 
       val x = self(index)
       index += 1
+<<<<<<< HEAD
       x      
+=======
+      x
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
 
     def head = {
       if (index >= end)
         Iterator.empty.next
+<<<<<<< HEAD
       
       self(index)
     }
     
+=======
+
+      self(index)
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     override def drop(n: Int): Iterator[A] =
       if (n <= 0) new Elements(index, end)
       else if (index + n >= end) new Elements(end, end)
@@ -88,7 +127,11 @@ trait IndexedSeqLike[+A, +Repr] extends SeqLike[A, Repr] {
 
   override /*IterableLike*/
   def iterator: Iterator[A] = new Elements(0, length)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Overridden for efficiency */
   override def toBuffer[A1 >: A]: mutable.Buffer[A1] = {
     val result = new mutable.ArrayBuffer[A1](size)
@@ -96,4 +139,7 @@ trait IndexedSeqLike[+A, +Repr] extends SeqLike[A, Repr] {
     result
   }
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0

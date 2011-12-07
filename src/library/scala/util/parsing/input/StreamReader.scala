@@ -26,11 +26,19 @@ object StreamReader {
   }
 }
 
+<<<<<<< HEAD
 /** A StreamReader reads from a character sequence, typically created as a PagedSeq  
  *  from a java.io.Reader
  *
  *  NOTE:
  *  StreamReaders do not really fulfill the new contract for readers, which 
+=======
+/** A StreamReader reads from a character sequence, typically created as a PagedSeq
+ *  from a java.io.Reader
+ *
+ *  NOTE:
+ *  StreamReaders do not really fulfill the new contract for readers, which
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  requires a `source` CharSequence representing the full input.
  *  Instead source is treated line by line.
  *  As a consequence, regex matching cannot extend beyond a single line
@@ -46,8 +54,13 @@ sealed class StreamReader(seq: PagedSeq[Char], off: Int, lnum: Int) extends Page
   import StreamReader._
 
   override def rest: StreamReader =
+<<<<<<< HEAD
     if (off == seq.length) this 
     else if (seq(off) == '\n') 
+=======
+    if (off == seq.length) this
+    else if (seq(off) == '\n')
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       new StreamReader(seq.slice(off + 1), 0, lnum + 1)
     else new StreamReader(seq, off + 1, lnum)
 

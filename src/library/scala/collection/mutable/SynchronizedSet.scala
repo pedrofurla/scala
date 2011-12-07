@@ -14,9 +14,15 @@ import script._
 
 /** This class should be used as a mixin. It synchronizes the `Set`
  *  functions of the class into which it is mixed in.
+<<<<<<< HEAD
  *  
  *  @tparam A    type of the elements contained in this synchronized set.
  *  
+=======
+ *
+ *  @tparam A    type of the elements contained in this synchronized set.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author  Matthias Zenger
  *  @version 1.0, 08/07/2003
  *  @since   1

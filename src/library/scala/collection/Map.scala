@@ -10,6 +10,7 @@ package scala.collection
 
 import generic._
 
+<<<<<<< HEAD
 /** 
  *  A map from keys of type `A` to values of type `B`.
  *  
@@ -24,11 +25,31 @@ import generic._
  *  @tparam A     the type of the keys in this map.
  *  @tparam B     the type of the values associated with keys.
  *  
+=======
+/**
+ *  A map from keys of type `A` to values of type `B`.
+ *
+ *  $mapNote
+ *
+ *  '''Note:''' If you do not have specific implementations for `add` and `-` in mind,
+ *        you might consider inheriting from `DefaultMap` instead.
+ *
+ *  '''Note:''' If your additions and mutations return the same kind of map as the map
+ *        you are defining, you should inherit from `MapLike` as well.
+ *
+ *  @tparam A     the type of the keys in this map.
+ *  @tparam B     the type of the values associated with keys.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @since 1.0
  */
 trait Map[A, +B] extends Iterable[(A, B)] with GenMap[A, B] with MapLike[A, B, Map[A, B]] {
   def empty: Map[A, B] = Map.empty
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def seq: Map[A, B] = this
 }
 
@@ -37,6 +58,7 @@ trait Map[A, +B] extends Iterable[(A, B)] with GenMap[A, B] with MapLike[A, B, M
  *  @define coll map
  */
 object Map extends MapFactory[Map] {
+<<<<<<< HEAD
   
   private[collection] val hashSeed = "Map".hashCode
   
@@ -49,9 +71,26 @@ object Map extends MapFactory[Map] {
    *  because of variance issues.
    */
   abstract class WithDefault[A, +B](underlying: Map[A, B], d: A => B) extends Map[A, B] {
+=======
+  def empty[A, B]: immutable.Map[A, B] = immutable.Map.empty
+
+  /** $mapCanBuildFromInfo */
+  implicit def canBuildFrom[A, B]: CanBuildFrom[Coll, (A, B), Map[A, B]] = new MapCanBuildFrom[A, B]
+
+  /** An abstract shell used by { mutable, immutable }.Map but not by collection.Map
+   *  because of variance issues.
+   */
+  abstract class WithDefault[A, +B](underlying: Map[A, B], d: A => B) extends AbstractMap[A, B] with Map[A, B] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     override def size               = underlying.size
     def get(key: A)                 = underlying.get(key) // removed in 2.9: orElse Some(default(key))
     def iterator                    = underlying.iterator
     override def default(key: A): B = d(key)
   }
 }
+<<<<<<< HEAD
+=======
+
+/** Explicit instantiation of the `Map` trait to reduce class file size in subclasses. */
+private[scala] abstract class AbstractMap[A, +B] extends AbstractIterable[(A, B)] with Map[A, B]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0

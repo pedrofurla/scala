@@ -42,7 +42,11 @@ object FileChooser {
 class FileChooser(dir: File) {
   import FileChooser._
   lazy val peer: JFileChooser = new JFileChooser(dir)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def this() = this(null)
 
   import Swing._
@@ -71,7 +75,11 @@ class FileChooser(dir: File) {
   def selectedFiles: Seq[File] = peer.getSelectedFiles
   def selectedFiles_=(files: File*) { peer.setSelectedFiles(files.toArray) }
 
+<<<<<<< HEAD
   def multiSelectionEnabled: Boolean = peer.isMultiSelectionEnabled  
+=======
+  def multiSelectionEnabled: Boolean = peer.isMultiSelectionEnabled
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def multiSelectionEnabled_=(b: Boolean) { peer.setMultiSelectionEnabled(b) }
 
   def iconFor(f: File) = peer.getIcon(f)
@@ -104,7 +112,11 @@ class FileChooser(dir: File) {
         case MULTI_SELECTION_ENABLED_CHANGED_PROPERTY =>
         case SELECTED_FILE_CHANGED_PROPERTY =>
         case SELECTED_FILES_CHANGED_PROPERTY =>
+<<<<<<< HEAD
         case _ => 
+=======
+        case _ =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       }
     }
   })*/

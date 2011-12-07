@@ -7,7 +7,11 @@
 \*                                                                      */
 package scala.reflect.internal.pickling
 
+<<<<<<< HEAD
 object ByteCodecs { 
+=======
+object ByteCodecs {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   def avoidZero(src: Array[Byte]): Array[Byte] = {
     var i = 0
@@ -122,9 +126,12 @@ object ByteCodecs {
     dst
   }
 
+<<<<<<< HEAD
   @deprecated("use 2-argument version instead", "2.8.0")
   def decode7to8(src: Array[Byte], srclen: Int, dstlen: Int) { decode7to8(src, srclen) }
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def decode7to8(src: Array[Byte], srclen: Int): Int = {
     var i = 0
     var j = 0
@@ -193,9 +200,12 @@ object ByteCodecs {
 
   def encode(xs: Array[Byte]): Array[Byte] = avoidZero(encode8to7(xs))
 
+<<<<<<< HEAD
   @deprecated("use 1-argument version instead", "2.8.0")
   def decode(xs: Array[Byte], dstlen: Int) { decode(xs) }
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /**
    * Destructively decodes array xs and returns the length of the decoded array.
    *
@@ -218,6 +228,7 @@ object ByteCodecs {
   }
 }
 
+<<<<<<< HEAD
       
       
       
@@ -225,3 +236,12 @@ object ByteCodecs {
       
   
     
+=======
+
+
+
+
+
+
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0

@@ -17,7 +17,11 @@ trait ScalacShared extends ScalaMatchingTask {
 
   def execWithArgFiles(java: Java, paths: List[String]) = {
     paths foreach (p => java.createArg() setValue ("@"+ p))
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val debugString = paths map (x => " (@ = '%s')".format(io.File(x).slurp())) mkString ""
     log(java.getCommandLine.getCommandline.mkString("", " ", debugString), Project.MSG_VERBOSE)
     java.executeJava()

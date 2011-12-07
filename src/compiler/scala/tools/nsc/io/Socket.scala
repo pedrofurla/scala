@@ -14,7 +14,11 @@ import scala.io.Codec
 
 /** A skeletal only-as-much-as-I-need Socket wrapper.
  */
+<<<<<<< HEAD
 object Socket {  
+=======
+object Socket {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def preferringIPv4[T](body: => T): T = exclusively {
     val saved = preferIPv4Stack.value
     try   { preferIPv4Stack.enable() ; body }
@@ -27,7 +31,11 @@ object Socket {
     }
     private val optHandler = handlerFn[Option[T]](_ => None)
     private val eitherHandler = handlerFn[Either[Throwable, T]](x => Left(x))
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def getOrElse[T1 >: T](alt: T1): T1 = opt getOrElse alt
     def either: Either[Throwable, T]    = try Right(f()) catch eitherHandler
     def opt: Option[T]                  = try Some(f()) catch optHandler
@@ -45,21 +53,37 @@ class Socket(jsocket: JSocket) extends Streamable.Bytes with Closeable {
   def outputStream() = jsocket.getOutputStream()
   def getPort()      = jsocket.getPort()
   def close()        = jsocket.close()
+<<<<<<< HEAD
   
   def printWriter()                         = new PrintWriter(outputStream(), true)
   def bufferedReader(implicit codec: Codec) = new BufferedReader(new InputStreamReader(inputStream()))
   def bufferedOutput(size: Int)             = new BufferedOutputStream(outputStream(), size)
   
+=======
+
+  def printWriter()                         = new PrintWriter(outputStream(), true)
+  def bufferedReader(implicit codec: Codec) = new BufferedReader(new InputStreamReader(inputStream()))
+  def bufferedOutput(size: Int)             = new BufferedOutputStream(outputStream(), size)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Creates an InputStream and applies the closure, automatically closing it on completion.
    */
   def applyReaderAndWriter[T](f: (BufferedReader, PrintWriter) => T): T = {
     val out = printWriter()
     val in  = bufferedReader
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     try f(in, out)
     finally {
       in.close()
       out.close()
     }
+<<<<<<< HEAD
   }  
+=======
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

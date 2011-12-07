@@ -2,7 +2,11 @@
 // Programmation IV - 2002 - Week 10
 //############################################################################
 
+<<<<<<< HEAD
 import Math.{Pi, log}
+=======
+import math.{Pi, log}
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 object M0 {
 

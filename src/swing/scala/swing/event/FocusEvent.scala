@@ -16,8 +16,16 @@ package event
  */
 abstract class FocusEvent(override val source: Component, val other: Option[Component], val temporary: Boolean) extends ComponentEvent
 
+<<<<<<< HEAD
 case class FocusGained(override val source: Component, override val other: Option[Component], override val temporary: Boolean) 
            extends FocusEvent(source, other, temporary) 
 
 case class FocusLost(override val source: Component, override val other: Option[Component], override val temporary: Boolean) 
            extends FocusEvent(source, other, temporary) 
+=======
+case class FocusGained(override val source: Component, override val other: Option[Component], override val temporary: Boolean)
+           extends FocusEvent(source, other, temporary)
+
+case class FocusLost(override val source: Component, override val other: Option[Component], override val temporary: Boolean)
+           extends FocusEvent(source, other, temporary)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0

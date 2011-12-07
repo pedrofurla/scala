@@ -27,8 +27,13 @@ object Streamable {
   trait Bytes {
     def inputStream(): InputStream
     def length: Long = -1
+<<<<<<< HEAD
     
     def bufferedInput() = new BufferedInputStream(inputStream())    
+=======
+
+    def bufferedInput() = new BufferedInputStream(inputStream())
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def bytes(): Iterator[Byte] = bytesAsInts() map (_.toByte)
     def bytesAsInts(): Iterator[Int] = {
       val in = bufferedInput()
@@ -42,12 +47,20 @@ object Streamable {
       // if we don't know the length, fall back on relative inefficiency
       if (length == -1L)
         return (new ArrayBuffer[Byte]() ++= bytes()).toArray
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       val arr = new Array[Byte](length.toInt)
       val len = arr.length
       lazy val in = bufferedInput()
       var offset = 0
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       def loop() {
         if (offset < len) {
           val read = in.read(arr, offset, len - offset)
@@ -59,7 +72,11 @@ object Streamable {
       }
       try loop()
       finally in.close()
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (offset == arr.length) arr
       else fail("Could not read entire source (%d of %d bytes)".format(offset, len))
     }
@@ -78,20 +95,35 @@ object Streamable {
 
     def chars(): BufferedSource = chars(creationCodec)
     def chars(codec: Codec): BufferedSource = Source.fromInputStream(inputStream())(codec)
+<<<<<<< HEAD
     
     def lines(): Iterator[String] = lines(creationCodec)
     def lines(codec: Codec): Iterator[String] = chars(codec).getLines()
   
+=======
+
+    def lines(): Iterator[String] = lines(creationCodec)
+    def lines(codec: Codec): Iterator[String] = chars(codec).getLines()
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Obtains an InputStreamReader wrapped around a FileInputStream.
      */
     def reader(): InputStreamReader = reader(creationCodec)
     def reader(codec: Codec): InputStreamReader = new InputStreamReader(inputStream, codec.charSet)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Wraps a BufferedReader around the result of reader().
      */
     def bufferedReader(): BufferedReader = bufferedReader(creationCodec)
     def bufferedReader(codec: Codec) = new BufferedReader(reader(codec))
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Creates a BufferedReader and applies the closure, automatically closing it on completion.
      */
     def applyReader[T](f: BufferedReader => T): T = {
@@ -99,21 +131,36 @@ object Streamable {
       try f(in)
       finally in.close()
     }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Convenience function to import entire file into a String.
      */
     def slurp(): String = slurp(creationCodec)
     def slurp(codec: Codec) = chars(codec).mkString
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Call a function on something Closeable, finally closing it. */
   def closing[T <: JCloseable, U](stream: T)(f: T => U): U =
     try f(stream)
     finally stream.close()
+<<<<<<< HEAD
   
   def bytes(is: => InputStream): Array[Byte] =
     new Bytes { def inputStream() = is } toByteArray
   
+=======
+
+  def bytes(is: => InputStream): Array[Byte] =
+    new Bytes { def inputStream() = is } toByteArray
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def slurp(is: => InputStream)(implicit codec: Codec): String =
     new Chars { def inputStream() = is } slurp codec
 

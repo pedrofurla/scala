@@ -26,9 +26,17 @@ trait ListSelectionEvent extends SelectionEvent {
 case class SelectionChanged(override val source: Component) extends ComponentEvent with SelectionEvent
 
 object ListSelectionChanged {
+<<<<<<< HEAD
   def unapply[A](e: ListSelectionChanged[A]): Option[(ListView[A], Range, Boolean)] = 
     Some((e.source, e.range, e.live))
 }
 
 class ListSelectionChanged[A](override val source: ListView[A], val range: Range, val live: Boolean) 
+=======
+  def unapply[A](e: ListSelectionChanged[A]): Option[(ListView[A], Range, Boolean)] =
+    Some((e.source, e.range, e.live))
+}
+
+class ListSelectionChanged[A](override val source: ListView[A], val range: Range, val live: Boolean)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   extends SelectionChanged(source) with ListEvent[A]

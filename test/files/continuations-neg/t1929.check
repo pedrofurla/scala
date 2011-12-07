@@ -1,6 +1,11 @@
 t1929.scala:8: error: type mismatch;
+<<<<<<< HEAD
  found   : Int @scala.util.continuations.cpsParam[String,java.lang.String] @scala.util.continuations.cpsSynth
  required: Int @scala.util.continuations.cpsParam[Int,java.lang.String]
+=======
+ found   : Int @scala.util.continuations.cpsParam[String,String] @scala.util.continuations.cpsSynth
+ required: Int @scala.util.continuations.cpsParam[Int,String]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     reset {
           ^
 one error found

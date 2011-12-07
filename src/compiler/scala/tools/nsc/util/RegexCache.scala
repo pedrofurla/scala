@@ -14,7 +14,11 @@ object RegexCache {
 
   /** Lists the regexes that have been recorded in order */
   private val regexList = new mutable.Queue[String]
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private val regexesToCache = 1000
 
   /** Compile a regex and add it to the cache */

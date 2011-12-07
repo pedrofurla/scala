@@ -1,5 +1,9 @@
 implicits.scala:38: error: type mismatch;
+<<<<<<< HEAD
  found   : test2.HSome[java.lang.String,test2.HMap]
+=======
+ found   : test2.HSome[String,test2.HMap]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  required: Int
   foo(set)
       ^

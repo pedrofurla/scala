@@ -15,12 +15,20 @@ import annotation.bridge
 
 /** A template trait for non-strict views of sequences.
  *  $seqViewInfo
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define seqViewInfo
  *  $viewInfo
  *  All views for sequences are defined by re-interpreting the `length` and
  * `apply` methods.
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author Martin Odersky
  *  @version 2.8
  *  @since   2.8
@@ -28,9 +36,15 @@ import annotation.bridge
  *  @tparam Coll the type of the underlying collection containing the elements.
  *  @tparam This the type of the view itself
  */
+<<<<<<< HEAD
 trait SeqViewLike[+A, 
                   +Coll,
                   +This <: SeqView[A, Coll] with SeqViewLike[A, Coll, This]] 
+=======
+trait SeqViewLike[+A,
+                  +Coll,
+                  +This <: SeqView[A, Coll] with SeqViewLike[A, Coll, This]]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   extends Seq[A] with SeqLike[A, This] with IterableView[A, Coll] with IterableViewLike[A, Coll, This] with GenSeqViewLike[A, Coll, This]
 { self =>
 
@@ -40,6 +54,12 @@ trait SeqViewLike[+A,
     override def toString = viewToString
   }
 
+<<<<<<< HEAD
+=======
+  /** Explicit instantiation of the `Transformed` trait to reduce class file size in subclasses. */
+  private[collection] abstract class AbstractTransformed[+B] extends super[IterableViewLike].AbstractTransformed[B] with Transformed[B]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait EmptyView extends Transformed[Nothing] with super[IterableViewLike].EmptyView with super[GenSeqViewLike].EmptyView
 
   trait Forced[B] extends super[IterableViewLike].Forced[B] with super[GenSeqViewLike].Forced[B] with Transformed[B]
@@ -49,7 +69,11 @@ trait SeqViewLike[+A,
   trait Mapped[B] extends super[IterableViewLike].Mapped[B] with super[GenSeqViewLike].Mapped[B] with Transformed[B]
 
   trait FlatMapped[B] extends super[IterableViewLike].FlatMapped[B] with super[GenSeqViewLike].FlatMapped[B] with Transformed[B]
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait Appended[B >: A] extends super[IterableViewLike].Appended[B] with super[GenSeqViewLike].Appended[B] with Transformed[B]
 
   trait Filtered extends super[IterableViewLike].Filtered with super[GenSeqViewLike].Filtered with Transformed[A]
@@ -71,6 +95,7 @@ trait SeqViewLike[+A,
   /** Boilerplate method, to override in each subclass
    *  This method could be eliminated if Scala had virtual classes
    */
+<<<<<<< HEAD
   protected override def newForced[B](xs: => GenSeq[B]): Transformed[B] = new { val forced = xs } with Forced[B]
   protected override def newAppended[B >: A](that: GenTraversable[B]): Transformed[B] = new { val rest = that } with Appended[B]
   protected override def newMapped[B](f: A => B): Transformed[B] = new { val mapping = f } with Mapped[B]
@@ -80,18 +105,39 @@ trait SeqViewLike[+A,
   protected override def newDroppedWhile(p: A => Boolean): Transformed[A] = new { val pred = p } with DroppedWhile
   protected override def newTakenWhile(p: A => Boolean): Transformed[A] = new { val pred = p } with TakenWhile
   protected override def newZipped[B](that: GenIterable[B]): Transformed[(A, B)] = new { val other = that } with Zipped[B]
+=======
+  protected override def newForced[B](xs: => GenSeq[B]): Transformed[B] = new { val forced = xs } with AbstractTransformed[B] with Forced[B]
+  protected override def newAppended[B >: A](that: GenTraversable[B]): Transformed[B] = new { val rest = that } with AbstractTransformed[B] with Appended[B]
+  protected override def newMapped[B](f: A => B): Transformed[B] = new { val mapping = f } with AbstractTransformed[B] with Mapped[B]
+  protected override def newFlatMapped[B](f: A => GenTraversableOnce[B]): Transformed[B] = new { val mapping = f } with AbstractTransformed[B] with FlatMapped[B]
+  protected override def newFiltered(p: A => Boolean): Transformed[A] = new { val pred = p } with AbstractTransformed[A] with Filtered
+  protected override def newSliced(_endpoints: SliceInterval): Transformed[A] = new { val endpoints = _endpoints } with AbstractTransformed[A] with Sliced
+  protected override def newDroppedWhile(p: A => Boolean): Transformed[A] = new { val pred = p } with AbstractTransformed[A] with DroppedWhile
+  protected override def newTakenWhile(p: A => Boolean): Transformed[A] = new { val pred = p } with AbstractTransformed[A] with TakenWhile
+  protected override def newZipped[B](that: GenIterable[B]): Transformed[(A, B)] = new { val other = that } with AbstractTransformed[(A, B)] with Zipped[B]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected override def newZippedAll[A1 >: A, B](that: GenIterable[B], _thisElem: A1, _thatElem: B): Transformed[(A1, B)] = new {
     val other = that
     val thisElem = _thisElem
     val thatElem = _thatElem
+<<<<<<< HEAD
   } with ZippedAll[A1, B]
   protected def newReversed: Transformed[A] = new Reversed { }
+=======
+  } with AbstractTransformed[(A1, B)] with ZippedAll[A1, B]
+  protected def newReversed: Transformed[A] = new AbstractTransformed[A] with Reversed
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected def newPatched[B >: A](_from: Int, _patch: GenSeq[B], _replaced: Int): Transformed[B] = new {
     val from = _from
     val patch = _patch
     val replaced = _replaced
+<<<<<<< HEAD
   } with Patched[B]
   protected def newPrepended[B >: A](elem: B): Transformed[B] = new { protected[this] val fst = elem } with Prepended[B]
+=======
+  } with AbstractTransformed[B] with Patched[B]
+  protected def newPrepended[B >: A](elem: B): Transformed[B] = new { protected[this] val fst = elem } with AbstractTransformed[B] with Prepended[B]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   // see comment in IterableViewLike.
   protected override def newTaken(n: Int): Transformed[A] = newSliced(SliceInterval(0, n))
@@ -103,7 +149,11 @@ trait SeqViewLike[+A,
     newPatched(from, patch, replaced).asInstanceOf[That]
 // was:    val b = bf(repr)
 //    if (b.isInstanceOf[NoBuilder[_]]) newPatched(from, patch, replaced).asInstanceOf[That]
+<<<<<<< HEAD
 //    else super.patch[B, That](from, patch, replaced)(bf) 
+=======
+//    else super.patch[B, That](from, patch, replaced)(bf)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   }
 
   override def padTo[B >: A, That](len: Int, elem: B)(implicit bf: CanBuildFrom[This, B, That]): That =
@@ -117,6 +167,7 @@ trait SeqViewLike[+A,
     patch(index, List(elem), 1)(bf)
   }
 
+<<<<<<< HEAD
   override def +:[B >: A, That](elem: B)(implicit bf: CanBuildFrom[This, B, That]): That = 
     newPrepended(elem).asInstanceOf[That]
 
@@ -127,11 +178,27 @@ trait SeqViewLike[+A,
     newForced(thisSeq union that).asInstanceOf[That]
 
   override def diff[B >: A](that: GenSeq[B]): This = 
+=======
+  override def +:[B >: A, That](elem: B)(implicit bf: CanBuildFrom[This, B, That]): That =
+    newPrepended(elem).asInstanceOf[That]
+
+  override def :+[B >: A, That](elem: B)(implicit bf: CanBuildFrom[This, B, That]): That =
+    ++(Iterator.single(elem))(bf)
+
+  override def union[B >: A, That](that: GenSeq[B])(implicit bf: CanBuildFrom[This, B, That]): That =
+    newForced(thisSeq union that).asInstanceOf[That]
+
+  override def diff[B >: A](that: GenSeq[B]): This =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     newForced(thisSeq diff that).asInstanceOf[This]
 
   @bridge def diff[B >: A](that: Seq[B]): This = diff(that: GenSeq[B])
 
+<<<<<<< HEAD
   override def intersect[B >: A](that: GenSeq[B]): This = 
+=======
+  override def intersect[B >: A](that: GenSeq[B]): This =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     newForced(thisSeq intersect that).asInstanceOf[This]
 
   @bridge def intersect[B >: A](that: Seq[B]): This = intersect(that: GenSeq[B])

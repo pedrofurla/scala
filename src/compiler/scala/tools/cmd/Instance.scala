@@ -18,7 +18,11 @@ trait Instance extends Spec {
   def isSet(s: String)    = parsed isSet toOpt(s)
   def originalArgs        = parsed.originalArgs     // the full original list
   def residualArgs        = parsed.residualArgs     // only args which were not options or args to options
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   type OptionMagic = Opt.Instance
   protected implicit def optionMagicAdditions(name: String) = new Opt.Instance(programInfo, parsed, name)
 }

@@ -24,6 +24,7 @@ trait Files { self : SubComponent =>
 
     def isEmpty = dependencies.isEmpty && targets.isEmpty
 
+<<<<<<< HEAD
     def emits(source: AbstractFile, result: AbstractFile) = 
       targets(source) += result
     def depends(from: AbstractFile, on: AbstractFile) = 
@@ -31,6 +32,15 @@ trait Files { self : SubComponent =>
 
     def reset(file: AbstractFile) = dependencies -= file
     
+=======
+    def emits(source: AbstractFile, result: AbstractFile) =
+      targets(source) += result
+    def depends(from: AbstractFile, on: AbstractFile) =
+      dependencies(from) += on
+
+    def reset(file: AbstractFile) = dependencies -= file
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def cleanEmpty = {
       dependencies foreach {case (_, value) =>
                                value retain (x => x.exists && (x ne removedFile))}
@@ -39,7 +49,11 @@ trait Files { self : SubComponent =>
       targets retain ((key, value) => key.exists && !value.isEmpty)
     }
 
+<<<<<<< HEAD
     def containsFile(f: AbstractFile) = targets.contains(f.absolute)        
+=======
+    def containsFile(f: AbstractFile) = targets.contains(f.absolute)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     def invalidatedFiles(maxDepth: Int) = {
       val direct = new mutable.HashSet[AbstractFile]
@@ -48,13 +62,21 @@ trait Files { self : SubComponent =>
         // This looks a bit odd. It may seem like one should invalidate a file
         // if *any* of its dependencies are older than it. The forall is there
         // to deal with the fact that a) Some results might have been orphaned
+<<<<<<< HEAD
         // and b) Some files might not need changing. 
+=======
+        // and b) Some files might not need changing.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         direct(file) ||= products.forall(d => d.lastModified < file.lastModified)
       }
 
       val indirect = dependentFiles(maxDepth, direct)
 
+<<<<<<< HEAD
       for ((source, targets) <- targets  
+=======
+      for ((source, targets) <- targets
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
            if direct(source) || indirect(source) || (source eq removedFile)) {
         targets foreach (_.delete)
         targets -= source
@@ -88,6 +110,7 @@ trait Files { self : SubComponent =>
       indirect --= changed
     }
 
+<<<<<<< HEAD
     def writeTo(file: AbstractFile, fromFile: AbstractFile => String): Unit = 
       writeToFile(file)(out => writeTo(new PrintStream(out), fromFile))
     
@@ -95,6 +118,15 @@ trait Files { self : SubComponent =>
       def emit(tracker: Tracker) =
         for ((f, ds) <- tracker; d <- ds) print.println(fromFile(f) + arrow + fromFile(d))
       
+=======
+    def writeTo(file: AbstractFile, fromFile: AbstractFile => String): Unit =
+      writeToFile(file)(out => writeTo(new PrintStream(out), fromFile))
+
+    def writeTo(print: PrintStream, fromFile: AbstractFile => String): Unit = {
+      def emit(tracker: Tracker) =
+        for ((f, ds) <- tracker; d <- ds) print.println(fromFile(f) + arrow + fromFile(d))
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       cleanEmpty
       print.println(classpath)
       print.println(separator)
@@ -108,18 +140,30 @@ trait Files { self : SubComponent =>
     private val separator:String = "-------"
     private val arrow = " -> "
     private val removedFile = new VirtualFile("removed")
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private def validLine(l: String) = (l != null) && (l != separator)
 
     def readFrom(file: AbstractFile, toFile: String => AbstractFile): Option[FileDependencies] =
       readFromFile(file) { in =>
         val reader = new BufferedReader(new InputStreamReader(in))
         val it = new FileDependencies(reader.readLine)
+<<<<<<< HEAD
         
         def readLines(valid: Boolean)(f: (AbstractFile, AbstractFile) => Unit): Boolean = {
           var continue = valid
           var line: String = null
           while (continue && {line = reader.readLine; validLine(line)}) { 
+=======
+
+        def readLines(valid: Boolean)(f: (AbstractFile, AbstractFile) => Unit): Boolean = {
+          var continue = valid
+          var line: String = null
+          while (continue && {line = reader.readLine; validLine(line)}) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             line.split(arrow) match {
               case Array(from, on) => f(toFile(from), toFile(on))
               case _ =>
@@ -129,7 +173,11 @@ trait Files { self : SubComponent =>
           }
           continue
         }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         reader.readLine
 
         val dResult = readLines(true)(
@@ -137,10 +185,17 @@ trait Files { self : SubComponent =>
             case (null, _)          => // fromFile is removed, it's ok
             case (fromFile, null)   =>
               // onFile is removed, should recompile fromFile
+<<<<<<< HEAD
               it.depends(fromFile, removedFile) 
             case (fromFile, onFile) => it.depends(fromFile, onFile)
           })
         
+=======
+              it.depends(fromFile, removedFile)
+            case (fromFile, onFile) => it.depends(fromFile, onFile)
+          })
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         readLines(dResult)(
           (_, _) match {
             case (null, null)             =>
@@ -152,7 +207,11 @@ trait Files { self : SubComponent =>
               // it may has been cleaned outside, or removed during last phase
             case (sourceFile, targetFile) => it.emits(sourceFile, targetFile)
           })
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         Some(it)
       }
   }
@@ -160,7 +219,11 @@ trait Files { self : SubComponent =>
   def writeToFile[T](file: AbstractFile)(f: OutputStream => T) : T = {
     val out = file.bufferedOutput
     try {
+<<<<<<< HEAD
       f(out) 
+=======
+      f(out)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     } finally {
       out.close
     }

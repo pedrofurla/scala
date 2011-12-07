@@ -25,7 +25,11 @@ object Test {
   //bug #1214
   val y = new (Integer @ann(0))(2)
 
+<<<<<<< HEAD
   import scala.reflect.BeanProperty
+=======
+  import scala.beans.BeanProperty
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   // bug #637
   trait S { def getField(): Int }
@@ -44,7 +48,11 @@ object Test {
 
 // test forward references to getters / setters
 class BeanPropertyTests {
+<<<<<<< HEAD
   @scala.reflect.BeanProperty lazy val lv1 = 0
+=======
+  @scala.beans.BeanProperty lazy val lv1 = 0
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   def foo() {
     val bp1 = new BeanPropertyTests1
@@ -58,13 +66,22 @@ class BeanPropertyTests {
     bp1.setV2(100)
   }
 
+<<<<<<< HEAD
   @scala.reflect.BeanProperty var v1 = 0
+=======
+  @scala.beans.BeanProperty var v1 = 0
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 }
 
 class BeanPropertyTests1 {
+<<<<<<< HEAD
   @scala.reflect.BeanProperty lazy val lv2 = "0"
   @scala.reflect.BeanProperty var v2 = 0
+=======
+  @scala.beans.BeanProperty lazy val lv2 = "0"
+  @scala.beans.BeanProperty var v2 = 0
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 // test mixin of getters / setters, and implementing abstract
@@ -78,8 +95,13 @@ class C extends T with BeanF {
 }
 
 trait T {
+<<<<<<< HEAD
   @scala.reflect.BeanProperty var f = "nei"
   @scala.reflect.BooleanBeanProperty var g = false
+=======
+  @scala.beans.BeanProperty var f = "nei"
+  @scala.beans.BooleanBeanProperty var g = false
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 trait BeanF {

@@ -9,7 +9,11 @@ package api
 trait StandardDefinitions { self: Universe =>
 
   val definitions: AbsDefinitions
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   abstract class AbsDefinitions {
     // outer packages and their classes
     // Under consideration
@@ -31,7 +35,11 @@ trait StandardDefinitions { self: Universe =>
     // bottom types
     def NullClass   : Symbol
     def NothingClass: Symbol
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // the scala value classes
     def UnitClass   : Symbol
     def ByteClass   : Symbol
@@ -42,7 +50,11 @@ trait StandardDefinitions { self: Universe =>
     def FloatClass  : Symbol
     def DoubleClass : Symbol
     def BooleanClass: Symbol
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // fundamental reference classes
     def SymbolClass : Symbol
     def StringClass : Symbol

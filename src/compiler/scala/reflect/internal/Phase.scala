@@ -29,13 +29,25 @@ abstract class Phase(val prev: Phase) {
 
   def name: String
   def description: String = name
+<<<<<<< HEAD
   // Will running with -Ycheck:name work? 
   def checkable: Boolean = true
   // def devirtualized: Boolean = false
+=======
+  // Will running with -Ycheck:name work?
+  def checkable: Boolean = true
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def specialized: Boolean = false
   def erasedTypes: Boolean = false
   def flatClasses: Boolean = false
   def refChecked: Boolean = false
+<<<<<<< HEAD
+=======
+
+  /** This is used only in unsafeTypeParams, and at this writing is
+   *  overridden to false in namer, typer, and erasure. (And NoPhase.)
+   */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def keepsTypeParams = true
   def run(): Unit
 
@@ -49,6 +61,10 @@ abstract class Phase(val prev: Phase) {
 
 object NoPhase extends Phase(null) {
   def name = "<no phase>"
+<<<<<<< HEAD
+=======
+  override def keepsTypeParams = false
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def run() { throw new Error("NoPhase.run") }
 }
 

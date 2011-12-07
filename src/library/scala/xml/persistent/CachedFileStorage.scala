@@ -9,9 +9,15 @@
 package scala.xml
 package persistent
 
+<<<<<<< HEAD
 import java.io.{ File, FileOutputStream } 
 import java.nio.ByteBuffer
 import java.nio.channels.Channels 
+=======
+import java.io.{ File, FileOutputStream }
+import java.nio.ByteBuffer
+import java.nio.channels.Channels
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 import java.lang.Thread
 import scala.util.logging.Logged
 import scala.collection.Iterator
@@ -42,14 +48,22 @@ abstract class CachedFileStorage(private val file1: File) extends Thread with Lo
   /** period between modification checks, in milliseconds */
   protected val interval = 1000
 
+<<<<<<< HEAD
   /** finds and loads the storage file. subclasses should call this method 
+=======
+  /** finds and loads the storage file. subclasses should call this method
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  prior to any other, but only once, to obtain the initial sequence of nodes.
    */
   protected def initialNodes: Iterator[Node] = (file1.exists, file2.exists) match {
     case (false,false) =>
       theFile = file1
       Iterator.empty
+<<<<<<< HEAD
     case (true, true ) if (file1.lastModified < file2.lastModified) => 
+=======
+    case (true, true ) if (file1.lastModified < file2.lastModified) =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       theFile = file2
       load
     case (true, _ ) =>

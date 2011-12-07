@@ -22,7 +22,11 @@ class ConsoleReporter(val verbosity: Int) extends Test.TestCallback {
         val s = (if(res.passed) "+ " else "! ") + pretty(res, prettyPrms)
         printf("\r%s\n", format(s, "", "", 75))
       } else {
+<<<<<<< HEAD
         val s = (if(res.passed) "+ " else "! ") + name + ": " + 
+=======
+        val s = (if(res.passed) "+ " else "! ") + name + ": " +
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           pretty(res, prettyPrms)
         printf("\r%s\n", format(s, "", "", 75))
       }

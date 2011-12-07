@@ -24,6 +24,7 @@ package scala
  */
 trait Proxy {
   def self: Any
+<<<<<<< HEAD
   
   override def hashCode: Int = self.hashCode
   override def equals(that: Any): Boolean = that match {
@@ -32,6 +33,15 @@ trait Proxy {
     case x          => (x equals self)
   }
   override def toString: String = self.toString
+=======
+
+  override def hashCode: Int = self.hashCode
+  override def equals(that: Any): Boolean = that match {
+    case null      => false
+    case x: AnyRef => (x eq this) || (x eq self.asInstanceOf[AnyRef]) || (x equals self)
+  }
+  override def toString = "" + self
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 object Proxy {

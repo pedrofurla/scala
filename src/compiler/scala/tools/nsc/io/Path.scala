@@ -6,8 +6,13 @@
 package scala.tools.nsc
 package io
 
+<<<<<<< HEAD
 import java.io.{ 
   FileInputStream, FileOutputStream, BufferedReader, BufferedWriter, InputStreamReader, OutputStreamWriter, 
+=======
+import java.io.{
+  FileInputStream, FileOutputStream, BufferedReader, BufferedWriter, InputStreamReader, OutputStreamWriter,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   BufferedInputStream, BufferedOutputStream, RandomAccessFile }
 import java.net.{ URI, URL }
 import scala.util.Random.alphanumeric
@@ -27,7 +32,11 @@ import scala.util.Random.alphanumeric
  *  @since   2.8
  */
 
+<<<<<<< HEAD
 object Path {  
+=======
+object Path {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def isExtensionJarOrZip(jfile: JFile): Boolean = isExtensionJarOrZip(jfile.getName)
   def isExtensionJarOrZip(name: String): Boolean = {
     val ext = extension(name)
@@ -46,7 +55,11 @@ object Path {
   // not certain these won't be problematic, but looks good so far
   implicit def string2path(s: String): Path = apply(s)
   implicit def jfile2path(jfile: JFile): Path = apply(jfile)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // java 7 style, we don't use it yet
   // object AccessMode extends Enumeration("AccessMode") {
   //   val EXECUTE, READ, WRITE = Value
@@ -59,12 +72,20 @@ object Path {
   //   }
   //   true
   // }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def onlyDirs(xs: Iterator[Path]): Iterator[Directory] = xs filter (_.isDirectory) map (_.toDirectory)
   def onlyDirs(xs: List[Path]): List[Directory] = xs filter (_.isDirectory) map (_.toDirectory)
   def onlyFiles(xs: Iterator[Path]): Iterator[File] = xs filter (_.isFile) map (_.toFile)
   def onlyFiles(xs: List[Path]): List[File] = xs filter (_.isFile) map (_.toFile)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def roots: List[Path] = java.io.File.listRoots().toList map Path.apply
 
   def apply(segments: Seq[String]): Path = apply(segments mkString java.io.File.separator)
@@ -104,6 +125,7 @@ class Path private[io] (val jfile: JFile) {
    *  path made up of root / this.
    */
   def toAbsoluteWithRoot(root: Path) = if (isAbsolute) this else root.toAbsolute / this
+<<<<<<< HEAD
   
   /** Creates a new Path with the specified path appended.  Assumes
    *  the type of the new component implies the type of the result.
@@ -112,6 +134,16 @@ class Path private[io] (val jfile: JFile) {
   def /(child: Directory): Directory = /(child: Path).toDirectory
   def /(child: File): File = /(child: Path).toFile
   
+=======
+
+  /** Creates a new Path with the specified path appended.  Assumes
+   *  the type of the new component implies the type of the result.
+   */
+  def /(child: Path): Path = if (isEmpty) child else new Path(new JFile(jfile, child.path))
+  def /(child: Directory): Directory = /(child: Path).toDirectory
+  def /(child: File): File = /(child: Path).toFile
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** If this path is a container, recursively iterate over its contents.
    *  The supplied condition is a filter which is applied to each element,
    *  with that branch of the tree being closed off if it is true.  So for
@@ -123,7 +155,11 @@ class Path private[io] (val jfile: JFile) {
     if (isFile) toFile walkFilter cond
     else if (isDirectory) toDirectory walkFilter cond
     else Iterator.empty
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Equivalent to walkFilter(_ => false).
    */
   def walk: Iterator[Path] = walkFilter(_ => true)
@@ -133,7 +169,11 @@ class Path private[io] (val jfile: JFile) {
   def path: String = jfile.getPath()
   def normalize: Path = Path(jfile.getAbsolutePath())
   def isRootPath: Boolean = roots exists (_ isSame this)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def resolve(other: Path) = if (other.isAbsolute || isEmpty) other else /(other)
   def relativize(other: Path) = {
     assert(isAbsolute == other.isAbsolute, "Paths not of same type: "+this+", "+other)
@@ -144,10 +184,17 @@ class Path private[io] (val jfile: JFile) {
         case (bs, os) => ((".."+separator)*bs.length)+os.mkString(separatorStr)
       }
     }
+<<<<<<< HEAD
   
     Path(createRelativePath(segments, other.segments))
   }
   
+=======
+
+    Path(createRelativePath(segments, other.segments))
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // derived from identity
   def root: Option[Path] = roots find (this startsWith _)
   def segments: List[String] = (path split separator).toList filterNot (_.length == 0)
@@ -200,7 +247,11 @@ class Path private[io] (val jfile: JFile) {
     if (extension == "") addExtension(ext)
     else Path(path.stripSuffix(extension) + ext)
   )
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // conditionally execute
   def ifFile[T](f: File => T): Option[T] = if (isFile) Some(f(toFile)) else None
   def ifDirectory[T](f: Directory => T): Option[T] = if (isDirectory) Some(f(toDirectory)) else None
@@ -208,7 +259,11 @@ class Path private[io] (val jfile: JFile) {
   // Boolean tests
   def canRead = jfile.canRead()
   def canWrite = jfile.canWrite()
+<<<<<<< HEAD
   def exists = jfile.exists()  
+=======
+  def exists = jfile.exists()
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def notExists = try !jfile.exists() catch { case ex: SecurityException => false }
 
   def isFile = jfile.isFile()
@@ -216,12 +271,20 @@ class Path private[io] (val jfile: JFile) {
   def isAbsolute = jfile.isAbsolute()
   def isHidden = jfile.isHidden()
   def isEmpty = path.length == 0
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // Information
   def lastModified = jfile.lastModified()
   def lastModified_=(time: Long) = jfile setLastModified time // should use setXXX function?
   def length = jfile.length()
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // Boolean path comparisons
   def endsWith(other: Path) = segments endsWith other.segments
   def startsWith(other: Path) = segments startsWith other.segments
@@ -241,7 +304,11 @@ class Path private[io] (val jfile: JFile) {
     else if (isFile) toFile
     else new File(jfile)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // deletions
   def delete() = jfile.delete()
   def deleteIfExists() = if (jfile.exists()) delete() else false
@@ -251,7 +318,11 @@ class Path private[io] (val jfile: JFile) {
    */
   def deleteRecursively(): Boolean = deleteRecursively(jfile)
   private def deleteRecursively(f: JFile): Boolean = {
+<<<<<<< HEAD
     if (f.isDirectory) f.listFiles match { 
+=======
+    if (f.isDirectory) f.listFiles match {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       case null =>
       case xs   => xs foreach deleteRecursively
     }
@@ -265,7 +336,11 @@ class Path private[io] (val jfile: JFile) {
       raf.close()
       length == 0
     }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def touch(modTime: Long = System.currentTimeMillis) = {
     createFile()
     if (isFile)
@@ -275,11 +350,19 @@ class Path private[io] (val jfile: JFile) {
   // todo
   // def copyTo(target: Path, options ...): Boolean
   // def moveTo(target: Path, options ...): Boolean
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def toString() = path
   override def equals(other: Any) = other match {
     case x: Path  => path == x.path
     case _        => false
+<<<<<<< HEAD
   }  
+=======
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def hashCode() = path.hashCode()
 }

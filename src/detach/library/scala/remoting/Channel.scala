@@ -42,7 +42,11 @@ class Channel protected (socket: Socket) {
   /** Returns the port on which this channel is listening. */
   val port = socket.getLocalPort
 
+<<<<<<< HEAD
   private var cl: ClassLoader = 
+=======
+  private var cl: ClassLoader =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     try {
       // requires permission in Java policy file
       val codebase = System.getProperty("java.rmi.server.codebase")
@@ -85,7 +89,11 @@ class Channel protected (socket: Socket) {
         sys.error("Input stream undefined: "+e.getMessage+" ("+this+")")
         null
     }
+<<<<<<< HEAD
   private lazy val out = 
+=======
+  private lazy val out =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     try {
       new ObjectOutputStream(socket.getOutputStream)
     }

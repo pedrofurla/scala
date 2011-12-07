@@ -1,6 +1,10 @@
 
 // Martin: I am not sure this is a solvable problem right now. I'll leave it in pending.
+<<<<<<< HEAD
 // derived from pos/bug1001
+=======
+// derived from pos/t1001
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 class A
 trait B[T <: B[T]] extends A
 class C extends B[C]

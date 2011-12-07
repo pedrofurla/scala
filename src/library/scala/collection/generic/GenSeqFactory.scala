@@ -5,7 +5,11 @@
 ** /____/\___/_/ |_/____/_/ | |                                         **
 **                          |/                                          **
 \*                                                                      */
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 
 package scala.collection
@@ -19,8 +23,15 @@ import annotation.bridge
  */
 abstract class GenSeqFactory[CC[X] <: GenSeq[X] with GenericTraversableTemplate[X, CC]]
 extends GenTraversableFactory[CC] {
+<<<<<<< HEAD
   
   @bridge
   def unapplySeq[A](x: GenSeq[A]): Some[GenSeq[A]] = Some(x)
   
+=======
+
+  @bridge
+  def unapplySeq[A](x: GenSeq[A]): Some[GenSeq[A]] = Some(x)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

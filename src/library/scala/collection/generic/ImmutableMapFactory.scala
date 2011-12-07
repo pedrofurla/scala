@@ -15,4 +15,8 @@ package generic
  *    @version 2.8
  *    @since 2.8
  */
+<<<<<<< HEAD
 abstract class ImmutableMapFactory[CC[A, +B] <: immutable.Map[A, B] with immutable.MapLike[A, B, CC[A, B]]] extends MapFactory[CC] 
+=======
+abstract class ImmutableMapFactory[CC[A, +B] <: immutable.Map[A, B] with immutable.MapLike[A, B, CC[A, B]]] extends MapFactory[CC]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0

@@ -3,3 +3,16 @@ test Test2 was successful
 test Test3 was successful
 test Test4 was successful
 
+<<<<<<< HEAD
+=======
+D1.ValueSet(North, East)
+D2.ValueSet(North, East)
+D1.ValueSet(North, East, West)
+D2.ValueSet(North, East, West)
+List(101)
+List(101)
+D1.ValueSet(North, East)
+D2.ValueSet(North, East)
+WeekDays.ValueSet(Tue, Wed, Thu, Fri)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0

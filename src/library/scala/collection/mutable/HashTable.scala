@@ -28,11 +28,16 @@ package mutable
  *  @author  Martin Odersky
  *  @version 2.0, 31/12/2006
  *  @since   1
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @tparam A     type of the elements contained in this hash table.
  */
 trait HashTable[A, Entry >: Null <: HashEntry[A, Entry]] extends HashTable.HashUtils[A] {
   import HashTable._
+<<<<<<< HEAD
   
   @transient protected var _loadFactor = defaultLoadFactor
   
@@ -54,6 +59,29 @@ trait HashTable[A, Entry >: Null <: HashEntry[A, Entry]] extends HashTable.HashU
   
   protected def initialSize: Int = HashTable.initialSize
   
+=======
+
+  @transient protected var _loadFactor = defaultLoadFactor
+
+  /** The actual hash table.
+   */
+  @transient protected var table: Array[HashEntry[A, Entry]] = new Array(initialCapacity)
+
+  /** The number of mappings contained in this hash table.
+   */
+  @transient protected var tableSize: Int = 0
+
+  /** The next size value at which to resize (capacity * load factor).
+   */
+  @transient protected var threshold: Int = initialThreshold(_loadFactor)
+
+  /** The array keeping track of the number of elements in 32 element blocks.
+   */
+  @transient protected var sizemap: Array[Int] = null
+
+  protected def initialSize: Int = HashTable.initialSize
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def lastPopulatedIndex = {
     var idx = table.length - 1
     while (table(idx) == null && idx > 0)
@@ -69,6 +97,7 @@ trait HashTable[A, Entry >: Null <: HashEntry[A, Entry]] extends HashTable.HashU
    */
   private[collection] def init[B](in: java.io.ObjectInputStream, f: (A, B) => Entry) {
     in.defaultReadObject
+<<<<<<< HEAD
     
     _loadFactor = in.readInt
     assert(_loadFactor > 0)
@@ -84,18 +113,43 @@ trait HashTable[A, Entry >: Null <: HashEntry[A, Entry]] extends HashTable.HashU
     
     if (smDefined) sizeMapInit(table.length) else sizemap = null
     
+=======
+
+    _loadFactor = in.readInt
+    assert(_loadFactor > 0)
+
+    val size = in.readInt
+    tableSize = 0
+    assert(size >= 0)
+
+    val smDefined = in.readBoolean
+
+    table = new Array(capacity(sizeForThreshold(_loadFactor, size)))
+    threshold = newThreshold(_loadFactor, table.size)
+
+    if (smDefined) sizeMapInit(table.length) else sizemap = null
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     var index = 0
     while (index < size) {
       addEntry(f(in.readObject.asInstanceOf[A], in.readObject.asInstanceOf[B]))
       index += 1
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /**
    * Serializes the collection to the output stream by saving the load factor, collection
    * size, collection keys and collection values. `value` is responsible for providing a value
    * from an entry.
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * `foreach` determines the order in which the key/value pairs are saved to the stream. To
    * deserialize, `init` should be used.
    */
@@ -109,7 +163,11 @@ trait HashTable[A, Entry >: Null <: HashEntry[A, Entry]] extends HashTable.HashU
       out.writeObject(value(entry))
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Find entry with given key in table, null if not found.
    */
   protected def findEntry(key: A): Entry = {
@@ -162,7 +220,11 @@ trait HashTable[A, Entry >: Null <: HashEntry[A, Entry]] extends HashTable.HashU
 
   /** An iterator returning all entries.
    */
+<<<<<<< HEAD
   protected def entriesIterator: Iterator[Entry] = new Iterator[Entry] {
+=======
+  protected def entriesIterator: Iterator[Entry] = new AbstractIterator[Entry] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val iterTable = table
     var idx       = lastPopulatedIndex
     var es        = iterTable(idx)
@@ -196,10 +258,13 @@ trait HashTable[A, Entry >: Null <: HashEntry[A, Entry]] extends HashTable.HashU
     }
   }
 
+<<<<<<< HEAD
   /** An iterator returning all entries */
   @deprecated("use entriesIterator instead", "2.8.0")
   protected def entries: Iterator[Entry] = entriesIterator
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Remove all entries from table
    */
   protected def clearTable() {
@@ -228,6 +293,7 @@ trait HashTable[A, Entry >: Null <: HashEntry[A, Entry]] extends HashTable.HashU
     }
     threshold = newThreshold(_loadFactor, newSize)
   }
+<<<<<<< HEAD
   
   /* Size map handling code */
   
@@ -235,6 +301,15 @@ trait HashTable[A, Entry >: Null <: HashEntry[A, Entry]] extends HashTable.HashU
    * The following three sizeMap* functions (Add, Remove, Reset)
    * are used to update the size map of the hash table.
    * 
+=======
+
+  /* Size map handling code */
+
+  /*
+   * The following three sizeMap* functions (Add, Remove, Reset)
+   * are used to update the size map of the hash table.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * The size map logically divides the hash table into `sizeMapBucketSize` element buckets
    * by keeping an integer entry for each such bucket. Each integer entry simply denotes
    * the number of elements in the corresponding bucket.
@@ -242,7 +317,11 @@ trait HashTable[A, Entry >: Null <: HashEntry[A, Entry]] extends HashTable.HashU
    * table   = [/, 1, /, 6, 90, /, -3, 5]    (8 entries)
    * sizemap = [     2     |     3      ]    (2 entries)
    * where sizeMapBucketSize == 4.
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * By default the size map is not initialized, so these methods don't do anything, thus,
    * their impact on hash table performance is negligible. However, if the hash table
    * is converted into a parallel hash table, the size map is initialized, as it will be needed
@@ -251,30 +330,54 @@ trait HashTable[A, Entry >: Null <: HashEntry[A, Entry]] extends HashTable.HashU
   protected def nnSizeMapAdd(h: Int) = if (sizemap ne null) {
     sizemap(h >> sizeMapBucketBitSize) += 1
   }
+<<<<<<< HEAD
   
   protected def nnSizeMapRemove(h: Int) = if (sizemap ne null) {
     sizemap(h >> sizeMapBucketBitSize) -= 1
   }
   
+=======
+
+  protected def nnSizeMapRemove(h: Int) = if (sizemap ne null) {
+    sizemap(h >> sizeMapBucketBitSize) -= 1
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected def nnSizeMapReset(tableLength: Int) = if (sizemap ne null) {
     val nsize = calcSizeMapSize(tableLength)
     if (sizemap.length != nsize) sizemap = new Array[Int](nsize)
     else java.util.Arrays.fill(sizemap, 0)
   }
+<<<<<<< HEAD
   
   private[collection] final def totalSizeMapBuckets = if (sizeMapBucketSize < table.length) 1 else table.length / sizeMapBucketSize
   
   protected def calcSizeMapSize(tableLength: Int) = (tableLength >> sizeMapBucketBitSize) + 1
   
+=======
+
+  private[collection] final def totalSizeMapBuckets = if (sizeMapBucketSize < table.length) 1 else table.length / sizeMapBucketSize
+
+  protected def calcSizeMapSize(tableLength: Int) = (tableLength >> sizeMapBucketBitSize) + 1
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // discards the previous sizemap and only allocates a new one
   protected def sizeMapInit(tableLength: Int) {
     sizemap = new Array[Int](calcSizeMapSize(tableLength))
   }
+<<<<<<< HEAD
   
   // discards the previous sizemap and populates the new one
   protected def sizeMapInitAndRebuild() {
     sizeMapInit(table.length)
     
+=======
+
+  // discards the previous sizemap and populates the new one
+  protected def sizeMapInitAndRebuild() {
+    sizeMapInit(table.length)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // go through the buckets, count elements
     var tableidx = 0
     var bucketidx = 0
@@ -297,6 +400,7 @@ trait HashTable[A, Entry >: Null <: HashEntry[A, Entry]] extends HashTable.HashU
       bucketidx += 1
     }
   }
+<<<<<<< HEAD
   
   private[collection] def printSizeMap() {
     println(sizemap.toList)
@@ -313,6 +417,24 @@ trait HashTable[A, Entry >: Null <: HashEntry[A, Entry]] extends HashTable.HashU
   
   protected def elemEquals(key1: A, key2: A): Boolean = (key1 == key2)
   
+=======
+
+  private[collection] def printSizeMap() {
+    println(sizemap.toList)
+  }
+
+  protected def sizeMapDisable() = sizemap = null
+
+  protected def isSizeMapDefined = sizemap ne null
+
+  // override to automatically initialize the size map
+  protected def alwaysInitSizeMap = false
+
+  /* End of size map handling code */
+
+  protected def elemEquals(key1: A, key2: A): Boolean = (key1 == key2)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // Note:
   // we take the most significant bits of the hashcode, not the lower ones
   // this is of crucial importance when populating the table in parallel
@@ -322,7 +444,11 @@ trait HashTable[A, Entry >: Null <: HashEntry[A, Entry]] extends HashTable.HashU
     val shifted = (improved >> (32 - java.lang.Integer.bitCount(ones))) & ones
     shifted
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected def initWithContents(c: HashTable.Contents[A, Entry]) = {
     if (c != null) {
       _loadFactor = c.loadFactor
@@ -333,7 +459,11 @@ trait HashTable[A, Entry >: Null <: HashEntry[A, Entry]] extends HashTable.HashU
     }
     if (alwaysInitSizeMap && sizemap == null) sizeMapInitAndRebuild
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private[collection] def hashTableContents = new HashTable.Contents(
     _loadFactor,
     table,
@@ -348,6 +478,7 @@ private[collection] object HashTable {
    */
   private[collection] final def defaultLoadFactor: Int = 750 // corresponds to 75%
   private[collection] final def loadFactorDenum = 1000;
+<<<<<<< HEAD
   
   /** The initial size of the hash table.
    */
@@ -365,13 +496,38 @@ private[collection] object HashTable {
   
   private[collection] final def capacity(expectedSize: Int) = if (expectedSize == 0) 1 else powerOfTwo(expectedSize)
   
+=======
+
+  /** The initial size of the hash table.
+   */
+  private[collection] final def initialSize: Int = 16
+
+  /** The initial threshold.
+   */
+  private[collection] final def initialThreshold(_loadFactor: Int): Int = newThreshold(_loadFactor, initialCapacity)
+
+  private[collection] final def initialCapacity = capacity(initialSize)
+
+  private[collection] final def newThreshold(_loadFactor: Int, size: Int) = ((size.toLong * _loadFactor) / loadFactorDenum).toInt
+
+  private[collection] final def sizeForThreshold(_loadFactor: Int, thr: Int) = thr * loadFactorDenum / _loadFactor
+
+  private[collection] final def capacity(expectedSize: Int) = if (expectedSize == 0) 1 else powerOfTwo(expectedSize)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait HashUtils[KeyType] {
     protected final def sizeMapBucketBitSize = 5
     // so that:
     protected final def sizeMapBucketSize = 1 << sizeMapBucketBitSize
+<<<<<<< HEAD
     
     protected def elemHashCode(key: KeyType) = key.##
     
+=======
+
+    protected def elemHashCode(key: KeyType) = key.##
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     protected final def improve(hcode: Int) = {
       /* Murmur hash
        *  m = 0x5bd1e995
@@ -382,10 +538,17 @@ private[collection] object HashTable {
       // k ^= k >> 24
       // k *= 0x5bd1e995
       // k
+<<<<<<< HEAD
       
       /* Another fast multiplicative hash
        * by Phil Bagwell
        * 
+=======
+
+      /* Another fast multiplicative hash
+       * by Phil Bagwell
+       *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
        * Comment:
        * Multiplication doesn't affect all the bits in the same way, so we want to
        * multiply twice, "once from each side".
@@ -393,9 +556,15 @@ private[collection] object HashTable {
        * however, this is more costly. We therefore restrict ourselves only to
        * reversing the bytes before final multiplication. This yields a slightly
        * worse entropy in the lower 8 bits, but that can be improved by adding:
+<<<<<<< HEAD
        * 
        * `i ^= i >> 6`
        * 
+=======
+       *
+       * `i ^= i >> 6`
+       *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
        * For performance reasons, we avoid this improvement.
        * */
       var i = hcode * 0x9e3775cd
@@ -404,7 +573,11 @@ private[collection] object HashTable {
       // a slower alternative for byte reversal:
       // i = (i << 16) | (i >> 16)
       // i = ((i >> 8) & 0x00ff00ff) | ((i << 8) & 0xff00ff00)
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       /* Jenkins hash
        * for range 0-10000, output has the msb set to zero */
       // var h = hcode + (hcode << 12)
@@ -416,7 +589,11 @@ private[collection] object HashTable {
       // h += (h << 7)
       // h ^= (h >> 12)
       // h
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       /* OLD VERSION
        * quick, but bad for sequence 0-10000 - little enthropy in higher bits
        * since 2003 */
@@ -426,7 +603,11 @@ private[collection] object HashTable {
       // h ^ (h >>> 10)
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /**
    * Returns a power of two >= `target`.
    */
@@ -440,7 +621,11 @@ private[collection] object HashTable {
     c |= c >>> 16;
     c + 1;
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class Contents[A, Entry >: Null <: HashEntry[A, Entry]](
     val loadFactor: Int,
     val table: Array[HashEntry[A, Entry]],
@@ -460,5 +645,9 @@ private[collection] object HashTable {
       append("Sizemap: [" + arrayString(sizemap, 0, sizemap.length) + "]")
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

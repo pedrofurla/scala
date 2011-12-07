@@ -38,6 +38,7 @@ trait Unapplies extends ast.TreeDSL
    *   - returns T otherwise
    */
   def unapplyTypeListFromReturnType(tp1: Type): List[Type] = {
+<<<<<<< HEAD
     val tp = unapplyUnwrap(tp1)    
     tp.typeSymbol match {                             // unapplySeqResultToMethodSig
       case BooleanClass             => Nil
@@ -47,14 +48,30 @@ trait Unapplies extends ast.TreeDSL
           case Some(xs) if xs.size > 1  => xs         // n > 1
           case _                        => List(prod) // special n == 0 ||  n == 1
         }
+=======
+    val tp = unapplyUnwrap(tp1)
+    tp.typeSymbol match {                             // unapplySeqResultToMethodSig
+      case BooleanClass             => Nil
+      case OptionClass | SomeClass  =>
+        val prod  = tp.typeArgs.head
+        val targs = getProductArgs(prod)
+
+        if (targs.isEmpty || targs.tail.isEmpty) List(prod) // special n == 0 ||  n == 1
+        else targs  // n > 1
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       case _                        =>
         throw new TypeError("result type "+tp+" of unapply not in {Boolean, Option[_], Some[_]}")
     }
   }
 
   /** let type be the result type of the (possibly polymorphic) unapply method
+<<<<<<< HEAD
    *  for type Option[T] or Some[T] 
    *  -returns T0...Tn-1,Tn* if n>0 and T <: Product[T0...Tn-1,Seq[Tn]]], 
+=======
+   *  for type Option[T] or Some[T]
+   *  -returns T0...Tn-1,Tn* if n>0 and T <: Product[T0...Tn-1,Seq[Tn]]],
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  -returns R* if T = Seq[R]
    */
   def unapplyTypeListFromReturnTypeSeq(tp1: Type): List[Type] = {
@@ -99,10 +116,17 @@ trait Unapplies extends ast.TreeDSL
 
   def copyUntypedInvariant(td: TypeDef): TypeDef = {
     val copy = treeCopy.TypeDef(td, td.mods &~ (COVARIANT | CONTRAVARIANT), td.name, td.tparams, td.rhs)
+<<<<<<< HEAD
     
     returning[TypeDef](copy.duplicate)(UnTyper traverse _)
   }
   
+=======
+
+    returning[TypeDef](copy.duplicate)(UnTyper traverse _)
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def toIdent(x: DefTree) = Ident(x.name) setPos x.pos.focus
 
   private def classType(cdef: ClassDef, tparams: List[TypeDef]): Tree = {
@@ -121,7 +145,11 @@ trait Unapplies extends ast.TreeDSL
    */
   private def caseClassUnapplyReturnValue(param: Name, caseclazz: Symbol) = {
     def caseFieldAccessorValue(selector: Symbol): Tree = Ident(param) DOT selector
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     caseclazz.caseFieldAccessors match {
       case Nil      => TRUE
       case xs       => SOME(xs map caseFieldAccessorValue: _*)
@@ -157,7 +185,11 @@ trait Unapplies extends ast.TreeDSL
   }
 
   private val caseMods = Modifiers(SYNTHETIC | CASE)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** The apply method corresponding to a case class
    */
   def caseModuleApplyMeth(cdef: ClassDef): DefDef = {
@@ -187,11 +219,19 @@ trait Unapplies extends ast.TreeDSL
     )
   }
 
+<<<<<<< HEAD
   def caseClassCopyMeth(cdef: ClassDef): Option[DefDef] = {    
     def isDisallowed(vd: ValDef) = isRepeatedParamType(vd.tpt) || isByNameParamType(vd.tpt)
     val cparamss  = constrParamss(cdef)
     val flat      = cparamss flatten
     
+=======
+  def caseClassCopyMeth(cdef: ClassDef): Option[DefDef] = {
+    def isDisallowed(vd: ValDef) = isRepeatedParamType(vd.tpt) || isByNameParamType(vd.tpt)
+    val cparamss  = constrParamss(cdef)
+    val flat      = cparamss flatten
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (cdef.symbol.hasAbstractFlag || (flat exists isDisallowed)) None
     else {
       val tparams = cdef.tparams map copyUntypedInvariant
@@ -200,10 +240,17 @@ trait Unapplies extends ast.TreeDSL
       // and re-added in ``finishWith'' in the namer.
       def paramWithDefault(vd: ValDef) =
         treeCopy.ValDef(vd, vd.mods | DEFAULTPARAM, vd.name, atPos(vd.pos.focus)(TypeTree() setOriginal vd.tpt), toIdent(vd))
+<<<<<<< HEAD
       
       val paramss   = cparamss map (_ map paramWithDefault)
       val classTpe  = classType(cdef, tparams)
       
+=======
+
+      val paramss   = cparamss map (_ map paramWithDefault)
+      val classTpe  = classType(cdef, tparams)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       Some(atPos(cdef.pos.focus)(
         DefDef(Modifiers(SYNTHETIC), nme.copy, tparams, paramss, classTpe,
           New(classTpe, paramss map (_ map toIdent)))

@@ -14,7 +14,11 @@ trait Variances {
 
   val global: Global
   import global._
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Flip between covariant and contravariant */
   private def flip(v: Int): Int = {
     if (v == COVARIANT) CONTRAVARIANT
@@ -31,8 +35,13 @@ trait Variances {
     (VARIANCES /: syms) ((v, sym) => v & varianceInSym(sym)(tparam))
 
   /** Compute variance of type parameter `tparam` in type of symbol `sym`. */
+<<<<<<< HEAD
   def varianceInSym(sym: Symbol)(tparam: Symbol): Int = 
     if (sym.isAliasType) cut(varianceInType(sym.info)(tparam)) 
+=======
+  def varianceInSym(sym: Symbol)(tparam: Symbol): Int =
+    if (sym.isAliasType) cut(varianceInType(sym.info)(tparam))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     else varianceInType(sym.info)(tparam)
 
   /** Compute variance of type parameter `tparam` in all types `tps`. */
@@ -71,6 +80,11 @@ trait Variances {
       varianceInType(pre)(tparam)
     case TypeRef(pre, sym, args) =>
       if (sym == tparam) COVARIANT
+<<<<<<< HEAD
+=======
+      // tparam cannot occur in tp's args if tp is a type constructor (those don't have args)
+      else if (tp.isHigherKinded) varianceInType(pre)(tparam)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       else varianceInType(pre)(tparam) & varianceInArgs(args, sym.typeParams)(tparam)
     case TypeBounds(lo, hi) =>
       flip(varianceInType(lo)(tparam)) & varianceInType(hi)(tparam)

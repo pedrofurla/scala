@@ -23,7 +23,11 @@ import Proxy.Typed
 abstract class ScalaNumberProxy[T: Numeric] extends ScalaNumericConversions with Typed[T] with OrderedProxy[T] {
   private val num = implicitly[Numeric[T]]
   protected val ord: Ordering[T] = num
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def underlying()  = self.asInstanceOf[AnyRef]
   def doubleValue() = num.toDouble(self)
   def floatValue()  = num.toFloat(self)
@@ -71,7 +75,11 @@ trait OrderedProxy[T] extends Typed[T] with Ordered[T] {
 }
 trait RangedProxy[T] extends Typed[T] {
   type ResultWithoutStep
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def until(end: T): ResultWithoutStep
   def until(end: T, step: T): immutable.IndexedSeq[T]
   def to(end: T): ResultWithoutStep

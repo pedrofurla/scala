@@ -31,13 +31,21 @@ trait Sorted[K, +This <: Sorted[K, This]] {
 
   /** Comparison function that orders keys. */
   def compare(k0: K, k1: K): Int = ordering.compare(k0, k1)
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Creates a ranged projection of this collection. Any mutations in the
    *  ranged projection will update this collection and vice versa.
    *
    *  Note: keys are not garuanteed to be consistent between this collection
    *  and the projection. This is the case for buffers where indexing is
+<<<<<<< HEAD
    *  relative to the projection. 
+=======
+   *  relative to the projection.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *
    *  @param from  The lower-bound (inclusive) of the ranged projection.
    *               `None` if there is no lower bound.
@@ -57,7 +65,11 @@ trait Sorted[K, +This <: Sorted[K, This]] {
    *  @param until The upper-bound (exclusive) of the ranged projection.
    */
   def until(until: K): This = rangeImpl(None, Some(until))
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Creates a ranged projection of this collection with both a lower-bound
    *  and an upper-bound.
    *
@@ -66,16 +78,27 @@ trait Sorted[K, +This <: Sorted[K, This]] {
    *  @return      ...
    */
   def range(from: K, until: K): This = rangeImpl(Some(from), Some(until))
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Create a range projection of this collection with no lower-bound.
    *  @param to The upper-bound (inclusive) of the ranged projection.
    */
   def to(to: K): This = {
+<<<<<<< HEAD
     // tough!
     val i = keySet.from(to).iterator
     if (i.isEmpty) return repr
     val next = i.next
     if (next == to)
+=======
+    val i = keySet.from(to).iterator
+    if (i.isEmpty) return repr
+    val next = i.next
+    if (compare(next, to) == 0)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (i.isEmpty) repr
       else until(i.next)
     else
@@ -98,5 +121,9 @@ trait Sorted[K, +This <: Sorted[K, This]] {
       }) in = i.next;
     }
     true
+<<<<<<< HEAD
   }      
+=======
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

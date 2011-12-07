@@ -16,7 +16,11 @@ import StringOps._
  */
 abstract class Reporter {
   protected def info0(pos: Position, msg: String, severity: Severity, force: Boolean): Unit
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   object severity extends Enumeration
   class Severity(val id: Int) extends severity.Value {
     var count: Int = 0
@@ -24,7 +28,11 @@ abstract class Reporter {
   val INFO    = new Severity(0)
   val WARNING = new Severity(1)
   val ERROR   = new Severity(2)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Whether very long lines can be truncated.  This exists so important
    *  debugging information (like printing the classpath) is not rendered
    *  invisible due to the max message length.
@@ -52,22 +60,35 @@ abstract class Reporter {
   def hasWarnings       = WARNING.count > 0
 
   def    info(pos: Position, msg: String, force: Boolean) { info0(pos, msg,    INFO, force) }
+<<<<<<< HEAD
   def warning(pos: Position, msg: String                ) { info0(pos, msg, WARNING, false) }
   def   error(pos: Position, msg: String                ) { info0(pos, msg,   ERROR, false) }
+=======
+  def warning(pos: Position, msg: String                ) { withoutTruncating(info0(pos, msg, WARNING, false)) }
+  def   error(pos: Position, msg: String                ) { withoutTruncating(info0(pos, msg,   ERROR, false)) }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def incompleteInputError(pos: Position, msg: String   ) {
     if (incompleteHandled) incompleteHandler(pos, msg)
     else error(pos, msg)
   }
 
   def comment(pos: Position, msg: String) { }
+<<<<<<< HEAD
   def flush() { }  
+=======
+  def flush() { }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def reset() {
     INFO.count        = 0
     ERROR.count       = 0
     WARNING.count     = 0
     cancelled         = false
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // sbt compat
   @deprecated("Moved to scala.tools.util.StringOps", "2.10.0")
   def countElementsAsString(n: Int, elements: String): String = StringOps.countElementsAsString(n, elements)

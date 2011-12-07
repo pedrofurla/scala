@@ -16,7 +16,11 @@ object ByteCode {
     val name = clazz.getName
     val subPath = name.substring(name.lastIndexOf('.') + 1) + ".class"
     val in = clazz.getResourceAsStream(subPath)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     try {
       var rest = in.available()
       val bytes = new Array[Byte](rest)
@@ -26,9 +30,15 @@ object ByteCode {
         rest -= res
       }
       ByteCode(bytes)
+<<<<<<< HEAD
       
     } finally { 
       in.close() 
+=======
+
+    } finally {
+      in.close()
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
   }
 }
@@ -36,6 +46,7 @@ object ByteCode {
 /** Represents a chunk of raw bytecode.  Used as input for the parsers
  */
 class ByteCode(val bytes : Array[Byte], val pos : Int, val length : Int) {
+<<<<<<< HEAD
   
   assert(pos >= 0 && length >= 0 && pos + length <= bytes.length)
   
@@ -45,6 +56,17 @@ class ByteCode(val bytes : Array[Byte], val pos : Int, val length : Int) {
   def take(n : Int) = new ByteCode(bytes, pos, n)
   def drop(n : Int) = new ByteCode(bytes, pos + n, length - n)
   
+=======
+
+  assert(pos >= 0 && length >= 0 && pos + length <= bytes.length)
+
+  def nextByte = if (length == 0) Failure else Success(drop(1), bytes(pos))
+  def next(n : Int) = if (length >= n) Success(drop(n), take(n)) else Failure
+
+  def take(n : Int) = new ByteCode(bytes, pos, n)
+  def drop(n : Int) = new ByteCode(bytes, pos + n, length - n)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def fold[X](x : X)(f : (X, Byte) => X) : X = {
     var result = x
     var i = pos
@@ -54,7 +76,11 @@ class ByteCode(val bytes : Array[Byte], val pos : Int, val length : Int) {
     }
     result
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def toString = length + " bytes"
 
   def toInt = fold(0) { (x, b) => (x << 8) + (b & 0xFF)}
@@ -82,6 +108,7 @@ case class StringBytesPair(string: String, bytes: Array[Byte])
 trait ByteCodeReader extends RulesWithState {
   type S = ByteCode
   type Parser[A] = Rule[A, String]
+<<<<<<< HEAD
     
   val byte = apply(_ nextByte)
   
@@ -90,16 +117,34 @@ trait ByteCodeReader extends RulesWithState {
   val u4 = bytes(4) ^^ (_ toInt) // should map to Long??
   
   def bytes(n : Int) = apply(_ next n)  
+=======
+
+  val byte = apply(_ nextByte)
+
+  val u1 = byte ^^ (_ & 0xFF)
+  val u2 = bytes(2) ^^ (_ toInt)
+  val u4 = bytes(4) ^^ (_ toInt) // should map to Long??
+
+  def bytes(n : Int) = apply(_ next n)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 object ClassFileParser extends ByteCodeReader {
   def parse(byteCode : ByteCode) = expect(classFile)(byteCode)
   def parseAnnotations(byteCode: ByteCode) = expect(annotations)(byteCode)
+<<<<<<< HEAD
   
   val magicNumber = (u4 filter (_ == 0xCAFEBABE)) | error("Not a valid class file")
   val version = u2 ~ u2 ^^ { case minor ~ major => (major,  minor) }
   val constantPool = (u2 ^^ ConstantPool) >> repeatUntil(constantPoolEntry)(_ isFull)
   
+=======
+
+  val magicNumber = (u4 filter (_ == 0xCAFEBABE)) | error("Not a valid class file")
+  val version = u2 ~ u2 ^^ { case minor ~ major => (major,  minor) }
+  val constantPool = (u2 ^^ ConstantPool) >> repeatUntil(constantPoolEntry)(_ isFull)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // NOTE currently most constants just evaluate to a string description
   // TODO evaluate to useful values
   val utf8String = (u2 >> bytes) ^^ add1 { raw => pool => raw.fromUTF8StringAndBytes }
@@ -113,7 +158,11 @@ object ClassFileParser extends ByteCodeReader {
   val methodRef = memberRef("Method")
   val interfaceMethodRef = memberRef("InterfaceMethod")
   val nameAndType = u2 ~ u2 ^^ add1 { case name ~ descriptor => pool => "NameAndType: " + pool(name) + ", " + pool(descriptor) }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   val constantPoolEntry = u1 >> {
     case 1 => utf8String
     case 3 => intConstant
@@ -127,9 +176,15 @@ object ClassFileParser extends ByteCodeReader {
     case 11 => interfaceMethodRef
     case 12 => nameAndType
   }
+<<<<<<< HEAD
   
   val interfaces = u2 >> u2.times
   
+=======
+
+  val interfaces = u2 >> u2.times
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // bytes are parametrizes by the length, declared in u4 section
   val attribute = u2 ~ (u4 >> bytes) ^~^ Attribute
   // parse attributes u2 times
@@ -158,12 +213,21 @@ object ClassFileParser extends ByteCodeReader {
 
   val field = u2 ~ u2 ~ u2 ~ attributes ^~~~^ Field
   val fields = u2 >> field.times
+<<<<<<< HEAD
   
   val method = u2 ~ u2 ~ u2 ~ attributes ^~~~^ Method
   val methods = u2 >> method.times
   
   val header = magicNumber -~ u2 ~ u2 ~ constantPool ~ u2 ~ u2 ~ u2 ~ interfaces ^~~~~~~^ ClassFileHeader
   val classFile = header ~ fields ~ methods ~ attributes ~- !u1 ^~~~^ ClassFile 
+=======
+
+  val method = u2 ~ u2 ~ u2 ~ attributes ^~~~^ Method
+  val methods = u2 >> method.times
+
+  val header = magicNumber -~ u2 ~ u2 ~ constantPool ~ u2 ~ u2 ~ u2 ~ interfaces ^~~~~~~^ ClassFileHeader
+  val classFile = header ~ fields ~ methods ~ attributes ~- !u1 ^~~~^ ClassFile
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   // TODO create a useful object, not just a string
   def memberRef(description : String) = u2 ~ u2 ^^ add1 {
@@ -179,6 +243,7 @@ case class ClassFile(
     fields : Seq[Field],
     methods : Seq[Method],
     attributes : Seq[Attribute]) {
+<<<<<<< HEAD
   
   def majorVersion = header.major
   def minorVersion = header.minor
@@ -187,13 +252,27 @@ case class ClassFile(
   def superClass = constant(header.superClassIndex)
   def interfaces = header.interfaces.map(constant)
     
+=======
+
+  def majorVersion = header.major
+  def minorVersion = header.minor
+
+  def className = constant(header.classIndex)
+  def superClass = constant(header.superClassIndex)
+  def interfaces = header.interfaces.map(constant)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def constant(index : Int) = header.constants(index) match {
     case StringBytesPair(str, _) => str
     case z => z
   }
 
   def constantWrapped(index: Int) = header.constants(index)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def attribute(name : String) = attributes.find {attrib => constant(attrib.nameIndex) == name }
 
   val RUNTIME_VISIBLE_ANNOTATIONS = "RuntimeVisibleAnnotations"
@@ -202,6 +281,7 @@ case class ClassFile(
 
   def annotation(name: String) = annotations.flatMap(seq => seq.find(annot => constant(annot.typeIndex) == name))
 }
+<<<<<<< HEAD
   
 case class Attribute(nameIndex : Int, byteCode : ByteCode)
 case class Field(flags : Int, nameIndex : Int, descriptorIndex : Int, attributes : Seq[Attribute])
@@ -211,10 +291,22 @@ case class ClassFileHeader(
     minor : Int, 
     major : Int, 
     constants : ConstantPool, 
+=======
+
+case class Attribute(nameIndex : Int, byteCode : ByteCode)
+case class Field(flags : Int, nameIndex : Int, descriptorIndex : Int, attributes : Seq[Attribute])
+case class Method(flags : Int, nameIndex : Int, descriptorIndex : Int, attributes : Seq[Attribute])
+
+case class ClassFileHeader(
+    minor : Int,
+    major : Int,
+    constants : ConstantPool,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     flags : Int,
     classIndex : Int,
     superClassIndex : Int,
     interfaces : Seq[Int]) {
+<<<<<<< HEAD
     
   def constant(index : Int) = constants(index)
 }
@@ -227,6 +319,20 @@ case class ConstantPool(len : Int) {
     
   def isFull = buffer.length >= size
   
+=======
+
+  def constant(index : Int) = constants(index)
+}
+
+case class ConstantPool(len : Int) {
+  val size = len - 1
+
+  private val buffer = new scala.collection.mutable.ArrayBuffer[ConstantPool => Any]
+  private val values = Array.fill[Option[Any]](size)(None)
+
+  def isFull = buffer.length >= size
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def apply(index : Int) = {
     // Note constant pool indices are 1-based
     val i = index - 1
@@ -237,7 +343,11 @@ case class ConstantPool(len : Int) {
       value
     }
   }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def add(f : ConstantPool => Any) = {
     buffer += f
     this

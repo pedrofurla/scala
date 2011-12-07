@@ -33,7 +33,11 @@ object VarFoo {
 
 object Foo {
   def unapply(x: Any): Option[Product2[Int, String]] = x match {
+<<<<<<< HEAD
     case y: Bar => Some(Tuple(y.size, y.name))
+=======
+    case y: Bar => Some(y.size, y.name)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     case _ => None
   }
   def doMatch1(b:Bar) = b match {
@@ -69,7 +73,11 @@ object Foo {
 object Mas {
   object Gaz {
     def unapply(x: Any): Option[Product2[Int, String]] = x match {
+<<<<<<< HEAD
       case y: Baz => Some(Tuple(y.size, y.name))
+=======
+      case y: Baz => Some(y.size, y.name)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       case _ => None
     }
   }

@@ -2,7 +2,11 @@
  * Copyright 2005-2011 LAMP/EPFL
  * @author Paul Phillips
  */
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 package scala.tools.nsc
 package interpreter
 
@@ -17,7 +21,11 @@ import io.{ Directory, Path }
  *  than delegate to new objects on each '/' in the path, we treat the
  *  buffer like a path and process it directly.
  */
+<<<<<<< HEAD
 object FileCompletion {  
+=======
+object FileCompletion {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def executionFor(buffer: String): Option[Path] = {
     Some(Directory.Home match {
       case Some(d) if buffer startsWith "~" => d / buffer.tail
@@ -28,7 +36,11 @@ object FileCompletion {
   private def fileCompletionForwarder(buffer: String, where: Directory): List[String] = {
     completionsFor(where.path + buffer) map (_ stripPrefix where.path) toList
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def homeCompletions(buffer: String): List[String] = {
     require(buffer startsWith "~/")
     val home = Directory.Home getOrElse (return Nil)
@@ -39,7 +51,11 @@ object FileCompletion {
     val cwd = Directory.Current getOrElse (return Nil)
     fileCompletionForwarder(buffer.tail, cwd) map ("." + _)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def completionsFor(buffer: String): List[String] =
     if (buffer startsWith "~/") homeCompletions(buffer)
     else if (buffer startsWith "./") cwdCompletions(buffer)

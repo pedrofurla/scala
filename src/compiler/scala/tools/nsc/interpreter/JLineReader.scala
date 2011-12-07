@@ -19,7 +19,11 @@ import io.Streamable.slurp
 class JLineReader(_completion: => Completion) extends InteractiveReader {
   val interactive = true
   val consoleReader = new JLineConsoleReader()
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   lazy val completion = _completion
   lazy val history: JLineHistory = JLineHistory()
   lazy val keyBindings =
@@ -29,16 +33,27 @@ class JLineReader(_completion: => Completion) extends InteractiveReader {
   private def term = consoleReader.getTerminal()
   def reset() = term.reset()
   def init()  = term.init()
+<<<<<<< HEAD
   
   def scalaToJline(tc: ScalaCompleter): Completer = new Completer {
     def complete(_buf: String, cursor: Int, candidates: JList[CharSequence]): Int = {
       val buf   = if (_buf == null) "" else _buf      
+=======
+
+  def scalaToJline(tc: ScalaCompleter): Completer = new Completer {
+    def complete(_buf: String, cursor: Int, candidates: JList[CharSequence]): Int = {
+      val buf   = if (_buf == null) "" else _buf
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       val Candidates(newCursor, newCandidates) = tc.complete(buf, cursor)
       newCandidates foreach (candidates add _)
       newCursor
     }
   }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class JLineConsoleReader extends ConsoleReader with ConsoleReaderHelper {
     // working around protected/trait/java insufficiencies.
     def goBack(num: Int): Unit = back(num)
@@ -54,20 +69,34 @@ class JLineReader(_completion: => Completion) extends InteractiveReader {
     // A hook for running code after the repl is done initializing.
     lazy val postInit: Unit = {
       this setBellEnabled false
+<<<<<<< HEAD
       if (history ne NoHistory)
         this setHistory history
     
+=======
+      if ((history: History) ne NoHistory)
+        this setHistory history
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (completion ne NoCompletion) {
         val argCompletor: ArgumentCompleter =
           new ArgumentCompleter(new JLineDelimiter, scalaToJline(completion.completer()))
         argCompletor setStrict false
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         this addCompleter argCompletor
         this setAutoprintThreshold 400 // max completion candidates without warning
       }
     }
   }
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def currentLine = consoleReader.getCursorBuffer.buffer.toString
   def redrawLine() = consoleReader.redrawLineAndFlush()
   def eraseLine() = consoleReader.eraseLine()

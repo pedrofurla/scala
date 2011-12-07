@@ -18,7 +18,11 @@ object KeyBinding {
       val description = comment map (_ drop 1 trim) mkString " "
       val (aliases, desc) = description span (_ != ':') match {
         case (x, y) => (
+<<<<<<< HEAD
           x split ',' map (_.trim) toList, 
+=======
+          x split ',' map (_.trim) toList,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           if (y == "") "" else y.tail.trim
         )
       }

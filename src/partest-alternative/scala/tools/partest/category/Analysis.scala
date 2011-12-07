@@ -30,12 +30,20 @@ class PartestClassLoader(urls: Array[URL], parent: JavaClassLoader) extends Scal
 
 trait Analysis {
   self: Universe =>
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   object Scalap extends DirBasedCategory("scalap") {
     val testSequence: TestSequence = List(checkFileRequired, compile, run, diff)
     override def denotesTest(p: Path) = p.isDirectory && (p.toDirectory.files exists (_.name == "result.test"))
     override def createTest(location: Path) = new ScalapTest(location)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     class ScalapTest(val location: Path) extends TestEntity {
       val category      = Scalap
       val scalapMain    = "scala.tools.scalap.Main$"
@@ -46,7 +54,11 @@ trait Analysis {
 
       private def runnerURLs        = build.classpathPaths ::: classpathPaths map (_.toURL)
       private def createClassLoader = new PartestClassLoader(runnerURLs.toArray, this.getClass.getClassLoader)
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       val isPackageObject = containsString("package object")
       val suffix          = if (isPackageObject) ".package" else ""
       val className       = location.name.capitalize + suffix
@@ -54,7 +66,11 @@ trait Analysis {
       override def run() = loggingResult {
         def loader  = createClassLoader
         def bytes   = loader.bytes(className)
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         trace("scalap %s".format(className))
         if (isDryRun) ""
         else loader[String](scalapMain, scalapMethod)(bytes, isPackageObject)

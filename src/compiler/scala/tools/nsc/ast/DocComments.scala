@@ -40,7 +40,11 @@ trait DocComments { self: Global =>
    */
   def docCommentPos(sym: Symbol): Position =
     getDocComment(sym) map (_.pos) getOrElse NoPosition
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A version which doesn't consider self types, as a temporary measure:
    *  an infinite loop has broken out between superComment and cookedDocComment
    *  since r23926.
@@ -269,7 +273,11 @@ trait DocComments { self: Global =>
               lookupVariable(vname, site) match {
                 case Some(replacement) => replaceWith(replacement)
                 case None              => reporter.warning(sym.pos, "Variable " + vname + " undefined in comment for " + sym)
+<<<<<<< HEAD
               }            
+=======
+              }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             }
         }
       }
@@ -279,7 +287,11 @@ trait DocComments { self: Global =>
         expandInternal(out.toString, depth + 1)
       }
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // We suppressed expanding \$ throughout the recursion, and now we
     // need to replace \$ with $ so it looks as intended.
     expandInternal(initialStr, 0).replaceAllLiterally("""\$""", "$")
@@ -314,7 +326,11 @@ trait DocComments { self: Global =>
       val commentStart = skipLineLead(raw, codeEnd + 1) min end
       val comment      = "/** " + raw.substring(commentStart, end) + "*/"
       val commentPos   = subPos(commentStart, end)
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       UseCase(DocComment(comment, commentPos), code, codePos)
     }
 
@@ -378,7 +394,11 @@ trait DocComments { self: Global =>
         val partnames = (parts.init map newTermName) :+ newTypeName(parts.last)
         val (start, rest) = parts match {
           case "this" :: _      => (site.thisType, partnames.tail)
+<<<<<<< HEAD
           case _ :: "this" :: _ => 
+=======
+          case _ :: "this" :: _ =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             site.ownerChain.find(_.name == partnames.head) match {
               case Some(clazz)  => (clazz.thisType, partnames drop 2)
               case _            => (NoType, Nil)

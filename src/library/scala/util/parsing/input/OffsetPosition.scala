@@ -38,21 +38,36 @@ case class OffsetPosition(source: java.lang.CharSequence, offset: Int) extends P
       val mid = (hi + lo) / 2
       if (offset < index(mid)) hi = mid
       else lo = mid
+<<<<<<< HEAD
     } 
     lo + 1
   }
    
+=======
+    }
+    lo + 1
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** The column number referred to by the position; column numbers start at 1. */
   def column: Int = offset - index(line - 1) + 1
 
   /** The contents of the line numbered `lnum` (must not contain a new-line character).
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * @param lnum a 1-based integer index into the `document`
    * @return the line at `lnum` (not including a newline)
    */
   def lineContents: String =
     source.subSequence(index(line - 1), index(line)).toString
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Returns a string representation of the `Position`, of the form `line.column`. */
   override def toString = line+"."+column
 
@@ -67,7 +82,11 @@ case class OffsetPosition(source: java.lang.CharSequence, offset: Int) extends P
     case OffsetPosition(_, that_offset) =>
       this.offset < that_offset
     case _ =>
+<<<<<<< HEAD
       this.line < that.line || 
+=======
+      this.line < that.line ||
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       this.line == that.line && this.column < that.column
   }
 }

@@ -17,6 +17,7 @@ trait SigTest {
     if (m.isBridge) " (bridge)" else ""
   )
   def fstr(f: JField) = "  (f) %s".format(f.toGenericString)
+<<<<<<< HEAD
   
   def isObjectMethodName(name: String) = classOf[Object].getMethods exists (_.getName == name)
   
@@ -24,12 +25,25 @@ trait SigTest {
     val cl = classManifest[T].erasure    
     val fs = (cl.getFields ++ cl.getDeclaredFields).distinct sortBy (_.getName)
     
+=======
+
+  def isObjectMethodName(name: String) = classOf[Object].getMethods exists (_.getName == name)
+
+  def fields[T: ClassManifest](p: JField => Boolean) = {
+    val cl = classManifest[T].erasure
+    val fs = (cl.getFields ++ cl.getDeclaredFields).distinct sortBy (_.getName)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     fs filter p
   }
   def methods[T: ClassManifest](p: JMethod => Boolean) = {
     val cl = classManifest[T].erasure
     val ms = (cl.getMethods ++ cl.getDeclaredMethods).distinct sortBy (x => (x.getName, x.isBridge))
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     ms filter p
   }
   def allFields[T: ClassManifest]()                = fields[T](_ => true)
@@ -39,7 +53,11 @@ trait SigTest {
 
   def allGenericStrings[T: ClassManifest]() =
     (allMethods[T]() map mstr) ++ (allFields[T]() map fstr)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def genericStrings[T: ClassManifest](name: String) =
     (methodsNamed[T](name) map mstr) ++ (fieldsNamed[T](name) map fstr)
 

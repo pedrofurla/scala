@@ -11,10 +11,17 @@ import scala.tools.nsc.plugins._
 import scala.tools.nsc.ast.TreeBrowsers
 import scala.tools.nsc.ast._
 
+<<<<<<< HEAD
 /** 
  * In methods marked @cps, CPS-transform assignments introduced by ANF-transform phase.
  */
 abstract class SelectiveCPSTransform extends PluginComponent with 
+=======
+/**
+ * In methods marked @cps, CPS-transform assignments introduced by ANF-transform phase.
+ */
+abstract class SelectiveCPSTransform extends PluginComponent with
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   InfoTransform with TypingTransformers with CPSUtils {
   // inherits abstract value `global` and class `Phase` from Transform
 
@@ -31,7 +38,11 @@ abstract class SelectiveCPSTransform extends PluginComponent with
   /** This class does not change linearization */
   override def changesBaseClasses = false
 
+<<<<<<< HEAD
   /** - return symbol's transformed type, 
+=======
+  /** - return symbol's transformed type,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */
   def transformInfo(sym: Symbol, tp: Type): Type = {
     if (!cpsEnabled) return tp
@@ -80,7 +91,11 @@ abstract class SelectiveCPSTransform extends PluginComponent with
       tree match {
 
         // TODO: can we generalize this?
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case Apply(TypeApply(fun, targs), args)
         if (fun.symbol == MethShift) =>
           log("found shift: " + tree)
@@ -95,7 +110,11 @@ abstract class SelectiveCPSTransform extends PluginComponent with
                 args.map(transform(_))
             ).setType(transformCPSType(tree.tpe))
           }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case Apply(TypeApply(fun, targs), args)
         if (fun.symbol == MethShiftUnit) =>
           log("found shiftUnit: " + tree)
@@ -103,7 +122,11 @@ abstract class SelectiveCPSTransform extends PluginComponent with
             val funR = gen.mkAttributedRef(MethShiftUnitR) // TODO: correct?
             log(funR.tpe)
             Apply(
+<<<<<<< HEAD
                 TypeApply(funR, List(targs(0), targs(1))).setType(appliedType(funR.tpe, 
+=======
+                TypeApply(funR, List(targs(0), targs(1))).setType(appliedType(funR.tpe,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                     List(targs(0).tpe, targs(1).tpe))),
                 args.map(transform(_))
             ).setType(appliedType(Context.tpe, List(targs(0).tpe,targs(1).tpe,targs(1).tpe)))
@@ -130,7 +153,11 @@ abstract class SelectiveCPSTransform extends PluginComponent with
         // the problem is that they cannot easily be removed
         // from the regular control path and hence will
         // also be invoked after creating the Context object.
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         /*
         object Test {
           def foo1 = {
@@ -169,7 +196,11 @@ abstract class SelectiveCPSTransform extends PluginComponent with
             println("done")
           }
         }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         reset(Test.bar(1)) // should print: exception,done,0
         reset(Test.bar(2)) // should print: done,20 <-- but prints: done,done,20
         reset(Test.bar(3)) // should print: exception,done,0 <-- but prints: done,exception,done,0
@@ -189,7 +220,11 @@ abstract class SelectiveCPSTransform extends PluginComponent with
           }
 
           val targettp = transformCPSType(tree.tpe)
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 //          val expr2 = if (catches.nonEmpty) {
             val pos = catches.head.pos
             val argSym = currentOwner.newValueParameter(pos, "$ex").setInfo(ThrowableClass.tpe)
@@ -202,11 +237,19 @@ abstract class SelectiveCPSTransform extends PluginComponent with
             argSym.owner = fun.symbol
             val chown = new ChangeOwnerTraverser(currentOwner, fun.symbol)
             chown.traverse(rhs)
+<<<<<<< HEAD
             
             val exSym = currentOwner.newValueParameter(pos, "$ex").setInfo(ThrowableClass.tpe)
             val catch2 = { localTyper.typedCases(tree, List(
               CaseDef(Bind(exSym, Typed(Ident("_"), TypeTree(ThrowableClass.tpe))), 
                 Apply(Select(Ident(funSym), "isDefinedAt"), List(Ident(exSym))), 
+=======
+
+            val exSym = currentOwner.newValueParameter(pos, "$ex").setInfo(ThrowableClass.tpe)
+            val catch2 = { localTyper.typedCases(tree, List(
+              CaseDef(Bind(exSym, Typed(Ident("_"), TypeTree(ThrowableClass.tpe))),
+                Apply(Select(Ident(funSym), "isDefinedAt"), List(Ident(exSym))),
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 Apply(Ident(funSym), List(Ident(exSym))))
             ), ThrowableClass.tpe, targettp) }
 
@@ -217,7 +260,11 @@ abstract class SelectiveCPSTransform extends PluginComponent with
 
 /*
           disabled for now - see notes above
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           val expr3 = if (!finalizer.isEmpty) {
             val pos = finalizer.pos
             val finalizer2 = duplicateTree(finalizer1)
@@ -235,12 +282,21 @@ abstract class SelectiveCPSTransform extends PluginComponent with
           treeCopy.Try(tree, block1, catches1, finalizer1)
         }
 
+<<<<<<< HEAD
       case Block(stms, expr) => 
         
           val (stms1, expr1) = transBlock(stms, expr)
           treeCopy.Block(tree, stms1, expr1)
 
         case _ => 
+=======
+      case Block(stms, expr) =>
+
+          val (stms1, expr1) = transBlock(stms, expr)
+          treeCopy.Block(tree, stms1, expr1)
+
+        case _ =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           super.transform(tree)
       }
     }
@@ -265,7 +321,11 @@ abstract class SelectiveCPSTransform extends PluginComponent with
               val rhs1 = atOwner(vd.symbol) { transform(rhs) }
 
               new ChangeOwnerTraverser(vd.symbol, currentOwner).traverse(rhs1) // TODO: don't traverse twice
+<<<<<<< HEAD
               
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               log("valdef symbol " + vd.symbol + " has type " + tpe)
               log("right hand side " + rhs1 + " has type " + rhs1.tpe)
 
@@ -276,7 +336,11 @@ abstract class SelectiveCPSTransform extends PluginComponent with
               // FIXME: result will later be traversed again by TreeSymSubstituter and
               // ChangeOwnerTraverser => exp. running time.
               // Should be changed to fuse traversals into one.
+<<<<<<< HEAD
               
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               val specialCaseTrivial = bodyExpr match {
                 case Apply(fun, args) =>
                   // for now, look for explicit tail calls only.
@@ -285,6 +349,7 @@ abstract class SelectiveCPSTransform extends PluginComponent with
                   (bodyExpr.tpe.typeSymbol == Context) && (currentMethod == fun.symbol)
                 case _ => false
               }
+<<<<<<< HEAD
               
               def applyTrivial(ctxValSym: Symbol, body: Tree) = {
                 
@@ -292,6 +357,15 @@ abstract class SelectiveCPSTransform extends PluginComponent with
                 
                 val body2 = localTyper.typed(atPos(vd.symbol.pos) { body1 })
                 
+=======
+
+              def applyTrivial(ctxValSym: Symbol, body: Tree) = {
+
+                val body1 = (new TreeSymSubstituter(List(vd.symbol), List(ctxValSym)))(body)
+
+                val body2 = localTyper.typed(atPos(vd.symbol.pos) { body1 })
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 // in theory it would be nicer to look for an @cps annotation instead
                 // of testing for Context
                 if ((body2.tpe == null) || !(body2.tpe.typeSymbol == Context)) {
@@ -300,38 +374,60 @@ abstract class SelectiveCPSTransform extends PluginComponent with
                 }
                 body2
               }
+<<<<<<< HEAD
               
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               def applyCombinatorFun(ctxR: Tree, body: Tree) = {
                 val arg = currentOwner.newValueParameter(ctxR.pos, name).setInfo(tpe)
                 val body1 = (new TreeSymSubstituter(List(vd.symbol), List(arg)))(body)
                 val fun = localTyper.typed(atPos(vd.symbol.pos) { Function(List(ValDef(arg)), body1) }) // types body as well
                 arg.owner = fun.symbol
                 new ChangeOwnerTraverser(currentOwner, fun.symbol).traverse(body1)
+<<<<<<< HEAD
                 
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 // see note about multiple traversals above
 
                 log("fun.symbol: "+fun.symbol)
                 log("fun.symbol.owner: "+fun.symbol.owner)
                 log("arg.owner: "+arg.owner)
+<<<<<<< HEAD
               
                 log("fun.tpe:"+fun.tpe)
                 log("return type of fun:"+body1.tpe)
               
                 var methodName = "map"
               
+=======
+
+                log("fun.tpe:"+fun.tpe)
+                log("return type of fun:"+body1.tpe)
+
+                var methodName = "map"
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 if (body1.tpe != null) {
                   if (body1.tpe.typeSymbol == Context)
                     methodName = "flatMap"
                 }
                 else
                   unit.error(rhs.pos, "cannot compute type for CPS-transformed function result")
+<<<<<<< HEAD
               
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 log("will use method:"+methodName)
 
                 localTyper.typed(atPos(vd.symbol.pos) {
                   Apply(Select(ctxR, ctxR.tpe.member(methodName)), List(fun))
                 })
               }
+<<<<<<< HEAD
               
               def mkBlock(stms: List[Tree], expr: Tree) = if (stms.nonEmpty) Block(stms, expr) else expr
               
@@ -342,6 +438,18 @@ abstract class SelectiveCPSTransform extends PluginComponent with
                   // FIXME: flatMap impl has become more complicated due to
                   // exceptions. do we need to put a try/catch in the then part??
                   
+=======
+
+              def mkBlock(stms: List[Tree], expr: Tree) = if (stms.nonEmpty) Block(stms, expr) else expr
+
+              try {
+                if (specialCaseTrivial) {
+                  log("will optimize possible tail call: " + bodyExpr)
+
+                  // FIXME: flatMap impl has become more complicated due to
+                  // exceptions. do we need to put a try/catch in the then part??
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                   // val ctx = <rhs>
                   // if (ctx.isTrivial)
                   //   val <lhs> = ctx.getTrivialValue; ...    <--- TODO: try/catch ??? don't bother for the moment...
@@ -370,8 +478,13 @@ abstract class SelectiveCPSTransform extends PluginComponent with
                   unit.error(ex.pos, ex.msg)
                   (bodyStms, bodyExpr)
               }
+<<<<<<< HEAD
               
             case _ => 
+=======
+
+            case _ =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 val stm1 = transform(stm)
                 val (a, b) = transBlock(rest, expr)
                 (stm1::a, b)

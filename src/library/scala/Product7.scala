@@ -10,7 +10,11 @@
 package scala
 
 object Product7 {
+<<<<<<< HEAD
   def unapply[T1, T2, T3, T4, T5, T6, T7](x: Product7[T1, T2, T3, T4, T5, T6, T7]): Option[Product7[T1, T2, T3, T4, T5, T6, T7]] = 
+=======
+  def unapply[T1, T2, T3, T4, T5, T6, T7](x: Product7[T1, T2, T3, T4, T5, T6, T7]): Option[Product7[T1, T2, T3, T4, T5, T6, T7]] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     Some(x)
 }
 
@@ -23,6 +27,7 @@ trait Product7[+T1, +T2, +T3, +T4, +T5, +T6, +T7] extends Product {
    */
   override def productArity = 7
 
+<<<<<<< HEAD
   
   /** Returns the n-th projection of this product if 0 < n <= productArity,
    *  otherwise throws an `IndexOutOfBoundsException`.
@@ -34,6 +39,19 @@ trait Product7[+T1, +T2, +T3, +T4, +T5, +T6, +T7] extends Product {
 
   @throws(classOf[IndexOutOfBoundsException])
   override def productElement(n: Int) = n match { 
+=======
+
+  /** Returns the n-th projection of this product if 0 < n <= productArity,
+   *  otherwise throws an `IndexOutOfBoundsException`.
+   *
+   *  @param n number of the projection to be returned
+   *  @return  same as `._(n+1)`, for example `productElement(1)` is the same as `._1`.
+   *  @throws  IndexOutOfBoundsException
+   */
+
+  @throws(classOf[IndexOutOfBoundsException])
+  override def productElement(n: Int) = n match {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     case 0 => _1
     case 1 => _2
     case 2 => _3
@@ -42,7 +60,11 @@ trait Product7[+T1, +T2, +T3, +T4, +T5, +T6, +T7] extends Product {
     case 5 => _6
     case 6 => _7
     case _ => throw new IndexOutOfBoundsException(n.toString())
+<<<<<<< HEAD
  }  
+=======
+ }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** A projection of element 1 of this Product.
    *  @return   A projection of element 1.

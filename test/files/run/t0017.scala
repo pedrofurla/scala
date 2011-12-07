@@ -12,6 +12,10 @@ for (i <- Array.range(0, my_arr(0).length)) yield
 
 val transposed = transpose(my_arr)
 
+<<<<<<< HEAD
 println(transposed.deepToString)
+=======
+println(transposed.deep.toString)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 }

@@ -16,7 +16,11 @@ import scala.reflect.internal.pickling.ByteCodecs
 
 object ScalaSigParser {
   import Main.{ SCALA_SIG, SCALA_SIG_ANNOTATION, BYTES_VALUE }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def scalaSigFromAnnotation(classFile: ClassFile): Option[ScalaSig] = {
     import classFile._
 
@@ -26,17 +30,28 @@ object ScalaSigParser {
         val bytes = ((bytesElem.elementValue match {case ConstValueIndex(index) => constantWrapped(index)})
                 .asInstanceOf[StringBytesPair].bytes)
         val length = ByteCodecs.decode(bytes)
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         ScalaSigAttributeParsers.parse(ByteCode(bytes.take(length)))
     }
   }
 
   def scalaSigFromAttribute(classFile: ClassFile) : Option[ScalaSig] =
     classFile.attribute(SCALA_SIG).map(_.byteCode).map(ScalaSigAttributeParsers.parse)
+<<<<<<< HEAD
   
   def parse(classFile: ClassFile): Option[ScalaSig] = {
     val scalaSig  = scalaSigFromAttribute(classFile)
     
+=======
+
+  def parse(classFile: ClassFile): Option[ScalaSig] = {
+    val scalaSig  = scalaSigFromAttribute(classFile)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     scalaSig match {
       // No entries in ScalaSig attribute implies that the signature is stored in the annotation
       case Some(ScalaSig(_, _, entries)) if entries.length == 0 =>
@@ -44,7 +59,11 @@ object ScalaSigParser {
       case x => x
     }
   }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def parse(clazz : Class[_]): Option[ScalaSig] = {
     val byteCode  = ByteCode.forClass(clazz)
     val classFile = ClassFileParser.parse(byteCode)

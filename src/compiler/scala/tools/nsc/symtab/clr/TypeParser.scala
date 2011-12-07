@@ -7,6 +7,10 @@ package symtab
 package clr
 
 import java.io.IOException
+<<<<<<< HEAD
+=======
+import io.MsilFile
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 import ch.epfl.lamp.compiler.msil.{Type => MSILType, Attribute => MSILAttribute, _}
 import scala.collection.{ mutable, immutable }
 import scala.reflect.internal.pickling.UnPickler
@@ -94,7 +98,11 @@ abstract class TypeParser {
     // since I retired the deprecated code which allowed for that bug.
     //
     // if (addToboxMethodMap) definitions.boxMethod(clazz) = vmsym
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (isAddressOf) clrTypes.addressOfViews += vmsym
     vmsym
   }
@@ -255,7 +263,11 @@ abstract class TypeParser {
     for (ntype <- typ.getNestedTypes() if !(ntype.IsNestedPrivate || ntype.IsNestedAssembly || ntype.IsNestedFamANDAssem)
 				                                 || ntype.IsInterface /* TODO why shouldn't nested ifaces be type-parsed too? */ )
       {
+<<<<<<< HEAD
 	val loader = new loaders.MSILTypeLoader(ntype)
+=======
+        val loader = new loaders.MsilFileLoader(new MsilFile(ntype))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 	val nclazz = statics.newClass(NoPosition, ntype.Name.toTypeName)
 	val nmodule = statics.newModule(NoPosition, ntype.Name)
 	nclazz.setInfo(loader)
@@ -276,7 +288,11 @@ abstract class TypeParser {
       val flags = translateAttributes(field);
       val name = newTermName(field.Name);
       val fieldType =
+<<<<<<< HEAD
         if (field.IsLiteral && !field.FieldType.IsEnum && isDefinedAtgetConstant(getCLRType(field.FieldType))) 
+=======
+        if (field.IsLiteral && !field.FieldType.IsEnum && isDefinedAtgetConstant(getCLRType(field.FieldType)))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 	      ConstantType(getConstant(getCLRType(field.FieldType), field.getValue))
 	    else
 	      getCLRType(field.FieldType)
@@ -481,7 +497,11 @@ abstract class TypeParser {
                 else mtype(methodSym)
 /* END CLR generics (snippet 4) */
 /* START CLR non-generics (snippet 4)
+<<<<<<< HEAD
     val mInfo = mtype(methodSym) 
+=======
+    val mInfo = mtype(methodSym)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    END CLR non-generics (snippet 4) */
     methodSym.setInfo(mInfo)
     (if (method.IsStatic()) staticDefs else instanceDefs).enter(methodSym);
@@ -638,7 +658,11 @@ abstract class TypeParser {
   /** Return a method type for the provided argument types and return type. */
   private def methodType(argtypes: Array[MSILType], rettype: Type): Symbol => Type = {
     def paramType(typ: MSILType): Type =
+<<<<<<< HEAD
       if (typ eq clrTypes.OBJECT) definitions.AnyClass.tpe // TODO a hack to compile scalalib, should be definitions.AnyRefClass.tpe  
+=======
+      if (typ eq clrTypes.OBJECT) definitions.AnyClass.tpe // TODO a hack to compile scalalib, should be definitions.AnyRefClass.tpe
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       else getCLSType(typ);
     val ptypes = argtypes.map(paramType).toList;
     if (ptypes.contains(null)) null
@@ -671,7 +695,11 @@ abstract class TypeParser {
           ||  typ.IsPointer()
           || (typ.IsArray() && getCLRType(typ.GetElementType()) == null)  /* TODO hack: getCLR instead of getCLS */
           || (typ.IsByRef() && !typ.GetElementType().CanBeTakenAddressOf()))
+<<<<<<< HEAD
       null 
+=======
+      null
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     else
       getCLRType(typ)
   }
@@ -724,7 +752,11 @@ abstract class TypeParser {
              else methodTParams(tVarNumber).typeConstructor // shouldn't fail, just return definitions.AnyClass.tpe at worst
         /* END CLR generics (snippet 7) */
        /* START CLR non-generics (snippet 7)
+<<<<<<< HEAD
         null // definitions.ObjectClass.tpe 
+=======
+        null // definitions.ObjectClass.tpe
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           END CLR non-generics (snippet 7) */
      } else if (tMSIL.IsArray()) {
         var elemtp = getCLRType(tMSIL.GetElementType())
@@ -732,7 +764,11 @@ abstract class TypeParser {
         // make unbounded Array[T] where T is a type variable into Array[T with Object]
         // (this is necessary because such arrays have a representation which is incompatible
         // with arrays of primitive types).
+<<<<<<< HEAD
         // TODO does that incompatibility also apply to .NET?   
+=======
+        // TODO does that incompatibility also apply to .NET?
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         if (elemtp.typeSymbol.isAbstractType && !(elemtp <:< definitions.ObjectClass.tpe))
           elemtp = intersectionType(List(elemtp, definitions.ObjectClass.tpe))
         appliedType(definitions.ArrayClass.tpe, List(elemtp))

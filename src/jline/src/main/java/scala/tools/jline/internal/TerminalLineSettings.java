@@ -77,7 +77,11 @@ public final class TerminalLineSettings
      * </p>
      *
      * @param name the stty property.
+<<<<<<< HEAD
      * @return the stty property value.                        
+=======
+     * @return the stty property value.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      */
     public int getProperty(String name) {
         assert name != null;
@@ -89,7 +93,11 @@ public final class TerminalLineSettings
             }
             return this.getProperty(name, config);
         } catch (Exception e) {
+<<<<<<< HEAD
             Log.warn("Failed to query stty ", name, e);            
+=======
+            Log.warn("Failed to query stty ", name, e);
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             return -1;
         }
     }

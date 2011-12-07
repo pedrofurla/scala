@@ -56,6 +56,7 @@ object Test1_scala {
     println("arrayEquals(a1, _a1): " + arrayEquals(a1, _a1))
     println()
 
+<<<<<<< HEAD
     // Cell
     val c1 = new Cell('a')
     val _c1: Cell[Char] = read(write(c1))
@@ -65,6 +66,8 @@ object Test1_scala {
     println("c1 equals _c1: " + (c1 equals _c1) + ", _c1 equals c1: " + (_c1 equals c1))
     println()
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // Either
     val e1 = Left(1)
     val _e1: Either[Int, String] = read(write(e1))
@@ -535,6 +538,7 @@ class Outer extends Serializable {
 object Test7 {
   val x = new Outer
   x.Inner // initialize
+<<<<<<< HEAD
   try {
     val y:Outer = read(write(x))
     if (y.Inner == null)
@@ -548,16 +552,31 @@ object Test7 {
 }
 
 
+=======
+  val y:Outer = read(write(x))
+  if (y.Inner == null)
+    println("Inner object is null")
+}
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 // Verify that transient lazy vals don't get serialized
 class WithTransient extends Serializable {
   @transient lazy val a1 = 1
   @transient private lazy val a2 = 2
   @transient object B extends Serializable
+<<<<<<< HEAD
+=======
+  @transient private object C extends Serializable
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     
   def test = {
     println(a1)
     println(a2)
+<<<<<<< HEAD
     if (B == null)
+=======
+    if (B == null || C == null)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      println("Transient nested object failed to serialize properly")
   }
 }

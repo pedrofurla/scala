@@ -16,7 +16,11 @@ import javax.swing.text._
 import javax.swing.event._
 
 object TextComponent {
+<<<<<<< HEAD
   trait HasColumns extends TextComponent { 
+=======
+  trait HasColumns extends TextComponent {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def columns: Int
     def columns_=(n: Int)
   }
@@ -35,7 +39,11 @@ class TextComponent extends Component with Publisher {
   override lazy val peer: JTextComponent = new JTextComponent with SuperMixin {}
   def text: String = peer.getText
   def text_=(t: String) = peer.setText(t)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class Caret extends Publisher {
     def dot: Int = peer.getCaret.getDot
     def dot_=(n: Int) { peer.getCaret.setDot(n) }
@@ -51,6 +59,7 @@ class TextComponent extends Component with Publisher {
     def color_=(c: Color) = peer.setCaretColor(c)
     def position: Int = peer.getCaretPosition
     def position_=(p: Int) = peer.setCaretPosition(p)
+<<<<<<< HEAD
     
     peer.addCaretListener {
       new CaretListener {
@@ -59,6 +68,16 @@ class TextComponent extends Component with Publisher {
     }
   }
   
+=======
+
+    peer.addCaretListener {
+      new CaretListener {
+        def caretUpdate(e: CaretEvent) { publish(CaretUpdate(TextComponent.this)) }
+      }
+    }
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   object caret extends Caret
 
   def editable: Boolean = peer.isEditable
@@ -67,9 +86,15 @@ class TextComponent extends Component with Publisher {
   def copy() { peer.copy() }
   def paste() { peer.paste() }
   def selected: String = peer.getSelectedText
+<<<<<<< HEAD
   
   def selectAll() { peer.selectAll() }
   
+=======
+
+  def selectAll() { peer.selectAll() }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   peer.getDocument.addDocumentListener(new DocumentListener {
     def changedUpdate(e:DocumentEvent) { publish(new ValueChanged(TextComponent.this)) }
     def insertUpdate(e:DocumentEvent) { publish(new ValueChanged(TextComponent.this)) }

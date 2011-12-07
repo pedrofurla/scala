@@ -22,7 +22,11 @@ import generic._
  *  @version 2.8
  *  @since   2.8
  */
+<<<<<<< HEAD
 trait SeqProxyLike[+A, +Repr <: SeqLike[A, Repr] with Seq[A]] extends SeqLike[A, Repr] with IterableProxyLike[A, Repr] { 
+=======
+trait SeqProxyLike[+A, +Repr <: SeqLike[A, Repr] with Seq[A]] extends SeqLike[A, Repr] with IterableProxyLike[A, Repr] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def size = self.size
   override def toSeq: Seq[A] = self.toSeq
   override def length: Int = self.length
@@ -33,7 +37,10 @@ trait SeqProxyLike[+A, +Repr <: SeqLike[A, Repr] with Seq[A]] extends SeqLike[A,
   override def prefixLength(p: A => Boolean) = self.prefixLength(p)
   override def indexWhere(p: A => Boolean): Int = self.indexWhere(p)
   override def indexWhere(p: A => Boolean, from: Int): Int = self.indexWhere(p, from)
+<<<<<<< HEAD
   override def findIndexOf(p: A => Boolean): Int = self.indexWhere(p)
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def indexOf[B >: A](elem: B): Int = self.indexOf(elem)
   override def indexOf[B >: A](elem: B, from: Int): Int = self.indexOf(elem, from)
   override def lastIndexOf[B >: A](elem: B): Int = self.lastIndexOf(elem)

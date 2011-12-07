@@ -23,9 +23,15 @@ trait SeqLike[A, +This <: SeqLike[A, This] with Seq[A]]
      with Parallelizable[A, ParSeq[A]]
 {
   self =>
+<<<<<<< HEAD
   
   protected[this] override def parCombiner = ParSeq.newCombiner[A]
   
+=======
+
+  protected[this] override def parCombiner = ParSeq.newCombiner[A]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Replaces element at given index with a new value.
    *
    *  @param n       the index of the element to replace.
@@ -33,10 +39,17 @@ trait SeqLike[A, +This <: SeqLike[A, This] with Seq[A]]
    *  @throws   IndexOutOfBoundsException if the index is not valid.
    */
   def update(idx: Int, elem: A)
+<<<<<<< HEAD
   
   /** Applies a transformation function to all values contained in this sequence.
    *  The transformation function produces new values from existing elements.
    * 
+=======
+
+  /** Applies a transformation function to all values contained in this sequence.
+   *  The transformation function produces new values from existing elements.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * @param f  the transformation to apply
    * @return   the sequence itself.
    */

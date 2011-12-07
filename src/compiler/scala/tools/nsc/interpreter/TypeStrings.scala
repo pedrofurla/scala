@@ -32,10 +32,17 @@ trait TypeStrings {
       case "void" => "Unit"
       case s      => s.capitalize
     }
+<<<<<<< HEAD
     
     ("java.lang." + key) -> ("scala." + value)
   } toMap
   
+=======
+
+    ("java.lang." + key) -> ("scala." + value)
+  } toMap
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def scalaName(s: String): String = {
     if (s endsWith MODULE_SUFFIX_STRING) s.init + ".type"
     else if (s == "void") "scala.Unit"
@@ -49,21 +56,34 @@ trait TypeStrings {
     val enclClass = clazz.getEnclosingClass
     def enclPre   = enclClass.getName + MODULE_SUFFIX_STRING
     def enclMatch = name startsWith enclPre
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     scalaName(
       if (enclClass == null || isAnon || !enclMatch) name
       else enclClass.getName + "." + (name stripPrefix enclPre)
     )
   }
   def scalaName(m: ClassManifest[_]): String = scalaName(m.erasure)
+<<<<<<< HEAD
   def anyClass(x: Any): JClass               = if (x == null) null else x.asInstanceOf[AnyRef].getClass
   
+=======
+  def anyClass(x: Any): JClass               = if (x == null) null else x.getClass
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def brackets(tps: String*): String =
     if (tps.isEmpty) ""
     else tps.mkString("[", ", ", "]")
 
   private def tvarString(tvar: TypeVariable[_]): String = tvarString(tvar.getBounds.toList)
+<<<<<<< HEAD
   private def tvarString(bounds: List[AnyRef]): String = {    
+=======
+  private def tvarString(bounds: List[AnyRef]): String = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val xs = bounds filterNot (_ == ObjectClass) collect { case x: JClass => x }
     if (xs.isEmpty) "_"
     else scalaName(xs.head)
@@ -87,7 +107,11 @@ trait TypeStrings {
   def fromValue(value: Any): String             = if (value == null) "Null" else fromClazz(anyClass(value))
   def fromClazz(clazz: JClass): String          = scalaName(clazz) + tparamString(clazz)
   def fromManifest[T: Manifest] : String        = scalaName(manifest[T].erasure) + tparamString[T]
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Reducing fully qualified noise for some common packages.
    */
   def quieter(tpe: String, alsoStrip: String*): String = {
@@ -98,12 +122,20 @@ trait TypeStrings {
       "java.lang." -> "jl.",
       "scala.runtime." -> "runtime."
     ) ++ (alsoStrip map (_ -> ""))
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     transforms.foldLeft(tpe) {
       case (res, (k, v)) => res.replaceAll(k, v)
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   val typeTransforms = List(
     "java.lang." -> "",
     "scala.collection.immutable." -> "immutable.",

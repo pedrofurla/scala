@@ -73,7 +73,11 @@ trait TraversableFactory[CC[X] <: Traversable[X] with GenericTraversableTemplate
 
   @bridge
   override def range[T: Integral](start: T, end: T): CC[T] = super.range(start, end)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   @bridge
   override def range[T: Integral](start: T, end: T, step: T): CC[T] = super.range(start, end, step)
 

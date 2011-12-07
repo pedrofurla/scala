@@ -9,7 +9,11 @@
 package scala.tools.nsc
 package ast.parser
 
+<<<<<<< HEAD
 import scala.collection.mutable.ListBuffer
+=======
+import scala.collection.mutable.{ListBuffer, StringBuilder}
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 import util.{ SourceFile, OffsetPosition, FreshNameCreator }
 import scala.reflect.internal.{ ModifierFlags => Flags }
 import Tokens._
@@ -27,7 +31,11 @@ import scala.reflect.internal.Chars.{ isScalaLetter }
 trait ParsersCommon extends ScannersCommon {
   val global : Global
   import global._
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait ParserCommon {
     val in: ScannerCommon
     def freshName(prefix: String): Name
@@ -67,14 +75,22 @@ trait ParsersCommon extends ScannersCommon {
 
     @inline final def inBracesOrNil[T](body: => List[T]): List[T] = inBracesOrError(body, Nil)
     @inline final def inBracesOrUnit[T](body: => Tree): Tree = inBracesOrError(body, Literal(Constant()))
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     @inline final def inBrackets[T](body: => T): T = {
       accept(LBRACKET)
       val ret = body
       accept(RBRACKET)
       ret
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Creates an actual Parens node (only used during parsing.)
      */
     @inline final def makeParens(body: => List[Tree]): Parens =
@@ -95,6 +111,7 @@ trait ParsersCommon extends ScannersCommon {
  *      If pattern is a simple (typed) identifier:<pre>
  *        <b>val</b> x = e     ==>  <b>val</b> x = e
  *        <b>val</b> x: T = e  ==>  <b>val</b> x: T = e</pre>
+<<<<<<< HEAD
  *    
  *      if there are no variables in pattern<pre>
  *        <b>val</b> p = e  ==>  e match (case p => ())</pre>
@@ -102,6 +119,15 @@ trait ParsersCommon extends ScannersCommon {
  *      if there is exactly one variable in pattern<pre>
  *        <b>val</b> x_1 = e <b>match</b> (case p => (x_1))</pre>
  *    
+=======
+ *
+ *      if there are no variables in pattern<pre>
+ *        <b>val</b> p = e  ==>  e match (case p => ())</pre>
+ *
+ *      if there is exactly one variable in pattern<pre>
+ *        <b>val</b> x_1 = e <b>match</b> (case p => (x_1))</pre>
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *      if there is more than one variable in pattern<pre>
  *        <b>val</b> p = e  ==>  <b>private synthetic val</b> t$ = e <b>match</b> (case p => (x_1, ..., x_N))
  *                        <b>val</b> x_1 = t$._1
@@ -120,7 +146,11 @@ trait ParsersCommon extends ScannersCommon {
  */
 trait Parsers extends Scanners with MarkupParsers with ParsersCommon {
 self =>
+<<<<<<< HEAD
   val global: Global 
+=======
+  val global: Global
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   import global._
 
   private val glob: global.type = global
@@ -172,7 +202,11 @@ self =>
   class OutlineParser(source: SourceFile) extends SourceFileParser(source) {
 
     def skipBraces[T](body: T): T = {
+<<<<<<< HEAD
       accept(LBRACE)  
+=======
+      accept(LBRACE)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       var openBraces = 1
       while (in.token != EOF && openBraces > 0) {
         if (in.token == XMLSTART) xmlLiteral()
@@ -184,7 +218,11 @@ self =>
       }
       body
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     override def blockExpr(): Tree = skipBraces(EmptyTree)
 
     override def templateBody(isPre: Boolean) = skipBraces((emptyValDef, List(EmptyTree)))
@@ -193,17 +231,29 @@ self =>
   class UnitParser(val unit: global.CompilationUnit, patches: List[BracePatch]) extends SourceFileParser(unit.source) {
 
     def this(unit: global.CompilationUnit) = this(unit, List())
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     override def newScanner = new UnitScanner(unit, patches)
 
     override def freshTermName(prefix: String): TermName = unit.freshTermName(prefix)
     override def freshTypeName(prefix: String): TypeName = unit.freshTypeName(prefix)
 
+<<<<<<< HEAD
     override def warning(offset: Int, msg: String) { 
       unit.warning(o2p(offset), msg) 
     }
 
     override def deprecationWarning(offset: Int, msg: String) {   
+=======
+    override def warning(offset: Int, msg: String) {
+      unit.warning(o2p(offset), msg)
+    }
+
+    override def deprecationWarning(offset: Int, msg: String) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       unit.deprecationWarning(o2p(offset), msg)
     }
 
@@ -219,10 +269,17 @@ self =>
     def showSyntaxErrors() =
       for ((offset, msg) <- syntaxErrors)
         unit.error(o2p(offset), msg)
+<<<<<<< HEAD
     
     override def syntaxError(offset: Int, msg: String) { 
       if (smartParsing) syntaxErrors += ((offset, msg))
       else unit.error(o2p(offset), msg) 
+=======
+
+    override def syntaxError(offset: Int, msg: String) {
+      if (smartParsing) syntaxErrors += ((offset, msg))
+      else unit.error(o2p(offset), msg)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
 
     override def incompleteInputError(msg: String) {
@@ -247,7 +304,11 @@ self =>
   final val Local = 0
   final val InBlock = 1
   final val InTemplate = 2
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   import nme.raw
 
   abstract class Parser extends ParserCommon {
@@ -258,7 +319,11 @@ self =>
     def freshTypeName(prefix: String): TypeName
     def o2p(offset: Int): Position
     def r2p(start: Int, mid: Int, end: Int): Position
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** whether a non-continuable syntax error has been seen */
     private var lastErrorOffset : Int = -1
 
@@ -287,6 +352,7 @@ self =>
     private var currentPackage = ""
     def resetPackage() {
       inScalaPackage = false
+<<<<<<< HEAD
       currentPackage = ""      
     }
     private lazy val anyValNames: Set[Name] = tpnme.ScalaValueNames.toSet + tpnme.AnyVal
@@ -295,6 +361,16 @@ self =>
     private def isScalaArray(name: Name) = inScalaRootPackage && name == tpnme.Array
     private def isAnyValType(name: Name) = inScalaRootPackage && anyValNames(name)
     
+=======
+      currentPackage = ""
+    }
+    private lazy val anyValNames: Set[Name] = tpnme.ScalaValueNames.toSet + tpnme.AnyVal
+
+    private def inScalaRootPackage       = inScalaPackage && currentPackage == "scala"
+    private def isScalaArray(name: Name) = inScalaRootPackage && name == tpnme.Array
+    private def isAnyValType(name: Name) = inScalaRootPackage && anyValNames(name)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def parseStartRule: () => Tree
 
     /** This is the general parse entry point.
@@ -304,7 +380,11 @@ self =>
       accept(EOF)
       t
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** This is the parse entry point for code which is not self-contained, e.g.
      *  a script which is a series of template statements.  They will be
      *  swaddled in Trees until the AST is equivalent to the one returned
@@ -313,7 +393,11 @@ self =>
     def scriptBody(): Tree = {
       val stmts = templateStatSeq(false)._2
       accept(EOF)
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       def mainModuleName = settings.script.value
       /** If there is only a single object template in the file and it has a
        *  suitable main method, we will use it rather than building another object
@@ -351,10 +435,17 @@ self =>
         }
         Some(makePackaging(0, emptyPkg, newStmts))
       }
+<<<<<<< HEAD
       
       if (mainModuleName == ScriptRunner.defaultScriptMain)
         searchForMain() foreach { return _ }
       
+=======
+
+      if (mainModuleName == ScriptRunner.defaultScriptMain)
+        searchForMain() foreach { return _ }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       /** Here we are building an AST representing the following source fiction,
        *  where `moduleName` is from -Xscript (defaults to "Main") and <stmts> are
        *  the result of parsing the script file.
@@ -393,7 +484,11 @@ self =>
       def moduleName  = ScriptRunner scriptMain settings
       def moduleBody  = Template(List(scalaScalaObjectConstr), emptyValDef, List(emptyInit, mainDef))
       def moduleDef   = ModuleDef(NoMods, moduleName, moduleBody)
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       // package <empty> { ... }
       makePackaging(0, emptyPkg, List(moduleDef))
     }
@@ -401,12 +496,20 @@ self =>
 /* --------------- PLACEHOLDERS ------------------------------------------- */
 
     /** The implicit parameters introduced by `_` in the current expression.
+<<<<<<< HEAD
      *  Parameters appear in reverse order. 
+=======
+     *  Parameters appear in reverse order.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      */
     var placeholderParams: List[ValDef] = Nil
 
     /** The placeholderTypes introduced by `_` in the current type.
+<<<<<<< HEAD
      *  Parameters appear in reverse order. 
+=======
+     *  Parameters appear in reverse order.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      */
     var placeholderTypes: List[TypeDef] = Nil
 
@@ -417,15 +520,25 @@ self =>
       placeholderTypes = List()
 
       val res = op
+<<<<<<< HEAD
       
       placeholderParams match {
         case vd :: _ => 
+=======
+
+      placeholderParams match {
+        case vd :: _ =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           syntaxError(vd.pos, "unbound placeholder parameter", false)
           placeholderParams = List()
         case _ =>
       }
       placeholderTypes match {
+<<<<<<< HEAD
         case td :: _ => 
+=======
+        case td :: _ =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           syntaxError(td.pos, "unbound wildcard type", false)
           placeholderTypes = List()
         case _ =>
@@ -445,7 +558,11 @@ self =>
         ensureNonOverlapping(t, placeholderTypes)
         t = atPos(expos) { ExistentialTypeTree(t, placeholderTypes.reverse) }
         placeholderTypes = List()
+<<<<<<< HEAD
       } 
+=======
+      }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       placeholderTypes = placeholderTypes ::: savedPlaceholderTypes
       t
     }
@@ -513,7 +630,11 @@ self =>
         // no more errors on this token.
         lastErrorOffset = in.offset
       }
+<<<<<<< HEAD
       if (skipIt) 
+=======
+      if (skipIt)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         skip(UNDEF)
     }
 
@@ -535,11 +656,19 @@ self =>
       if (in.token != token) {
         syntaxErrorOrIncomplete(expectedMsg(token), false)
         if ((token == RPAREN || token == RBRACE || token == RBRACKET))
+<<<<<<< HEAD
           if (in.parenBalance(token) + assumedClosingParens(token) < 0) 
             assumedClosingParens(token) += 1
           else
             skip(token)
         else 
+=======
+          if (in.parenBalance(token) + assumedClosingParens(token) < 0)
+            assumedClosingParens(token) += 1
+          else
+            skip(token)
+        else
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           skip(UNDEF)
       }
       if (in.token == token) in.nextToken()
@@ -558,7 +687,11 @@ self =>
     def acceptStatSepOpt() =
       if (!isStatSeqEnd)
         acceptStatSep()
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def errorTypeTree    = TypeTree() setType ErrorType setPos o2p(in.offset)
     def errorTermTree    = Literal(Constant(null)) setPos o2p(in.offset)
     def errorPatternTree = Ident(nme.WILDCARD) setPos o2p(in.offset)
@@ -577,7 +710,11 @@ self =>
            ValDef(_, _, _, EmptyTree) | EmptyTree =>
              ;
       case _ =>
+<<<<<<< HEAD
         syntaxError(t.pos, "not a legal existential clause", false) 
+=======
+        syntaxError(t.pos, "not a legal existential clause", false)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
 
 /* -------------- TOKEN CLASSES ------------------------------------------- */
@@ -592,7 +729,11 @@ self =>
       case ABSTRACT | FINAL | SEALED | IMPLICIT | LAZY => true
       case _ => false
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def isTemplateIntro: Boolean = in.token match {
       case OBJECT | CASEOBJECT | CLASS | CASECLASS | TRAIT  => true
       case _                                                => false
@@ -616,8 +757,13 @@ self =>
 
     def isLiteralToken(token: Int) = token match {
       case CHARLIT | INTLIT | LONGLIT | FLOATLIT | DOUBLELIT |
+<<<<<<< HEAD
            STRINGLIT | SYMBOLLIT | TRUE | FALSE | NULL          => true
       case _                                                    => false
+=======
+           STRINGLIT | STRINGPART | SYMBOLLIT | TRUE | FALSE | NULL => true
+      case _                                                        => false
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
     def isLiteral = isLiteralToken(in.token)
 
@@ -639,10 +785,17 @@ self =>
     def isTypeIntro: Boolean = isTypeIntroToken(in.token)
 
     def isStatSeqEnd = in.token == RBRACE || in.token == EOF
+<<<<<<< HEAD
     
     def isStatSep(token: Int): Boolean = 
       token == NEWLINE || token == NEWLINES || token == SEMI
     
+=======
+
+    def isStatSep(token: Int): Boolean =
+      token == NEWLINE || token == NEWLINES || token == SEMI
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def isStatSep: Boolean = isStatSep(in.token)
 
 
@@ -679,7 +832,11 @@ self =>
       global.atPos(r2p(offset, offset, in.lastOffset max offset))(t)
     def atPos[T <: Tree](start: Int, point: Int)(t: T): T =
       global.atPos(r2p(start, point, in.lastOffset max start))(t)
+<<<<<<< HEAD
     def atPos[T <: Tree](start: Int, point: Int, end: Int)(t: T): T = 
+=======
+    def atPos[T <: Tree](start: Int, point: Int, end: Int)(t: T): T =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       global.atPos(r2p(start, point, end))(t)
     def atPos[T <: Tree](pos: Position)(t: T): T =
       global.atPos(pos)(t)
@@ -764,7 +921,11 @@ self =>
       if (size > max) syntaxError("too many "+kind+", maximum = "+max, false)
     }
 
+<<<<<<< HEAD
     def checkAssoc(offset: Int, op: Name, leftAssoc: Boolean) = 
+=======
+    def checkAssoc(offset: Int, op: Name, leftAssoc: Boolean) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (treeInfo.isLeftAssoc(op) != leftAssoc)
         syntaxError(
           offset, "left- and right-associative operators with same precedence may not be mixed", false)
@@ -774,7 +935,11 @@ self =>
       var top = top0
       if (opstack != base && precedence(opstack.head.operator) == prec)
         checkAssoc(opstack.head.offset, opstack.head.operator, leftAssoc)
+<<<<<<< HEAD
       while (opstack != base && 
+=======
+      while (opstack != base &&
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
              (prec < precedence(opstack.head.operator) ||
               leftAssoc && prec == precedence(opstack.head.operator))) {
         val opinfo = opstack.head
@@ -801,10 +966,17 @@ self =>
       /** {{{
        *  ArgType       ::=  Type
        *  }}}
+<<<<<<< HEAD
        */ 
       def argType(): Tree
       def functionArgType(): Tree
       
+=======
+       */
+      def argType(): Tree
+      def functionArgType(): Tree
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       private def tupleInfixType(start: Int) = {
         in.nextToken()
         if (in.token == RPAREN) {
@@ -814,7 +986,11 @@ self =>
         else {
           val ts = functionTypes()
           accept(RPAREN)
+<<<<<<< HEAD
           if (in.token == ARROW) 
+=======
+          if (in.token == ARROW)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             atPos(start, in.skipToken()) { makeFunctionTypeTree(ts, typ()) }
           else {
             ts foreach checkNotByNameOrVarargs
@@ -844,8 +1020,13 @@ self =>
        *  }}}
        */
       def typ(): Tree = placeholderTypeBoundary {
+<<<<<<< HEAD
         val start = in.offset      
         val t =   
+=======
+        val start = in.offset
+        val t =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           if (in.token == LPAREN) tupleInfixType(start)
           else infixType(InfixMode.FirstOp)
 
@@ -855,13 +1036,21 @@ self =>
           case _        => t
         }
       }
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       /** {{{
        *  TypeArgs    ::= `[' ArgType {`,' ArgType} `]'
        *  }}}
        */
       def typeArgs(): List[Tree] = inBrackets(types())
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       /** {{{
        *  AnnotType        ::=  SimpleType {Annotation}
        *  }}}
@@ -869,7 +1058,11 @@ self =>
       def annotType(): Tree = placeholderTypeBoundary { annotTypeRest(simpleType()) }
 
       /** {{{
+<<<<<<< HEAD
        *  SimpleType       ::=  SimpleType TypeArgs 
+=======
+       *  SimpleType       ::=  SimpleType TypeArgs
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
        *                     |  SimpleType `#' Id
        *                     |  StableId
        *                     |  Path `.' type
@@ -894,11 +1087,16 @@ self =>
         val hashOffset = in.skipToken()
         val nameOffset = in.offset
         val name       = identForType(false)
+<<<<<<< HEAD
         val point      = if (name == tpnme.ERROR) hashOffset else nameOffset 
+=======
+        val point      = if (name == tpnme.ERROR) hashOffset else nameOffset
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         atPos(t.pos.startOrPoint, point)(SelectFromTypeTree(t, name))
       }
       def simpleTypeRest(t: Tree): Tree = in.token match {
         case HASH     => simpleTypeRest(typeProjection(t))
+<<<<<<< HEAD
         case LBRACKET => simpleTypeRest(atPos(t.pos.startOrPoint)(AppliedTypeTree(t, typeArgs())))
         case _        => t
       }
@@ -908,6 +1106,17 @@ self =>
        *                |  Refinement
        *  }}}
        */  
+=======
+        case LBRACKET => simpleTypeRest(atPos(t.pos.startOrPoint, t.pos.point)(AppliedTypeTree(t, typeArgs())))
+        case _        => t
+      }
+
+      /** {{{
+       *  CompoundType ::= AnnotType {with AnnotType} [Refinement]
+       *                |  Refinement
+       *  }}}
+       */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       def compoundType(): Tree = compoundTypeRest(
         if (in.token == LBRACE) atPos(o2p(in.offset))(scalaAnyRefConstr)
         else annotType()
@@ -933,7 +1142,11 @@ self =>
             }
             CompoundTypeTree(Template(ts.toList, emptyValDef, refinement()))
           }
+<<<<<<< HEAD
           else 
+=======
+          else
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             makeIntersectionTypeTree(ts.toList)
         }
       }
@@ -955,12 +1168,21 @@ self =>
       }
 
       /** {{{
+<<<<<<< HEAD
        *  InfixType ::= CompoundType {id [nl] CompoundType} 
        *  }}}
        */
       def infixType(mode: InfixMode.Value): Tree = 
         placeholderTypeBoundary { infixTypeRest(compoundType(), mode) }
       
+=======
+       *  InfixType ::= CompoundType {id [nl] CompoundType}
+       *  }}}
+       */
+      def infixType(mode: InfixMode.Value): Tree =
+        placeholderTypeBoundary { infixTypeRest(compoundType(), mode) }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       /** {{{
        *  Types ::= Type {`,' Type}
        *  }}}
@@ -980,7 +1202,11 @@ self =>
         nme.ERROR
       }
     def ident(): Name = ident(true)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** For when it's known already to be a type name. */
     def identForType(): TypeName = ident().toTypeName
     def identForType(skipIt: Boolean): TypeName = ident(skipIt).toTypeName
@@ -1057,7 +1283,11 @@ self =>
     *   MixinQualifier ::= `[' Id `]'
     *   }}}
     */
+<<<<<<< HEAD
     def mixinQualifierOpt(): TypeName = 
+=======
+    def mixinQualifierOpt(): TypeName =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (in.token == LBRACKET) inBrackets(identForType())
       else tpnme.EMPTY
 
@@ -1084,6 +1314,7 @@ self =>
     private def pkgQualId() = {
       if (in.token == IDENTIFIER && in.name.encode == nme.scala_)
         inScalaPackage = true
+<<<<<<< HEAD
       
       val pkg = qualId()
       newLineOptWhenFollowedBy(LBRACE)
@@ -1091,6 +1322,15 @@ self =>
       if (currentPackage == "") currentPackage = pkg.toString
       else currentPackage = currentPackage + "." + pkg
     
+=======
+
+      val pkg = qualId()
+      newLineOptWhenFollowedBy(LBRACE)
+
+      if (currentPackage == "") currentPackage = pkg.toString
+      else currentPackage = currentPackage + "." + pkg
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       pkg
     }
 
@@ -1099,7 +1339,11 @@ self =>
      *                  | symbol
      *                  | null
      *  }}}
+<<<<<<< HEAD
      *  @note  The returned tree does not yet have a position 
+=======
+     *  @note  The returned tree does not yet have a position
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      */
     def literal(isNegated: Boolean): Tree = {
       def finish(value: Any): Tree = {
@@ -1109,6 +1353,11 @@ self =>
       }
       if (in.token == SYMBOLLIT)
         Apply(scalaDot(nme.Symbol), List(finish(in.strVal)))
+<<<<<<< HEAD
+=======
+      else if (in.token == STRINGPART)
+        interpolatedString()
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       else finish(in.token match {
         case CHARLIT               => in.charVal
         case INTLIT                => in.intVal(isNegated).toInt
@@ -1125,6 +1374,30 @@ self =>
       })
     }
 
+<<<<<<< HEAD
+=======
+    private def stringOp(t: Tree, op: TermName) = {
+      val str = in.strVal
+      in.nextToken()
+      if (str.length == 0) t
+      else atPos(t.pos.startOrPoint) {
+        Apply(Select(t, op), List(Literal(Constant(str))))
+      }
+    }
+
+    private def interpolatedString(): Tree = {
+      var t = atPos(o2p(in.offset))(New(TypeTree(definitions.StringBuilderClass.tpe), List(List())))
+      while (in.token == STRINGPART) {
+        t = stringOp(t, nme.append)
+        var e = expr()
+        if (in.token == STRINGFMT) e = stringOp(e, nme.formatted)
+        t = atPos(t.pos.startOrPoint)(Apply(Select(t, nme.append), List(e)))
+      }
+      if (in.token == STRINGLIT) t = stringOp(t, nme.append)
+      atPos(t.pos)(Select(t, nme.toString_))
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 /* ------------- NEW LINES ------------------------------------------------- */
 
     def newLineOpt() {
@@ -1156,11 +1429,19 @@ self =>
       if (in.token == COLON) { in.nextToken(); typ() }
       else TypeTree()
 
+<<<<<<< HEAD
     def typeOrInfixType(location: Int): Tree = 
       if (location == Local) typ()
       else startInfixType()
 
     def annotTypeRest(t: Tree): Tree = 
+=======
+    def typeOrInfixType(location: Int): Tree =
+      if (location == Local) typ()
+      else startInfixType()
+
+    def annotTypeRest(t: Tree): Tree =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       (t /: annotations(false)) (makeAnnotated)
 
     /** {{{
@@ -1176,7 +1457,11 @@ self =>
       t
     }
 
+<<<<<<< HEAD
 /* ----------- EXPRESSIONS ------------------------------------------------ */    
+=======
+/* ----------- EXPRESSIONS ------------------------------------------------ */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     /** {{{
      *  EqualsExpr ::= `=' Expr
@@ -1282,7 +1567,11 @@ self =>
           val cond = condExpr()
           newLinesOpt()
           val body = expr()
+<<<<<<< HEAD
           makeWhile(lname, cond, body) 
+=======
+          makeWhile(lname, cond, body)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         }
       case DO =>
         val start = in.offset
@@ -1292,7 +1581,11 @@ self =>
           if (isStatSep) in.nextToken()
           accept(WHILE)
           val cond = condExpr()
+<<<<<<< HEAD
           makeDoWhile(lname, body, cond) 
+=======
+          makeDoWhile(lname, body, cond)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         }
       case FOR =>
         atPos(in.skipToken()) {
@@ -1312,8 +1605,13 @@ self =>
           Return(if (isExprIntro) expr() else Literal(Constant()))
         }
       case THROW =>
+<<<<<<< HEAD
         atPos(in.skipToken()) { 
           Throw(expr()) 
+=======
+        atPos(in.skipToken()) {
+          Throw(expr())
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         }
       case IMPLICIT =>
         implicitClosure(in.skipToken(), location)
@@ -1323,7 +1621,11 @@ self =>
           t match {
             case Ident(_) | Select(_, _) | Apply(_, _) =>
               t = atPos(t.pos.startOrPoint, in.skipToken()) { makeAssign(t, expr()) }
+<<<<<<< HEAD
             case _ => 
+=======
+            case _ =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           }
         } else if (in.token == COLON) {
           t = stripParens(t)
@@ -1342,6 +1644,7 @@ self =>
           } else if (in.token == AT) {
             t = (t /: annotations(false)) (makeAnnotated)
           } else {
+<<<<<<< HEAD
             t = atPos(t.pos.startOrPoint, colonPos) { 
               val tpt = typeOrInfixType(location)
               if (isWildcard(t))
@@ -1350,6 +1653,16 @@ self =>
                     placeholderParams = treeCopy.ValDef(vd, mods, name, tpt.duplicate, EmptyTree) :: rest
                 }
               // this does not correspond to syntax, but is necessary to 
+=======
+            t = atPos(t.pos.startOrPoint, colonPos) {
+              val tpt = typeOrInfixType(location)
+              if (isWildcard(t))
+                (placeholderParams: @unchecked) match {
+                  case (vd @ ValDef(mods, name, _, _)) :: rest =>
+                    placeholderParams = treeCopy.ValDef(vd, mods, name, tpt.duplicate, EmptyTree) :: rest
+                }
+              // this does not correspond to syntax, but is necessary to
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               // accept closures. We might restrict closures to be between {...} only.
               Typed(t, tpt)
             }
@@ -1383,6 +1696,10 @@ self =>
      *  Expr ::= implicit Id => Expr
      *  }}}
      */
+<<<<<<< HEAD
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def implicitClosure(start: Int, location: Int): Tree = {
       val param0 = convertToParam {
         atPos(in.offset) {
@@ -1438,7 +1755,11 @@ self =>
      *  PrefixExpr   ::= [`-' | `+' | `~' | `!' | `&'] SimpleExpr
      *  }}}
      */
+<<<<<<< HEAD
     def prefixExpr(): Tree = {      
+=======
+    def prefixExpr(): Tree = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (isUnaryOp) {
         atPos(in.offset) {
           val name: Name = "unary_" + ident()
@@ -1449,7 +1770,11 @@ self =>
       else simpleExpr()
     }
     def xmlLiteral(): Tree
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** {{{
      *  SimpleExpr    ::= new (ClassTemplate | TemplateBody)
      *                  |  BlockExpr
@@ -1510,7 +1835,11 @@ self =>
           val t1 = stripParens(t)
           t1 match {
             case Ident(_) | Select(_, _) =>
+<<<<<<< HEAD
               val tapp = atPos(t1.pos.startOrPoint, in.offset) { 
+=======
+              val tapp = atPos(t1.pos.startOrPoint, in.offset) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 TypeApply(t1, exprTypeArgs())
               }
               simpleExprRest(tapp, true)
@@ -1531,7 +1860,11 @@ self =>
           }
           simpleExprRest(app, true)
         case USCORE =>
+<<<<<<< HEAD
           atPos(t.pos.startOrPoint, in.skipToken()) { 
+=======
+          atPos(t.pos.startOrPoint, in.skipToken()) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             Typed(stripParens(t), Function(Nil, EmptyTree))
           }
         case _ =>
@@ -1564,7 +1897,11 @@ self =>
       if (in.token != LPAREN) Nil
       else argumentExprs() :: multipleArgumentExprs()
     }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** {{{
      *  BlockExpr ::= `{' (CaseClauses | Block) `}'
      *  }}}
@@ -1575,7 +1912,11 @@ self =>
         else block()
       }
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** {{{
      *  Block ::= BlockStatSeq
      *  }}}
@@ -1597,17 +1938,28 @@ self =>
     }
 
     // IDE HOOK (so we can memoize case blocks) // needed?
+<<<<<<< HEAD
     def caseBlock(): Tree = 
+=======
+    def caseBlock(): Tree =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       atPos(accept(ARROW))(block())
 
     /** {{{
      *  Guard ::= if PostfixExpr
      *  }}}
      */
+<<<<<<< HEAD
     def guard(): Tree = 
       if (in.token == IF) { in.nextToken(); stripParens(postfixExpr()) } 
       else EmptyTree
       
+=======
+    def guard(): Tree =
+      if (in.token == IF) { in.nextToken(); stripParens(postfixExpr()) }
+      else EmptyTree
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** {{{
      *  Enumerators ::= Generator {semi Enumerator}
      *  Enumerator  ::=  Generator
@@ -1631,6 +1983,7 @@ self =>
      *  }}}
      */
     def generator(enums: ListBuffer[Enumerator], eqOK: Boolean) {
+<<<<<<< HEAD
       val start = in.offset
       if (in.token == VAL) in.nextToken()
       val pat = noSeq.pattern1()
@@ -1640,6 +1993,26 @@ self =>
       else accept(LARROW)
       val rhs = expr()
       enums += makeGenerator(r2p(start, point, in.lastOffset max start), pat, tok == EQUALS, rhs)
+=======
+      val start  = in.offset
+      val hasVal = in.token == VAL
+      if (hasVal)
+        in.nextToken()
+
+      val pat   = noSeq.pattern1()
+      val point = in.offset
+      val hasEq = in.token == EQUALS
+
+      if (hasVal) {
+        if (hasEq) deprecationWarning(in.offset, "val keyword in for comprehension is deprecated")
+        else syntaxError(in.offset, "val in for comprehension must be followed by assignment")
+      }
+
+      if (hasEq && eqOK) in.nextToken()
+      else accept(LARROW)
+      val rhs = expr()
+      enums += makeGenerator(r2p(start, point, in.lastOffset max start), pat, hasEq, rhs)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       // why max above? IDE stress tests have shown that lastOffset could be less than start,
       // I guess this happens if instead if a for-expression we sit on a closing paren.
       while (in.token == IF) enums += makeFilter(in.offset, guard())
@@ -1647,7 +2020,11 @@ self =>
 
     def makeFilter(start: Int, tree: Tree) = Filter(r2p(start, tree.pos.point, tree.pos.endOrPoint), tree)
 
+<<<<<<< HEAD
 /* -------- PATTERNS ------------------------------------------- */    
+=======
+/* -------- PATTERNS ------------------------------------------- */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     /** Methods which implicitly propagate whether the initial call took
      *  place in a context where sequences are allowed.  Formerly, this
@@ -1674,14 +2051,22 @@ self =>
             typ()
         }
       }
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       /** {{{
        *  Patterns ::= Pattern { `,' Pattern }
        *  SeqPatterns ::= SeqPattern { `,' SeqPattern }
        *  }}}
        */
       def patterns(): List[Tree] = commaSeparated(pattern())
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       /** {{{
        *  Pattern  ::=  Pattern1 { `|' Pattern1 }
        *  SeqPattern ::= SeqPattern1 { `|' SeqPattern1 }
@@ -1726,7 +2111,11 @@ self =>
         if (in.token != AT) p
         else p match {
           case Ident(nme.WILDCARD) =>
+<<<<<<< HEAD
             in.nextToken() 
+=======
+            in.nextToken()
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             pattern3()
           case Ident(name) if treeInfo.isVarPattern(p) =>
             in.nextToken()
@@ -1734,10 +2123,17 @@ self =>
           case _ => p
         }
       }
+<<<<<<< HEAD
       
       /** {{{
        *  Pattern3    ::= SimplePattern
        *                |  SimplePattern {Id [nl] SimplePattern} 
+=======
+
+      /** {{{
+       *  Pattern3    ::= SimplePattern
+       *                |  SimplePattern {Id [nl] SimplePattern}
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
        *  SeqPattern3 ::= SeqSimplePattern [ `*' | `?' | `+' ]
        *                |  SeqSimplePattern {Id [nl] SeqSimplePattern}
        *  }}}
@@ -1773,7 +2169,11 @@ self =>
        *                    |  StableId [TypeArgs] [`(' [SeqPatterns] `)']
        *                    |  `(' [SeqPatterns] `)'
        *  }}}
+<<<<<<< HEAD
        * 
+=======
+       *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
        * XXX: Hook for IDE
        */
       def simplePattern(): Tree = {
@@ -1802,7 +2202,11 @@ self =>
             in.nextToken()
             atPos(start, start) { Ident(nme.WILDCARD) }
           case CHARLIT | INTLIT | LONGLIT | FLOATLIT | DOUBLELIT |
+<<<<<<< HEAD
                STRINGLIT | SYMBOLLIT | TRUE | FALSE | NULL =>
+=======
+               STRINGLIT | STRINGPART | SYMBOLLIT | TRUE | FALSE | NULL =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             atPos(start) { literal(false) }
           case LPAREN =>
             atPos(start)(makeParens(noSeq.patterns()))
@@ -1849,14 +2253,24 @@ self =>
       if (in.token == RPAREN) Nil
       else seqPatterns()
     }
+<<<<<<< HEAD
     def xmlLiteralPattern(): Tree    
 
 /* -------- MODIFIERS and ANNOTATIONS ------------------------------------------- */    
+=======
+    def xmlLiteralPattern(): Tree
+
+/* -------- MODIFIERS and ANNOTATIONS ------------------------------------------- */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     /** Drop `private` modifier when followed by a qualifier.
      *  Contract `abstract` and `override` to ABSOVERRIDE
      */
+<<<<<<< HEAD
     private def normalize(mods: Modifiers): Modifiers = 
+=======
+    private def normalize(mods: Modifiers): Modifiers =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (mods.isPrivate && mods.hasAccessBoundary)
         normalize(mods &~ Flags.PRIVATE)
       else if (mods hasAllFlags (Flags.ABSTRACT | Flags.OVERRIDE))
@@ -1870,12 +2284,21 @@ self =>
       (mods | mod) withPosition (mod, pos)
     }
 
+<<<<<<< HEAD
     private def tokenRange(token: TokenData) = r2p(token.offset, token.offset, token.offset + token.name.length - 1)
+=======
+    private def tokenRange(token: TokenData) =
+      r2p(token.offset, token.offset, token.offset + token.name.length - 1)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     /** {{{
      *  AccessQualifier ::= `[' (Id | this) `]'
      *  }}}
+<<<<<<< HEAD
      */ 
+=======
+     */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def accessQualifierOpt(mods: Modifiers): Modifiers = {
       var result = mods
       if (in.token == LBRACKET) {
@@ -1904,7 +2327,11 @@ self =>
      *  AccessModifier ::= (private | protected) [AccessQualifier]
      *  }}}
      */
+<<<<<<< HEAD
     def accessModifierOpt(): Modifiers = normalize {      
+=======
+    def accessModifierOpt(): Modifiers = normalize {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       in.token match {
         case m @ (PRIVATE | PROTECTED)  => in.nextToken() ; accessQualifierOpt(Modifiers(flagTokens(m)))
         case _                          => NoMods
@@ -1913,7 +2340,11 @@ self =>
 
     /** {{{
      *  Modifiers ::= {Modifier}
+<<<<<<< HEAD
      *  Modifier  ::= LocalModifier 
+=======
+     *  Modifier  ::= LocalModifier
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *              |  AccessModifier
      *              |  override
      *  }}}
@@ -1939,10 +2370,17 @@ self =>
      *  }}}
      */
     def localModifiers(): Modifiers = {
+<<<<<<< HEAD
       def loop(mods: Modifiers): Modifiers = 
         if (isLocalModifier) loop(addMod(mods, flagTokens(in.token), tokenRange(in)))
         else mods
         
+=======
+      def loop(mods: Modifiers): Modifiers =
+        if (isLocalModifier) loop(addMod(mods, flagTokens(in.token), tokenRange(in)))
+        else mods
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       loop(NoMods)
     }
 
@@ -1966,7 +2404,11 @@ self =>
       else New(t, List(Nil))
     }
 
+<<<<<<< HEAD
 /* -------- PARAMETERS ------------------------------------------- */    
+=======
+/* -------- PARAMETERS ------------------------------------------- */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     /** {{{
      *  ParamClauses      ::= {ParamClause} [[nl] `(' implicit Params `)']
@@ -1996,7 +2438,11 @@ self =>
               in.nextToken()
             case _ =>
               if (mods.flags != Flags.PARAMACCESSOR) accept(VAL)
+<<<<<<< HEAD
               if (!caseParam) mods |= Flags.PRIVATE | Flags.LOCAL
+=======
+              if (!caseParam) mods |= Flags.PrivateLocal
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           }
           if (caseParam) mods |= Flags.CASEACCESSOR
         }
@@ -2011,12 +2457,20 @@ self =>
             if (in.token == ARROW) {
               if (owner.isTypeName && !mods.hasLocalFlag)
                 syntaxError(
+<<<<<<< HEAD
                   in.offset, 
+=======
+                  in.offset,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                   (if (mods.isMutable) "`var'" else "`val'") +
                   " parameters may not be call-by-name", false)
               else if (implicitmod != 0)
                 syntaxError(
+<<<<<<< HEAD
                   in.offset, 
+=======
+                  in.offset,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                   "implicit parameters may not be call-by-name", false)
               else bynamemod = Flags.BYNAMEPARAM
             }
@@ -2035,7 +2489,11 @@ self =>
       def paramClause(): List[ValDef] = {
         if (in.token == RPAREN)
           return Nil
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         if (in.token == IMPLICIT) {
           in.nextToken()
           implicitmod = Flags.IMPLICIT
@@ -2140,6 +2598,7 @@ self =>
      *  TypeBounds ::= [`>:' Type] [`<:' Type]
      *  }}}
      */
+<<<<<<< HEAD
     def typeBounds(): TypeBoundsTree = { 
       val t = TypeBoundsTree(
         bound(SUPERTYPE, tpnme.Nothing),
@@ -2153,6 +2612,21 @@ self =>
       else atPos(o2p(in.lastOffset)) { rootScalaDot(default) }
 
 /* -------- DEFS ------------------------------------------- */    
+=======
+    def typeBounds(): TypeBoundsTree = {
+      val t = TypeBoundsTree(
+        bound(SUPERTYPE, tpnme.Nothing),
+        bound(SUBTYPE, tpnme.Any)
+      )
+      t setPos wrappingPos(List(t.hi, t.lo))
+    }
+
+    def bound(tok: Int, default: TypeName): Tree =
+      if (in.token == tok) { in.nextToken(); typ() }
+      else atPos(o2p(in.lastOffset)) { rootScalaDot(default) }
+
+/* -------- DEFS ------------------------------------------- */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 
     /** {{{
@@ -2163,7 +2637,11 @@ self =>
       val offset = accept(IMPORT)
       commaSeparated(importExpr()) match {
         case Nil => Nil
+<<<<<<< HEAD
         case t :: rest => 
+=======
+        case t :: rest =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           // The first import should start at the position of the keyword.
           t.setPos(t.pos.withStart(offset))
           t :: rest
@@ -2207,17 +2685,28 @@ self =>
         // reaching here means we're done walking.
         atPos(start)(Import(expr, selectors))
       }
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       loop(in.token match {
         case THIS   => thisDotted(tpnme.EMPTY)
         case _      =>
           val id = atPos(start)(Ident(ident()))
           accept(DOT)
           if (in.token == THIS) thisDotted(id.name.toTypeName)
+<<<<<<< HEAD
           else id        
       })
     }
       
+=======
+          else id
+      })
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** {{{
      *  ImportSelectors ::= `{' {ImportSelector `,'} (ImportSelector | `_') `}'
      *  }}}
@@ -2227,10 +2716,17 @@ self =>
       selectors.init foreach {
         case ImportSelector(nme.WILDCARD, pos, _, _)  => syntaxError(pos, "Wildcard import must be in last position")
         case _                                        => ()
+<<<<<<< HEAD
       }      
       selectors
     }
     
+=======
+      }
+      selectors
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def wildcardOrIdent() = {
       if (in.token == USCORE) { in.nextToken() ; nme.WILDCARD }
       else ident()
@@ -2256,13 +2752,21 @@ self =>
       }
       ImportSelector(name, start, rename, renameOffset)
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** {{{
      *  Def    ::= val PatDef
      *           | var PatDef
      *           | def FunDef
      *           | type [nl] TypeDef
+<<<<<<< HEAD
      *           | TmplDef 
+=======
+     *           | TmplDef
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *  Dcl    ::= val PatDcl
      *           | var PatDcl
      *           | def FunDcl
@@ -2285,14 +2789,22 @@ self =>
           List(tmplDef(pos, mods))
       }
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private def caseAwareTokenOffset = if (in.token == CASECLASS || in.token == CASEOBJECT) in.prev.offset else in.offset
 
     def nonLocalDefOrDcl : List[Tree] = {
       val annots = annotations(true)
       defOrDcl(caseAwareTokenOffset, modifiers() withAnnotations annots)
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** {{{
      *  PatDef ::= Pattern2 {`,' Pattern2} [`:' Type] `=' Expr
      *  ValDcl ::= Id {`,' Id} `:' Type
@@ -2307,7 +2819,11 @@ self =>
       val rhs =
         if (tp.isEmpty || in.token == EQUALS) {
           accept(EQUALS)
+<<<<<<< HEAD
           if (!tp.isEmpty && newmods.isMutable && 
+=======
+          if (!tp.isEmpty && newmods.isMutable &&
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               (lhs.toList forall (_.isInstanceOf[Ident])) && in.token == USCORE) {
             in.nextToken()
             newmods = newmods | Flags.DEFAULTINIT
@@ -2321,6 +2837,7 @@ self =>
         }
       def mkDefs(p: Tree, tp: Tree, rhs: Tree): List[Tree] = {
         //Console.println("DEBUG: p = "+p.toString()); // DEBUG
+<<<<<<< HEAD
         val trees = 
           makePatDef(newmods, 
                      if (tp.isEmpty) p 
@@ -2329,6 +2846,16 @@ self =>
         if (newmods.isDeferred) {
           trees match {
             case List(ValDef(_, _, _, EmptyTree)) => 
+=======
+        val trees =
+          makePatDef(newmods,
+                     if (tp.isEmpty) p
+                     else Typed(p, tp) setPos (p.pos union tp.pos),
+                     rhs)
+        if (newmods.isDeferred) {
+          trees match {
+            case List(ValDef(_, _, _, EmptyTree)) =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               if (mods.isLazy) syntaxError(p.pos, "lazy values may not be abstract", false)
             case _ => syntaxError(p.pos, "pattern definition may not be abstract", false)
           }
@@ -2374,13 +2901,21 @@ self =>
      *  FunDef ::= FunSig `:' Type `=' Expr
      *           | FunSig [nl] `{' Block `}'
      *           | this ParamClause ParamClauses (`=' ConstrExpr | [nl] ConstrBlock)
+<<<<<<< HEAD
+=======
+     *           | `macro' FunSig [`:' Type] `=' Expr
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *  FunDcl ::= FunSig [`:' Type]
      *  FunSig ::= id [FunTypeParamClause] ParamClauses
      *  }}}
      */
     def funDefOrDcl(start : Int, mods: Modifiers): Tree = {
       in.nextToken
+<<<<<<< HEAD
       if (in.token == THIS) {  
+=======
+      if (in.token == THIS) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         atPos(start, in.skipToken()) {
           val vparamss = paramClauses(nme.CONSTRUCTOR, classContextBounds map (_.duplicate), false)
           newLineOptWhenFollowedBy(LBRACE)
@@ -2390,6 +2925,7 @@ self =>
           }
           DefDef(mods, nme.CONSTRUCTOR, List(), vparamss, TypeTree(), rhs)
         }
+<<<<<<< HEAD
       } 
       else {
         var newmods = mods
@@ -2420,6 +2956,49 @@ self =>
         signalParseProgress(result.pos)
         result
       }
+=======
+      }
+      else {
+        val nameOffset = in.offset
+        val name = ident()
+        if (name == nme.macro_ && isIdent && settings.Xexperimental.value)
+          funDefRest(start, in.offset, mods | Flags.MACRO, ident())
+        else
+          funDefRest(start, nameOffset, mods, name)
+      }
+    }
+
+    def funDefRest(start: Int, nameOffset: Int, mods: Modifiers, name: Name): Tree = {
+      val result = atPos(start, if (name.toTermName == nme.ERROR) start else nameOffset) {
+        val isMacro = mods hasFlag Flags.MACRO
+        val isTypeMacro = isMacro && name.isTypeName
+        var newmods = mods
+        // contextBoundBuf is for context bounded type parameters of the form
+        // [T : B] or [T : => B]; it contains the equivalent implicit parameter type,
+        // i.e. (B[T] or T => B)
+        val contextBoundBuf = new ListBuffer[Tree]
+        val tparams = typeParamClauseOpt(name, contextBoundBuf)
+        val vparamss = paramClauses(name, contextBoundBuf.toList, false)
+        if (!isMacro) newLineOptWhenFollowedBy(LBRACE)
+        var restype = if (isTypeMacro) TypeTree() else fromWithinReturnType(typedOpt())
+        val rhs =
+          if (isMacro)
+            equalsExpr()
+          else if (isStatSep || in.token == RBRACE) {
+            if (restype.isEmpty) restype = scalaUnitConstr
+            newmods |= Flags.DEFERRED
+            EmptyTree
+          } else if (restype.isEmpty && in.token == LBRACE) {
+            restype = scalaUnitConstr
+            blockExpr()
+          } else {
+            equalsExpr()
+          }
+        DefDef(newmods, name, tparams, vparamss, restype, rhs)
+      }
+      signalParseProgress(result.pos)
+      result
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
 
     /** {{{
@@ -2449,7 +3028,11 @@ self =>
       }
 
     /** {{{
+<<<<<<< HEAD
      *  ConstrBlock    ::=  `{' SelfInvocation {semi BlockStat} `}' 
+=======
+     *  ConstrBlock    ::=  `{' SelfInvocation {semi BlockStat} `}'
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *  }}}
      */
     def constrBlock(vparamss: List[List[ValDef]]): Tree =
@@ -2464,6 +3047,10 @@ self =>
 
     /** {{{
      *  TypeDef ::= type Id [TypeParamClause] `=' Type
+<<<<<<< HEAD
+=======
+     *            | `macro' FunSig `=' Expr
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *  TypeDcl ::= type Id [TypeParamClause] TypeBounds
      *  }}}
      */
@@ -2472,6 +3059,7 @@ self =>
       newLinesOpt()
       atPos(start, in.offset) {
         val name = identForType()
+<<<<<<< HEAD
         // @M! a type alias as well as an abstract type may declare type parameters
         val tparams = typeParamClauseOpt(name, null)
         in.token match {
@@ -2483,6 +3071,23 @@ self =>
           case _ =>
             syntaxErrorOrIncomplete("`=', `>:', or `<:' expected", true)
             EmptyTree
+=======
+        if (name == nme.macro_.toTypeName && isIdent && settings.Xexperimental.value) {
+          funDefRest(start, in.offset, mods | Flags.MACRO, identForType())
+        } else {
+          // @M! a type alias as well as an abstract type may declare type parameters
+          val tparams = typeParamClauseOpt(name, null)
+          in.token match {
+            case EQUALS =>
+              in.nextToken()
+              TypeDef(mods, name, tparams, typ())
+            case SUPERTYPE | SUBTYPE | SEMI | NEWLINE | NEWLINES | COMMA | RBRACE =>
+              TypeDef(mods | Flags.DEFERRED, name, tparams, typeBounds())
+            case _ =>
+              syntaxErrorOrIncomplete("`=', `>:', or `<:' expected", true)
+              EmptyTree
+          }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         }
       }
     }
@@ -2494,7 +3099,11 @@ self =>
       val mods   = modifiers() withAnnotations annots
       tmplDef(pos, mods)
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** {{{
      *  TmplDef ::= [case] class ClassDef
      *            |  [case] object ObjectDef
@@ -2543,7 +3152,11 @@ self =>
             classContextBounds = List()
           }
           val constrAnnots = constructorAnnotations()
+<<<<<<< HEAD
           val (constrMods, vparamss) = 
+=======
+          val (constrMods, vparamss) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             if (isTrait) (Modifiers(Flags.TRAIT), List())
             else (accessModifierOpt(), paramClauses(name, classContextBounds, mods.isCase))
           var mods1 = mods
@@ -2553,7 +3166,11 @@ self =>
             syntaxError("classes are not allowed to be virtual", false)
           }
           val template = templateOpt(mods1, name, constrMods withAnnotations constrAnnots, vparamss, tstart)
+<<<<<<< HEAD
           if (isInterface(mods1, template.body)) mods1 |= Flags.INTERFACE 
+=======
+          if (isInterface(mods1, template.body)) mods1 |= Flags.INTERFACE
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           val result = ClassDef(mods1, name, tparams, template)
           // Context bounds generate implicit parameters (part of the template) with types
           // from tparams: we need to ensure these don't overlap
@@ -2579,7 +3196,11 @@ self =>
         ModuleDef(mods1, name, template)
       }
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** {{{
      *  ClassParents       ::= AnnotType {`(' [Exprs] `)'} {with AnnotType}
      *  TraitParents       ::= AnnotType {with AnnotType}
@@ -2612,14 +3233,24 @@ self =>
       newLineOptWhenFollowedBy(LBRACE)
       if (in.token == LBRACE) {
         // @S: pre template body cannot stub like post body can!
+<<<<<<< HEAD
         val (self, body) = templateBody(true) 
         if (in.token == WITH && self.isEmpty) {
           val earlyDefs: List[Tree] = body flatMap { 
+=======
+        val (self, body) = templateBody(true)
+        if (in.token == WITH && self.isEmpty) {
+          val earlyDefs: List[Tree] = body flatMap {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             case vdef @ ValDef(mods, name, tpt, rhs) if !mods.isDeferred =>
               List(treeCopy.ValDef(vdef, mods | Flags.PRESUPER, name, tpt, rhs))
             case tdef @ TypeDef(mods, name, tparams, rhs) =>
               List(treeCopy.TypeDef(tdef, mods | Flags.PRESUPER, name, tparams, rhs))
+<<<<<<< HEAD
             case stat if !stat.isEmpty => 
+=======
+            case stat if !stat.isEmpty =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               syntaxError(stat.pos, "only type definitions and concrete field definitions allowed in early object initialization section", false)
               List()
             case _ => List()
@@ -2642,12 +3273,17 @@ self =>
       mods.hasTraitFlag && (body forall treeInfo.isInterfaceMember)
 
     /** {{{
+<<<<<<< HEAD
      *  ClassTemplateOpt ::= `extends' ClassTemplate | [[`extends'] TemplateBody] 
+=======
+     *  ClassTemplateOpt ::= `extends' ClassTemplate | [[`extends'] TemplateBody]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *  TraitTemplateOpt ::= TraitExtends TraitTemplate | [[`extends'] TemplateBody] | `<:' TemplateBody
      *  TraitExtends     ::= `extends' | `<:'
      *  }}}
      */
     def templateOpt(mods: Modifiers, name: Name, constrMods: Modifiers, vparamss: List[List[ValDef]], tstart: Int): Template = {
+<<<<<<< HEAD
       /** A synthetic ProductN parent for case classes. */
       def extraCaseParents = (
         if (settings.Xexperimental.value && mods.isCase) {
@@ -2659,11 +3295,31 @@ self =>
               vparamss.head map (vd => vd.tpt)
             )
           )
+=======
+      /** Extra parents for case classes. */
+      def caseParents() = (
+        if (mods.isCase) {
+          val arity = if (vparamss.isEmpty || vparamss.head.isEmpty) 0 else vparamss.head.size
+          productConstr :: serializableConstr :: {
+            Nil
+            // if (arity == 0 || settings.YnoProductN.value) Nil
+            // else List(
+            //   AppliedTypeTree(
+            //     productConstrN(arity),
+            //     vparamss.head map (vd => vd.tpt.duplicate setPos vd.tpt.pos.focus)
+            //   )
+            // )
+          }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         }
         else Nil
       )
       val (parents0, argss, self, body) = (
+<<<<<<< HEAD
         if (in.token == EXTENDS || in.token == SUBTYPE && mods.hasTraitFlag) { 
+=======
+        if (in.token == EXTENDS || in.token == SUBTYPE && mods.hasTraitFlag) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           in.nextToken()
           template(mods.hasTraitFlag)
         }
@@ -2673,7 +3329,11 @@ self =>
           (List(), List(List()), self, body)
         }
       )
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       val tstart0 = if (body.isEmpty && in.lastOffset < tstart) in.lastOffset else tstart
       atPos(tstart0) {
         if (isAnyValType(name)) {
@@ -2685,22 +3345,34 @@ self =>
             if (!isInterface(mods, body) && !isScalaArray(name)) parents0 :+ scalaScalaObjectConstr
             else if (parents0.isEmpty) List(scalaAnyRefConstr)
             else parents0
+<<<<<<< HEAD
           ) ++ (
             if (mods.isCase) List(productConstr, serializableConstr) ++ extraCaseParents
             else Nil
           )
 
+=======
+          ) ++ caseParents()
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           Template(parents, self, constrMods, vparamss, argss, body, o2p(tstart))
         }
       }
     }
 
+<<<<<<< HEAD
 /* -------- TEMPLATES ------------------------------------------- */        
+=======
+/* -------- TEMPLATES ------------------------------------------- */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     /** {{{
      *  TemplateBody ::= [nl] `{' TemplateStatSeq `}'
      *  }}}
+<<<<<<< HEAD
      * @param isPre specifies whether in early initializer (true) or not (false) 
+=======
+     * @param isPre specifies whether in early initializer (true) or not (false)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      */
     def templateBody(isPre: Boolean) = inBraces(templateStatSeq(isPre)) match {
       case (self, Nil)  => (self, List(EmptyTree))
@@ -2709,22 +3381,36 @@ self =>
     def templateBodyOpt(traitParentSeen: Boolean): (ValDef, List[Tree]) = {
       newLineOptWhenFollowedBy(LBRACE)
       if (in.token == LBRACE) {
+<<<<<<< HEAD
         templateBody(false) 
       } else {
         if (in.token == LPAREN) 
+=======
+        templateBody(false)
+      } else {
+        if (in.token == LPAREN)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           syntaxError((if (traitParentSeen) "parents of traits" else "traits or objects")+
                       " may not have parameters", true)
         (emptyValDef, List())
       }
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** {{{
      *  Refinement ::= [nl] `{' RefineStat {semi RefineStat} `}'
      *  }}}
      */
     def refinement(): List[Tree] = inBraces(refineStatSeq())
 
+<<<<<<< HEAD
 /* -------- STATSEQS ------------------------------------------- */        
+=======
+/* -------- STATSEQS ------------------------------------------- */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** Create a tree representing a packaging. */
     def makePackaging(start: Int, pkg: Tree, stats: List[Tree]): PackageDef = pkg match {
@@ -2738,15 +3424,24 @@ self =>
             makePackaging(start, qual, List(PackageDef(Ident(name), stats)))
         }
       }
+<<<<<<< HEAD
 */ 
     
+=======
+*/
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Create a tree representing a package object, converting
      *  {{{
      *    package object foo { ... }
      *  }}}
      *  to
      *  {{{
+<<<<<<< HEAD
      *    package foo { 
+=======
+     *    package foo {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *      object `package` { ... }
      *    }
      *  }}}
@@ -2773,7 +3468,11 @@ self =>
      *            | Packaging
      *            | package object objectDef
      *            | Import
+<<<<<<< HEAD
      *            | 
+=======
+     *            |
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *  }}}
      */
     def topStatSeq(): List[Tree] = {
@@ -2853,7 +3552,11 @@ self =>
       }
       (self, stats.toList)
     }
+<<<<<<< HEAD
      
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** {{{
      *  RefineStatSeq    ::= RefineStat {semi RefineStat}
      *  RefineStat       ::= Dcl
@@ -2877,7 +3580,11 @@ self =>
       stats.toList
     }
 
+<<<<<<< HEAD
     /** overridable IDE hook for local definitions of blockStatSeq 
+=======
+    /** overridable IDE hook for local definitions of blockStatSeq
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *  Here's an idea how to fill in start and end positions.
     def localDef : List[Tree] = {
       atEndPos {
@@ -2895,10 +3602,17 @@ self =>
       val annots = annotations(true)
       val pos = in.offset
       val mods = (localModifiers() | implicitMod) withAnnotations annots
+<<<<<<< HEAD
       val defs = 
         if (!(mods hasFlag ~(Flags.IMPLICIT | Flags.LAZY))) defOrDcl(pos, mods)
         else List(tmplDef(pos, mods))
       
+=======
+      val defs =
+        if (!(mods hasFlag ~(Flags.IMPLICIT | Flags.LAZY))) defOrDcl(pos, mods)
+        else List(tmplDef(pos, mods))
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       in.token match {
         case RBRACE | CASE  => defs :+ (Literal(Constant()) setPos o2p(in.offset))
         case _              => defs
@@ -2907,7 +3621,11 @@ self =>
 
     /** {{{
      *  BlockStatSeq ::= { BlockStat semi } [ResultExpr]
+<<<<<<< HEAD
      *  BlockStat    ::= Import 
+=======
+     *  BlockStat    ::= Import
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *                 | Annotations [implicit] [lazy] Def
      *                 | Annotations LocalModifiers TmplDef
      *                 | Expr1
@@ -2956,7 +3674,11 @@ self =>
         while (in.token == SEMI) in.nextToken()
         val start = in.offset
         if (in.token == PACKAGE) {
+<<<<<<< HEAD
           in.nextToken()   
+=======
+          in.nextToken()
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           if (in.token == OBJECT) {
             ts ++= joinComment(List(makePackageObject(start, objectDef(in.offset, NoMods))))
             if (in.token != EOF) {
@@ -2982,9 +3704,15 @@ self =>
         }
         ts.toList
       }
+<<<<<<< HEAD
       
       resetPackage()
       topstats() match {        
+=======
+
+      resetPackage()
+      topstats() match {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case List(stat @ PackageDef(_, _)) => stat
         case stats =>
           val start =

@@ -2,7 +2,11 @@
  * Copyright 2005-2011 LAMP/EPFL
  * @author Paul Phillips
  */
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 package scala.tools.nsc
 package io
 

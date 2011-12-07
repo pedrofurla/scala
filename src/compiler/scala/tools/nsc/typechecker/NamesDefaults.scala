@@ -21,8 +21,18 @@ trait NamesDefaults { self: Analyzer =>
   val defaultParametersOfMethod =
     perRunCaches.newWeakMap[Symbol, Set[Symbol]]() withDefaultValue Set()
 
+<<<<<<< HEAD
   case class NamedApplyInfo(qual: Option[Tree], targs: List[Tree],
                             vargss: List[List[Tree]], blockTyper: Typer)
+=======
+  case class NamedApplyInfo(
+    qual:       Option[Tree],
+    targs:      List[Tree],
+    vargss:     List[List[Tree]],
+    blockTyper: Typer
+  ) { }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   val noApplyInfo = NamedApplyInfo(None, Nil, Nil, null)
 
   def nameOf(arg: Tree) = arg match {
@@ -31,14 +41,22 @@ trait NamesDefaults { self: Analyzer =>
   }
   def isNamed(arg: Tree) = nameOf(arg).isDefined
 
+<<<<<<< HEAD
   /** @param pos maps indicies from old to new */ 
+=======
+  /** @param pos maps indicies from old to new */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def reorderArgs[T: ClassManifest](args: List[T], pos: Int => Int): List[T] = {
     val res = new Array[T](args.length)
     // (hopefully) faster than zipWithIndex
     (0 /: args) { case (index, arg) => res(pos(index)) = arg; index + 1 }
     res.toList
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** @param pos maps indicies from new to old (!) */
   def reorderArgsInv[T: ClassManifest](args: List[T], pos: Int => Int): List[T] = {
     val argsArray = args.toArray
@@ -75,12 +93,20 @@ trait NamesDefaults { self: Analyzer =>
    *  >  val qual$n+m = arg(m)
    *  >  qual$1.fun[targs](x$1, ...)...(..., x$n)(x$n+1, ..., x$n+m)
    *   }
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * @param typer the typer calling this method; this method calls
    *    typer.doTypedApply
    * @param mode the mode to use for calling typer.doTypedApply
    * @param pt the expected type for calling typer.doTypedApply
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * @param tree: the function application tree
    * @argPos: a function mapping arguments from their current position to the
    *   position specified by the method type. example:
@@ -88,7 +114,11 @@ trait NamesDefaults { self: Analyzer =>
    *    foo(b = "1", a = 2)
    *  calls
    *    transformNamedApplication(Apply(foo, List("1", 2), { 0 => 1, 1 => 0 })
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @return the transformed application (a Block) together with the NamedApplyInfo.
    *     if isNamedApplyBlock(tree), returns the existing context.namedApplyBlockInfo
    */
@@ -184,7 +214,11 @@ trait NamesDefaults { self: Analyzer =>
         if (pre == NoType) {
           None
         } else {
+<<<<<<< HEAD
           val module = companionModuleOf(baseFun.symbol.owner, context)
+=======
+          val module = companionSymbolOf(baseFun.symbol.owner, context)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           if (module == NoSymbol) None
           else {
             val ref = atPos(pos.focus)(gen.mkAttributedRef(pre, module))
@@ -212,22 +246,38 @@ trait NamesDefaults { self: Analyzer =>
 
         case Select(New(tp @ Select(qual, _)), _) if isConstr =>
           // in `new q.C()', q is always stable
+<<<<<<< HEAD
           assert(treeInfo.isPureExpr(qual), qual)
           // 'moduleQual' fixes #2057
           blockWithoutQualifier(moduleQual(tp.pos, tp.tpe))
         case Select(TypeApply(New(tp @ Select(qual, _)), _), _) if isConstr =>
           assert(treeInfo.isPureExpr(qual), qual)
+=======
+          assert(treeInfo.isExprSafeToInline(qual), qual)
+          // 'moduleQual' fixes #2057
+          blockWithoutQualifier(moduleQual(tp.pos, tp.tpe))
+        case Select(TypeApply(New(tp @ Select(qual, _)), _), _) if isConstr =>
+          assert(treeInfo.isExprSafeToInline(qual), qual)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           blockWithoutQualifier(moduleQual(tp.pos, tp.tpe))
 
         // super constructor calls
         case Select(sp @ Super(_, _), _) if isConstr =>
           // 'moduleQual' fixes #3207. selection of the companion module of the
+<<<<<<< HEAD
           // superclass needs to have the same prefix as the the superclass.
+=======
+          // superclass needs to have the same prefix as the superclass.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           blockWithoutQualifier(moduleQual(baseFun.pos, sp.symbol.tpe.parents.head))
 
         // self constructor calls (in secondary constructors)
         case Select(tp, name) if isConstr =>
+<<<<<<< HEAD
           assert(treeInfo.isPureExpr(tp), tp)
+=======
+          assert(treeInfo.isExprSafeToInline(tp), tp)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           blockWithoutQualifier(moduleQual(tp.pos, tp.tpe))
 
         // other method calls
@@ -236,7 +286,11 @@ trait NamesDefaults { self: Analyzer =>
           blockWithoutQualifier(None)
 
         case Select(qual, name) =>
+<<<<<<< HEAD
           if (treeInfo.isPureExpr(qual))
+=======
+          if (treeInfo.isExprSafeToInline(qual))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             blockWithoutQualifier(Some(qual.duplicate))
           else
             blockWithQualifier(qual, name)
@@ -409,7 +463,11 @@ trait NamesDefaults { self: Analyzer =>
     if (i > 0) {
       val defGetterName = nme.defaultGetterName(param.owner.name, i)
       if (param.owner.isConstructor) {
+<<<<<<< HEAD
         val mod = companionModuleOf(param.owner.owner, context)
+=======
+        val mod = companionSymbolOf(param.owner.owner, context)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         mod.info.member(defGetterName)
       }
       else {
@@ -486,7 +544,11 @@ trait NamesDefaults { self: Analyzer =>
               if (sym.isVariable || sym.isGetter && sym.accessed.isVariable) {
                 // named arg not allowed
                 variableNameClash = true
+<<<<<<< HEAD
                 typer.context.error(sym.pos, 
+=======
+                typer.context.error(sym.pos,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                   "%s definition needs %s because '%s' is used as a named argument in its body.".format(
                     "variable",   // "method"
                     "type",       // "result type"
@@ -558,17 +620,24 @@ trait NamesDefaults { self: Analyzer =>
       val p = rest.head
       if (!p.isSynthetic) {
         if (p.name == name) return (i, None)
+<<<<<<< HEAD
         if (deprecatedName(p) == Some(name)) return (i, Some(p.name))
+=======
+        if (p.deprecatedParamName == Some(name)) return (i, Some(p.name))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       }
       i += 1
       rest = rest.tail
     }
     (-1, None)
   }
+<<<<<<< HEAD
 
   def deprecatedName(sym: Symbol): Option[Name] =
     sym.getAnnotation(DeprecatedNameAttr).map(ann => (ann.args(0): @unchecked) match {
       case Apply(fun, Literal(str) :: Nil) if (fun.symbol == Symbol_apply) =>
         newTermName(str.stringValue)
     })
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

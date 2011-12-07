@@ -41,7 +41,11 @@ class TreeSet[T >: Null <: AnyRef](less: (T, T) => Boolean) extends Set[T] {
   }
 
   def iterator = {
+<<<<<<< HEAD
     def elems(t: Tree): Iterator[T] = {      
+=======
+    def elems(t: Tree): Iterator[T] = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (t eq null) Iterator.empty
       else elems(t.l) ++ (Iterator single t.elem) ++ elems(t.r)
     }

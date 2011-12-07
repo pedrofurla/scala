@@ -14,22 +14,38 @@ package scala.tools.scalap
 package scalax
 package rules
 
+<<<<<<< HEAD
 trait Functor[+A] { 
+=======
+trait Functor[+A] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   type M[+A] <: Functor[A]
   def map[B](f : A => B) : M[B]
 }
 
+<<<<<<< HEAD
 trait Filter[+A] { 
+=======
+trait Filter[+A] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   type M[+A] <: Filter[A]
   def filter(f : A => Boolean) : M[A]
 }
 
+<<<<<<< HEAD
 trait Plus[+A] { 
+=======
+trait Plus[+A] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   type M[+A] <: Plus[A]
   def plus[B >: A](other : => M[B]) : M[B]
 }
 
+<<<<<<< HEAD
 trait OrElse[+A] { 
+=======
+trait OrElse[+A] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   type M[+A] <: OrElse[A]
   def orElse[B >: A](other : => M[B]) : M[B]
 }
@@ -47,11 +63,19 @@ trait Zero {
 
 trait Functors {
   type M[+A] <: Functor[A]
+<<<<<<< HEAD
   
   trait Functor[+A] extends rules.Functor[A] { this : M[A] =>
     type M[+A] = Functors.this.M[A]
   }
  
+=======
+
+  trait Functor[+A] extends rules.Functor[A] { this : M[A] =>
+    type M[+A] = Functors.this.M[A]
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait ZeroFunctor extends Functor[Nothing] { this : M[Nothing] =>
     override def map[B](f : Nothing => B) : M[B] = this
     def filter(f : Nothing => Boolean) : M[Nothing] = this
@@ -69,10 +93,17 @@ trait UnitFunctors extends Units with Functors {
 
 trait Monoidals extends UnitFunctors {
   type M[+A] <: Monoidal[A]
+<<<<<<< HEAD
     
   implicit def app[A, B](fab : M[A => B]) = (fa : M[A]) => fa applyTo fab
   implicit def appUnit[A, B](a2b : A => B) = app(unit(a2b))
   
+=======
+
+  implicit def app[A, B](fab : M[A => B]) = (fa : M[A]) => fa applyTo fab
+  implicit def appUnit[A, B](a2b : A => B) = app(unit(a2b))
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** One of 'and' and 'applyTo' definitions must be overridden in concrete subclasses */
   trait Monoidal[+A] extends Functor[A] { self : M[A] =>
     def and[B](fb : => M[B]) : M[(A, B)] = ((a : A) => (b : B) => (a, b))(this)(fb)

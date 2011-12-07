@@ -15,8 +15,13 @@ import javax.swing._
 import java.awt.event._
 
 /**
+<<<<<<< HEAD
  * A password field, that displays a replacement character for each character in the password. 
  * 
+=======
+ * A password field, that displays a replacement character for each character in the password.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * @see javax.swing.JPasswordField
  */
 class PasswordField(text0: String, columns0: Int) extends TextField(text0, columns0) {
@@ -24,12 +29,21 @@ class PasswordField(text0: String, columns0: Int) extends TextField(text0, colum
   def this(text: String) = this(text, 0)
   def this(columns: Int) = this("", columns)
   def this() = this("")
+<<<<<<< HEAD
   
   def echoChar: Char = peer.getEchoChar
   def echoChar_=(c: Char) = peer.setEchoChar(c)
   
   /**
    * The text property should not be used on a password field for 
+=======
+
+  def echoChar: Char = peer.getEchoChar
+  def echoChar_=(c: Char) = peer.setEchoChar(c)
+
+  /**
+   * The text property should not be used on a password field for
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * security reasons.
    */
   override def text: String = ""

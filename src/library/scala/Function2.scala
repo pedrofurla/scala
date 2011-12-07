@@ -11,12 +11,20 @@ package scala
 
 
 /** A function of 2 parameters.
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  In the following example, the definition of max is a
  *  shorthand for the anonymous class definition anonfun2:
  *
  *  {{{
+<<<<<<< HEAD
  *  object Main extends Application { 
+=======
+ *  object Main extends Application {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *    val max = (x: Int, y: Int) => if (x < y) y else x
  *
  *    val anonfun2 = new Function2[Int, Int, Int] {
@@ -31,7 +39,11 @@ trait Function2[@specialized(scala.Int, scala.Long, scala.Double) -T1, @speciali
    *  @return   the result of function application.
    */
   def apply(v1: T1, v2: T2): R
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Creates a curried version of this function.
    *
    *  @return   a function `f` such that `f(x1)(x2) == apply(x1, x2)`
@@ -39,8 +51,11 @@ trait Function2[@specialized(scala.Int, scala.Long, scala.Double) -T1, @speciali
   def curried: T1 => T2 => R = {
     (x1: T1) => (x2: T2) => apply(x1, x2)
   }
+<<<<<<< HEAD
   @deprecated("Use 'curried' instead", "2.8.0")
   def curry = curried
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** Creates a tupled version of this function: instead of 2 arguments,
    *  it accepts a single [[scala.Tuple2]] argument.

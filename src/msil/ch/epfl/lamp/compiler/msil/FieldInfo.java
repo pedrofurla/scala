@@ -5,7 +5,11 @@
 
 package ch.epfl.lamp.compiler.msil;
 
+<<<<<<< HEAD
 import ch.epfl.lamp.compiler.msil.util.PECustomMod; 
+=======
+import ch.epfl.lamp.compiler.msil.util.PECustomMod;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 /**
  * Discovers the attributes of a field and provides access to field metadata.
@@ -84,11 +88,19 @@ public class FieldInfo extends MemberInfo implements HasCustomModifiers {
     public final boolean IsNotSerialized() {
  	return (Attributes & FieldAttributes.NotSerialized) != 0;
     }
+<<<<<<< HEAD
     
     private boolean knownVolatile  = false;
     private boolean cachedVolatile = false; 
     public final boolean IsVolatile() {
         if(knownVolatile) return cachedVolatile; 
+=======
+
+    private boolean knownVolatile  = false;
+    private boolean cachedVolatile = false;
+    public final boolean IsVolatile() {
+        if(knownVolatile) return cachedVolatile;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         knownVolatile  = true;
         if(cmods == null) {
             cachedVolatile = false;
@@ -103,11 +115,19 @@ public class FieldInfo extends MemberInfo implements HasCustomModifiers {
         cachedVolatile = false;
         return cachedVolatile;
     }
+<<<<<<< HEAD
     
     public final Type[] GetOptionalCustomModifiers () {
         return CustomModifier.helperCustomMods(false, cmods);
     }
             
+=======
+
+    public final Type[] GetOptionalCustomModifiers () {
+        return CustomModifier.helperCustomMods(false, cmods);
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     public final Type[] GetRequiredCustomModifiers() {
         return CustomModifier.helperCustomMods(true, cmods);
     }

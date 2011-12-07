@@ -20,6 +20,7 @@ object TabbedPane {
     val Wrap = Value(JTabbedPane.WRAP_TAB_LAYOUT)
     val Scroll = Value(JTabbedPane.SCROLL_TAB_LAYOUT)
   }
+<<<<<<< HEAD
   
   class Page protected[TabbedPane](parent0: TabbedPane, title0: String, content0: Component, tip0: String) extends Proxy {
     def self = content0
@@ -27,10 +28,20 @@ object TabbedPane {
     def this(title0: String, content0: Component, tip0: String) = 
       this(null, title0, content0, tip0)
     def this(title0: String, content0: Component) = 
+=======
+
+  class Page protected[TabbedPane](parent0: TabbedPane, title0: String, content0: Component, tip0: String) extends Proxy {
+    def self = content0
+
+    def this(title0: String, content0: Component, tip0: String) =
+      this(null, title0, content0, tip0)
+    def this(title0: String, content0: Component) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       this(title0, content0, "")
     content = content0 // first add component, *then* set other things
     title = title0
     tip = tip0
+<<<<<<< HEAD
     
     protected[TabbedPane] var parent: TabbedPane = parent0
     
@@ -40,6 +51,17 @@ object TabbedPane {
       // beware to keep this order since, index depends on the _old_ title
       if (parent != null) parent.peer.setTitleAt(index, t)
       _title = t 
+=======
+
+    protected[TabbedPane] var parent: TabbedPane = parent0
+
+    protected var _title = title0
+    def title: String = _title
+    def title_=(t: String) {
+      // beware to keep this order since, index depends on the _old_ title
+      if (parent != null) parent.peer.setTitleAt(index, t)
+      _title = t
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
     protected var _content = content0
     def content: Component = _content//UIElement.cachedWrapper(peer.getComponentAt(index).asInstanceOf[JComponent])
@@ -60,28 +82,48 @@ object TabbedPane {
     def background: Color = _background //peer.getBackgroundAt(index)
     def background_=(c: Color) { _background = c; if (parent != null) parent.peer.setBackgroundAt(index, c)}
     def bounds: Rectangle = parent.peer.getBoundsAt(index)
+<<<<<<< HEAD
     
     // TODO: icon, disabledIcon
     
+=======
+
+    // TODO: icon, disabledIcon
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def index = if(parent != null) parent.peer.indexOfTab(title) else 0//_index
     //protected[TabbedPane] var _index: Int = index0
   }
 }
 
 /**
+<<<<<<< HEAD
  * Displays the contents of one of several pages at a time. For each page a tab is 
  * visible at all times. The user can click on one of these tabs to move the 
  * corresponding page to the front.
  * 
+=======
+ * Displays the contents of one of several pages at a time. For each page a tab is
+ * visible at all times. The user can click on one of these tabs to move the
+ * corresponding page to the front.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * @see javax.swing.JTabbedPane
  */
 class TabbedPane extends Component with Publisher {
   override lazy val peer: JTabbedPane = new JTabbedPane with SuperMixin
   import TabbedPane._
+<<<<<<< HEAD
   
   object pages extends BufferWrapper[Page] {
     def runCount: Int = peer.getTabRunCount
     
+=======
+
+  object pages extends BufferWrapper[Page] {
+    def runCount: Int = peer.getTabRunCount
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def remove(n: Int): Page = {
       val t = apply(n)
       peer.removeTabAt(n)
@@ -92,12 +134,17 @@ class TabbedPane extends Component with Publisher {
     protected def insertAt(n: Int, t: Page) {
       //for(i <- n to length) apply(i)._index += 1
       t.parent = TabbedPane.this
+<<<<<<< HEAD
       peer.insertTab(t.title, null, t.content.peer, t.tip, n) 
+=======
+      peer.insertTab(t.title, null, t.content.peer, t.tip, n)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
 
     def +=(t: Page): this.type = { t.parent = TabbedPane.this; peer.addTab(t.title, null, t.content.peer, t.tip); this }
     def length = peer.getTabCount
     def apply(n: Int) = new Page(TabbedPane.this, peer.getTitleAt(n),
+<<<<<<< HEAD
       UIElement.cachedWrapper[Component](peer.getComponentAt(n).asInstanceOf[javax.swing.JComponent]), 
       peer.getToolTipTextAt(n))
   }
@@ -106,24 +153,51 @@ class TabbedPane extends Component with Publisher {
   def tabLayoutPolicy_=(p: Layout.Value) { peer.setTabLayoutPolicy(p.id) }
   
   
+=======
+      UIElement.cachedWrapper[Component](peer.getComponentAt(n).asInstanceOf[javax.swing.JComponent]),
+      peer.getToolTipTextAt(n))
+  }
+
+  def tabLayoutPolicy: Layout.Value = Layout(peer.getTabLayoutPolicy)
+  def tabLayoutPolicy_=(p: Layout.Value) { peer.setTabLayoutPolicy(p.id) }
+
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def tabPlacement: Alignment.Value = Alignment(peer.getTabPlacement)
   /**
    * Possible values are Left, Right, Top, Bottom.
    */
+<<<<<<< HEAD
   def tabPlacement(b: Alignment.Value) { peer.setTabPlacement(b.id) }
   
+=======
+  def tabPlacement_=(b: Alignment.Value) { peer.setTabPlacement(b.id) }
+
+  @deprecated("Use tabPlacement_=() instead.", "2.9.1")
+  def tabPlacement(b: Alignment.Value) { peer.setTabPlacement(b.id) }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /**
    * The current page selection
    */
   object selection extends Publisher {
     def page: Page = pages(index)
     def page_=(p: Page) { index = p.index }
+<<<<<<< HEAD
   
     def index: Int = peer.getSelectedIndex
     def index_=(n: Int) { peer.setSelectedIndex(n) }
     
     peer.addChangeListener(new javax.swing.event.ChangeListener {
       def stateChanged(e: javax.swing.event.ChangeEvent) { 
+=======
+
+    def index: Int = peer.getSelectedIndex
+    def index_=(n: Int) { peer.setSelectedIndex(n) }
+
+    peer.addChangeListener(new javax.swing.event.ChangeListener {
+      def stateChanged(e: javax.swing.event.ChangeEvent) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         publish(SelectionChanged(TabbedPane.this))
       }
     })

@@ -14,7 +14,11 @@ package statement;
 
 /** A statement that returns a relation. */
 @deprecated(DbcIsDeprecated, "2.9.0") abstract class Relation extends Statement {
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def isCompatibleType: (DataType,DataType)=>Boolean =
     ((dt,wdt)=>dt.isSubtypeOf(wdt));
 
@@ -29,12 +33,17 @@ package statement;
   }
 
   def fieldTypes: List[DataType];
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def sqlTypeString: String =
     if (fieldTypes.isEmpty)
       "UNTYPED"
     else
       fieldTypes.map(dt=>dt.sqlString).mkString("RELATION (",", ",")");
+<<<<<<< HEAD
   
   /** A SQL-99 compliant string representation of the statement. */
   def sqlString: String;
@@ -43,13 +52,31 @@ package statement;
    * statement. This only has a meaning inside another statement. */
   def sqlInnerString: String;
   
+=======
+
+  /** A SQL-99 compliant string representation of the statement. */
+  def sqlString: String;
+
+  /** A SQL-99 compliant string representation of the relation sub-
+   * statement. This only has a meaning inside another statement. */
+  def sqlInnerString: String;
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Executes the statement on the given database. */
   def execute (database: scala.dbc.Database): scala.dbc.result.Relation = {
     database.executeStatement(this);
   }
+<<<<<<< HEAD
   
   def execute (database:scala.dbc.Database, debug:Boolean): scala.dbc.result.Relation = {
     database.executeStatement(this,debug);
   }
   
+=======
+
+  def execute (database:scala.dbc.Database, debug:Boolean): scala.dbc.result.Relation = {
+    database.executeStatement(this,debug);
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

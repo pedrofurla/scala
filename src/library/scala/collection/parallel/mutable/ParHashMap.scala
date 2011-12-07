@@ -22,6 +22,7 @@ import collection.mutable.UnrolledBuffer
 
 
 /** A parallel hash map.
+<<<<<<< HEAD
  *  
  *  `ParHashMap` is a parallel map which internally keeps elements within a hash table.
  *  It uses chaining to resolve collisions.
@@ -31,6 +32,17 @@ import collection.mutable.UnrolledBuffer
  *  @define Coll ParHashMap
  *  @define coll parallel hash map
  *  
+=======
+ *
+ *  `ParHashMap` is a parallel map which internally keeps elements within a hash table.
+ *  It uses chaining to resolve collisions.
+ *
+ *  @tparam T        type of the elements in the parallel hash map
+ *
+ *  @define Coll ParHashMap
+ *  @define coll parallel hash map
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author Aleksandar Prokopec
  */
 @SerialVersionUID(1L)
@@ -43,6 +55,7 @@ extends ParMap[K, V]
 {
 self =>
   initWithContents(contents)
+<<<<<<< HEAD
   
   type Entry = collection.mutable.DefaultEntry[K, V]
   
@@ -62,32 +75,68 @@ self =>
   
   override def clear() = clearTable()
   
+=======
+
+  type Entry = collection.mutable.DefaultEntry[K, V]
+
+  def this() = this(null)
+
+  override def mapCompanion: GenericParMapCompanion[ParHashMap] = ParHashMap
+
+  override def empty: ParHashMap[K, V] = new ParHashMap[K, V]
+
+  protected[this] override def newCombiner = ParHashMapCombiner[K, V]
+
+  override def seq = new collection.mutable.HashMap[K, V](hashTableContents)
+
+  def splitter = new ParHashMapIterator(1, table.length, size, table(0).asInstanceOf[DefaultEntry[K, V]]) with SCPI
+
+  override def size = tableSize
+
+  override def clear() = clearTable()
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def get(key: K): Option[V] = {
     val e = findEntry(key)
     if (e == null) None
     else Some(e.value)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def put(key: K, value: V): Option[V] = {
     val e = findEntry(key)
     if (e == null) { addEntry(new Entry(key, value)); None }
     else { val v = e.value; e.value = value; Some(v) }
   }
+<<<<<<< HEAD
   
   def update(key: K, value: V): Unit = put(key, value)
   
+=======
+
+  def update(key: K, value: V): Unit = put(key, value)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def remove(key: K): Option[V] = {
     val e = removeEntry(key)
     if (e ne null) Some(e.value)
     else None
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def += (kv: (K, V)): this.type = {
     val e = findEntry(kv._1)
     if (e == null) addEntry(new Entry(kv._1, kv._2))
     else e.value = kv._2
     this
   }
+<<<<<<< HEAD
   
   def -=(key: K): this.type = { removeEntry(key); this }
   
@@ -95,6 +144,15 @@ self =>
   
   type SCPI = SignalContextPassingIterator[ParHashMapIterator]
   
+=======
+
+  def -=(key: K): this.type = { removeEntry(key); this }
+
+  override def stringPrefix = "ParHashMap"
+
+  type SCPI = SignalContextPassingIterator[ParHashMapIterator]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class ParHashMapIterator(start: Int, untilIdx: Int, totalSize: Int, e: DefaultEntry[K, V])
   extends EntryIterator[(K, V), ParHashMapIterator](start, untilIdx, totalSize, e) with ParIterator {
   me: SCPI =>
@@ -102,6 +160,7 @@ self =>
     def newIterator(idxFrom: Int, idxUntil: Int, totalSz: Int, es: DefaultEntry[K, V]) =
       new ParHashMapIterator(idxFrom, idxUntil, totalSz, es) with SCPI
   }
+<<<<<<< HEAD
   
   private def writeObject(out: java.io.ObjectOutputStream) {
     serializeTo(out, _.value)
@@ -121,6 +180,27 @@ self =>
     buckets.flatMap(x => x) ++ elems.flatMap(x => x)
   }
   
+=======
+
+  private def writeObject(out: java.io.ObjectOutputStream) {
+    serializeTo(out, _.value)
+  }
+
+  private def readObject(in: java.io.ObjectInputStream) {
+    init[V](in, new Entry(_, _))
+  }
+
+  private[parallel] override def brokenInvariants = {
+    // bucket by bucket, count elements
+    val buckets = for (i <- 0 until (table.length / sizeMapBucketSize)) yield checkBucket(i)
+
+    // check if each element is in the position corresponding to its key
+    val elems = for (i <- 0 until table.length) yield checkEntry(i)
+
+    buckets.flatMap(x => x) ++ elems.flatMap(x => x)
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def checkBucket(i: Int) = {
     def count(e: HashEntry[K, DefaultEntry[K, V]]): Int = if (e eq null) 0 else 1 + count(e.next)
     val expected = sizemap(i)
@@ -130,14 +210,22 @@ self =>
     if (found != expected) List("Found " + found + " elements, while sizemap showed " + expected)
     else Nil
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def checkEntry(i: Int) = {
     def check(e: HashEntry[K, DefaultEntry[K, V]]): List[String] = if (e eq null) Nil else
       if (index(elemHashCode(e.key)) == i) check(e.next)
       else ("Element " + e.key + " at " + i + " with " + elemHashCode(e.key) + " maps to " + index(elemHashCode(e.key))) :: check(e.next)
     check(table(i))
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 
@@ -147,11 +235,19 @@ self =>
  */
 object ParHashMap extends ParMapFactory[ParHashMap] {
   var iters = 0
+<<<<<<< HEAD
   
   def empty[K, V]: ParHashMap[K, V] = new ParHashMap[K, V]
   
   def newCombiner[K, V]: Combiner[(K, V), ParHashMap[K, V]] = ParHashMapCombiner.apply[K, V]
   
+=======
+
+  def empty[K, V]: ParHashMap[K, V] = new ParHashMap[K, V]
+
+  def newCombiner[K, V]: Combiner[(K, V), ParHashMap[K, V]] = ParHashMapCombiner.apply[K, V]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   implicit def canBuildFrom[K, V]: CanCombineFrom[Coll, (K, V), ParHashMap[K, V]] = new CanCombineFromMap[K, V]
 }
 
@@ -164,7 +260,11 @@ extends collection.parallel.BucketCombiner[(K, V), ParHashMap[K, V], DefaultEntr
   import collection.parallel.tasksupport._
   private var mask = ParHashMapCombiner.discriminantmask
   private var nonmasklen = ParHashMapCombiner.nonmasklength
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def +=(elem: (K, V)) = {
     sz += 1
     val hc = improve(elemHashCode(elem._1))
@@ -177,7 +277,11 @@ extends collection.parallel.BucketCombiner[(K, V), ParHashMap[K, V], DefaultEntr
     buckets(pos) += new DefaultEntry(elem._1, elem._2)
     this
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def result: ParHashMap[K, V] = if (size >= (ParHashMapCombiner.numblocks * sizeMapBucketSize)) { // 1024
     // construct table
     val table = new AddingHashTable(size, tableLoadFactor)
@@ -204,12 +308,21 @@ extends collection.parallel.BucketCombiner[(K, V), ParHashMap[K, V], DefaultEntr
     val c = table.hashTableContents
     new ParHashMap(c)
   }
+<<<<<<< HEAD
   
   /* classes */
   
   /** A hash table which will never resize itself. Knowing the number of elements in advance,
    *  it allocates the table of the required size when created.
    *  
+=======
+
+  /* classes */
+
+  /** A hash table which will never resize itself. Knowing the number of elements in advance,
+   *  it allocates the table of the required size when created.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  Entries are added using the `insertEntry` method. This method checks whether the element
    *  exists and updates the size map. It returns false if the key was already in the table,
    *  and true if the key was successfully inserted. It does not update the number of elements
@@ -227,7 +340,11 @@ extends collection.parallel.BucketCombiner[(K, V), ParHashMap[K, V], DefaultEntr
       var h = index(elemHashCode(e.key))
       // assertCorrectBlock(h, block)
       var olde = table(h).asInstanceOf[DefaultEntry[K, V]]
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       // check if key already exists
       var ce = olde
       while (ce ne null) {
@@ -236,7 +353,11 @@ extends collection.parallel.BucketCombiner[(K, V), ParHashMap[K, V], DefaultEntr
           ce = null
         } else ce = ce.next
       }
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       // if key does not already exist
       if (h != -1) {
         e.next = olde
@@ -253,11 +374,19 @@ extends collection.parallel.BucketCombiner[(K, V), ParHashMap[K, V], DefaultEntr
       }
     }
   }
+<<<<<<< HEAD
   
   /* tasks */
   
   import UnrolledBuffer.Unrolled
   
+=======
+
+  /* tasks */
+
+  import UnrolledBuffer.Unrolled
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class FillBlocks(buckets: Array[Unrolled[DefaultEntry[K, V]]], table: AddingHashTable, offset: Int, howmany: Int)
   extends Task[Int, FillBlocks] {
     var result = Int.MinValue
@@ -305,7 +434,11 @@ extends collection.parallel.BucketCombiner[(K, V), ParHashMap[K, V], DefaultEntr
     }
     def shouldSplitFurther = howmany > collection.parallel.thresholdFromSize(ParHashMapCombiner.numblocks, parallelismLevel)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 
@@ -314,7 +447,11 @@ private[parallel] object ParHashMapCombiner {
   private[mutable] val numblocks = 1 << discriminantbits
   private[mutable] val discriminantmask = ((1 << discriminantbits) - 1);
   private[mutable] val nonmasklength = 32 - discriminantbits
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def apply[K, V] = new ParHashMapCombiner[K, V](HashTable.defaultLoadFactor) {} // was: with EnvironmentPassingCombiner[(K, V), ParHashMap[K, V]]
 }
 

@@ -15,18 +15,28 @@ import Spec.Info
  *  (trait Reference) and providing well typed vals for every configurable
  *  option in response to any given set of arguments (trait Instance).
  */
+<<<<<<< HEAD
 object Opt {  
   trait Error {
     self: Implicit =>
     
     protected def fail(msg: String) = runAndExit(println(programInfo.runner + ": " + msg))
     protected def failOption(arg: String, why: String) = fail("%s: '%s' is %s".format(opt, arg, why))    
+=======
+object Opt {
+  trait Error {
+    self: Implicit =>
+
+    protected def fail(msg: String) = runAndExit(println(programInfo.runner + ": " + msg))
+    protected def failOption(arg: String, why: String) = fail("%s: '%s' is %s".format(opt, arg, why))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   }
 
   trait Implicit {
     def name: String
     def programInfo: Info
     protected def opt = toOpt(name)
+<<<<<<< HEAD
     
     def --? : Boolean                       // --opt is set
     def --> (body: => Unit): Unit           // if --opt is set, execute body    
@@ -35,6 +45,16 @@ object Opt {
     
     def optMap[T](f: String => T) = --| map f
   
+=======
+
+    def --? : Boolean                       // --opt is set
+    def --> (body: => Unit): Unit           // if --opt is set, execute body
+    def --| : Option[String]                // --opt <arg: String> is optional, result is Option[String]
+    def --^[T: FromString] : Option[T]      // --opt <arg: T> is optional, result is Option[T]
+
+    def optMap[T](f: String => T) = --| map f
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Names.
      */
     def defaultTo[T: FromString](default: T): T
@@ -54,7 +74,11 @@ object Opt {
     def --> (body: => Unit)             = { addUnary(opt) }
     def --|                             = { addBinary(opt) ; None }
     def --^[T: FromString]              = { addBinary(opt) ; None }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def defaultTo[T: FromString](default: T)  = { addBinary(opt) ; addHelpDefault(() => default.toString) ; default }
     def defaultToEnv(envVar: String)          = { addBinary(opt) ; addHelpEnvDefault(envVar) ; "" }
     def choiceOf[T: FromString](choices: T*)  = { addBinary(opt) ; None }
@@ -73,6 +97,7 @@ object Opt {
         if (fs isDefinedAt arg) fs(arg)
         else failOption(arg, "not a " + fs.targetString)
       }
+<<<<<<< HEAD
     }    
     
     def defaultTo[T: FromString](default: T)  = --^[T] getOrElse default
@@ -80,6 +105,15 @@ object Opt {
     def expandTo(args: String*)               = ()
           
     def choiceOf[T: FromString](choices: T*) = {      
+=======
+    }
+
+    def defaultTo[T: FromString](default: T)  = --^[T] getOrElse default
+    def defaultToEnv(envVar: String)          = --| getOrElse envOrElse(envVar, "")
+    def expandTo(args: String*)               = ()
+
+    def choiceOf[T: FromString](choices: T*) = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       --^[T] map { arg =>
         if (choices contains arg) arg
         else failOption(arg.toString, "not a valid choice from " + choices)

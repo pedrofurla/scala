@@ -15,13 +15,18 @@ import scala.tools.nsc._
 import scala.tools.nsc.reporters.ConsoleReporter
 
 class ForeignCompiler {
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private var argsBuffer: Array[String] = null
   def args: Array[String] = argsBuffer
   def args_=(a: Array[String]) {
     argsBuffer = a
     nsc
   }
+<<<<<<< HEAD
   
   private val error: (String => Nothing) = { msg => throw new Exception(msg) }
   
@@ -29,6 +34,15 @@ class ForeignCompiler {
   
   private lazy val reporter = new ConsoleReporter(settings)
   
+=======
+
+  private val error: (String => Nothing) = { msg => throw new Exception(msg) }
+
+  private def settings = new scala.tools.nsc.Settings(error)
+
+  private lazy val reporter = new ConsoleReporter(settings)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private lazy val nsc: Global = {
     try {
       val command = new CompilerCommand(args.toList, settings)
@@ -39,11 +53,19 @@ class ForeignCompiler {
         throw new Exception(msg, ex)
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def compile(files: Array[File]): Int = {
     val command = new CompilerCommand(files.toList map (_.toString), settings)
     (new nsc.Run) compile command.files
     reporter.ERROR.count << 16 | reporter.WARNING.count
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

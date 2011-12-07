@@ -167,14 +167,18 @@ object Test {
   //##########################################################################
   // Values
 
+<<<<<<< HEAD
   import Math._
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   val u0: Unit    = ();
   val u1: Unit    = ();
 
   val z0: Boolean = false;
   val z1: Boolean = true;
 
+<<<<<<< HEAD
   val b0: Byte    = MIN_BYTE;
   val b1: Byte    = 1;
   val b2: Byte    = MAX_BYTE;
@@ -202,6 +206,35 @@ object Test {
   val d0: Double  = MIN_DOUBLE;
   val d1: Int     = 7;
   val d2: Double  = MAX_DOUBLE;
+=======
+  val b0: Byte    = Byte.MinValue;
+  val b1: Byte    = 1;
+  val b2: Byte    = Byte.MaxValue;
+
+  val s0: Short   = Short.MinValue;
+  val s1: Short   = 2;
+  val s2: Short   = Short.MaxValue;
+
+  val c0: Char    = Char.MinValue;
+  val c1: Char    = '3';
+  val c2: Char    = Char.MaxValue;
+
+  val i0: Int     = Int.MinValue;
+  val i1: Int     = 4;
+  val i2: Int     = Int.MinValue;
+
+  val l0: Long    = Long.MinValue;
+  val l1: Int     = 5;
+  val l2: Long    = Long.MaxValue;
+
+  val f0: Float   = Float.MinValue;
+  val f1: Int     = 6;
+  val f2: Float   = Float.MaxValue;
+
+  val d0: Double  = Double.MinValue;
+  val d1: Int     = 7;
+  val d2: Double  = Double.MaxValue;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   val a0: Unit    = ();
   val a1: Boolean = false;

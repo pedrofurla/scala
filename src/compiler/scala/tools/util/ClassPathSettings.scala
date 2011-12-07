@@ -19,7 +19,11 @@ trait ClassPathSettings {
 //   val f = File("/tmp/path-resolve-log.txt")
 //   if (f.exists) f.truncate()
 //   else f.createFile()
+<<<<<<< HEAD
 //   
+=======
+//
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 //   val res = f.bufferedWriter()
 //   res write ("Started debug log: %s\n".format(new java.util.Date))
 //   res

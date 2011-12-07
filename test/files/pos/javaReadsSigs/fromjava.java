@@ -21,13 +21,21 @@ class B { };
 // we are informed if the status changes.
 class Contra {
   // Not an Ordering<Character>.
+<<<<<<< HEAD
   static Ordering<Object> charOrd = scala.math.Ordering$Char$.MODULE$;
+=======
+  static Ordering<Object> charOrd = scala.math.Ordering.Char$.MODULE$;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   
   public boolean useCharOrd() {
     return charOrd.compare(new Object(), new Object()) == 0;
   }
   
+<<<<<<< HEAD
   static Numeric<?> intNum = scala.math.Numeric$IntIsIntegral$.MODULE$;
+=======
+  static Numeric<?> intNum = scala.math.Numeric.IntIsIntegral$.MODULE$;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 public class fromjava {

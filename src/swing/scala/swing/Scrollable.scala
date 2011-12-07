@@ -14,6 +14,7 @@ object Scrollable {
   trait Wrapper extends Scrollable {
     protected def scrollablePeer: javax.swing.Scrollable
     def preferredViewportSize = scrollablePeer.getPreferredScrollableViewportSize
+<<<<<<< HEAD
     
     def tracksViewportHeight: Boolean = scrollablePeer.getScrollableTracksViewportHeight
     def tracksViewportWidth: Boolean = scrollablePeer.getScrollableTracksViewportWidth
@@ -21,6 +22,15 @@ object Scrollable {
     def blockIncrement(visibleRect: Rectangle, orientation: Orientation.Value, direction: Int): Int =
       scrollablePeer.getScrollableBlockIncrement(visibleRect, orientation.id, direction)
     
+=======
+
+    def tracksViewportHeight: Boolean = scrollablePeer.getScrollableTracksViewportHeight
+    def tracksViewportWidth: Boolean = scrollablePeer.getScrollableTracksViewportWidth
+
+    def blockIncrement(visibleRect: Rectangle, orientation: Orientation.Value, direction: Int): Int =
+      scrollablePeer.getScrollableBlockIncrement(visibleRect, orientation.id, direction)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def unitIncrement(visibleRect: Rectangle, orientation: Orientation.Value, direction: Int): Int =
       scrollablePeer.getScrollableUnitIncrement(visibleRect, orientation.id, direction)
   }
@@ -28,16 +38,29 @@ object Scrollable {
 
 /**
  * A component that is specially suitable for being placed inside a
+<<<<<<< HEAD
  * <code>ScrollPane</code>. 
  * 
+=======
+ * <code>ScrollPane</code>.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * @see javax.swing.Scrollable
  */
 trait Scrollable extends Component {
   def preferredViewportSize: Dimension
+<<<<<<< HEAD
   
   def tracksViewportHeight: Boolean
   def tracksViewportWidth: Boolean
   
   def blockIncrement(visibleRect: Rectangle, orientation: Orientation.Value, direction: Int): Int  
+=======
+
+  def tracksViewportHeight: Boolean
+  def tracksViewportWidth: Boolean
+
+  def blockIncrement(visibleRect: Rectangle, orientation: Orientation.Value, direction: Int): Int
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def unitIncrement(visibleRect: Rectangle, orientation: Orientation.Value, direction: Int): Int
 }

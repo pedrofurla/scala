@@ -94,8 +94,13 @@ object Test4 {
   }
   class Foo8(@SourceAnnotation("constructor val") val n: Int) {}
   class Foo9 {
+<<<<<<< HEAD
     import scala.annotation.target._
     import scala.reflect.BeanProperty
+=======
+    import scala.annotation.meta._
+    import scala.beans.BeanProperty
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     @(SourceAnnotation @getter)("http://apple.com") val x = 0
     @BeanProperty @(SourceAnnotation @beanSetter)("http://uppla.com") var y = 0
 
@@ -103,14 +108,23 @@ object Test4 {
     @BeanProperty @myAnn("http://eppli.com") var z = 0
   }
   class Foo10(@SourceAnnotation("on param 1") val name: String)
+<<<<<<< HEAD
   class Foo11(@(SourceAnnotation @scala.annotation.target.field)("on param 2") val name: String)
   class Foo12(@(SourceAnnotation @scala.annotation.target.setter)("on param 3") var name: String)
+=======
+  class Foo11(@(SourceAnnotation @scala.annotation.meta.field)("on param 2") val name: String)
+  class Foo12(@(SourceAnnotation @scala.annotation.meta.setter)("on param 3") var name: String)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def run {
     import java.lang.annotation.Annotation
     import java.lang.reflect.AnnotatedElement
     def printSourceAnnotation(a: Annotation) {
       val ann = a.asInstanceOf[SourceAnnotation]
+<<<<<<< HEAD
       println("@test.SourceAnnotation(mails=" + ann.mails.deepMkString("{", ",", "}") +
+=======
+      println("@test.SourceAnnotation(mails=" + ann.mails.deep.mkString("{", ",", "}") +
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               ", value=" + ann.value + ")")
     }
     def printSourceAnnotations(target: AnnotatedElement) {
@@ -157,7 +171,11 @@ object Test4 {
 }
 
 object Test5 {
+<<<<<<< HEAD
   import scala.reflect.BeanProperty
+=======
+  import scala.beans.BeanProperty
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   import java.lang.Integer
 
   class Count {
@@ -182,8 +200,13 @@ object Test5 {
 }
 
 object Test6 {
+<<<<<<< HEAD
   import scala.reflect.BeanProperty
   import scala.reflect.BooleanBeanProperty
+=======
+  import scala.beans.BeanProperty
+  import scala.beans.BooleanBeanProperty
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class C(@BeanProperty var text: String)
   class D(@BooleanBeanProperty var prop: Boolean) {
     @BeanProperty val m: Int = if (prop) 1 else 2

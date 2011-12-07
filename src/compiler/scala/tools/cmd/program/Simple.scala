@@ -14,6 +14,7 @@ import Spec.Info
  */
 object Simple {
   type CommandLineTransform = SimpleCommandLine => SimpleCommandLine
+<<<<<<< HEAD
   
   abstract class SimpleSpec(val programInfo: Info) extends Spec with Meta.StdOpts with Interpolation
   
@@ -24,10 +25,23 @@ object Simple {
   class SimpleReference(
     programInfo: Info,
     unary: List[(String, String)] = Nil, 
+=======
+
+  abstract class SimpleSpec(val programInfo: Info) extends Spec with Meta.StdOpts with Interpolation
+
+  trait SimpleInstance extends SimpleSpec with Instance {
+    val parsed: CommandLine
+  }
+
+  class SimpleReference(
+    programInfo: Info,
+    unary: List[(String, String)] = Nil,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     binary: List[(String, String)] = Nil,
     postCreation: CommandLineTransform = null
   ) extends SimpleSpec(programInfo) with Reference {
 
+<<<<<<< HEAD
     spec => 
     
     if (programInfo.usage != "") help(programInfo.usage)
@@ -36,6 +50,16 @@ object Simple {
     
     type ThisCommandLine = SimpleCommandLine
   
+=======
+    spec =>
+
+    if (programInfo.usage != "") help(programInfo.usage)
+    unary foreach   { case (option, help) => option / help --? }
+    binary foreach  { case (option, help) => option / help --| }
+
+    type ThisCommandLine = SimpleCommandLine
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def creator(args: List[String]) = new SimpleCommandLine(spec, args)
     def instance(args: Array[String]): SimpleInstance = instance(args.toList)
     def instance(args: List[String]): SimpleInstance =
@@ -44,10 +68,17 @@ object Simple {
       } with SimpleSpec(programInfo) with SimpleInstance {
         lazy val referenceSpec = spec
       }
+<<<<<<< HEAD
     
     lazy val referenceSpec = spec    
   }
   
+=======
+
+    lazy val referenceSpec = spec
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def apply(info: Info, unary: List[(String, String)], binary: List[(String, String)], postCreation: CommandLineTransform): SimpleReference = {
     new SimpleReference(info, unary, binary, postCreation) {
       override def creator(args: List[String]) = {
@@ -57,7 +88,11 @@ object Simple {
       }
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def scalaProgramInfo(name: String, help: String) =
     Spec.Info(name, help, "scala.tools.cmd.program." + name.capitalize)
 

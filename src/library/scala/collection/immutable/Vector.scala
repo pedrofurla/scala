@@ -28,6 +28,7 @@ object Vector extends SeqFactory[Vector] {
 // in principle, most members should be private. however, access privileges must
 // be carefully chosen to not prevent method inlining
 
+<<<<<<< HEAD
 /** Vector is a general-purpose, immutable data structure.  It provides random access and updates 
  *  in effectively constant time, as well as very fast append and prepend.  Because vectors strike
  *  a good balance between fast random selections and fast random functional updates, they are 
@@ -35,6 +36,18 @@ object Vector extends SeqFactory[Vector] {
  *  endian bit-mapped vector trie with a branching factor of 32.  Locality is very good, but not 
  *  contiguous, which is good for very large sequences.
  *
+=======
+/** Vector is a general-purpose, immutable data structure.  It provides random access and updates
+ *  in effectively constant time, as well as very fast append and prepend.  Because vectors strike
+ *  a good balance between fast random selections and fast random functional updates, they are
+ *  currently the default implementation of immutable indexed sequences.  It is backed by a little
+ *  endian bit-mapped vector trie with a branching factor of 32.  Locality is very good, but not
+ *  contiguous, which is good for very large sequences.
+ *
+ *  @see [[http://docs.scala-lang.org/overviews/collections/concrete-immutable-collection-classes.html#vectors "Scala's Collection Library overview"]]
+ *  section on `Vectors` for more information.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @tparam A the element type
  *
  *  @define Coll Vector
@@ -52,7 +65,12 @@ object Vector extends SeqFactory[Vector] {
  *  @define willNotTerminateInf
  */
 final class Vector[+A](private[collection] val startIndex: Int, private[collection] val endIndex: Int, focus: Int)
+<<<<<<< HEAD
 extends IndexedSeq[A]
+=======
+extends AbstractSeq[A]
+   with IndexedSeq[A]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    with GenericTraversableTemplate[A, Vector]
    with IndexedSeqLike[A, Vector[A]]
    with VectorPointer[A @uncheckedVariance]
@@ -70,17 +88,29 @@ override def companion: GenericCompanion[Vector] = Vector
   private[immutable] var dirty = false
 
   def length = endIndex - startIndex
+<<<<<<< HEAD
   
   override def par = new ParVector(this)
   
   override def lengthCompare(len: Int): Int = length - len
   
+=======
+
+  override def par = new ParVector(this)
+
+  override def lengthCompare(len: Int): Int = length - len
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private[collection] final def initIterator[B >: A](s: VectorIterator[B]) {
     s.initFrom(this)
     if (dirty) s.stabilize(focus)
     if (s.depth > 1) s.gotoPos(startIndex, startIndex ^ focus)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   @inline override def iterator: VectorIterator[A] = {
     val s = new VectorIterator[A](startIndex, endIndex)
     initIterator(s)
@@ -90,10 +120,17 @@ override def companion: GenericCompanion[Vector] = Vector
 
   // can still be improved
   override /*SeqLike*/
+<<<<<<< HEAD
   def reverseIterator: Iterator[A] = new Iterator[A] {
     private var i = self.length
     def hasNext: Boolean = 0 < i
     def next: A = 
+=======
+  def reverseIterator: Iterator[A] = new AbstractIterator[A] {
+    private var i = self.length
+    def hasNext: Boolean = 0 < i
+    def next(): A =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (0 < i) {
         i -= 1
         self(i)
@@ -122,7 +159,11 @@ override def companion: GenericCompanion[Vector] = Vector
     //println("get elem: "+index + "/"+idx + "(focus:" +focus+" xor:"+(idx^focus)+" depth:"+depth+")")
     getElem(idx, idx ^ focus)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def checkRangeConvert(index: Int) = {
     val idx = index + startIndex
     if (0 <= index && idx < endIndex)
@@ -133,7 +174,11 @@ override def companion: GenericCompanion[Vector] = Vector
 
 
   // SeqLike api
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   @inline override def updated[B >: A, That](index: Int, elem: B)(implicit bf: CanBuildFrom[Vector[A], B, That]): That = {
     // just ignore bf
     updateAt(index, elem).asInstanceOf[That]
@@ -199,12 +244,17 @@ override def companion: GenericCompanion[Vector] = Vector
     if (isEmpty) throw new UnsupportedOperationException("empty.last")
     apply(length-1)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override /*TraversableLike*/ def init: Vector[A] = {
     if (isEmpty) throw new UnsupportedOperationException("empty.init")
     dropRight(1)
   }
 
+<<<<<<< HEAD
   override /*IterableLike*/ def slice(from: Int, until: Int): Vector[A] = 
     take(until).drop(from)
 
@@ -213,12 +263,27 @@ override def companion: GenericCompanion[Vector] = Vector
     
   // concat (stub)
   
+=======
+  override /*IterableLike*/ def slice(from: Int, until: Int): Vector[A] =
+    take(until).drop(from)
+
+  override /*IterableLike*/ def splitAt(n: Int): (Vector[A], Vector[A]) = (take(n), drop(n))
+
+
+  // concat (stub)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def ++[B >: A, That](that: GenTraversableOnce[B])(implicit bf: CanBuildFrom[Vector[A], B, That]): That = {
     super.++(that.seq)
   }
 
+<<<<<<< HEAD
     
   
+=======
+
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // semi-private api
 
   private[immutable] def updateAt[B >: A](index: Int, elem: B): Vector[B] = {
@@ -230,15 +295,24 @@ override def companion: GenericCompanion[Vector] = Vector
     s.display0(idx & 0x1f) = elem.asInstanceOf[AnyRef]
     s
   }
+<<<<<<< HEAD
   
   
+=======
+
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def gotoPosWritable(oldIndex: Int, newIndex: Int, xor: Int) = if (dirty) {
     gotoPosWritable1(oldIndex, newIndex, xor)
   } else {
     gotoPosWritable0(newIndex, xor)
     dirty = true
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def gotoFreshPosWritable(oldIndex: Int, newIndex: Int, xor: Int) = if (dirty) {
     gotoFreshPosWritable1(oldIndex, newIndex, xor)
   } else {
@@ -276,7 +350,11 @@ override def companion: GenericCompanion[Vector] = Vector
             val s = new Vector(startIndex - 1 + shift, endIndex + shift, newBlockIndex)
             s.initFrom(this)
             s.dirty = dirty
+<<<<<<< HEAD
             s.shiftTopLevel(0, shiftBlocks) // shift right by n blocks 
+=======
+            s.shiftTopLevel(0, shiftBlocks) // shift right by n blocks
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             s.debug
             s.gotoFreshPosWritable(newFocus, newBlockIndex, newFocus ^ newBlockIndex) // maybe create pos; prepare for writing
             s.display0(lo) = value.asInstanceOf[AnyRef]
@@ -347,7 +425,11 @@ override def companion: GenericCompanion[Vector] = Vector
     if (endIndex != startIndex) {
       var blockIndex = endIndex & ~31
       var lo = endIndex & 31
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (endIndex != blockIndex) {
         //println("will make writable block (from "+focus+") at: " + blockIndex)
         val s = new Vector(startIndex, endIndex + 1, blockIndex)
@@ -361,7 +443,11 @@ override def companion: GenericCompanion[Vector] = Vector
         val shiftBlocks = startIndex >>> 5*(depth-1)
 
         //println("----- appendBack " + value + " at " + endIndex + " reached block end")
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         if (shift != 0) {
           debug
           //println("shifting left by " + shiftBlocks + " at level " + (depth-1) + " (had "+startIndex+" free space)")
@@ -371,7 +457,11 @@ override def companion: GenericCompanion[Vector] = Vector
             val s = new Vector(startIndex - shift, endIndex + 1 - shift, newBlockIndex)
             s.initFrom(this)
             s.dirty = dirty
+<<<<<<< HEAD
             s.shiftTopLevel(shiftBlocks, 0) // shift left by n blocks 
+=======
+            s.shiftTopLevel(shiftBlocks, 0) // shift left by n blocks
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             s.debug
             s.gotoFreshPosWritable(newFocus, newBlockIndex, newFocus ^ newBlockIndex)
             s.display0(lo) = value.asInstanceOf[AnyRef]
@@ -578,17 +668,29 @@ override def companion: GenericCompanion[Vector] = Vector
     else if (xor < (1 << 30)) 6
     else throw new IllegalArgumentException()
   }
+<<<<<<< HEAD
   
   private def dropFront0(cutIndex: Int): Vector[A] = {
     var blockIndex = cutIndex & ~31
     var lo = cutIndex & 31
     
+=======
+
+  private def dropFront0(cutIndex: Int): Vector[A] = {
+    var blockIndex = cutIndex & ~31
+    var lo = cutIndex & 31
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val xor = cutIndex ^ (endIndex - 1)
     val d = requiredDepth(xor)
     val shift = (cutIndex & ~((1 << (5*d))-1))
 
     //println("cut front at " + cutIndex + ".." + endIndex + " (xor: "+xor+" shift: " + shift + " d: " + d +")")
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 /*
     val s = new Vector(cutIndex-shift, endIndex-shift, blockIndex-shift)
     s.initFrom(this)
@@ -598,7 +700,11 @@ override def companion: GenericCompanion[Vector] = Vector
     s.stabilize(blockIndex-shift)
     s.cleanLeftEdge(cutIndex-shift)
     s
+<<<<<<< HEAD
 */    
+=======
+*/
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     // need to init with full display iff going to cutIndex requires swapping block at level >= d
 
@@ -618,12 +724,21 @@ override def companion: GenericCompanion[Vector] = Vector
     val xor = startIndex ^ (cutIndex - 1)
     val d = requiredDepth(xor)
     val shift = (startIndex & ~((1 << (5*d))-1))
+<<<<<<< HEAD
     
 /*    
     println("cut back at " + startIndex + ".." + cutIndex + " (xor: "+xor+" d: " + d +")")
     if (cutIndex == blockIndex + 32)
       println("OUCH!!!")
 */    
+=======
+
+/*
+    println("cut back at " + startIndex + ".." + cutIndex + " (xor: "+xor+" d: " + d +")")
+    if (cutIndex == blockIndex + 32)
+      println("OUCH!!!")
+*/
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val s = new Vector(startIndex-shift, cutIndex-shift, blockIndex-shift)
     s.initFrom(this)
     s.dirty = dirty
@@ -632,11 +747,22 @@ override def companion: GenericCompanion[Vector] = Vector
     s.cleanRightEdge(cutIndex-shift)
     s
   }
+<<<<<<< HEAD
   
 }
 
 
 class VectorIterator[+A](_startIndex: Int, _endIndex: Int) extends Iterator[A] with VectorPointer[A @uncheckedVariance] {
+=======
+
+}
+
+
+class VectorIterator[+A](_startIndex: Int, _endIndex: Int)
+extends AbstractIterator[A]
+   with Iterator[A]
+   with VectorPointer[A @uncheckedVariance] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   private var blockIndex: Int = _startIndex & ~31
   private var lo: Int = _startIndex & 31
@@ -669,9 +795,15 @@ class VectorIterator[+A](_startIndex: Int, _endIndex: Int) extends Iterator[A] w
 
     res
   }
+<<<<<<< HEAD
   
   private[collection] def remainingElementCount: Int = (_endIndex - (blockIndex + lo)) max 0
   
+=======
+
+  private[collection] def remainingElementCount: Int = (_endIndex - (blockIndex + lo)) max 0
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Creates a new vector which consists of elements remaining in this iterator.
    *  Such a vector can then be split into several vectors using methods like `take` and `drop`.
    */
@@ -680,13 +812,18 @@ class VectorIterator[+A](_startIndex: Int, _endIndex: Int) extends Iterator[A] w
     v.initFrom(this)
     v
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   @deprecated("this method is experimental and will be removed in a future release", "2.8.0")
   @inline def foreachFast[U](f: A =>  U) { while (hasNext) f(next()) }
 }
 
 
 final class VectorBuilder[A]() extends Builder[A,Vector[A]] with VectorPointer[A @uncheckedVariance] {
+<<<<<<< HEAD
   
   // possible alternative: start with display0 = null, blockIndex = -32, lo = 32
   // to avoid allocating initial array if the result will be empty anyways
@@ -697,6 +834,18 @@ final class VectorBuilder[A]() extends Builder[A,Vector[A]] with VectorPointer[A
   private var blockIndex = 0
   private var lo = 0
   
+=======
+
+  // possible alternative: start with display0 = null, blockIndex = -32, lo = 32
+  // to avoid allocating initial array if the result will be empty anyways
+
+  display0 = new Array[AnyRef](32)
+  depth = 1
+
+  private var blockIndex = 0
+  private var lo = 0
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def += (elem: A): this.type = {
     if (lo >= display0.length) {
       val newBlockIndex = blockIndex+32
@@ -721,7 +870,11 @@ final class VectorBuilder[A]() extends Builder[A,Vector[A]] with VectorPointer[A
     if (depth > 1) s.gotoPos(0, size - 1) // we're currently focused to size - 1, not size!
     s
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def clear(): Unit = {
     display0 = new Array[AnyRef](32)
     depth = 1
@@ -743,7 +896,11 @@ private[immutable] trait VectorPointer[T] {
 
     // used
     private[immutable] final def initFrom[U](that: VectorPointer[U]): Unit = initFrom(that, that.depth)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private[immutable] final def initFrom[U](that: VectorPointer[U], depth: Int) = {
       this.depth = depth
       (depth - 1) match {
@@ -993,30 +1150,47 @@ private[immutable] trait VectorPointer[T] {
 
 
     /// USED IN UPDATE AND APPEND BACK
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // prepare for writing at an existing position
 
     // requires structure is clean and at pos oldIndex = xor ^ newIndex,
     // ensures structure is dirty and at pos newIndex and writable at level 0
     private[immutable] final def gotoPosWritable0(newIndex: Int, xor: Int): Unit = (depth - 1) match {
+<<<<<<< HEAD
       case 5 => 
+=======
+      case 5 =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         display5 = copyOf(display5)
         display4 = nullSlotAndCopy(display5, (newIndex >> 25) & 31).asInstanceOf[Array[AnyRef]]
         display3 = nullSlotAndCopy(display4, (newIndex >> 20) & 31).asInstanceOf[Array[AnyRef]]
         display2 = nullSlotAndCopy(display3, (newIndex >> 15) & 31).asInstanceOf[Array[AnyRef]]
         display1 = nullSlotAndCopy(display2, (newIndex >> 10) & 31).asInstanceOf[Array[AnyRef]]
         display0 = nullSlotAndCopy(display1, (newIndex >>  5) & 31).asInstanceOf[Array[AnyRef]]
+<<<<<<< HEAD
       case 4 => 
+=======
+      case 4 =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         display4 = copyOf(display4)
         display3 = nullSlotAndCopy(display4, (newIndex >> 20) & 31).asInstanceOf[Array[AnyRef]]
         display2 = nullSlotAndCopy(display3, (newIndex >> 15) & 31).asInstanceOf[Array[AnyRef]]
         display1 = nullSlotAndCopy(display2, (newIndex >> 10) & 31).asInstanceOf[Array[AnyRef]]
         display0 = nullSlotAndCopy(display1, (newIndex >>  5) & 31).asInstanceOf[Array[AnyRef]]
+<<<<<<< HEAD
       case 3 => 
+=======
+      case 3 =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         display3 = copyOf(display3)
         display2 = nullSlotAndCopy(display3, (newIndex >> 15) & 31).asInstanceOf[Array[AnyRef]]
         display1 = nullSlotAndCopy(display2, (newIndex >> 10) & 31).asInstanceOf[Array[AnyRef]]
         display0 = nullSlotAndCopy(display1, (newIndex >>  5) & 31).asInstanceOf[Array[AnyRef]]
+<<<<<<< HEAD
       case 2 => 
         display2 = copyOf(display2)
         display1 = nullSlotAndCopy(display2, (newIndex >> 10) & 31).asInstanceOf[Array[AnyRef]]
@@ -1029,6 +1203,20 @@ private[immutable] trait VectorPointer[T] {
     }
     
     
+=======
+      case 2 =>
+        display2 = copyOf(display2)
+        display1 = nullSlotAndCopy(display2, (newIndex >> 10) & 31).asInstanceOf[Array[AnyRef]]
+        display0 = nullSlotAndCopy(display1, (newIndex >>  5) & 31).asInstanceOf[Array[AnyRef]]
+      case 1 =>
+        display1 = copyOf(display1)
+        display0 = nullSlotAndCopy(display1, (newIndex >>  5) & 31).asInstanceOf[Array[AnyRef]]
+      case 0 =>
+        display0 = copyOf(display0)
+    }
+
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // requires structure is dirty and at pos oldIndex,
     // ensures structure is dirty and at pos newIndex and writable at level 0
     private[immutable] final def gotoPosWritable1(oldIndex: Int, newIndex: Int, xor: Int): Unit = {
@@ -1039,6 +1227,7 @@ private[immutable] trait VectorPointer[T] {
         display1 = copyOf(display1)
         display1((oldIndex >> 5) & 31) = display0
         display0 = nullSlotAndCopy(display1, (newIndex >>  5) & 31)
+<<<<<<< HEAD
       } else                                                                               
       if (xor < (1 << 15)) { // level = 2                                                  
         display1 = copyOf(display1)
@@ -1060,30 +1249,73 @@ private[immutable] trait VectorPointer[T] {
         display0 = nullSlotAndCopy(display1, (newIndex >>  5) & 31).asInstanceOf[Array[AnyRef]]
       } else                                                                               
       if (xor < (1 << 25)) { // level = 4                                                  
+=======
+      } else
+      if (xor < (1 << 15)) { // level = 2
+        display1 = copyOf(display1)
+        display2 = copyOf(display2)
+        display1((oldIndex >>  5) & 31) = display0
+        display2((oldIndex >> 10) & 31) = display1
+        display1 = nullSlotAndCopy(display2, (newIndex >> 10) & 31).asInstanceOf[Array[AnyRef]]
+        display0 = nullSlotAndCopy(display1, (newIndex >>  5) & 31).asInstanceOf[Array[AnyRef]]
+      } else
+      if (xor < (1 << 20)) { // level = 3
+        display1 = copyOf(display1)
+        display2 = copyOf(display2)
+        display3 = copyOf(display3)
+        display1((oldIndex >>  5) & 31) = display0
+        display2((oldIndex >> 10) & 31) = display1
+        display3((oldIndex >> 15) & 31) = display2
+        display2 = nullSlotAndCopy(display3, (newIndex >> 15) & 31).asInstanceOf[Array[AnyRef]]
+        display1 = nullSlotAndCopy(display2, (newIndex >> 10) & 31).asInstanceOf[Array[AnyRef]]
+        display0 = nullSlotAndCopy(display1, (newIndex >>  5) & 31).asInstanceOf[Array[AnyRef]]
+      } else
+      if (xor < (1 << 25)) { // level = 4
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         display1 = copyOf(display1)
         display2 = copyOf(display2)
         display3 = copyOf(display3)
         display4 = copyOf(display4)
+<<<<<<< HEAD
         display1((oldIndex >>  5) & 31) = display0                                         
         display2((oldIndex >> 10) & 31) = display1                                         
         display3((oldIndex >> 15) & 31) = display2                                         
         display4((oldIndex >> 20) & 31) = display3                                         
+=======
+        display1((oldIndex >>  5) & 31) = display0
+        display2((oldIndex >> 10) & 31) = display1
+        display3((oldIndex >> 15) & 31) = display2
+        display4((oldIndex >> 20) & 31) = display3
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         display3 = nullSlotAndCopy(display4, (newIndex >> 20) & 31).asInstanceOf[Array[AnyRef]]
         display2 = nullSlotAndCopy(display3, (newIndex >> 15) & 31).asInstanceOf[Array[AnyRef]]
         display1 = nullSlotAndCopy(display2, (newIndex >> 10) & 31).asInstanceOf[Array[AnyRef]]
         display0 = nullSlotAndCopy(display1, (newIndex >>  5) & 31).asInstanceOf[Array[AnyRef]]
+<<<<<<< HEAD
       } else                                                                               
       if (xor < (1 << 30)) { // level = 5                                                  
+=======
+      } else
+      if (xor < (1 << 30)) { // level = 5
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         display1 = copyOf(display1)
         display2 = copyOf(display2)
         display3 = copyOf(display3)
         display4 = copyOf(display4)
         display5 = copyOf(display5)
+<<<<<<< HEAD
         display1((oldIndex >>  5) & 31) = display0                                         
         display2((oldIndex >> 10) & 31) = display1                                         
         display3((oldIndex >> 15) & 31) = display2                                         
         display4((oldIndex >> 20) & 31) = display3                                         
         display5((oldIndex >> 25) & 31) = display4                                         
+=======
+        display1((oldIndex >>  5) & 31) = display0
+        display2((oldIndex >> 10) & 31) = display1
+        display3((oldIndex >> 15) & 31) = display2
+        display4((oldIndex >> 20) & 31) = display3
+        display5((oldIndex >> 25) & 31) = display4
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         display4 = nullSlotAndCopy(display5, (newIndex >> 25) & 31).asInstanceOf[Array[AnyRef]]
         display3 = nullSlotAndCopy(display4, (newIndex >> 20) & 31).asInstanceOf[Array[AnyRef]]
         display2 = nullSlotAndCopy(display3, (newIndex >> 15) & 31).asInstanceOf[Array[AnyRef]]
@@ -1096,7 +1328,11 @@ private[immutable] trait VectorPointer[T] {
 
 
     // USED IN DROP
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private[immutable] final def copyRange(array: Array[AnyRef], oldLeft: Int, newLeft: Int) = {
       val elems = new Array[AnyRef](32)
       Platform.arraycopy(array, oldLeft, elems, newLeft, 32 - math.max(newLeft,oldLeft))
@@ -1197,8 +1433,13 @@ private[immutable] trait VectorPointer[T] {
     }
 
 
+<<<<<<< HEAD
     
     
+=======
+
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // DEBUG STUFF
 
     private[immutable] def debug(): Unit = {

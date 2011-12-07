@@ -3,12 +3,21 @@ import scala.collection.immutable.TreeMap
 
 object Test extends App {
   /* This method converts parsed JSON back into real JSON notation with objects in
+<<<<<<< HEAD
    * sorted-key order. Not required by the spec, but it allows us to to a stable
    * toString comparison. */
   def jsonToString(in : Any) : String = in match {
     case l : List[_] => "[" + l.map(jsonToString).mkString(", ") + "]"
     case m : Map[String,_] => "{" + m.elements.toList
          .sort({ (x,y) => x._1 < y._1 })
+=======
+   * sorted-key order. Not required by the spec, but it allows us to do a stable
+   * toString comparison. */
+  def jsonToString(in : Any) : String = in match {
+    case l : List[_] => "[" + l.map(jsonToString).mkString(", ") + "]"
+    case m : Map[String,_] => "{" + m.iterator.toList
+         .sortWith({ (x,y) => x._1 < y._1 })
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
          .map({ case (k,v) => "\"" + k + "\": " + jsonToString(v) })
          .mkString(", ") + "}"
     case s : String => "\"" + s + "\""
@@ -20,7 +29,11 @@ object Test extends App {
    */
   def sortJSON(in : Any) : Any = in match {
     case l : List[_] => l.map(sortJSON)
+<<<<<<< HEAD
     case m : Map[String,_] => TreeMap(m.mapElements(sortJSON).elements.toSeq : _*)
+=======
+    case m : Map[String,_] => TreeMap(m.mapValues(sortJSON).iterator.toSeq : _*)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // For the object versions, sort their contents, ugly casts and all...
     case JSONObject(data) => JSONObject(sortJSON(data).asInstanceOf[Map[String,Any]])
     case JSONArray(data) => JSONArray(sortJSON(data).asInstanceOf[List[Any]])
@@ -62,7 +75,11 @@ object Test extends App {
   def stringDiff (expected : String, actual : String) {
     if (expected != actual) {
       // Figure out where the Strings differ and generate a marker
+<<<<<<< HEAD
         val mismatchPosition = expected.toList.zip(actual.toList).findIndexOf({case (x,y) => x != y}) match {
+=======
+        val mismatchPosition = expected.toList.zip(actual.toList).indexWhere({case (x,y) => x != y}) match {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           case -1 => Math.min(expected.length, actual.length)
           case x => x
         }

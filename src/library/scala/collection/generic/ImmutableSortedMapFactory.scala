@@ -23,4 +23,8 @@ package generic
  *  @define sortedMapCanBuildFromInfo
  *    The standard `CanBuildFrom` instance for sorted maps
  */
+<<<<<<< HEAD
 abstract class ImmutableSortedMapFactory[CC[A, B] <: immutable.SortedMap[A, B] with SortedMapLike[A, B, CC[A, B]]] extends SortedMapFactory[CC] 
+=======
+abstract class ImmutableSortedMapFactory[CC[A, B] <: immutable.SortedMap[A, B] with SortedMapLike[A, B, CC[A, B]]] extends SortedMapFactory[CC]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0

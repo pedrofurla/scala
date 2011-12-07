@@ -28,7 +28,11 @@ object ProcessResult {
 
 trait LoopCommands {
   protected def out: JPrintWriter
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // So outputs can be suppressed.
   def echoCommandMessage(msg: String): Unit = out println msg
 
@@ -41,19 +45,31 @@ trait LoopCommands {
     def longHelp = _longHelp match {
       case null   => defaultHelp
       case text   => text
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def usage: String = ""
     def usageMsg: String = ":" + name + (
       if (usage == "") "" else " " + usage
     )
     def apply(line: String): Result
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // called if no args are given
     def showUsage(): Result = {
       "usage is " + usageMsg
       Result(true, None)
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def onError(msg: String) = {
       out.println("error: " + msg)
       showUsage()
@@ -62,6 +78,7 @@ trait LoopCommands {
   object LoopCommand {
     def nullary(name: String, help: String, f: () => Result): LoopCommand =
       new NullaryCmd(name, help, _ => f())
+<<<<<<< HEAD
     
     def cmd(name: String, usage: String, help: String, f: String => Result): LoopCommand =
       if (usage == "") new NullaryCmd(name, help, f)
@@ -75,6 +92,21 @@ trait LoopCommands {
     def apply(line: String): Result = f(line)
   }
   
+=======
+
+    def cmd(name: String, usage: String, help: String, f: String => Result): LoopCommand =
+      if (usage == "") new NullaryCmd(name, help, f)
+      else new LineCmd(name, usage, help, f)
+
+    def varargs(name: String, usage: String, help: String, f: List[String] => Result): LoopCommand =
+      new VarArgsCmd(name, usage, help, f)
+  }
+
+  class NullaryCmd(name: String, help: String, f: String => Result) extends LoopCommand(name, help) {
+    def apply(line: String): Result = f(line)
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class LineCmd(name: String, argWord: String, help: String, f: String => Result) extends LoopCommand(name, help) {
     override def usage = argWord
     def apply(line: String): Result = f(line)
@@ -89,7 +121,11 @@ trait LoopCommands {
 
   // the result of a single command
   case class Result(val keepRunning: Boolean, val lineToRecord: Option[String])
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   object Result {
     // the default result means "keep running, and don't record that line"
     val default = Result(true, None)

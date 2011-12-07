@@ -41,7 +41,11 @@ abstract class ConstantFolder {
   private def fold(tree: Tree, compX: => Constant): Tree =
     try {
       val x = compX
+<<<<<<< HEAD
       if ((x ne null) && x.tag != UnitTag) tree setType ConstantType(x) 
+=======
+      if ((x ne null) && x.tag != UnitTag) tree setType ConstantType(x)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       else tree
     } catch {
       case _: ArithmeticException => tree   // the code will crash at runtime,
@@ -120,7 +124,11 @@ abstract class ConstantFolder {
     case nme.DIV => Constant(x.longValue / y.longValue)
     case nme.MOD => Constant(x.longValue % y.longValue)
     case _ => null
+<<<<<<< HEAD
   }  
+=======
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def foldFloatOp(op: Name, x: Constant, y: Constant): Constant = op match {
     case nme.EQ  => Constant(x.floatValue == y.floatValue)
     case nme.NE  => Constant(x.floatValue != y.floatValue)
@@ -155,7 +163,11 @@ abstract class ConstantFolder {
       if (x.tag == y.tag) x.tag
       else if (x.isNumeric && y.isNumeric) math.max(x.tag, y.tag)
       else NoTag
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     try optag match {
       case BooleanTag                               => foldBooleanOp(op, x, y)
       case ByteTag | ShortTag | CharTag | IntTag    => foldSubrangeOp(op, x, y)

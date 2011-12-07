@@ -23,7 +23,11 @@ import parallel.ParSet
  *  @define setNote
  *
  *  A set is a collection that contains no duplicate elements.
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *    '''Implementation note:'''
  *    This trait provides most of the operations of a `Set` independently of its representation.
  *    It is typically inherited by concrete implementations of sets.
@@ -43,20 +47,32 @@ import parallel.ParSet
  *    }}}
  *    It is also good idea to override methods `foreach` and
  *    `size` for efficiency.
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * @define setTags
  *  @tparam A    the type of the elements of the set
  *  @tparam This the type of the set itself.
  *
  *  @author  Martin Odersky
  *  @version 2.8
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define coll set
  *  @define Coll Set
  *  @define willNotTerminateInf
  *  @define mayNotTerminateInf
  */
+<<<<<<< HEAD
 trait SetLike[A, +This <: SetLike[A, This] with Set[A]] 
+=======
+trait SetLike[A, +This <: SetLike[A, This] with Set[A]]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 extends IterableLike[A, This]
    with GenSetLike[A, This]
    with Subtractable[A, This]
@@ -75,7 +91,11 @@ self =>
    *  `mutable.SetLike`</a>.
    */
   override protected[this] def newBuilder: Builder[A, This] = new SetBuilder[A, This](empty)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected[this] override def parCombiner = ParSet.newCombiner[A]
 
   /** Overridden for efficiency. */
@@ -85,7 +105,11 @@ self =>
     copyToBuffer(result)
     result
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // note: this is only overridden here to add the migration annotation,
   // which I hope to turn into an Xlint style warning as the migration aspect
   // is not central to its importance.
@@ -107,8 +131,13 @@ self =>
    *          contains `elem`.
    */
   def + (elem: A): This
+<<<<<<< HEAD
   
   /** Creates a new $coll with additional elements. 
+=======
+
+  /** Creates a new $coll with additional elements.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *
    *  This method takes two or more elements to be added. Another overloaded
    *  variant of this method handles the case where a single element is added.
@@ -119,7 +148,11 @@ self =>
    *  @return   a new $coll with the given elements added.
    */
   def + (elem1: A, elem2: A, elems: A*): This = this + elem1 + elem2 ++ elems
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Creates a new $coll by adding all elements contained in another collection to this $coll.
    *
    *  @param elems     the collection containing the added elements.
@@ -144,6 +177,7 @@ self =>
    */
   override def isEmpty: Boolean = size == 0
 
+<<<<<<< HEAD
   /**  This method is an alias for `intersect`. 
    *  It computes an intersection with set `that`.
    *  It removes all the elements that are not present in `that`.
@@ -153,11 +187,17 @@ self =>
   @deprecated("use & instead", "2.8.0")
   def ** (that: Set[A]): This = &(that)
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Computes the union between of set and another set.
    *
    *  @param   that  the set to form the union with.
    *  @return  a new set consisting of all elements that are in this
+<<<<<<< HEAD
    *  set or in the given set `that`. 
+=======
+   *  set or in the given set `that`.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */
   def union(that: GenSet[A]): This = this ++ that
 
@@ -171,7 +211,11 @@ self =>
    *              set that are not also contained in the given set `that`.
    */
   def diff(that: GenSet[A]): This = this -- that
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   @bridge
   def diff(that: Set[A]): This = diff(that: GenSet[A])
 
@@ -190,7 +234,11 @@ self =>
    *
    *  @return     the iterator.
    */
+<<<<<<< HEAD
   def subsets: Iterator[This] = new Iterator[This] {
+=======
+  def subsets: Iterator[This] = new AbstractIterator[This] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private val elms = self.toIndexedSeq
     private var len = 0
     private var itr: Iterator[This] = Iterator.empty
@@ -204,11 +252,19 @@ self =>
           len += 1
         }
       }
+<<<<<<< HEAD
       
       itr.next
     }
   }
     
+=======
+
+      itr.next
+    }
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** An Iterator include all subsets containing exactly len elements.
    *  If the elements in 'This' type is ordered, then the subsets will also be in the same order.
    *  ListSet(1,2,3).subsets => {1},{2},{3},{1,2},{1,3},{2,3},{1,2,3}}
@@ -216,13 +272,21 @@ self =>
    *  @author Eastsun
    *  @date 2010.12.6
    */
+<<<<<<< HEAD
   private class SubsetsItr(elms: IndexedSeq[A], len: Int) extends Iterator[This] {
+=======
+  private class SubsetsItr(elms: IndexedSeq[A], len: Int) extends AbstractIterator[This] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private val idxs = Array.range(0, len+1)
     private var _hasNext = true
     idxs(len) = elms.size
 
     def hasNext = _hasNext
+<<<<<<< HEAD
     def next: This = {
+=======
+    def next(): This = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (!hasNext) Iterator.empty.next
 
       val buf = self.newBuilder
@@ -238,7 +302,11 @@ self =>
         for (j <- (i+1) until len)
           idxs(j) = idxs(j-1) + 1
       }
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       result
     }
   }
@@ -249,5 +317,9 @@ self =>
    */
   override def stringPrefix: String = "Set"
   override def toString = super[IterableLike].toString
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

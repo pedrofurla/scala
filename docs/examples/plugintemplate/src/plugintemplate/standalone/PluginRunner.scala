@@ -26,7 +26,11 @@ extends Global(settings, reporter) {
     phasesSet += analyzer.typerFactory
     phasesSet += superAccessors			       // add super accessors
     phasesSet += pickler			       // serialize symbol tables
+<<<<<<< HEAD
     phasesSet += refchecks			       // perform reference and override checking, translate nested objects
+=======
+    phasesSet += refChecks			       // perform reference and override checking, translate nested objects
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     for (phase <- TemplatePlugin.components(this)) {
       phasesSet += phase

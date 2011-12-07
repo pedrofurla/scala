@@ -12,7 +12,11 @@ class Statistics extends scala.reflect.internal.util.Statistics {
 
   var microsByType = new ClassCounts
   var visitsByType = new ClassCounts
+<<<<<<< HEAD
   var pendingTreeTypes: List[Class[_]] = List() 
+=======
+  var pendingTreeTypes: List[Class[_]] = List()
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   var typerTime: Long = 0L
 
   val typedApplyCount = new Counter
@@ -71,6 +75,7 @@ abstract class StatisticsInfo {
 
   def countNodes(tree: Tree, counts: ClassCounts) {
     for (t <- tree) counts(t.getClass) += 1
+<<<<<<< HEAD
     counts
   }
 
@@ -83,6 +88,19 @@ abstract class StatisticsInfo {
   def showCounts(counts: ClassCounts) = 
     counts.toSeq.sortWith(_._2 > _._2).map { 
       case (cls, cnt) => 
+=======
+  }
+
+  def showRelative(base: Long)(value: Long) =
+    value+showPercent(value, base)
+
+  def showRelTyper(timer: Timer) =
+    timer+showPercent(timer.nanos, typerNanos.nanos)
+
+  def showCounts(counts: ClassCounts) =
+    counts.toSeq.sortWith(_._2 > _._2).map {
+      case (cls, cnt) =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         cls.toString.substring(cls.toString.lastIndexOf("$") + 1)+": "+cnt
     }
 
@@ -119,10 +137,17 @@ abstract class StatisticsInfo {
       inform("#subtype                 : " + subtypeCount)
       inform("  of which in failed     : " + subtypeFailed)
       inform("  of which in implicits  : " + subtypeImpl)
+<<<<<<< HEAD
       inform("  of which in app impl   : " + subtypeAppInfos) 
       inform("  of which in improv     : " + subtypeImprovCount) 
       inform("#sametype                : " + sametypeCount)
       inform("ms type-flow-analysis: " + analysis.timer.millis) 
+=======
+      inform("  of which in app impl   : " + subtypeAppInfos)
+      inform("  of which in improv     : " + subtypeImprovCount)
+      inform("#sametype                : " + sametypeCount)
+      inform("ms type-flow-analysis: " + analysis.timer.millis)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
       if (phase.name == "typer") {
         inform("time spent typechecking  : "+showRelTyper(typerNanos))
@@ -135,9 +160,15 @@ abstract class StatisticsInfo {
         inform("       assembling parts  : "+showRelTyper(subtypeETNanos))
         inform("              matchesPT  : "+showRelTyper(matchesPtNanos))
         inform("implicit cache hits      : "+showRelative(implicitCacheHits.value + implicitCacheMisses.value)(implicitCacheHits.value))
+<<<<<<< HEAD
         inform("time spent in failed     : "+showRelTyper(failedSilentNanos))     
         inform("       failed apply      : "+showRelTyper(failedApplyNanos))
         inform("       failed op=        : "+showRelTyper(failedOpEqNanos))     
+=======
+        inform("time spent in failed     : "+showRelTyper(failedSilentNanos))
+        inform("       failed apply      : "+showRelTyper(failedApplyNanos))
+        inform("       failed op=        : "+showRelTyper(failedOpEqNanos))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         inform("micros by tree node      : "+showCounts(microsByType))
         inform("#visits by tree node     : "+showCounts(visitsByType))
         val average = new ClassCounts

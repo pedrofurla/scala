@@ -17,6 +17,7 @@ import Properties.{ versionString, copyrightString, residentPromptString, msilLi
 /** The main class for NSC, a compiler for the programming
  *  language Scala.
  */
+<<<<<<< HEAD
 object Main extends AnyRef with EvalLoop {
   val versionMsg = "Scala compiler " +
     versionString + " -- " +
@@ -30,6 +31,12 @@ object Main extends AnyRef with EvalLoop {
     reporter.error(FakePos("scalac"), msg + "\n  scalac -help  gives more information")
   }
 
+=======
+object Main extends Driver with EvalLoop {
+
+  val prompt = residentPromptString
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def resident(compiler: Global) {
     loop { line =>
       val args = line.split(' ').toList
@@ -39,6 +46,7 @@ object Main extends AnyRef with EvalLoop {
     }
   }
 
+<<<<<<< HEAD
   def process(args: Array[String]) {
     val ss       = new Settings(scalacError)
     reporter     = new ConsoleReporter(ss)
@@ -48,11 +56,19 @@ object Main extends AnyRef with EvalLoop {
     if (settings.version.value)
       reporter.info(null, versionMsg, true)
     else if (settings.Yidedebug.value) {
+=======
+  override def processSettingsHook(): Boolean =
+    if (settings.Yidedebug.value) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       settings.Xprintpos.value = true
       settings.Yrangepos.value = true
       val compiler = new interactive.Global(settings, reporter)
       import compiler.{ reporter => _, _ }
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       val sfs = command.files map getSourceFile
       val reloaded = new interactive.Response[Unit]
       askReload(sfs, reloaded)
@@ -62,6 +78,7 @@ object Main extends AnyRef with EvalLoop {
         case None => reporter.reset() // Causes other compiler errors to be ignored
       }
       askShutdown
+<<<<<<< HEAD
     }
     else if (settings.Ybuilderdebug.value != "none") {
       def fileSet(files : List[String]) = Set.empty ++ (files map AbstractFile.getFile) 
@@ -72,12 +89,26 @@ object Main extends AnyRef with EvalLoop {
       }  
       buildManager.addSourceFiles(fileSet(command.files))
   
+=======
+      false
+    }
+    else if (settings.Ybuilderdebug.value != "none") {
+      def fileSet(files : List[String]) = Set.empty ++ (files map AbstractFile.getFile)
+
+      val buildManager = settings.Ybuilderdebug.value match {
+        case "simple"   => new SimpleBuildManager(settings)
+        case _          => new RefinedBuildManager(settings)
+      }
+      buildManager.addSourceFiles(fileSet(command.files))
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       // enter resident mode
       loop { line =>
         val args = line.split(' ').toList
         val command = new CompilerCommand(args.toList, settings)
         buildManager.update(fileSet(command.files), Set.empty)
       }
+<<<<<<< HEAD
     }
     else {      
       if (settings.target.value == "msil")
@@ -124,4 +155,23 @@ object Main extends AnyRef with EvalLoop {
     sys.exit(if (reporter.hasErrors) 1 else 0)
   }
 
+=======
+      false
+    }
+    else {
+      if (settings.target.value == "msil")
+        msilLibPath foreach (x => settings.assemrefs.value += (pathSeparator + x))
+      true
+    }
+
+  override def newCompiler(): Global =
+    if (settings.Yrangepos.value) new Global(settings, reporter) with interactive.RangePositions
+    else Global(settings, reporter)
+
+  override def doCompile(compiler: Global) {
+    if (settings.resident.value)
+      resident(compiler)
+    else super.doCompile(compiler)
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

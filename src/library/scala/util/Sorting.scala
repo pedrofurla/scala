@@ -38,7 +38,11 @@ object Sorting {
   def quickSort(a: Array[Float]) { sort1(a, 0, a.length) }
 
   /** Sort an array of K where K is Ordered, preserving the existing order
+<<<<<<< HEAD
     * where the values are equal. */      
+=======
+    * where the values are equal. */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def stableSort[K: ClassManifest: Ordering](a: Array[K]) {
     stableSort(a, 0, a.length-1, new Array[K](a.length), Ordering[K].lt _)
   }
@@ -506,12 +510,21 @@ object Sorting {
       var k, t_lo = lo
       var t_hi = mid + 1
       while (k <= hi) {
+<<<<<<< HEAD
         if ((t_lo <= mid) && ((t_hi > hi) || (!f(a(t_hi), a(t_lo))))) { 
           scratch(k) = a(t_lo) 
           t_lo += 1 
         } else { 
           scratch(k) = a(t_hi) 
           t_hi += 1 
+=======
+        if ((t_lo <= mid) && ((t_hi > hi) || (!f(a(t_hi), a(t_lo))))) {
+          scratch(k) = a(t_lo)
+          t_lo += 1
+        } else {
+          scratch(k) = a(t_hi)
+          t_hi += 1
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         }
         k += 1
       }

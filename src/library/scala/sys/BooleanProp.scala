@@ -17,10 +17,17 @@ trait BooleanProp extends Prop[Boolean] {
    *  @return   true if the current String is considered true, false otherwise
    */
   def value: Boolean
+<<<<<<< HEAD
   
   /** Alter this property so that `value` will be true. */
   def enable(): Unit
   
+=======
+
+  /** Alter this property so that `value` will be true. */
+  def enable(): Unit
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Alter this property so that `value` will be false. */
   def disable(): Unit
 
@@ -47,10 +54,17 @@ object BooleanProp {
     def get: String = "" + value
     val clear, enable, disable, toggle = ()
     def option = if (isSet) Some(value) else None
+<<<<<<< HEAD
     
     protected def zero = false
   }
   
+=======
+
+    protected def zero = false
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** The java definition of property truth is that the key be in the map and
    *  the value be equal to the String "true", case insensitively.  This method
    *  creates a BooleanProp instance which adheres to that definition.
@@ -58,7 +72,11 @@ object BooleanProp {
    *  @return   A BooleanProp which acts like java's Boolean.getBoolean
    */
   def valueIsTrue[T](key: String): BooleanProp = new BooleanPropImpl(key, _.toLowerCase == "true")
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** As an alternative, this method creates a BooleanProp which is true
    *  if the key exists in the map.  This way -Dfoo.bar is enough to be
    *  considered true.
@@ -66,10 +84,18 @@ object BooleanProp {
    *  @return   A BooleanProp with a liberal truth policy
    */
   def keyExists[T](key: String): BooleanProp = new BooleanPropImpl(key, _ => true)
+<<<<<<< HEAD
   
   /** A constant true or false property which ignores all method calls.
    */
   def constant(key: String, isOn: Boolean): BooleanProp = new ConstantImpl(key, isOn)
   
+=======
+
+  /** A constant true or false property which ignores all method calls.
+   */
+  def constant(key: String, isOn: Boolean): BooleanProp = new ConstantImpl(key, isOn)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   implicit def booleanPropAsBoolean(b: BooleanProp): Boolean = b.value
 }

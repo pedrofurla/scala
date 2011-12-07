@@ -41,11 +41,19 @@ object Test_BigDecimal {
     println("z <= 3 = " + (z <= 3))
     println("3 < z = " + (3 < z))
 
+<<<<<<< HEAD
     val a: BigDecimal= Math.MAX_LONG
     val b: BigDecimal = 1
     val c = a - b
     println("c > MAX_LONG = " + (c > Math.MAX_LONG))
     println("c <= MAX_LONG = " + (c <= Math.MAX_LONG))
+=======
+    val a: BigDecimal= Long.MaxValue
+    val b: BigDecimal = 1
+    val c = a - b
+    println("c > MAX_LONG = " + (c > Long.MaxValue))
+    println("c <= MAX_LONG = " + (c <= Long.MaxValue))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   }
 }
 

@@ -6,7 +6,11 @@
 package scala.tools.nsc
 package interpreter
 
+<<<<<<< HEAD
 import scala.reflect.{ NameTransformer, AnyValManifest }
+=======
+import scala.reflect.AnyValManifest
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 import scala.collection.{ mutable, immutable }
 import scala.util.matching.Regex
 import scala.tools.nsc.util.{ BatchSourceFile }
@@ -30,7 +34,11 @@ trait SharesGlobal {
   type AnyType     = Global#Type
   type AnyName     = Global#Name
   type AnyTree     = Global#Tree
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   type Symbol   = global.Symbol
   type Type     = global.Type
   type Name     = global.Name
@@ -44,7 +52,11 @@ trait SharesGlobal {
 
 object Power {
   def apply(intp: IMain): Power = apply(null, intp)
+<<<<<<< HEAD
   def apply(repl: ILoop): Power = apply(repl, repl.intp)  
+=======
+  def apply(repl: ILoop): Power = apply(repl, repl.intp)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def apply(repl: ILoop, intp: IMain): Power =
     new Power(repl, intp) {
       type GlobalType = intp.global.type
@@ -55,11 +67,19 @@ object Power {
 /** A class for methods to be injected into the intp in power mode.
  */
 abstract class Power(
+<<<<<<< HEAD
   val repl: ILoop, 
   val intp: IMain
 ) extends SharesGlobal {
   import intp.{ 
     beQuietDuring, typeOfExpression, getCompilerClass, getCompilerModule, 
+=======
+  val repl: ILoop,
+  val intp: IMain
+) extends SharesGlobal {
+  import intp.{
+    beQuietDuring, typeOfExpression, getCompilerClass, getCompilerModule,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     interpret, parse
   }
   import global._
@@ -76,7 +96,11 @@ abstract class Power(
     def discarded = seen.size - keep.size
 
     def members(x: Symbol): List[Symbol] =
+<<<<<<< HEAD
       if (x.rawInfo.isComplete) x.info.members 
+=======
+      if (x.rawInfo.isComplete) x.info.members
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       else Nil
 
     var lastCount = -1
@@ -110,7 +134,11 @@ abstract class Power(
   class PackageSlurper(pkgName: String) extends SymSlurper {
     val pkgSymbol = getCompilerModule(pkgName)
     val modClass  = pkgSymbol.moduleClass
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Looking for dwindling returns */
     def droppedEnough() = unseenHistory.size >= 4 && {
       unseenHistory takeRight 4 sliding 2 forall { it =>
@@ -128,7 +156,11 @@ abstract class Power(
 
   private def customBanner = replProps.powerBanner.option flatMap (f => io.File(f).safeSlurp())
   private def customInit   = replProps.powerInitCode.option flatMap (f => io.File(f).safeSlurp())
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def banner = customBanner getOrElse """
     |** Power User mode enabled - BEEP BOOP SPIZ **
     |** :phase has been set to 'typer'.          **
@@ -136,11 +168,19 @@ abstract class Power(
     |** global._ and definitions._ also imported **
     |** Try  :help,  vals.<tab>,  power.<tab>    **
   """.stripMargin.trim
+<<<<<<< HEAD
   
   private def initImports = List(
     "scala.tools.nsc._",
     "scala.collection.JavaConverters._",
     "global.{ error => _, _ }",
+=======
+
+  private def initImports = List(
+    "scala.tools.nsc._",
+    "scala.collection.JavaConverters._",
+    "intp.global.{ error => _, _ }",
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     "definitions.{ getClass => _, _ }",
     "power.Implicits._",
     "power.rutil._"
@@ -161,9 +201,15 @@ abstract class Power(
     // And whatever else there is to do.
     init.lines foreach (intp interpret _)
   }
+<<<<<<< HEAD
   
   trait LowPriorityInternalInfo {
     implicit def apply[T: Manifest] : InternalInfo[T] = new InternalInfo[T](None)    
+=======
+
+  trait LowPriorityInternalInfo {
+    implicit def apply[T: Manifest] : InternalInfo[T] = new InternalInfo[T](None)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   }
   object InternalInfo extends LowPriorityInternalInfo { }
 
@@ -179,25 +225,41 @@ abstract class Power(
     private def tpe    = tpe_
     private def symbol = symbol_
     private def name   = name_
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // Would love to have stuff like existential types working,
     // but very unfortunately those manifests just stuff the relevant
     // information into the toString method.  Boo.
     private def manifestToType(m: Manifest[_]): Type = m match {
       case x: AnyValManifest[_] =>
         getCompilerClass("scala." + x).tpe
+<<<<<<< HEAD
       case _                             => 
+=======
+      case _                             =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         val name = m.erasure.getName
         if (name endsWith nme.MODULE_SUFFIX_STRING) getCompilerModule(name dropRight 1).tpe
         else {
           val sym  = getCompilerClass(name)
           val args = m.typeArguments
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           if (args.isEmpty) sym.tpe
           else typeRef(NoPrefix, sym, args map manifestToType)
         }
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def symbol_ : Symbol = getCompilerClass(erasure.getName)
     def tpe_ : Type      = manifestToType(man)
     def name_ : Name     = symbol.name
@@ -207,14 +269,22 @@ abstract class Power(
     def owner            = symbol.owner
     def owners           = symbol.ownerChain drop 1
     def defn             = symbol.defString
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def declares  = members filter (_.owner == symbol)
     def inherits  = members filterNot (_.owner == symbol)
     def types     = members filter (_.name.isTypeName)
     def methods   = members filter (_.isMethod)
     def overrides = declares filter (_.isOverride)
     def inPackage = owners find (x => x.isPackageClass || x.isPackage) getOrElse definitions.RootPackage
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def man        = manifest[T]
     def erasure    = man.erasure
     def members    = tpe.members filterNot (_.name.toString contains "$mc")
@@ -229,18 +299,30 @@ abstract class Power(
       case _          => Set()
     }
     def ?         = this
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def whoHas(name: String) = bts filter (_.decls exists (_.name.toString == name))
     def <:<[U: Manifest](other: U) = tpe <:< InternalInfo[U].tpe
     def lub[U: Manifest](other: U) = global.lub(List(tpe, InternalInfo[U].tpe))
     def glb[U: Manifest](other: U) = global.glb(List(tpe, InternalInfo[U].tpe))
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def shortClass = erasure.getName split "[$.]" last
     override def toString = value match {
       case Some(x)  => "%s (%s)".format(x, shortClass)
       case _        => erasure.getName
     }
+<<<<<<< HEAD
   }  
+=======
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   trait LowPriorityPrettifier {
     implicit object AnyPrettifier extends Prettifier[Any] {
@@ -273,11 +355,19 @@ abstract class Power(
     def show(xs: TraversableOnce[T]): Unit = prettify(xs) foreach println
     def prettify(xs: TraversableOnce[T]): TraversableOnce[String] = xs flatMap (x => prettify(x))
   }
+<<<<<<< HEAD
   
   abstract class PrettifierClass[T: Prettifier]() {
     val pretty = implicitly[Prettifier[T]]
     import pretty._
     
+=======
+
+  abstract class PrettifierClass[T: Prettifier]() {
+    val pretty = implicitly[Prettifier[T]]
+    import pretty._
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def value: Seq[T]
 
     def pp(f: Seq[T] => Seq[T]): Unit =
@@ -285,7 +375,11 @@ abstract class Power(
 
     def freq[U](p: T => U) = (value.toSeq groupBy p mapValues (_.size)).toList sortBy (-_._2) map (_.swap)
     def ppfreq[U](p: T => U): Unit = freq(p) foreach { case (count, key) => println("%5d %s".format(count, key)) }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def |[U](f: Seq[T] => Seq[U]): Seq[U]        = f(value)
     def ^^[U](f: T => U): Seq[U]                 = value map f
     def ^?[U](pf: PartialFunction[T, U]): Seq[U] = value collect pf
@@ -301,12 +395,20 @@ abstract class Power(
     def >?(p: T => Boolean): Unit                = pp(_ filter p)
     def >?(s: String): Unit                      = pp(_ filter (_.toString contains s))
     def >?(r: Regex): Unit                       = pp(_ filter (_.toString matches fixRegex(r)))
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private def fixRegex(r: scala.util.matching.Regex): String = {
       val s = r.pattern.toString
       val prefix = if (s startsWith "^") "" else """^.*?"""
       val suffix = if (s endsWith "$") "" else """.*$"""
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       prefix + s + suffix
     }
   }
@@ -315,10 +417,17 @@ abstract class Power(
   class SinglePrettifierClass[T: Prettifier](single: T) extends PrettifierClass[T]() {
     val value = List(single)
   }
+<<<<<<< HEAD
   
   class RichReplString(s: String) {
     // pretty print the string
     def pp { intp.prettyPrint(s) }
+=======
+
+  class RichReplString(s: String) {
+    // pretty print the string
+    def pp() { intp.prettyPrint(s) }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // make an url out of the string
     def u: URL = (
       if (s contains ":") new URL(s)
@@ -333,7 +442,11 @@ abstract class Power(
   }
   class RichReplURL(url: URL)(implicit codec: Codec) {
     def slurp(): String = io.Streamable.slurp(url)
+<<<<<<< HEAD
     def pp { intp prettyPrint slurp() }
+=======
+    def pp() { intp prettyPrint slurp() }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   }
 
   protected trait Implicits1 {
@@ -367,7 +480,11 @@ abstract class Power(
     implicit def replEnhancedURLs(url: URL)(implicit codec: Codec): RichReplURL = new RichReplURL(url)(codec)
   }
   object Implicits extends Implicits2 { }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait ReplUtilities {
     def module[T: Manifest] = getCompilerModule(manifest[T].erasure.getName stripSuffix nme.MODULE_SUFFIX_STRING)
     def clazz[T: Manifest] = getCompilerClass(manifest[T].erasure.getName)
@@ -395,7 +512,11 @@ abstract class Power(
   }
 
   lazy val rutil: ReplUtilities = new ReplUtilities { }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   lazy val phased: Phased = new Phased with SharesGlobal {
     type GlobalType = Power.this.global.type
     final val global: Power.this.global.type = Power.this.global
@@ -406,7 +527,11 @@ abstract class Power(
   def unit(code: String)       = new CompilationUnit(source(code))
   def trees(code: String)      = parse(code) getOrElse Nil
   def typeOf(id: String): Type = intp.typeOfExpression(id) getOrElse NoType
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def toString = """
     |** Power mode status **
     |Default phase: %s

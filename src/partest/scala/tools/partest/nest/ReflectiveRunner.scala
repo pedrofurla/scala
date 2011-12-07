@@ -25,12 +25,20 @@ import java.net.URLClassLoader
 class ReflectiveRunner {
   // TODO: we might also use fileManager.CLASSPATH
   // to use the same classes as used by `scala` that
+<<<<<<< HEAD
   // was used to start the runner.  
+=======
+  // was used to start the runner.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   val sepRunnerClassName = "scala.tools.partest.nest.ConsoleRunner"
 
   def main(args: String) {
     val argList = (args.split("\\s")).toList
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (isPartestDebug)
       showAllJVMInfo
 
@@ -57,16 +65,27 @@ class ReflectiveRunner {
 
     if (isPartestDebug)
       println("Loading classes from:\n" + sepUrls.mkString("\n"))
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val paths = classPath match {
       case Some(cp) => Nil
       case _        => files.toList map (_.path)
     }
     val newClasspath = ClassPath.join(paths: _*)
+<<<<<<< HEAD
     
     setProp("java.class.path", newClasspath)
     setProp("scala.home", "")
     
+=======
+
+    setProp("java.class.path", newClasspath)
+    setProp("scala.home", "")
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (isPartestDebug)
       for (prop <- List("java.class.path", "sun.boot.class.path", "java.ext.dirs"))
         println(prop + ": " + propOrEmpty(prop))

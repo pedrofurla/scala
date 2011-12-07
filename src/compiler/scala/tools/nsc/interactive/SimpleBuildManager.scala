@@ -26,11 +26,19 @@ class SimpleBuildManager(val settings: Settings) extends BuildManager {
 
     def this(settings: Settings) =
       this(settings, new ConsoleReporter(settings))
+<<<<<<< HEAD
     
     def newRun() = new Run()
   }
   
   protected def newCompiler(settings: Settings) = new BuilderGlobal(settings) 
+=======
+
+    def newRun() = new Run()
+  }
+
+  protected def newCompiler(settings: Settings) = new BuilderGlobal(settings)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   val compiler = newCompiler(settings)
 
@@ -69,11 +77,16 @@ class SimpleBuildManager(val settings: Settings) extends BuildManager {
    */
   def update(files: Set[AbstractFile]) {
     deleteClassfiles(files)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val deps = compiler.dependencyAnalysis.dependencies
     val run = compiler.newRun()
     compiler.inform("compiling " + files)
 
+<<<<<<< HEAD
     val toCompile = 
       (files ++ deps.dependentFiles(Int.MaxValue, files)) intersect sources
     
@@ -82,6 +95,16 @@ class SimpleBuildManager(val settings: Settings) extends BuildManager {
                     (if(settings.debug.value) toCompile.mkString(", ")
                      else toCompile.size + " files"))
     
+=======
+    val toCompile =
+      (files ++ deps.dependentFiles(Int.MaxValue, files)) intersect sources
+
+
+    compiler.inform("Recompiling " +
+                    (if(settings.debug.value) toCompile.mkString(", ")
+                     else toCompile.size + " files"))
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     buildingFiles(toCompile)
 
     run.compileFiles(files.toList)
@@ -94,7 +117,11 @@ class SimpleBuildManager(val settings: Settings) extends BuildManager {
       sources ++= compiler.dependencyAnalysis.managedFiles
     success
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Save dependency information to `file`. */
   def saveTo(file: AbstractFile, fromFile: AbstractFile => String) {
     compiler.dependencyAnalysis.dependenciesFile = file

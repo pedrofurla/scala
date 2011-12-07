@@ -3,7 +3,11 @@ Type :help for more information.
 
 scala> 
 
+<<<<<<< HEAD
 scala> scala> 0123
+=======
+scala> scala> 999l
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 // Detected repl transcript paste: ctrl-D to finish.
 
@@ -34,8 +38,13 @@ res10: Int = 12
 
 // Replaying 8 commands from transcript.
 
+<<<<<<< HEAD
 scala> 0123
 res0: Int = 83
+=======
+scala> 999l
+res0: Long = 999
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 scala> val res5 = { 123 }
 res5: Int = 123
@@ -52,7 +61,11 @@ scala> val x = dingus
                ^
 
 scala> val x = "dingus"
+<<<<<<< HEAD
 x: java.lang.String = dingus
+=======
+x: String = dingus
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 scala> x.length
 res2: Int = 6

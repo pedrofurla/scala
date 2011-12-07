@@ -17,12 +17,17 @@ package expression;
   functionName: String,
   arguments: List[Expression]
 ) extends Expression {
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A SQL-99 compliant string representation of the relation sub-
     * statement. This only has a meaning inside another statement. */
   def sqlInnerString: String = {
     functionName + "(" + arguments.mkString("",", ","") + ")"
   }
+<<<<<<< HEAD
   
   /** The name of the function to call. */
   //def functionName: String;
@@ -30,4 +35,13 @@ package expression;
   /** A list of all argument expressions to pass to the function, in order. */
   //def arguments: List[Expression];
   
+=======
+
+  /** The name of the function to call. */
+  //def functionName: String;
+
+  /** A list of all argument expressions to pass to the function, in order. */
+  //def arguments: List[Expression];
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

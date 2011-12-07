@@ -23,10 +23,20 @@ import java.security.AccessControlException
  *  @version 2.9
  *  @since   2.9
  */
+<<<<<<< HEAD
 class SystemProperties extends mutable.Map[String, String] {
   override def empty = new SystemProperties
   override def default(key: String): String = null
   
+=======
+class SystemProperties
+extends mutable.AbstractMap[String, String]
+   with mutable.Map[String, String] {
+
+  override def empty = new SystemProperties
+  override def default(key: String): String = null
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def iterator: Iterator[(String, String)] =
     wrapAccess(System.getProperties().asScala.iterator) getOrElse Iterator.empty
   def get(key: String) =
@@ -36,7 +46,11 @@ class SystemProperties extends mutable.Map[String, String] {
 
   def -= (key: String): this.type = { wrapAccess(System.clearProperty(key)) ; this }
   def += (kv: (String, String)): this.type = { wrapAccess(System.setProperty(kv._1, kv._2)) ; this }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def wrapAccess[T](body: => T): Option[T] =
     try Some(body) catch { case _: AccessControlException => None }
 }
@@ -65,7 +79,11 @@ object SystemProperties {
     helpText
   )
   def help(key: String) = propertyHelp.getOrElse(key, "")
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // Todo: bring some sanity to the intersection of system properties aka "mutable
   // state shared by everyone and everything" and the reality that there is no other
   // mechanism for accomplishing some things on the jvm.

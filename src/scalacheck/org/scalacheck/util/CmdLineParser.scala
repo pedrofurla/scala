@@ -89,6 +89,10 @@ trait CmdLineParser extends Parsers {
     }
   }
 
+<<<<<<< HEAD
   def parseArgs[T](args: Array[String])(f: OptMap => T) = 
+=======
+  def parseArgs[T](args: Array[String])(f: OptMap => T) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     phrase(options map f)(new ArgsReader(args,0))
 }

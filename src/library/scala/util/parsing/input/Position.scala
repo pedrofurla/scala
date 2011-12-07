@@ -28,12 +28,20 @@ trait Position {
   def column: Int
 
   /** The contents of the line numbered `lnum` (must not contain a new-line character).
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * @param lnum a 1-based integer index into the `document`
    * @return the line at `lnum` (not including a newline)
    */
   protected def lineContents: String
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Returns a string representation of the `Position`, of the form `line.column`. */
   override def toString = ""+line+"."+column
 
@@ -58,7 +66,11 @@ trait Position {
    *         column is smaller than the corresponding components of `that`
    */
   def <(that: Position) = {
+<<<<<<< HEAD
     this.line < that.line || 
+=======
+    this.line < that.line ||
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     this.line == that.line && this.column < that.column
   }
 }

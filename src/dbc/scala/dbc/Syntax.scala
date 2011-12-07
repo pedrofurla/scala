@@ -38,7 +38,11 @@ import java.math.{BigDecimal, BigInteger};
   def characterLargeObject = DataTypeUtil.characterLargeObject;
 
   /* Statements */
+<<<<<<< HEAD
   //def select 
+=======
+  //def select
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /* Other stuff */
   def database (server: String, username: String, password: String): dbc.Database =

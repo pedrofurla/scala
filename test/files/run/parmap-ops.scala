@@ -1,9 +1,14 @@
+<<<<<<< HEAD
 
 
 import collection._
 
 
 
+=======
+import collection._
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 object Test {
   
   def main(args: Array[String]) {

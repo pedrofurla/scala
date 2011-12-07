@@ -13,13 +13,21 @@ import util.returning
 
 abstract class TreeCheckers extends Analyzer {
   import global._
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def classstr(x: AnyRef) = x.getClass.getName split """\\.|\\$""" last;
   private def typestr(x: Type)    = " (tpe = " + x + ")"
   private def treestr(t: Tree)    = t + " [" + classstr(t) + "]" + typestr(t.tpe)
   private def ownerstr(s: Symbol) = "'" + s + "'" + s.locationString
   private def wholetreestr(t: Tree) = nodeToString(t) + "\n"
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def beststr(t: Tree) = "<" + {
     if (t.symbol != null && t.symbol != NoSymbol) "sym=" + ownerstr(t.symbol)
     else if (t.tpe.isComplete) "tpe=" + typestr(t.tpe)
@@ -29,7 +37,11 @@ abstract class TreeCheckers extends Analyzer {
       case _          => "clazz=" + classstr(t)
     }
   } + ">"
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** This is a work in progress, don't take it too seriously.
    */
   object SymbolTracker extends Traverser {
@@ -42,17 +54,28 @@ abstract class TreeCheckers extends Analyzer {
     val newSyms       = mutable.HashSet[Symbol]()
     val movedMsgs     = new ListBuffer[String]
     def sortedNewSyms = newSyms.toList.distinct sortBy (_.name.toString)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def inPrev(sym: Symbol) = {
       (maps.size >= 2) && (prev contains sym)
     }
     def record(sym: Symbol, tree: Tree) = {
       if (latest contains sym) latest(sym) = latest(sym) :+ tree
       else latest(sym) = List(tree)
+<<<<<<< HEAD
       
       if (inPrev(sym)) {
         val prevTrees = prev(sym)
                 
+=======
+
+      if (inPrev(sym)) {
+        val prevTrees = prev(sym)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         if (prevTrees exists (t => (t eq tree) || (t.symbol == sym))) ()
         else if (prevTrees exists (_.symbol.owner == sym.owner.implClass)) {
           errorFn("Noticed " + ownerstr(sym) + " moving to implementation class.")
@@ -71,27 +94,47 @@ abstract class TreeCheckers extends Analyzer {
       if (newSyms.nonEmpty) {
         informFn(newSyms.size + " new symbols.")
         val toPrint = if (settings.debug.value) sortedNewSyms mkString " " else ""
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         newSyms.clear()
         if (toPrint != "")
           informFn(toPrint)
       }
+<<<<<<< HEAD
       
       // moved symbols
       movedMsgs foreach errorFn
       movedMsgs.clear()
       
+=======
+
+      // moved symbols
+      movedMsgs foreach errorFn
+      movedMsgs.clear()
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       // duplicate defs
       for ((sym, defs) <- defSyms ; if defs.size > 1) {
         errorFn("%s DefTrees with symbol '%s': %s".format(defs.size, ownerstr(sym), defs map beststr mkString ", "))
       }
       defSyms.clear()
     }
+<<<<<<< HEAD
     
     def check(ph: Phase, unit: CompilationUnit): Unit = {
       if (maps.isEmpty || maps.last._1 != ph)
         maps += ((ph, new PhaseMap))
       
+=======
+
+    def check(ph: Phase, unit: CompilationUnit): Unit = {
+      if (maps.isEmpty || maps.last._1 != ph)
+        maps += ((ph, new PhaseMap))
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       traverse(unit.body)
       reportChanges()
     }
@@ -106,17 +149,29 @@ abstract class TreeCheckers extends Analyzer {
           case _ => ()
         }
       }
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       super.traverse(tree)
     }
   }
 
   lazy val tpeOfTree = mutable.HashMap[Tree, Type]()
+<<<<<<< HEAD
   
   def posstr(p: Position) = 
     try p.source.path + ":" + p.line
     catch { case _: UnsupportedOperationException => p.toString }
   
+=======
+
+  def posstr(p: Position) =
+    try p.source.path + ":" + p.line
+    catch { case _: UnsupportedOperationException => p.toString }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def errorFn(msg: Any): Unit                = println("[check: %s] %s".format(phase.prev, msg))
   def errorFn(pos: Position, msg: Any): Unit = errorFn(posstr(pos) + ": " + msg)
   def informFn(msg: Any) {
@@ -130,10 +185,17 @@ abstract class TreeCheckers extends Analyzer {
   def checkTrees() {
     if (settings.verbose.value)
       Console.println("[consistency check at the beginning of phase " + phase + "]")
+<<<<<<< HEAD
     
     currentRun.units foreach check
   }
   
+=======
+
+    currentRun.units foreach check
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def printingTypings[T](body: => T): T = {
     val saved = global.printTypings
     global.printTypings = true
@@ -166,12 +228,20 @@ abstract class TreeCheckers extends Analyzer {
   override def newTyper(context: Context): Typer = new TreeChecker(context)
 
   class TreeChecker(context0: Context) extends Typer(context0) {
+<<<<<<< HEAD
     override protected def typerAddSyntheticMethods(templ: Template, clazz: Symbol, context: Context): Template = {
+=======
+    override protected def finishMethodSynthesis(templ: Template, clazz: Symbol, context: Context): Template = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       // If we don't intercept this all the synthetics get added at every phase,
       // with predictably unfortunate results.
       templ
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // XXX check for tree.original on TypeTrees.
     private def treesDiffer(t1: Tree, t2: Tree) =
       errorFn(t1.pos, "trees differ\n old: " + treestr(t1) + "\n new: " + treestr(t2))
@@ -181,7 +251,11 @@ abstract class TreeCheckers extends Analyzer {
       val sym = tree.symbol
       errorFn(tree.pos, sym + " has wrong owner: " + ownerstr(sym.owner) + ", should be: " + ownerstr(shouldBe))
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** XXX Disabled reporting of position errors until there is less noise. */
     private def noPos(t: Tree) =
       () // errorFn("no pos: " + treestr(t))
@@ -213,7 +287,11 @@ abstract class TreeCheckers extends Analyzer {
         val sym = tree.symbol
         def accessed = sym.accessed
         def fail(msg: String) = errorFn(tree.pos, msg + classstr(tree) + " / " + tree)
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         tree match {
           case DefDef(_, _, _, _, _, _) =>
             if (sym.hasAccessorFlag && !sym.isDeferred) {
@@ -239,7 +317,11 @@ abstract class TreeCheckers extends Analyzer {
           case Apply(fn, args) =>
             if (args exists (_ == EmptyTree))
               errorFn(tree.pos, "Apply arguments to " + fn + " contains an empty tree: " + args)
+<<<<<<< HEAD
               
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           case Select(qual, name) =>
             checkSym(tree)
           case This(_) =>
@@ -247,7 +329,11 @@ abstract class TreeCheckers extends Analyzer {
             if (sym.isStatic && sym.hasModuleFlag) ()
             else if (currentOwner.ownerChain takeWhile (_ != sym) exists (_ == NoSymbol))
               return fail("tree symbol "+sym+" does not point to enclosing class; tree = ")
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           /** XXX: temporary while Import nodes are arriving untyped. */
           case Import(_, _) =>
             return
@@ -260,7 +346,11 @@ abstract class TreeCheckers extends Analyzer {
           noType(tree)
         else if (tree.isDef) {
           checkSym(tree)
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           tree match {
             case x: PackageDef    =>
               if (sym.ownerChain contains currentOwner) ()
@@ -287,7 +377,11 @@ abstract class TreeCheckers extends Analyzer {
             tpeOfTree get tree foreach { oldtpe =>
               if (oldtpe =:= tree.tpe) ()
               else typesDiffer(tree, oldtpe, tree.tpe)
+<<<<<<< HEAD
               
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               tree.tpe = oldtpe
               super.traverse(tree)
             }

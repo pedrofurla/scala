@@ -6,6 +6,7 @@
 package scala.tools.nsc
 package typechecker
 
+<<<<<<< HEAD
 import scala.collection.mutable.ListBuffer
 import symtab.Flags._
 
@@ -17,13 +18,30 @@ import symtab.Flags._
  *  or are overridden by an abstract override.
  *  Finally, the phase also mangles the names of class-members which are private
  *  up to an enclosing non-package class, in order to avoid overriding conflicts.
+=======
+import scala.collection.{ mutable, immutable }
+import mutable.ListBuffer
+import symtab.Flags._
+
+/** This phase adds super accessors for all super calls that either
+ *  appear in a trait or have as a target a member of some outer class.
+ *  It also replaces references to parameter accessors with aliases
+ *  by super references to these aliases. The phase also checks that
+ *  symbols accessed from super are not abstract, or are overridden by
+ *  an abstract override. Finally, the phase also mangles the names
+ *  of class-members which are private up to an enclosing non-package
+ *  class, in order to avoid overriding conflicts.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *
  *  @author  Martin Odersky
  *  @version 1.0
  */
 abstract class SuperAccessors extends transform.Transform with transform.TypingTransformers {
+<<<<<<< HEAD
   // inherits abstract value `global` and class `Phase` from Transform
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   import global._
   import definitions.{ UnitClass, isRepeatedParamType, isByNameParamType, Any_asInstanceOf }
   import analyzer.{ restrictionError }
@@ -36,6 +54,7 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
 
   class SuperAccTransformer(unit: CompilationUnit) extends TypingTransformer(unit) {
     private var validCurrentOwner = true
+<<<<<<< HEAD
     private var accDefs: List[(Symbol, ListBuffer[Tree])] = List()
     
     private def accDefBuf(clazz: Symbol) = 
@@ -48,6 +67,22 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
         else transform(arg)
       }) :::
       (args drop params.length map transform)
+=======
+    private val accDefs = mutable.Map[Symbol, ListBuffer[Tree]]()
+
+    private def storeAccessorDefinition(clazz: Symbol, tree: Tree) = {
+      val buf = accDefs.getOrElse(clazz, sys.error("no acc def buf for "+clazz))
+      buf += typers(clazz) typed tree
+    }
+
+    private def transformArgs(params: List[Symbol], args: List[Tree]) = {
+      treeInfo.zipMethodParamsAndArgs(params, args) map { case (param, arg) =>
+        if (isByNameParamType(param.tpe))
+          withInvalidOwner { checkPackedConforms(transform(arg), param.tpe.typeArgs.head) }
+        else transform(arg)
+      }
+    }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     private def checkPackedConforms(tree: Tree, pt: Type): Tree = {
       if (tree.tpe exists (_.typeSymbol.isExistentialSkolem)) {
@@ -85,30 +120,51 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
 
         if (sym.isDeferred) {
           val member = sym.overridingSymbol(clazz);
+<<<<<<< HEAD
           if (mix != tpnme.EMPTY || member == NoSymbol || 
+=======
+          if (mix != tpnme.EMPTY || member == NoSymbol ||
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               !((member hasFlag ABSOVERRIDE) && member.isIncompleteIn(clazz)))
             unit.error(tree.pos, ""+sym+sym.locationString+" is accessed from super. It may not be abstract "+
                                  "unless it is overridden by a member declared `abstract' and `override'");
         }
+<<<<<<< HEAD
         if (tree.isTerm && mix == tpnme.EMPTY && 
+=======
+        if (tree.isTerm && mix == tpnme.EMPTY &&
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             (clazz.isTrait || clazz != currentOwner.enclClass || !validCurrentOwner)) {
           val supername = nme.superName(sym.name)
           var superAcc = clazz.info.decl(supername).suchThat(_.alias == sym)
           if (superAcc == NoSymbol) {
             debuglog("add super acc " + sym + sym.locationString + " to `" + clazz);//debug
+<<<<<<< HEAD
             superAcc = 
               clazz.newMethod(tree.pos, supername)
                 .setFlag(SUPERACCESSOR | PRIVATE)
                 .setAlias(sym)
             var superAccTpe = clazz.thisType.memberType(sym) 
+=======
+            superAcc =
+              clazz.newMethod(tree.pos, supername)
+                .setFlag(SUPERACCESSOR | PRIVATE)
+                .setAlias(sym)
+            var superAccTpe = clazz.thisType.memberType(sym)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             if (sym.isModule && !sym.isMethod) {
               // the super accessor always needs to be a method. See #231
               superAccTpe = NullaryMethodType(superAccTpe)
             }
             superAcc.setInfo(superAccTpe.cloneInfo(superAcc))
             //println("creating super acc "+superAcc+":"+superAcc.tpe)//DEBUG
+<<<<<<< HEAD
             clazz.info.decls enter superAcc;
             accDefBuf(clazz) += typers(clazz).typed(DefDef(superAcc, EmptyTree))
+=======
+            clazz.info.decls enter superAcc
+            storeAccessorDefinition(clazz, DefDef(superAcc, EmptyTree))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           }
           atPos(sup.pos) {
             Select(gen.mkAttributedThis(clazz), superAcc) setType tree.tpe;
@@ -139,17 +195,29 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
         }
         else if (goToSuper) super.transform(tree)
         else tree
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       try tree match {
         // Don't transform patterns or strange trees will reach the matcher (ticket #4062)
         case CaseDef(pat, guard, body) =>
           treeCopy.CaseDef(tree, pat, transform(guard), transform(body))
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case ClassDef(_, _, _, _) =>
           checkCompanionNameClashes(sym)
           val decls = sym.info.decls
           for (s <- decls) {
+<<<<<<< HEAD
             if (s.privateWithin.isClass && !s.privateWithin.isModuleClass &&
+=======
+            if (s.privateWithin.isClass && !s.isProtected && !s.privateWithin.isModuleClass &&
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 !s.hasFlag(EXPANDEDNAME) && !s.isConstructor) {
               decls.unlink(s)
               s.expandName(s.privateWithin)
@@ -173,14 +241,22 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
           checkCompanionNameClashes(sym)
           super.transform(tree)
         case Template(parents, self, body) =>
+<<<<<<< HEAD
           val ownAccDefs = new ListBuffer[Tree];
           accDefs = (currentOwner, ownAccDefs) :: accDefs;
         
           // ugly hack... normally, the following line should not be 
+=======
+          val ownAccDefs = new ListBuffer[Tree]
+          accDefs(currentOwner) = ownAccDefs
+
+          // ugly hack... normally, the following line should not be
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           // necessary, the 'super' method taking care of that. but because
           // that one is iterating through parents (and we dont want that here)
           // we need to inline it.
           curTree = tree
+<<<<<<< HEAD
           val body1 = atOwner(currentOwner) { transformTrees(body) }
           accDefs = accDefs.tail;
           treeCopy.Template(tree, parents, self, ownAccDefs.toList ::: body1)
@@ -196,6 +272,44 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
                 Select(
                   Super(qual, tpnme.EMPTY/*qual.symbol.info.parents.head.symbol.name*/) setPos qual.pos,
                   sym.alias) setPos tree.pos
+=======
+          val body1 = atOwner(currentOwner)(transformTrees(body))
+          accDefs -= currentOwner
+          ownAccDefs ++= body1
+          treeCopy.Template(tree, parents, self, ownAccDefs.toList)
+
+        case TypeApply(sel @ Select(This(_), name), args) =>
+          mayNeedProtectedAccessor(sel, args, false)
+
+        case sel @ Select(qual @ This(_), name) =>
+          // warn if they are selecting a private[this] member which
+          // also exists in a superclass, because they may be surprised
+          // to find out that a constructor parameter will shadow a
+          // field. See SI-4762.
+          if (settings.lint.value) {
+            if (sym.isPrivateLocal && sym.paramss.isEmpty) {
+              qual.symbol.ancestors foreach { parent =>
+                parent.info.decls filterNot (x => x.isPrivate || x.hasLocalFlag) foreach { m2 =>
+                  if (sym.name == m2.name && m2.isGetter && m2.accessed.isMutable) {
+                    unit.warning(sel.pos,
+                        sym.accessString + " " + sym.fullLocationString + " shadows mutable " + m2.name
+                      + " inherited from " + m2.owner + ".  Changes to " + m2.name + " will not be visible within "
+                      + sym.owner + " - you may want to give them distinct names."
+                    )
+                  }
+                }
+              }
+            }
+          }
+
+          // direct calls to aliases of param accessors to the superclass in order to avoid
+          // duplicating fields.
+          if (sym.isParamAccessor && sym.alias != NoSymbol) {
+            val result = localTyper.typed {
+              Select(
+              Super(qual, tpnme.EMPTY/*qual.symbol.info.parents.head.symbol.name*/) setPos qual.pos,
+              sym.alias) setPos tree.pos
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             }
             debuglog("alias replacement: " + tree + " ==> " + result);//debug
             localTyper.typed(gen.maybeMkAsInstanceOf(transformSuperSelect(result), sym.tpe, sym.alias.tpe, true))
@@ -204,14 +318,22 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
 
         case Select(Super(_, mix), name) =>
           if (sym.isValue && !sym.isMethod || sym.hasAccessorFlag) {
+<<<<<<< HEAD
             unit.error(tree.pos, "super may be not be used on "+
                        (if (sym.hasAccessorFlag) sym.accessed else sym))
+=======
+            unit.error(tree.pos, "super may be not be used on "+ sym.accessedOrSelf)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           }
           else if (isDisallowed(sym)) {
             unit.error(tree.pos, "super not allowed here: use this." + name.decode + " instead")
           }
           transformSuperSelect(tree)
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case TypeApply(sel @ Select(qual, name), args) =>
           mayNeedProtectedAccessor(sel, args, true)
 
@@ -219,7 +341,11 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
           mayNeedProtectedAccessor(sel, List(EmptyTree), true)
 
         case Assign(lhs @ Select(qual, name), rhs) =>
+<<<<<<< HEAD
           if (lhs.symbol.isVariable && 
+=======
+          if (lhs.symbol.isVariable &&
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               lhs.symbol.isJavaDefined &&
               needsProtectedAccessor(lhs.symbol, tree.pos)) {
             debuglog("Adding protected setter for " + tree)
@@ -230,8 +356,13 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
             super.transform(tree)
 
         case Apply(fn, args) =>
+<<<<<<< HEAD
           assert(fn.tpe != null, tree) 
           treeCopy.Apply(tree, transform(fn), transformArgs(args, fn.tpe.params))
+=======
+          assert(fn.tpe != null, tree)
+          treeCopy.Apply(tree, transform(fn), transformArgs(fn.tpe.params, args))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case Function(vparams, body) =>
           withInvalidOwner {
             treeCopy.Function(tree, vparams, transform(body))
@@ -241,9 +372,15 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
       }
       catch {
         case ex : AssertionError =>
+<<<<<<< HEAD
           if (sym != null && sym != NoSymbol) 
             Console.println("TRANSFORM: " + tree.symbol.sourceFile)
             
+=======
+          if (sym != null && sym != NoSymbol)
+            Console.println("TRANSFORM: " + tree.symbol.sourceFile)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           Console.println("TREE: " + tree)
           throw ex
       }
@@ -261,15 +398,22 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
       validCurrentOwner = prevValidCurrentOwner
       result
     }
+<<<<<<< HEAD
     
     /** Add a protected accessor, if needed, and return a tree that calls
      *  the accessor and returns the the same member. The result is already
+=======
+
+    /** Add a protected accessor, if needed, and return a tree that calls
+     *  the accessor and returns the same member. The result is already
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *  typed.
      */
     private def makeAccessor(tree: Select, targs: List[Tree]): Tree = {
       val Select(qual, name) = tree
       val sym = tree.symbol
       val clazz = hostForAccessorOf(sym, currentOwner.enclClass)
+<<<<<<< HEAD
           
       /** Return a list of list of types of all value parameter sections. */
       def allParamTypes(tpe: Type): List[List[Type]] = tpe match {
@@ -278,14 +422,23 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
         case _ => Nil
       }
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
       assert(clazz != NoSymbol, sym)
       debuglog("Decided for host class: " + clazz)
 
+<<<<<<< HEAD
       val accName = nme.protName(sym.originalName)
       val hasArgs = sym.tpe.paramTypes != Nil
       val memberType = refchecks.toScalaRepeatedParam(sym.tpe) // fix for #2413
       
+=======
+      val accName    = nme.protName(sym.originalName)
+      val hasArgs    = sym.tpe.paramSectionCount > 0
+      val memberType = refChecks.toScalaRepeatedParam(sym.tpe) // fix for #2413
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       // if the result type depends on the this type of an enclosing class, the accessor
       // has to take an object of exactly this type, otherwise it's more general
       val objType = if (isThisType(memberType.finalResultType)) clazz.thisType else clazz.typeOfThis
@@ -294,6 +447,7 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
           // luc: question to author: should the tparams symbols not be cloned and get a new owner (protAcc)?
           PolyType(tparams, MethodType(List(protAcc.newSyntheticValueParam(objType)),
                                        restpe.cloneInfo(protAcc).asSeenFrom(qual.tpe, sym.owner)))
+<<<<<<< HEAD
         case _ => 
           MethodType(List(protAcc.newSyntheticValueParam(objType)),
                      memberType.cloneInfo(protAcc).asSeenFrom(qual.tpe, sym.owner))
@@ -317,6 +471,35 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
       }
       var res: Tree = atPos(tree.pos) {
         if (targs.head == EmptyTree) 
+=======
+        case _ =>
+          MethodType(List(protAcc.newSyntheticValueParam(objType)),
+                     memberType.cloneInfo(protAcc).asSeenFrom(qual.tpe, sym.owner))
+      }
+
+      var protAcc = clazz.info.decl(accName).suchThat(s => s == NoSymbol || s.tpe =:= accType(s))
+      if (protAcc == NoSymbol) {
+        protAcc = clazz.newMethod(tree.pos, nme.protName(sym.originalName))
+        protAcc.setInfo(accType(protAcc))
+        clazz.info.decls.enter(protAcc);
+
+        val code = DefDef(protAcc, {
+          val (receiver :: _) :: tail = protAcc.paramss
+          val base: Tree              = Select(Ident(receiver), sym)
+          val allParamTypes           = sym.tpe.paramss map (xs => xs map (_.tpe))
+
+          (tail zip allParamTypes).foldLeft(base) {
+            case (fn, (params, tpes)) =>
+              Apply(fn, params zip tpes map { case (p, tp) => makeArg(p, receiver, tp) })
+          }
+        })
+
+        debuglog("" + code)
+        storeAccessorDefinition(clazz, code)
+      }
+      var res: Tree = atPos(tree.pos) {
+        if (targs.head == EmptyTree)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           Apply(Select(This(clazz), protAcc), List(qual))
         else
           Apply(TypeApply(Select(This(clazz), protAcc), targs), List(qual))
@@ -324,6 +507,7 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
       debuglog("Replaced " + tree + " with " + res)
       if (hasArgs) localTyper.typedOperator(res) else localTyper.typed(res)
     }
+<<<<<<< HEAD
     
     /** Adapt the given argument in call to protected member. 
      *  Adaptation may add a cast to a path-dependent type, for instance
@@ -331,11 +515,21 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
      *  def prot$m(obj: Outer)(x: Inner) = obj.m(x.asInstanceOf[obj.Inner]).
      *
      *  such a cast might be necessary when m expects an Outer.this.Inner (the 
+=======
+
+    /** Adapt the given argument in call to protected member.
+     *  Adaptation may add a cast to a path-dependent type, for instance
+     *
+     *  def prot$m(obj: Outer)(x: Inner) = obj.m(x.asInstanceOf[obj.Inner]).
+     *
+     *  such a cast might be necessary when m expects an Outer.this.Inner (the
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *  outer of 'obj' and 'x' have to be the same). This restriction can't be
      *  expressed in the type system (but is implicit when defining method m).
      *
      *  Also, it calls using repeated parameters are ascribed with ': _*'
      */
+<<<<<<< HEAD
     private def makeArg(v: Symbol, obj: Symbol, expectedTpe: Type): Tree = {
       var res: Tree = Ident(v)
       val sym = obj.tpe.typeSymbol
@@ -365,6 +559,21 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
       case _ => NoSymbol
     }
     
+=======
+    private def makeArg(v: Symbol, obj: Symbol, pt: Type): Tree = {
+      // owner class
+      val clazz = pt match {
+        case TypeRef(pre, _, _) => thisTypeOfPath(pre)
+        case _                  => NoSymbol
+      }
+      val result = gen.paramToArg(v)
+      if (clazz != NoSymbol && (obj.tpe.typeSymbol isSubClass clazz)) // path-dependent type
+        gen.mkAsInstanceOf(result, pt.asSeenFrom(singleType(NoPrefix, obj), clazz))
+      else
+        result
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Add an accessor for field, if needed, and return a selection tree for it .
      *  The result is not typed.
      */
@@ -381,11 +590,16 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
                                    UnitClass.tpe))
         clazz.info.decls.enter(protAcc)
         val code = DefDef(protAcc, {
+<<<<<<< HEAD
           val obj :: value :: Nil = protAcc.paramss.head;
+=======
+          val obj :: value :: Nil = protAcc.paramss.head
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           atPos(tree.pos) {
             Assign(
               Select(Ident(obj), field.name),
               Ident(value))
+<<<<<<< HEAD
           }              
         })
         debuglog("" + code)
@@ -395,15 +609,33 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
       res
     }
         
+=======
+          }
+        })
+        debuglog("" + code)
+        storeAccessorDefinition(clazz, code)
+      }
+      atPos(tree.pos)(Select(This(clazz), protAcc))
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Does `sym` need an accessor when accessed from `currentOwner`?
      *  A special case arises for classes with explicit self-types. If the
      *  self type is a Java class, and a protected accessor is needed, we issue
      *  an error. If the self type is a Scala class, we don't add an accessor.
+<<<<<<< HEAD
      *  An accessor is not needed if the access boundary is larger than the 
      *  enclosing package, since that translates to 'public' on the host sys.
      *  (as Java has no real package nesting).
      *
      * If the access happens inside a 'trait', access is more problematic since 
+=======
+     *  An accessor is not needed if the access boundary is larger than the
+     *  enclosing package, since that translates to 'public' on the host sys.
+     *  (as Java has no real package nesting).
+     *
+     * If the access happens inside a 'trait', access is more problematic since
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      * the implementation code is moved to an '$class' class which does not
      * inherit anything. Since we can't (yet) add accessors for 'required'
      * classes, this has to be signaled as error.
@@ -422,7 +654,11 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
       val isCandidate = (
            sym.isProtected
         && sym.isJavaDefined
+<<<<<<< HEAD
         && !sym.definedInPackage
+=======
+        && !sym.isDefinedInPackage
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         && !accessibleThroughSubclassing
         && (sym.owner.enclosingPackageClass != currentOwner.enclosingPackageClass)
         && (sym.owner.enclosingPackageClass == packageAccessBoundry(sym))
@@ -436,7 +672,11 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
         true
       }
       def isJavaProtected = host.isTrait && sym.isJavaDefined && {
+<<<<<<< HEAD
         restrictionError(pos, unit, 
+=======
+        restrictionError(pos, unit,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           """|%s accesses protected %s inside a concrete trait method.
              |Add an accessor in a class extending %s as a workaround.""".stripMargin.format(
                 clazz, sym, sym.enclClass)
@@ -445,10 +685,17 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
       }
       isCandidate && !host.isPackageClass && !isSelfType && !isJavaProtected
     }
+<<<<<<< HEAD
       
     /** Return the innermost enclosing class C of referencingClass for which either
      *  of the following holds: 
      *     - C is a subclass of sym.owner or 
+=======
+
+    /** Return the innermost enclosing class C of referencingClass for which either
+     *  of the following holds:
+     *     - C is a subclass of sym.owner or
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *     - C is declared in the same package as sym's owner
      */
     private def hostForAccessorOf(sym: Symbol, referencingClass: Symbol): Symbol = {
@@ -461,6 +708,7 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
         hostForAccessorOf(sym, referencingClass.owner.enclClass)
       else referencingClass
     }
+<<<<<<< HEAD
     
     /** Is 'tpe' the type of a member of an enclosing class? */
     private def isThisType(tpe: Type): Boolean = tpe match {
@@ -472,6 +720,24 @@ abstract class SuperAccessors extends transform.Transform with transform.TypingT
       case AnnotatedType(_, tp, _) =>
         isThisType(tp)
       case _ => false
+=======
+
+    /** For a path-dependent type, return the this type. */
+    private def thisTypeOfPath(path: Type): Symbol = path match {
+      case ThisType(outerSym)  => outerSym
+      case SingleType(rest, _) => thisTypeOfPath(rest)
+      case _                   => NoSymbol
+    }
+
+    /** Is 'tpe' the type of a member of an enclosing class? */
+    private def isThisType(tpe: Type): Boolean = tpe match {
+      case ThisType(sym)           => sym.isClass && !sym.isPackageClass
+      case TypeRef(pre, _, _)      => isThisType(pre)
+      case SingleType(pre, _)      => isThisType(pre)
+      case RefinedType(parents, _) => parents exists isThisType
+      case AnnotatedType(_, tp, _) => isThisType(tp)
+      case _                       => false
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
   }
 }

@@ -13,7 +13,11 @@ trait ScalaPrefs {
   def exceptionFormatter: Exceptional.Formatter
 }
 
+<<<<<<< HEAD
 trait LowPriorityScalaPrefs {  
+=======
+trait LowPriorityScalaPrefs {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   implicit object DefaultScalaPrefs extends ScalaPrefs {
     def codeSources        = Sources.defaultSources
     def exceptionFormatter = Exceptional.Formatter(this)

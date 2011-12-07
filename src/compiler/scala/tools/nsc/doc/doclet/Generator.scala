@@ -17,7 +17,11 @@ abstract class Generator {
     * confirm that they have been correctly initialised before allowing generation to proceed. */
   protected val checks: mutable.Set[()=>Boolean] =
     mutable.Set.empty[()=>Boolean]
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Outputs documentation (as a side effect). */
   def generate(): Unit = {
     assert(checks forall { check => check() })

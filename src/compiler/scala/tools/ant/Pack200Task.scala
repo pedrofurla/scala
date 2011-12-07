@@ -8,7 +8,11 @@
 
 package scala.tools.ant
 
+<<<<<<< HEAD
 import java.io.{BufferedOutputStream, File, FileInputStream, 
+=======
+import java.io.{BufferedOutputStream, File, FileInputStream,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
        FileOutputStream, PipedInputStream, PipedOutputStream}
 import java.util.jar.{JarFile, JarInputStream, JarOutputStream, Pack200}
 import java.util.jar.Pack200.Packer._
@@ -18,7 +22,11 @@ import org.apache.tools.ant.types.FileSet
 
 /** An [[http://ant.apache.org Ant]] task that applies the pack200 encoding
  *  to a JAR file.
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  - `destdir` (mandatory),
  *  - `dir` (defaults to project's basedir),
  *  - `effort` (default 9),
@@ -31,7 +39,11 @@ import org.apache.tools.ant.types.FileSet
  * @author  James Matlik
  */
 class Pack200Task extends ScalaMatchingTask {
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 /*============================================================================*\
 **                             Ant user-properties                            **
 \*============================================================================*/
@@ -58,16 +70,27 @@ class Pack200Task extends ScalaMatchingTask {
   }
 
   /** A level from 0 (none) to 9 (max) of effort for applying Pack200 */
+<<<<<<< HEAD
   def setEffort(x: Int) { 
     if (effort < 10 && effort > -1) effort = x 
+=======
+  def setEffort(x: Int) {
+    if (effort < 10 && effort > -1) effort = x
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     else buildError("The effort level must be a value from 0 to 9")
   }
 
   /** Set the flag to specify if file reordering should be performed. Reordering
     * is used to remove empty packages and improve pack200 optimization.
+<<<<<<< HEAD
     * @param keep 
     *         `'''true'''` to retain file ordering.
     *         `'''false'''` to optimize directory structure (DEFAULT).  */ 
+=======
+    * @param keep
+    *         `'''true'''` to retain file ordering.
+    *         `'''false'''` to optimize directory structure (DEFAULT).  */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def setKeepFileOrder(x: Boolean) { keepFileOrder = x }
 
   /** If false, a single modification time is used for all contained files */
@@ -85,7 +108,11 @@ class Pack200Task extends ScalaMatchingTask {
   /** Set the output directory */
   def setDestdir(file: File) {
     if (file != null && file.exists && file.isDirectory) destdir = Some(file)
+<<<<<<< HEAD
     else buildError("The destination directory is invalid: " + file.getAbsolutePath) 
+=======
+    else buildError("The destination directory is invalid: " + file.getAbsolutePath)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   }
 
   def setSuffix(s: String) { packFileSuffix = s }
@@ -101,7 +128,11 @@ class Pack200Task extends ScalaMatchingTask {
     val fs = getImplicitFileSet
     var ds = fs.getDirectoryScanner(getProject())
     var dir = fs.getDir(getProject())
+<<<<<<< HEAD
     for (filename <- ds.getIncludedFiles() 
+=======
+    for (filename <- ds.getIncludedFiles()
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
          if filename.toLowerCase.endsWith(".jar")) {
       val file = new File(dir, filename)
       if(files.exists(file.equals(_)) == false) files = file :: files

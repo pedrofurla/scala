@@ -29,7 +29,11 @@ import DocParser.Parsed
   *
   * @param reporter The reporter to which both documentation and compilation errors will be reported.
   * @param settings The settings to be used by the documenter and compiler for generating documentation.
+<<<<<<< HEAD
   * 
+=======
+  *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   * @author Gilles Dubochet */
 class DocFactory(val reporter: Reporter, val settings: doc.Settings) { processor =>
   /** The unique compiler instance used by this processor and constructed from its `settings`. */
@@ -41,7 +45,11 @@ class DocFactory(val reporter: Reporter, val settings: doc.Settings) { processor
       phasesSet += analyzer.typerFactory
       phasesSet += superAccessors
       phasesSet += pickler
+<<<<<<< HEAD
       phasesSet += refchecks
+=======
+      phasesSet += refChecks
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
     override def forScaladoc = true
   }

@@ -26,7 +26,11 @@ abstract class ValidatingMarkupHandler extends MarkupHandler with Logged {
   final override val isValidating = true
 
   override def log(msg: String) {}
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /*
   override def checkChildren(pos: Int, pre: String, label:String,ns:NodeSeq): Unit = {
     Console.println("checkChildren()");
@@ -64,9 +68,15 @@ abstract class ValidatingMarkupHandler extends MarkupHandler with Logged {
       log("  checking node")
       declCurrent.contentModel match {
         case ANY =>
+<<<<<<< HEAD
         case EMPTY => 
           reportValidationError(pos, "DTD says, no elems, no text allowed here")
         case PCDATA => 
+=======
+        case EMPTY =>
+          reportValidationError(pos, "DTD says, no elems, no text allowed here")
+        case PCDATA =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           reportValidationError(pos, "DTD says, no elements allowed here")
         case m @ MIXED(r) =>
           advanceDFA(m)
@@ -96,7 +106,11 @@ abstract class ValidatingMarkupHandler extends MarkupHandler with Logged {
   final override def elemDecl(name: String, cmstr: String) {
     decls = ElemDecl(name, ContentModel.parse(cmstr)) :: decls
   }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   final override def attListDecl(name: String, attList: List[AttrDecl]) {
     decls = AttListDecl(name, attList) :: decls
   }

@@ -16,11 +16,19 @@ trait FileBackedHistory extends JLineHistory with JPersistentHistory {
   def maxSize: Int
   protected lazy val historyFile: File = defaultFile
   private var isPersistent = true
+<<<<<<< HEAD
   
   locally {
     load()
   }
   
+=======
+
+  locally {
+    load()
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def withoutSaving[T](op: => T): T = {
     val saved = isPersistent
     isPersistent = false
@@ -31,7 +39,11 @@ trait FileBackedHistory extends JLineHistory with JPersistentHistory {
     if (isPersistent)
       append(item + "\n")
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Overwrites the history file with the current memory. */
   protected def sync(): Unit = {
     val lines = asStrings map (_ + "\n")
@@ -41,18 +53,30 @@ trait FileBackedHistory extends JLineHistory with JPersistentHistory {
   protected def append(lines: String*): Unit = {
     historyFile.appendAll(lines: _*)
   }
+<<<<<<< HEAD
   
   def load(): Unit = {
     if (!historyFile.canRead)
       historyFile.createFile()
     
+=======
+
+  def load(): Unit = {
+    if (!historyFile.canRead)
+      historyFile.createFile()
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val lines: IndexedSeq[String] = {
       try historyFile.lines().toIndexedSeq
       catch {
         // It seems that control characters in the history file combined
         // with the default codec can lead to nio spewing exceptions.  Rather
         // than abandon hope we'll try to read it as ISO-8859-1
+<<<<<<< HEAD
         case _: Exception => 
+=======
+        case _: Exception =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           try historyFile.lines("ISO-8859-1").toIndexedSeq
           catch { case _: Exception => Vector() }
       }

@@ -70,7 +70,11 @@ object Test2 {
   println()
 
   def loadArray[T](x: Array[Byte])(implicit m: reflect.Manifest[Array[T]]) =
+<<<<<<< HEAD
     load[Array[T]](x)(m).deepToString
+=======
+    load[Array[T]](x)(m).deep.toString
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   println("Array()="+loadArray[Int](dump(Array(): Array[Int])))
   println("Array(true)="+loadArray[Boolean](dump(Array(true))))
   println("Array(a)="+loadArray[Char](dump(Array('a'))))

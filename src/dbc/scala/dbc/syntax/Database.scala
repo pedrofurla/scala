@@ -15,7 +15,11 @@ package syntax;
 import java.net.URI;
 
 @deprecated(DbcIsDeprecated, "2.9.0") object Database {
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def database (server:String, username:String, password:String): dbc.Database = {
     val uri = new URI(server);
     // Java 1.5 if (uri.toString().contains("postgres")) {
@@ -29,5 +33,9 @@ import java.net.URI;
       throw new Exception("No DBMS vendor support could be found for the given URI");
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

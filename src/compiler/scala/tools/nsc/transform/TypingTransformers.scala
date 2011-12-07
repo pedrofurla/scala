@@ -27,7 +27,11 @@ trait TypingTransformers {
 
     /** a typer for each enclosing class */
     val typers: mutable.Map[Symbol, analyzer.Typer] = new mutable.HashMap
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     override def atOwner[A](owner: Symbol)(trans: => A): A = atOwner(curTree, owner)(trans)
 
     def atOwner[A](tree: Tree, owner: Symbol)(trans: => A): A = {

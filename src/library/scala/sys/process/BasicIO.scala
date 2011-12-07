@@ -14,6 +14,15 @@ import java.io.{ BufferedReader, InputStreamReader, FilterInputStream, FilterOut
 import java.util.concurrent.LinkedBlockingQueue
 import scala.collection.immutable.Stream
 
+<<<<<<< HEAD
+=======
+/**
+  * This object contains factories for [[scala.sys.process.ProcessIO]],
+  * which can be used to control the I/O of a [[scala.sys.process.Process]]
+  * when a [[scala.sys.process.ProcessBuilder]] is started with the `run`
+  * command.
+  */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 object BasicIO {
   final val BufferSize = 8192
   final val Newline    = props("line.separator")
@@ -45,10 +54,17 @@ object BasicIO {
     def protect(in: InputStream): InputStream    = if (in eq stdin) Uncloseable(in) else in
     def protect(out: OutputStream): OutputStream = if ((out eq stdout) || (out eq stderr)) Uncloseable(out) else out
   }
+<<<<<<< HEAD
   
   def apply(withIn: Boolean, output: String => Unit, log: Option[ProcessLogger]) =
     new ProcessIO(input(withIn), processFully(output), getErr(log))
     
+=======
+
+  def apply(withIn: Boolean, output: String => Unit, log: Option[ProcessLogger]) =
+    new ProcessIO(input(withIn), processFully(output), getErr(log))
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def apply(withIn: Boolean, buffer: StringBuffer, log: Option[ProcessLogger]) =
     new ProcessIO(input(withIn), processFully(buffer), getErr(log))
 

@@ -150,7 +150,11 @@ public class Attribute {
     private void parseBlob0() {
         if (buf != null)
             return;
+<<<<<<< HEAD
         buf = ByteBuffer.wrap(value);                                   // Sec. 23.3 in Partition II of CLR Spec. 
+=======
+        buf = ByteBuffer.wrap(value);                                   // Sec. 23.3 in Partition II of CLR Spec.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         buf.order(ByteOrder.LITTLE_ENDIAN);
 
         short sig = buf.getShort();                                     // Prolog
@@ -158,10 +162,17 @@ public class Attribute {
         ParameterInfo[] params = constr.GetParameters();
         constrArgs = new Object[params.length];
         for (int i = 0; i < params.length; i++) {
+<<<<<<< HEAD
             constrArgs[i] = parseFixedArg(params[i].ParameterType);     // FixedArg 
         }
 
         int ncount = buf.getShort();                                   // NumNamed 
+=======
+            constrArgs[i] = parseFixedArg(params[i].ParameterType);     // FixedArg
+        }
+
+        int ncount = buf.getShort();                                   // NumNamed
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         namedArgs = new LinkedHashMap();
         for (int i = 0; i < ncount; i++) {
             int designator = buf.get();                                // designator one of 0x53 (FIELD) or 0x54 (PROPERTY)
@@ -185,7 +196,11 @@ public class Attribute {
     }
 
     /* indicates whether the "simple" case (the other is "enum") of the first row
+<<<<<<< HEAD
        in the Elem production should be taken. */  
+=======
+       in the Elem production should be taken. */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private boolean isSimpleElem(Type type) {
         if(!type2id.containsKey(type)) return false;
         int id = getTypeId(type);
@@ -236,7 +251,11 @@ public class Attribute {
            if(boxedT.IsEnum()) {
                return new BoxedArgument(boxedT, parseVal(getTypeId(boxedT.getUnderlyingType())));
            } else {
+<<<<<<< HEAD
                return new BoxedArgument(boxedT, parseVal(getTypeId(boxedT))); // TODO dead code? 
+=======
+               return new BoxedArgument(boxedT, parseVal(getTypeId(boxedT))); // TODO dead code?
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
            }
        } else {
            Type boxedT = parseType();
@@ -262,7 +281,11 @@ public class Attribute {
             return new Integer(buf.getInt()); // TODO U4 not the same as I4
         case Signature.ELEMENT_TYPE_I8:
         case Signature.ELEMENT_TYPE_U8:
+<<<<<<< HEAD
             return new Long(buf.getLong());   // TODO U8 not the same as I8 
+=======
+            return new Long(buf.getLong());   // TODO U8 not the same as I8
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case Signature.ELEMENT_TYPE_R4:
             return new Float(buf.getFloat());
         case Signature.ELEMENT_TYPE_R8:
@@ -313,12 +336,20 @@ public class Attribute {
         }
     }
 
+<<<<<<< HEAD
     private Type parseType() { // FieldOrPropType, Sec. 23.3 in Partition II of CLR Spec.  
+=======
+    private Type parseType() { // FieldOrPropType, Sec. 23.3 in Partition II of CLR Spec.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         int id = buf.get();
         switch (id) {
         case Signature.ELEMENT_TYPE_SZARRAY:
             Type arrT = Type.mkArray(parseType(), 1);
+<<<<<<< HEAD
             return arrT; 
+=======
+            return arrT;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case Signature.X_ELEMENT_TYPE_ENUM:
             String enumName = parseString();
             Type enumT = Type.getType(enumName);
@@ -350,7 +381,11 @@ public class Attribute {
     }
 
 
+<<<<<<< HEAD
     private Type parseFieldOrPropTypeInNamedArg() { // FieldOrPropType, Sec. 23.3 in Partition II of CLR Spec.  
+=======
+    private Type parseFieldOrPropTypeInNamedArg() { // FieldOrPropType, Sec. 23.3 in Partition II of CLR Spec.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         int id = buf.get();
         switch (id) {
         case 0x51:
@@ -372,8 +407,13 @@ public class Attribute {
     private Type getTypeFromSerString() {
         String typename = parseString();
         int i = typename.indexOf(',');
+<<<<<<< HEAD
         /* fully qualified assembly name follows. Just strip it on the assumption that 
            the assembly is referenced in the externs and the type will be found. */ 
+=======
+        /* fully qualified assembly name follows. Just strip it on the assumption that
+           the assembly is referenced in the externs and the type will be found. */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         String name = (i < 0) ? typename : typename.substring(0, i);
         Type t = Type.GetType(name);
         if (t == null && i > 0) {
@@ -455,7 +495,11 @@ public class Attribute {
         return arr;
     }
 
+<<<<<<< HEAD
     private String parseString() { // SerString convention 
+=======
+    private String parseString() { // SerString convention
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         String str = null;
         int length = parseLength();
         if (length < 0)

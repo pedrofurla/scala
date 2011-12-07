@@ -18,26 +18,42 @@ import scala.util.control.Exception.ultimately
  */
 trait Dispatcher {
   partest: Universe =>
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** The public entry point.  The given filter narrows down the list of
    *  tests to run.
    */
   def runSelection(categories: List[TestCategory], filt: TestEntity => Boolean = _ => true): CombinedTestResults = {
     // Setting scala.home informs tests where to obtain their jars.
     setProp("scala.home", testBuildDir.path)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val allTests  = allCategories flatMap (_.enumerate)
     val selected  = allTests filter filt
     val groups    = selected groupBy (_.category)
     val count     = selected.size
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (count == 0) return CombinedTestResults(0, 0, 0, Nil)
     else if (count == allTests.size) verbose("Running all %d tests." format count)
     else verbose("Running %d/%d tests: %s".format(count, allTests.size, toStringTrunc(selected map (_.label) mkString ", ")))
 
     allCategories collect { case x if groups contains x => runCategory(x, groups(x)) } reduceLeft (_ ++ _)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def parallelizeTests(tests: List[TestEntity]): immutable.Map[TestEntity, TestResult] = {
     // propagate verbosity
     if (isDebug) scala.actors.Debug.level = 3
@@ -73,7 +89,11 @@ trait Dispatcher {
   private def runCategory(category: TestCategory, tests: List[TestEntity]): CombinedTestResults = {
     val kind = category.kind
     normal("%s (%s tests in %s)\n".format(category.startMessage, tests.size, category))
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val (milliSeconds, resultMap) = timed2(parallelizeTests(tests))
     val (passed, failed)          = resultsToStatistics(resultMap mapValues (_.state))
     val failures                  = resultMap.values filterNot (_.passed) toList
@@ -83,7 +103,11 @@ trait Dispatcher {
 
   /** A Worker is given a bundle of tests and runs them all sequentially.
    */
+<<<<<<< HEAD
   class Worker(val workerNum: Int) extends Actor {    
+=======
+  class Worker(val workerNum: Int) extends Actor {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def act() {
       react { case TestsToRun(tests) =>
         val master = sender
@@ -99,12 +123,20 @@ trait Dispatcher {
       val testIterator  = tests.iterator
       def processed     = results.size
       def isComplete    = testIterator.isEmpty
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       def atThreshold(num: Double) = {
         require(num >= 0 && num <= 1.0)
         ((processed - 1).toDouble / numberOfTests <= num) && (processed.toDouble / numberOfTests >= num)
       }
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       def extraMessage = {
         // for now quiet for normal people
         if (isVerbose || isTrace || isDebug) {
@@ -115,13 +147,21 @@ trait Dispatcher {
         }
         else ""
       }
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       def countAndReport(result: TestResult) {
         val TestResult(test, state) = result
         // refuse to count an entity twice
         if (results contains test)
           return warning("Received duplicate result for %s: was %s, now %s".format(test, results(test), state))
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         // increment the counter for this result state
         results += (test -> result)
 
@@ -135,11 +175,19 @@ trait Dispatcher {
 
         // Respond to master if this Worker is complete
         if (isComplete)
+<<<<<<< HEAD
           onCompletion(results)        
       }
       
       Actor.loopWhile(testIterator.hasNext) {
         val parent = self        
+=======
+          onCompletion(results)
+      }
+
+      Actor.loopWhile(testIterator.hasNext) {
+        val parent = self
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         // pick a test and set some alarms
         val test    = testIterator.next
         val alarmer = test startAlarms (parent ! new Timeout(test))

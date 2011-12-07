@@ -16,7 +16,11 @@ import Properties.isMac
 /** Reads lines from an input stream */
 trait InteractiveReader {
   val interactive: Boolean
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def init(): Unit
   def reset(): Unit
 
@@ -34,7 +38,11 @@ trait InteractiveReader {
   }
   def readAssumingNo(prompt: String)  = readYesOrNo(prompt, false)
   def readAssumingYes(prompt: String) = readYesOrNo(prompt, true)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected def readOneLine(prompt: String): String
   protected def readOneKey(prompt: String): Int
 
@@ -50,7 +58,11 @@ object InteractiveReader {
     try body catch {
       case e: IOException if e.getMessage == msgEINTR => reset ; body
     }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def apply(): InteractiveReader = SimpleReader()
   @deprecated("Use `apply` instead.", "2.9.0")
   def createDefault(): InteractiveReader = apply()

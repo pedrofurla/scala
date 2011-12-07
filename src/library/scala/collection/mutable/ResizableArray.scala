@@ -13,7 +13,11 @@ import generic._
 
 /** This class is used internally to implement data structures that
  *  are based on resizable arrays.
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @tparam A    type of the elements contained in this resizable array.
  *
  *  @author  Matthias Zenger, Burak Emir
@@ -21,9 +25,15 @@ import generic._
  *  @version 2.8
  *  @since   1
  */
+<<<<<<< HEAD
 trait ResizableArray[A] extends IndexedSeq[A] 
                            with GenericTraversableTemplate[A, ResizableArray]
                            with IndexedSeqOptimized[A, ResizableArray[A]] { 
+=======
+trait ResizableArray[A] extends IndexedSeq[A]
+                           with GenericTraversableTemplate[A, ResizableArray]
+                           with IndexedSeqOptimized[A, ResizableArray[A]] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   override def companion: GenericCompanion[ResizableArray] = ResizableArray
 

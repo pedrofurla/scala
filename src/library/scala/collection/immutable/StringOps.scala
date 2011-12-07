@@ -17,6 +17,7 @@ import mutable.StringBuilder
  *  This class serves as a wrapper providing `String`s with all the operations
  *  found in indexed sequences. Where needed, instances of `String` object
  *  are implicitly converted into this class.
+<<<<<<< HEAD
  *  
  *  The difference between this class and `WrappedString` is that calling transformer
  *  methods such as `filter` and `map` will yield a `String` object, whereas a 
@@ -24,6 +25,15 @@ import mutable.StringBuilder
  *  
  *  @param repr     the actual representation of this string operations object.
  *  
+=======
+ *
+ *  The difference between this class and `WrappedString` is that calling transformer
+ *  methods such as `filter` and `map` will yield a `String` object, whereas a
+ *  `WrappedString` will remain a `WrappedString`.
+ *
+ *  @param repr     the actual representation of this string operations object.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @since 2.8
  *  @define Coll StringOps
  *  @define coll string
@@ -47,6 +57,12 @@ final class StringOps(override val repr: String) extends StringLike[String] {
   }
   override def toString = repr
   override def length = repr.length
+<<<<<<< HEAD
   
   def seq = this.iterator
 }  
+=======
+
+  def seq = new WrappedString(repr)
+}
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0

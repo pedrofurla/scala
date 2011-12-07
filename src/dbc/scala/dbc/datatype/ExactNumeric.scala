@@ -18,7 +18,11 @@ package datatype;
 @deprecated(DbcIsDeprecated, "2.9.0") abstract class ExactNumeric[Type](
   override val nativeTypeId: DataType.Id
 ) extends datatype.Numeric[Type](nativeTypeId) {
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def isEquivalent(datatype: DataType) = datatype match {
     case dt: ExactNumeric[_] =>
       (nativeTypeId == dt.nativeTypeId &&
@@ -29,7 +33,11 @@ package datatype;
     case _ =>
       false
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def isSubtypeOf(datatype: DataType) = datatype match {
     case dt: ExactNumeric[_] =>
       (nativeTypeId == dt.nativeTypeId &&

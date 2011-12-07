@@ -11,9 +11,15 @@ package comment
 import scala.collection._
 
 /** A Scaladoc comment and all its tags.
+<<<<<<< HEAD
   * 
   * '''Note:''' the only instantiation site of this class is in [[CommentFactory]].
   * 
+=======
+  *
+  * '''Note:''' the only instantiation site of this class is in [[CommentFactory]].
+  *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   * @author Manohar Jonnalagedda
   * @author Gilles Dubochet */
 abstract class Comment {

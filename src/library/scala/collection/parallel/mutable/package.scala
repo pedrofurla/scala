@@ -1,11 +1,24 @@
+<<<<<<< HEAD
 package scala.collection.parallel
 
 
+=======
+/*                     __                                               *\
+**     ________ ___   / /  ___     Scala API                            **
+**    / __/ __// _ | / /  / _ |    (c) 2003-2011, LAMP/EPFL             **
+**  __\ \/ /__/ __ |/ /__/ __ |    http://scala-lang.org/               **
+** /____/\___/_/ |_/____/_/ | |                                         **
+**                          |/                                          **
+\*                                                                      */
+
+package scala.collection.parallel
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.mutable.ArraySeq
 import scala.collection.generic.Sizing
 
+<<<<<<< HEAD
 
 
 package object mutable {
@@ -23,11 +36,31 @@ package object mutable {
       // find the first bucket
       val fbindex = from / sizeMapBucketSize
       
+=======
+package object mutable {
+  /* aliases */
+  type ParArrayCombiner[T] = ResizableParArrayCombiner[T]
+  val ParArrayCombiner = ResizableParArrayCombiner
+}
+
+package mutable {
+  /* classes and traits */
+  private[mutable] trait SizeMapUtils {
+
+    protected def calcNumElems(from: Int, until: Int, tableLength: Int, sizeMapBucketSize: Int) = {
+      // find the first bucket
+      val fbindex = from / sizeMapBucketSize
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       // find the last bucket
       val lbindex = until / sizeMapBucketSize
       // note to self: FYI if you define lbindex as from / sizeMapBucketSize, the first branch
       // below always triggers and tests pass, so you spend a great day benchmarking and profiling
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (fbindex == lbindex) {
         // if first and last are the same, just count between `from` and `until`
         // return this count
@@ -41,11 +74,16 @@ package object mutable {
 
         // and finally count the elements in all the buckets between first and last using a sizemap
         val inbetween = countBucketSizes(fbindex + 1, lbindex)
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         // return the sum
         fbcount + inbetween + lbcount
       }
     }
+<<<<<<< HEAD
     
     protected def countElems(from: Int, until: Int): Int
     
@@ -54,6 +92,15 @@ package object mutable {
   
   /* hack-arounds */
   
+=======
+
+    protected def countElems(from: Int, until: Int): Int
+
+    protected def countBucketSizes(fromBucket: Int, untilBucket: Int): Int
+  }
+
+  /* hack-arounds */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private[mutable] class ExposedArrayBuffer[T] extends ArrayBuffer[T] with Sizing {
     def internalArray = array
     def setInternalSize(s: Int) = size0 = s
@@ -65,11 +112,18 @@ package object mutable {
       }
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private[mutable] class ExposedArraySeq[T](arr: Array[AnyRef], sz: Int) extends ArraySeq[T](sz) {
     override val array = arr
     override val length = sz
     override def stringPrefix = "ArraySeq"
   }
+<<<<<<< HEAD
   
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

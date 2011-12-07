@@ -11,15 +11,54 @@ import pickling.ByteCodecs
 
 /** AnnotationInfo and its helpers */
 trait AnnotationInfos extends api.AnnotationInfos { self: SymbolTable =>
+<<<<<<< HEAD
 
   /** Arguments to classfile annotations (which are written to
    *  bytecode as java annotations) are either:
    *  
+=======
+  import definitions.{ ThrowsClass, StaticAnnotationClass, isMetaAnnotation }
+
+  // Common annotation code between Symbol and Type.
+  // For methods altering the annotation list, on Symbol it mutates
+  // the Symbol's field directly.  For Type, a new AnnotatedType is
+  // created which wraps the original type.
+  trait Annotatable[Self] {
+    self: Self =>
+
+    /** The annotations on this type. */
+    def annotations: List[AnnotationInfo]                     // Annotations on this type.
+    def setAnnotations(annots: List[AnnotationInfo]): Self    // Replace annotations with argument list.
+    def withAnnotations(annots: List[AnnotationInfo]): Self   // Add annotations to this type.
+    def filterAnnotations(p: AnnotationInfo => Boolean): Self // Retain only annotations meeting the condition.
+    def withoutAnnotations: Self                              // Remove all annotations from this type.
+
+    /** Symbols of any @throws annotations on this symbol.
+     */
+    def throwsAnnotations(): List[Symbol] = annotations collect {
+      case AnnotationInfo(tp, Literal(Constant(tpe: Type)) :: Nil, _) if tp.typeSymbol == ThrowsClass => tpe.typeSymbol
+    }
+
+    /** Test for, get, or remove an annotation */
+    def hasAnnotation(cls: Symbol) = annotations exists (_ matches cls)
+    def getAnnotation(cls: Symbol) = annotations find (_ matches cls)
+    def removeAnnotation(cls: Symbol): Self = filterAnnotations(ann => !(ann matches cls))
+    final def withAnnotation(annot: AnnotationInfo): Self = withAnnotations(List(annot))
+  }
+
+  /** Arguments to classfile annotations (which are written to
+   *  bytecode as java annotations) are either:
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  - constants
    *  - arrays of constants
    *  - or nested classfile annotations
    */
+<<<<<<< HEAD
   abstract class ClassfileAnnotArg
+=======
+  abstract class ClassfileAnnotArg extends Product
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** Represents a compile-time Constant (`Boolean`, `Byte`, `Short`,
    *  `Char`, `Int`, `Long`, `Float`, `Double`, `String`, `java.lang.Class` or
@@ -58,8 +97,12 @@ trait AnnotationInfos extends api.AnnotationInfos { self: SymbolTable =>
   }
 
   /** Represents a nested classfile annotation */
+<<<<<<< HEAD
   case class NestedAnnotArg(annInfo: AnnotationInfo)
   extends ClassfileAnnotArg {
+=======
+  case class NestedAnnotArg(annInfo: AnnotationInfo) extends ClassfileAnnotArg {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // The nested annotation should not have any Scala annotation arguments
     assert(annInfo.args.isEmpty, annInfo.args)
     override def toString = annInfo.toString
@@ -67,6 +110,7 @@ trait AnnotationInfos extends api.AnnotationInfos { self: SymbolTable =>
 
   object NestedAnnotArg extends NestedAnnotArgExtractor
 
+<<<<<<< HEAD
   class AnnotationInfoBase
 
   /** Typed information about an annotation. It can be attached to either
@@ -91,6 +135,89 @@ trait AnnotationInfos extends api.AnnotationInfos { self: SymbolTable =>
 
     // Classfile annot: args empty. Scala annot: assocs empty.
     assert(args.isEmpty || assocs.isEmpty)
+=======
+  object AnnotationInfo extends AnnotationInfoExtractor {
+    def marker(atp: Type): AnnotationInfo =
+      apply(atp, Nil, Nil)
+
+    def lazily(lazyInfo: => AnnotationInfo) =
+      new LazyAnnotationInfo(lazyInfo)
+
+    def apply(atp: Type, args: List[Tree], assocs: List[(Name, ClassfileAnnotArg)]): AnnotationInfo =
+      new CompleteAnnotationInfo(atp, args, assocs)
+
+    def unapply(info: AnnotationInfo): Option[(Type, List[Tree], List[(Name, ClassfileAnnotArg)])] =
+      Some((info.atp, info.args, info.assocs))
+  }
+
+  class CompleteAnnotationInfo(
+    val atp: Type,
+    val args: List[Tree],
+    val assocs: List[(Name, ClassfileAnnotArg)]
+  ) extends AnnotationInfo {
+    // Classfile annot: args empty. Scala annot: assocs empty.
+    assert(args.isEmpty || assocs.isEmpty, atp)
+
+    override def toString = (
+      atp +
+      (if (!args.isEmpty) args.mkString("(", ", ", ")") else "") +
+      (if (!assocs.isEmpty) (assocs map { case (x, y) => x+" = "+y } mkString ("(", ", ", ")")) else "")
+    )
+  }
+
+  /** Symbol annotations parsed in `Namer` (typeCompleter of
+   *  definitions) have to be lazy (#1782)
+   */
+  final class LazyAnnotationInfo(lazyInfo: => AnnotationInfo) extends AnnotationInfo {
+    private var forced = false
+    private lazy val forcedInfo =
+      try {
+        val result = lazyInfo 
+        if (result.pos == NoPosition) result setPos pos
+        result
+      } finally forced = true
+
+    def atp: Type                               = forcedInfo.atp
+    def args: List[Tree]                        = forcedInfo.args
+    def assocs: List[(Name, ClassfileAnnotArg)] = forcedInfo.assocs
+
+    // We should always be able to print things without forcing them.
+    override def toString = if (forced) forcedInfo.toString else "@<?>"
+      
+    override def pos: Position = if (forced) forcedInfo.pos else NoPosition
+  }
+
+  /** Typed information about an annotation. It can be attached to either
+   *  a symbol or an annotated type.
+   *
+   *  Annotations are written to the classfile as Java annotations
+   *  if `atp` conforms to `ClassfileAnnotation` (the classfile parser adds
+   *  this interface to any Java annotation class).
+   *
+   *  Annotations are pickled (written to scala symtab attribute in the
+   *  classfile) if `atp` inherits form `StaticAnnotation`.
+   *
+   *  `args` stores arguments to Scala annotations, represented as typed
+   *  trees. Note that these trees are not transformed by any phases
+   *  following the type-checker.
+   *
+   *  `assocs` stores arguments to classfile annotations as name-value pairs.
+   */
+  sealed abstract class AnnotationInfo extends Product3[Type, List[Tree], List[(Name, ClassfileAnnotArg)]] {
+    def atp: Type
+    def args: List[Tree]
+    def assocs: List[(Name, ClassfileAnnotArg)]
+
+    /** Hand rolling Product. */
+    def _1 = atp
+    def _2 = args
+    def _3 = assocs
+    def canEqual(other: Any) = other.isInstanceOf[AnnotationInfo]
+    override def productPrefix = "AnnotationInfo"
+
+    // see annotationArgRewriter
+    lazy val isTrivial = atp.isTrivial && !hasArgWhich(_.isInstanceOf[This])
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     private var rawpos: Position = NoPosition
     def pos = rawpos
@@ -99,18 +226,65 @@ trait AnnotationInfos extends api.AnnotationInfos { self: SymbolTable =>
       this
     }
 
+<<<<<<< HEAD
     lazy val isTrivial: Boolean = atp.isTrivial && !(args exists (_.exists(_.isInstanceOf[This]))) // see annotationArgRewriter
 
     override def toString: String = atp +
       (if (!args.isEmpty) args.mkString("(", ", ", ")") else "") +
       (if (!assocs.isEmpty) (assocs map { case (x, y) => x+" = "+y } mkString ("(", ", ", ")")) else "")
+=======
+    /** Annotations annotating annotations are confusing so I drew
+     *  an example.  Given the following code:
+     *
+     *  class A {
+     *    @(deprecated @setter) @(inline @getter)
+     *    var x: Int = 0
+     *  }
+     *
+     *  For the setter `x_=` in A, annotations contains one AnnotationInfo =
+     *    List(deprecated @setter)
+     *  The single AnnotationInfo in that list, i.e. `@(deprecated @setter)`, has metaAnnotations =
+     *    List(setter)
+     *
+     *  Similarly, the getter `x` in A has an @inline annotation, which has
+     *  metaAnnotations = List(getter).
+     */
+    def symbol = atp.typeSymbol
+
+    /** These are meta-annotations attached at the use site; they
+     *  only apply to this annotation usage.  For instance, in
+     *    `@(deprecated @setter @field) val ...`
+     *  metaAnnotations = List(setter, field).
+     */
+    def metaAnnotations: List[AnnotationInfo] = atp match {
+      case AnnotatedType(metas, _, _) => metas
+      case _                          => Nil
+    }
+
+    /** The default kind of members to which this annotation is attached.
+     *  For instance, for scala.deprecated defaultTargets =
+     *    List(getter, setter, beanGetter, beanSetter).
+     */
+    def defaultTargets = symbol.annotations map (_.symbol) filter isMetaAnnotation
+    // Test whether the typeSymbol of atp conforms to the given class.
+    def matches(clazz: Symbol) = symbol isNonBottomSubClass clazz
+    // All subtrees of all args are considered.
+    def hasArgWhich(p: Tree => Boolean) = args exists (_ exists p)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     /** Check whether the type or any of the arguments are erroneous */
     def isErroneous = atp.isErroneous || args.exists(_.isErroneous)
 
+<<<<<<< HEAD
     /** Check whether any of the arguments mention a symbol */
     def refsSymbol(sym: Symbol) =
       args.exists(_.exists(_.symbol == sym))
+=======
+    def isStatic = symbol isNonBottomSubClass StaticAnnotationClass
+
+    /** Check whether any of the arguments mention a symbol */
+    def refsSymbol(sym: Symbol) = hasArgWhich(_.symbol == sym)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     /** Change all ident's with Symbol "from" to instead use symbol "to" */
     def substIdentSyms(from: Symbol, to: Symbol) = {
@@ -118,6 +292,7 @@ trait AnnotationInfos extends api.AnnotationInfos { self: SymbolTable =>
       AnnotationInfo(atp, args.map(subs(_)), assocs).setPos(pos)
     }
 
+<<<<<<< HEAD
     // !!! when annotation arguments are not literal strings, but any sort of
     // assembly of strings, there is a fair chance they will turn up here not as
     // Literal(const) but some arbitrary AST.
@@ -132,13 +307,41 @@ trait AnnotationInfos extends api.AnnotationInfos { self: SymbolTable =>
   }
 
   object AnnotationInfo extends AnnotationInfoExtractor
+=======
+    def stringArg(index: Int) = constantAtIndex(index) map (_.stringValue)
+    def intArg(index: Int)    = constantAtIndex(index) map (_.intValue)
+    def symbolArg(index: Int) = argAtIndex(index) collect {
+      case Apply(fun, Literal(str) :: Nil) if fun.symbol == definitions.Symbol_apply =>
+        newTermName(str.stringValue)
+    }
+
+    // !!! when annotation arguments are not literals, but any sort of
+    // expression, there is a fair chance they will turn up here not as
+    // Literal(const) but some arbitrary AST.
+    def constantAtIndex(index: Int): Option[Constant] =
+      argAtIndex(index) collect { case Literal(x) => x }
+
+    def argAtIndex(index: Int): Option[Tree] =
+      if (index < args.size) Some(args(index)) else None
+
+    override def hashCode = atp.## + args.## + assocs.##
+    override def equals(other: Any) = other match {
+      case x: AnnotationInfo  => (atp == x.atp) && (args == x.args) && (assocs == x.assocs)
+      case _                  => false
+    }
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   lazy val classfileAnnotArgManifest: ClassManifest[ClassfileAnnotArg] =
     reflect.ClassManifest.classType(classOf[ClassfileAnnotArg])
 
+<<<<<<< HEAD
   /** Symbol annotations parsed in `Namer` (typeCompleter of
    *  definitions) have to be lazy (#1782)
    */
   case class LazyAnnotationInfo(annot: () => AnnotationInfo)
   extends AnnotationInfoBase
+=======
+  object UnmappableAnnotation extends CompleteAnnotationInfo(NoType, Nil, Nil)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

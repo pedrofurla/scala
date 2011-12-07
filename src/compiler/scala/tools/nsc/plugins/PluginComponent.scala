@@ -9,7 +9,11 @@ package plugins
 
 /** A component that is part of a Plugin.
  *
+<<<<<<< HEAD
  * @author Lex Spoon 
+=======
+ * @author Lex Spoon
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * @version 1.1, 2009/1/2
  * Updated 2009/1/2 by Anders Bach Nielsen: Added features to implement SIP 00002
  */

@@ -73,14 +73,22 @@ class CompileSocket extends CompileOutputCommon {
   val tmpDir = {
     val udir  = Option(Properties.userName) getOrElse "shared"
     val f     = (Path(Properties.tmpDir) / "scala-devel" / udir).createDirectory()
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (f.isDirectory && f.canWrite) {
       info("[Temp directory: " + f + "]")
       f
     }
     else fatal("Could not find a directory for temporary files")
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /* A directory holding port identification files */
   val portsDir = (tmpDir / dirName).createDirectory()
 
@@ -118,7 +126,11 @@ class CompileSocket extends CompileOutputCommon {
   def getPort(vmArgs: String): Int = {
     val maxPolls = 300
     val sleepTime = 25
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     var attempts = 0
     var port = pollPort()
 
@@ -141,8 +153,13 @@ class CompileSocket extends CompileOutputCommon {
   def setPort(port: Int) {
     val file    = portFile(port)
     val secret  = new SecureRandom().nextInt.toString
+<<<<<<< HEAD
     
     try file writeAll secret catch { 
+=======
+
+    try file writeAll secret catch {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       case e @ (_: FileNotFoundException | _: SecurityException) =>
         fatal("Cannot create file: %s".format(file.path))
     }
@@ -159,13 +176,21 @@ class CompileSocket extends CompileOutputCommon {
     val maxMillis = 10 * 1000   // try for 10 seconds
     val retryDelay = 50
     val maxAttempts = maxMillis / retryDelay
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def getsock(attempts: Int): Option[Socket] = attempts match {
       case 0    => warn("Unable to establish connection to compilation daemon") ; None
       case num  =>
         val port = if (create) getPort(vmArgs) else pollPort()
         if (port < 0) return None
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         Socket.localhost(port).either match {
           case Right(socket)  =>
             info("[Connected to compilation daemon at port %d]" format port)
@@ -173,10 +198,17 @@ class CompileSocket extends CompileOutputCommon {
           case Left(err)      =>
             info(err.toString)
             info("[Connecting to compilation daemon at port %d failed; re-trying...]" format port)
+<<<<<<< HEAD
             
             if (attempts % 2 == 0) 
               deletePort(port)      // 50% chance to stop trying on this port
             
+=======
+
+            if (attempts % 2 == 0)
+              deletePort(port)      // 50% chance to stop trying on this port
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             Thread sleep retryDelay // delay before retrying
             getsock(attempts - 1)
         }
@@ -188,7 +220,11 @@ class CompileSocket extends CompileOutputCommon {
   def parseInt(x: String): Option[Int] =
     try   { Some(x.toInt) }
     catch { case _: NumberFormatException => None }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def getSocket(serverAdr: String): Socket = (
     for ((name, portStr) <- splitWhere(serverAdr, _ == ':', true) ; port <- parseInt(portStr)) yield
       getSocket(name, port)

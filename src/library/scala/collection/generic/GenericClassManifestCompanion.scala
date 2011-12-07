@@ -18,11 +18,19 @@ import mutable.Builder
  */
 abstract class GenericClassManifestCompanion[+CC[X] <: Traversable[X]] {
   type Coll = CC[_]
+<<<<<<< HEAD
   
   def newBuilder[A](implicit ord: ClassManifest[A]): Builder[A, CC[A]]
   
   def empty[A: ClassManifest]: CC[A] = newBuilder[A].result
   
+=======
+
+  def newBuilder[A](implicit ord: ClassManifest[A]): Builder[A, CC[A]]
+
+  def empty[A: ClassManifest]: CC[A] = newBuilder[A].result
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def apply[A](elems: A*)(implicit ord: ClassManifest[A]): CC[A] = {
     val b = newBuilder[A]
     b ++= elems

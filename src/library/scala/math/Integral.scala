@@ -16,7 +16,11 @@ package scala.math
 trait Integral[T] extends Numeric[T] {
   def quot(x: T, y: T): T
   def rem(x: T, y: T): T
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class IntegralOps(lhs: T) extends Ops(lhs) {
     def /(rhs: T) = quot(lhs, rhs)
     def %(rhs: T) = rem(lhs, rhs)

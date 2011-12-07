@@ -10,7 +10,11 @@
 package scala
 
 object Product2 {
+<<<<<<< HEAD
   def unapply[T1, T2](x: Product2[T1, T2]): Option[Product2[T1, T2]] = 
+=======
+  def unapply[T1, T2](x: Product2[T1, T2]): Option[Product2[T1, T2]] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     Some(x)
 }
 
@@ -23,6 +27,7 @@ trait Product2[@specialized(Int, Long, Double) +T1, @specialized(Int, Long, Doub
    */
   override def productArity = 2
 
+<<<<<<< HEAD
   
   /** Returns the n-th projection of this product if 0 < n <= productArity,
    *  otherwise throws an `IndexOutOfBoundsException`.
@@ -38,6 +43,23 @@ trait Product2[@specialized(Int, Long, Double) +T1, @specialized(Int, Long, Doub
     case 1 => _2
     case _ => throw new IndexOutOfBoundsException(n.toString())
  }  
+=======
+
+  /** Returns the n-th projection of this product if 0 < n <= productArity,
+   *  otherwise throws an `IndexOutOfBoundsException`.
+   *
+   *  @param n number of the projection to be returned
+   *  @return  same as `._(n+1)`, for example `productElement(1)` is the same as `._1`.
+   *  @throws  IndexOutOfBoundsException
+   */
+
+  @throws(classOf[IndexOutOfBoundsException])
+  override def productElement(n: Int) = n match {
+    case 0 => _1
+    case 1 => _2
+    case _ => throw new IndexOutOfBoundsException(n.toString())
+ }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** A projection of element 1 of this Product.
    *  @return   A projection of element 1.

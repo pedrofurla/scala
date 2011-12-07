@@ -224,7 +224,11 @@ public class JStackMapTableAttribute extends JAttribute {
                 else stream.writeInt(offsetDelta);
             } else if (tag == 251) {
                 if (usesU2) stream.writeShort(offsetDelta);
+<<<<<<< HEAD
                 else stream.writeInt(offsetDelta); 
+=======
+                else stream.writeInt(offsetDelta);
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             } else if (tag < 255) { // APPEND;  // 252-254
                 if (usesU2) stream.writeShort(offsetDelta);
                 else stream.writeInt(offsetDelta);
@@ -237,7 +241,11 @@ public class JStackMapTableAttribute extends JAttribute {
                     locals[i].writeContentsTo(stream);
                 for (int i = 0; i < stackItems.length; ++i)
                     stackItems[i].writeContentsTo(stream);
+<<<<<<< HEAD
             }   
+=======
+            }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         }
     }
 

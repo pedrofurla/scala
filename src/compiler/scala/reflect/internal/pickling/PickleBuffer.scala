@@ -137,13 +137,21 @@ class PickleBuffer(data: Array[Byte], from: Int, to: Int) {
     readIndex = 0
     readNat() ; readNat()     // discarding version
     val result = new Array[(Int, Array[Byte])](readNat())
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     result.indices foreach { index =>
       val tag = readNat()
       val len = readNat()
       val bytes = data.slice(readIndex, len + readIndex)
       readIndex += len
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       result(index) = tag -> bytes
     }
 
@@ -170,7 +178,11 @@ class PickleBuffer(data: Array[Byte], from: Int, to: Int) {
 
   /** Pickle = majorVersion_Nat minorVersion_Nat nbEntries_Nat {Entry}
    *  Entry  = type_Nat length_Nat [actual entries]
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  Assumes that the ..Version_Nat are already consumed.
    *
    *  @return an array mapping entry numbers to locations in

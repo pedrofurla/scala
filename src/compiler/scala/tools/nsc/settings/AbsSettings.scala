@@ -16,6 +16,7 @@ trait AbsSettings extends scala.reflect.internal.settings.AbsSettings {
   type ResultOfTryToSet           // List[String] in mutable, (Settings, List[String]) in immutable
   def errorFn: String => Unit
   protected def allSettings: collection.Set[Setting]
+<<<<<<< HEAD
   
   // settings minus internal usage settings
   def visibleSettings = allSettings filterNot (_.isInternalOnly)
@@ -29,6 +30,21 @@ trait AbsSettings extends scala.reflect.internal.settings.AbsSettings {
   // checks both name and any available abbreviations
   def lookupSetting(cmd: String): Option[Setting] = allSettings find (_ respondsTo cmd)
   
+=======
+
+  // settings minus internal usage settings
+  def visibleSettings = allSettings filterNot (_.isInternalOnly)
+
+  // only settings which differ from default
+  def userSetSettings = visibleSettings filterNot (_.isDefault)
+
+  // an argument list which (should) be usable to recreate the Settings
+  def recreateArgs = userSetSettings.toList flatMap (_.unparse)
+
+  // checks both name and any available abbreviations
+  def lookupSetting(cmd: String): Option[Setting] = allSettings find (_ respondsTo cmd)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // two AbsSettings objects are equal if their visible settings are equal.
   override def hashCode() = visibleSettings.size  // going for cheap
   override def equals(that: Any) = that match {
@@ -48,6 +64,7 @@ trait AbsSettings extends scala.reflect.internal.settings.AbsSettings {
     })
 
   implicit lazy val SettingOrdering: Ordering[Setting] = Ordering.ordered
+<<<<<<< HEAD
   
   trait AbsSetting extends Ordered[Setting] with AbsSettingValue {    
     def name: String
@@ -57,6 +74,17 @@ trait AbsSettings extends scala.reflect.internal.settings.AbsSettings {
     /* For tools which need to populate lists of available choices */
     def choices : List[String] = Nil
     
+=======
+
+  trait AbsSetting extends Ordered[Setting] with AbsSettingValue {
+    def name: String
+    def helpDescription: String
+    def unparse: List[String]     // A list of Strings which can recreate this setting.
+
+    /* For tools which need to populate lists of available choices */
+    def choices : List[String] = Nil
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** In mutable Settings, these return the same object with a var set.
      *  In immutable, of course they will return a new object, which means
      *  we can't use "this.type", at least not in a non-casty manner, which
@@ -74,7 +102,11 @@ trait AbsSettings extends scala.reflect.internal.settings.AbsSettings {
     def abbreviations: List[String] = Nil
     def dependencies: List[(Setting, String)] = Nil
     def respondsTo(label: String) = (name == label) || (abbreviations contains label)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** If the setting should not appear in help output, etc. */
     private var internalSetting = false
     def isInternalOnly = internalSetting
@@ -82,7 +114,11 @@ trait AbsSettings extends scala.reflect.internal.settings.AbsSettings {
       internalSetting = true
       this
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** If the appearance of the setting should halt argument processing. */
     private var isTerminatorSetting = false
     def shouldStopProcessing = isTerminatorSetting
@@ -93,7 +129,11 @@ trait AbsSettings extends scala.reflect.internal.settings.AbsSettings {
 
     /** Issue error and return */
     def errorAndValue[T](msg: String, x: T): T = { errorFn(msg) ; x }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** After correct Setting has been selected, tryToSet is called with the
      *  remainder of the command line.  It consumes any applicable arguments and
      *  returns the unconsumed ones.
@@ -135,7 +175,11 @@ trait AbsSettings extends scala.reflect.internal.settings.AbsSettings {
     override def hashCode() = name.hashCode + value.hashCode
     override def toString() = name + " = " + value
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait InternalSetting extends AbsSetting {
     override def isInternalOnly = true
   }

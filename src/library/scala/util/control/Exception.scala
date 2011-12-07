@@ -25,7 +25,11 @@ import java.lang.reflect.InvocationTargetException
  *  @author Paul Phillips
  */
 
+<<<<<<< HEAD
 object Exception {  
+=======
+object Exception {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   type Catcher[+T] = PartialFunction[Throwable, T]
 
   def mkCatcher[Ex <: Throwable: ClassManifest, T](isDef: Ex => Boolean, f: Ex => T) = new Catcher[T] {
@@ -72,13 +76,21 @@ object Exception {
   }
 
   /** A container class for catch/finally logic.
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  Pass a different value for rethrow if you want to probably
    *  unwisely allow catching control exceptions and other throwables
    *  which the rest of the world may expect to get through.
    */
   class Catch[+T](
+<<<<<<< HEAD
     val pf: Catcher[T], 
+=======
+    val pf: Catcher[T],
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val fin: Option[Finally] = None,
     val rethrow: Throwable => Boolean = shouldRethrow)
   extends Described {
@@ -131,7 +143,11 @@ object Exception {
   }
 
   /** A container class for Try logic */
+<<<<<<< HEAD
   class Try[+T] private[Exception](body: => T, val catcher: Catch[T]) {    
+=======
+  class Try[+T] private[Exception](body: => T, val catcher: Catch[T]) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Execute "body" using catch/finally logic "catcher" */
     def apply(): T                    = catcher(body)
     def apply[U >: T](other: => U): U = catcher(other)
@@ -226,6 +242,7 @@ object Exception {
   }
 
   /** Private **/
+<<<<<<< HEAD
   private def wouldMatch(x: Throwable, classes: collection.Seq[Class[_]]): Boolean = 
     classes exists (_ isAssignableFrom x.getClass)
   
@@ -234,4 +251,14 @@ object Exception {
       def apply(x: Throwable) = throw x
       def isDefinedAt(x: Throwable) = wouldMatch(x, exceptions)
     }  
+=======
+  private def wouldMatch(x: Throwable, classes: collection.Seq[Class[_]]): Boolean =
+    classes exists (_ isAssignableFrom x.getClass)
+
+  private def pfFromExceptions(exceptions: Class[_]*): PartialFunction[Throwable, Nothing] =
+    new scala.runtime.AbstractPartialFunction[Throwable, Nothing] {
+      def apply(x: Throwable) = throw x
+      def _isDefinedAt(x: Throwable) = wouldMatch(x, exceptions)
+    }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

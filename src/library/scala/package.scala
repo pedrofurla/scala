@@ -30,7 +30,11 @@ package object scala {
 
   @deprecated("instead of `@serializable class C`, use `class C extends Serializable`", "2.9.0")
   type serializable = annotation.serializable
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   type TraversableOnce[+A] = scala.collection.TraversableOnce[A]
 
   type Traversable[+A] = scala.collection.Traversable[A]
@@ -54,7 +58,11 @@ package object scala {
   val List = scala.collection.immutable.List
 
   val Nil = scala.collection.immutable.Nil
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   type ::[A] = scala.collection.immutable.::[A]
   val :: = scala.collection.immutable.::
 
@@ -64,7 +72,11 @@ package object scala {
 
   type Vector[+A] = scala.collection.immutable.Vector[A]
   val Vector = scala.collection.immutable.Vector
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   type StringBuilder = scala.collection.mutable.StringBuilder
   val StringBuilder = scala.collection.mutable.StringBuilder
 
@@ -74,13 +86,18 @@ package object scala {
   // Migrated from Predef
   @deprecated("Use Thread.currentThread instead", "2.9.0")
   def currentThread = java.lang.Thread.currentThread()
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // Moved back into Predef to avoid unnecessary indirection by
   // way of the scala package object within the standard library,
   // but bridged for compatibility.
   @bridge def $scope = scala.xml.TopScope
 
   // Numeric types which were moved into scala.math.*
+<<<<<<< HEAD
   
   type BigDecimal = scala.math.BigDecimal
   val BigDecimal = scala.math.BigDecimal
@@ -91,11 +108,24 @@ package object scala {
   type Equiv[T] = scala.math.Equiv[T]
   val Equiv = scala.math.Equiv
   
+=======
+
+  type BigDecimal = scala.math.BigDecimal
+  val BigDecimal = scala.math.BigDecimal
+
+  type BigInt = scala.math.BigInt
+  val BigInt = scala.math.BigInt
+
+  type Equiv[T] = scala.math.Equiv[T]
+  val Equiv = scala.math.Equiv
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   type Fractional[T] = scala.math.Fractional[T]
   type Integral[T] = scala.math.Integral[T]
 
   type Numeric[T] = scala.math.Numeric[T]
   val Numeric = scala.math.Numeric
+<<<<<<< HEAD
   
   type Ordered[T] = scala.math.Ordered[T]
   val Ordered = scala.math.Ordered
@@ -104,6 +134,16 @@ package object scala {
   val Ordering = scala.math.Ordering
   
   type PartialOrdering[T] = scala.math.PartialOrdering[T]  
+=======
+
+  type Ordered[T] = scala.math.Ordered[T]
+  val Ordered = scala.math.Ordered
+
+  type Ordering[T] = scala.math.Ordering[T]
+  val Ordering = scala.math.Ordering
+
+  type PartialOrdering[T] = scala.math.PartialOrdering[T]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   type PartiallyOrdered[T] = scala.math.PartiallyOrdered[T]
 
   // Annotations which we might move to annotation.*
@@ -123,6 +163,7 @@ package object scala {
   type unchecked = annotation.unchecked.unchecked
   type volatile = annotation.volatile
   */
+<<<<<<< HEAD
   @deprecated("Use Tuple1(x) to create a 1-tuple.", "2.8.0")
   def Tuple[A1](x1: A1) = Tuple1(x1)
   @deprecated("Use ((x1, x2, ...)) syntax to create Tuples", "2.8.0")
@@ -187,6 +228,8 @@ package object scala {
   type RandomAccessSeq[+A] = scala.collection.IndexedSeq[A]
   @deprecated("use IndexedSeq instead", "2.8.0")
   val RandomAccessSeq = scala.collection.IndexedSeq
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   @deprecated("use scala.annotation.Annotation instead", "2.9.0")
   type Annotation = scala.annotation.Annotation

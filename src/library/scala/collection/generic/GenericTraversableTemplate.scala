@@ -26,21 +26,34 @@ import annotation.unchecked.uncheckedVariance
  *  @define coll  collection
  *  @define Coll  CC
  */
+<<<<<<< HEAD
 trait GenericTraversableTemplate[+A, +CC[X] <: GenTraversable[X]] extends HasNewBuilder[A, CC[A] @uncheckedVariance] { 
+=======
+trait GenericTraversableTemplate[+A, +CC[X] <: GenTraversable[X]] extends HasNewBuilder[A, CC[A] @uncheckedVariance] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** Applies a function `f` to all elements of this $coll.
    *
    *  @param  f   the function that is applied for its side-effect to every element.
    *              The result of function `f` is discarded.
+<<<<<<< HEAD
    *              
    *  @tparam  U  the type parameter describing the result of function `f`. 
+=======
+   *
+   *  @tparam  U  the type parameter describing the result of function `f`.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *              This result will always be ignored. Typically `U` is `Unit`,
    *              but this is not necessary.
    *
    *  @usecase def foreach(f: A => Unit): Unit
    */
   def foreach[U](f: A => U): Unit
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Selects the first element of this $coll.
    *
    *  @return  the first element of this $coll.
@@ -55,7 +68,11 @@ trait GenericTraversableTemplate[+A, +CC[X] <: GenTraversable[X]] extends HasNew
   def isEmpty: Boolean
 
   /** The factory companion object that builds instances of class $Coll.
+<<<<<<< HEAD
    *  (or its `Iterable` superclass where class $Coll is not a `Seq`.) 
+=======
+   *  (or its `Iterable` superclass where class $Coll is not a `Seq`.)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */
   def companion: GenericCompanion[CC]
 
@@ -90,6 +107,7 @@ trait GenericTraversableTemplate[+A, +CC[X] <: GenTraversable[X]] extends HasNew
     }
     (b1.result, b2.result)
   }
+<<<<<<< HEAD
   
   /** Converts this $coll of triples into three collections of the first, second,
    *  and third element of each triple.
@@ -101,12 +119,29 @@ trait GenericTraversableTemplate[+A, +CC[X] <: GenTraversable[X]] extends HasNew
    *                of this $coll is a triple.
    *  @return       a triple ${coll}s, containing the first, second, respectively
    *                third member of each element triple of this $coll.
+=======
+
+  /** Converts this $coll of triples into three collections of the first, second,
+   *  and third element of each triple.
+   *
+   *  @param A1        the type of the first member of the element triples
+   *  @param A2        the type of the second member of the element triples
+   *  @param A3        the type of the third member of the element triples
+   *  @param asTriple  an implicit conversion which asserts that the element type
+   *                   of this $coll is a triple.
+   *  @return          a triple ${coll}s, containing the first, second, respectively
+   *                   third member of each element triple of this $coll.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */
   def unzip3[A1, A2, A3](implicit asTriple: A => (A1, A2, A3)): (CC[A1], CC[A2], CC[A3]) = {
     val b1 = genericBuilder[A1]
     val b2 = genericBuilder[A2]
     val b3 = genericBuilder[A3]
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     for (xyz <- sequential) {
       val (x, y, z) = asTriple(xyz)
       b1 += x
@@ -115,11 +150,19 @@ trait GenericTraversableTemplate[+A, +CC[X] <: GenTraversable[X]] extends HasNew
     }
     (b1.result, b2.result, b3.result)
   }
+<<<<<<< HEAD
   
   /** Converts this $coll of traversable collections into
    *  a $coll in which all element collections are concatenated.
    *
    *  @tparam B the type of the elements of each traversable collection. 
+=======
+
+  /** Converts this $coll of traversable collections into
+   *  a $coll in which all element collections are concatenated.
+   *
+   *  @tparam B the type of the elements of each traversable collection.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param asTraversable an implicit conversion which asserts that the element
    *          type of this $coll is a `GenTraversable`.
    *  @return a new $coll resulting from concatenating all element ${coll}s.
@@ -131,12 +174,20 @@ trait GenericTraversableTemplate[+A, +CC[X] <: GenTraversable[X]] extends HasNew
       b ++= asTraversable(xs).seq
     b.result
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // cannot have a bridge, because it would have the same signature as the target method after erasure
   // @bridge
   // def flatten[B](implicit asTraversable: A => /*<:<!!!*/ TraversableOnce[B]): CC[B] =
   //   flatten[B](asTraversable: A => GenTraversableOnce[B])
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Transposes this $coll of traversable collections into
    *  a $coll of ${coll}s.
    *
@@ -144,7 +195,11 @@ trait GenericTraversableTemplate[+A, +CC[X] <: GenTraversable[X]] extends HasNew
    *  @param  asTraversable an implicit conversion which asserts that the
    *          element type of this $coll is a `Traversable`.
    *  @return a two-dimensional $coll of ${coll}s which has as ''n''th row
+<<<<<<< HEAD
    *          the ''n''th column of this $coll. 
+=======
+   *          the ''n''th column of this $coll.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @throws `IllegalArgumentException` if all collections in this $coll
    *          are not of the same size.
    */
@@ -152,9 +207,15 @@ trait GenericTraversableTemplate[+A, +CC[X] <: GenTraversable[X]] extends HasNew
   def transpose[B](implicit asTraversable: A => /*<:<!!!*/ GenTraversableOnce[B]): CC[CC[B] @uncheckedVariance] = {
     if (isEmpty)
       return genericBuilder[CC[B]].result
+<<<<<<< HEAD
     
     def fail = throw new IllegalArgumentException("transpose requires all collections have the same size")
     
+=======
+
+    def fail = throw new IllegalArgumentException("transpose requires all collections have the same size")
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val headSize = asTraversable(head).size
     val bs: IndexedSeq[Builder[B, CC[B]]] = IndexedSeq.fill(headSize)(genericBuilder[B])
     for (xs <- sequential) {

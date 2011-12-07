@@ -2,7 +2,11 @@
  * Copyright 2005-2011 LAMP/EPFL
  * @author Paul Phillips
  */
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 package scala.tools.nsc
 
 /** The main REPL related classes and values are as follows.
@@ -30,7 +34,11 @@ package object interpreter extends ReplConfig with ReplStrings {
   type JPrintWriter   = java.io.PrintWriter
   type InputStream    = java.io.InputStream
   type OutputStream   = java.io.OutputStream
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   val IR = Results
 
   private[interpreter] implicit def javaCharSeqCollectionToScala(xs: JCollection[_ <: CharSequence]): List[String] = {
@@ -39,7 +47,13 @@ package object interpreter extends ReplConfig with ReplStrings {
   }
 
   private[nsc] implicit def enrichClass[T](clazz: Class[T]) = new RichClass[T](clazz)
+<<<<<<< HEAD
   private[nsc] implicit def enrichAnyRefWithTap[T](x: T) = new TapMaker(x)  
   private[nsc] def tracing[T](msg: String)(x: T): T = x.tapTrace(msg)
   private[nsc] def debugging[T](msg: String)(x: T) = x.tapDebug(msg)  
+=======
+  private[nsc] implicit def enrichAnyRefWithTap[T](x: T) = new TapMaker(x)
+  private[nsc] def tracing[T](msg: String)(x: T): T = x.tapTrace(msg)
+  private[nsc] def debugging[T](msg: String)(x: T) = x.tapDebug(msg)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

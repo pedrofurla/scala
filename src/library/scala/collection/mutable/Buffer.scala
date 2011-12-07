@@ -17,19 +17,33 @@ import generic._
  *  appending, prepending, or inserting new elements. It is also
  *  possible to access and modify elements in a random access fashion
  *  via the index of the element in the current sequence.
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author Matthias Zenger
  *  @author Martin Odersky
  *  @version 2.8
  *  @since   1
+<<<<<<< HEAD
  *  
  *  @tparam A    type of the elements contained in this buffer.
  *  
+=======
+ *
+ *  @tparam A    type of the elements contained in this buffer.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define Coll Buffer
  *  @define coll buffer
  */
 @cloneable
+<<<<<<< HEAD
 trait Buffer[A] extends Seq[A] 
+=======
+trait Buffer[A] extends Seq[A]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                    with GenericTraversableTemplate[A, Buffer]
                    with BufferLike[A, Buffer[A]] {
   override def companion: GenericCompanion[Buffer] = Buffer
@@ -44,3 +58,8 @@ object Buffer extends SeqFactory[Buffer] {
   def newBuilder[A]: Builder[A, Buffer[A]] = new ArrayBuffer
 }
 
+<<<<<<< HEAD
+=======
+/** Explicit instantiation of the `Buffer` trait to reduce class file size in subclasses. */
+private[scala] abstract class AbstractBuffer[A] extends AbstractSeq[A] with Buffer[A]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0

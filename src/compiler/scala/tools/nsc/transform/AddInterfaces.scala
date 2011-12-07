@@ -184,9 +184,16 @@ abstract class AddInterfaces extends InfoTransform {
           if (clazz.isTrait) erasedTypeRef(ObjectClass) :: tl
           else parents
       }
+<<<<<<< HEAD
       val decls1 = decls filter (sym =>
         if (clazz.isInterface) isInterfaceMember(sym)
         else (!sym.isType || sym.isClass))
+=======
+      val decls1 = scopeTransform(clazz) { decls filter (sym =>
+        if (clazz.isInterface) isInterfaceMember(sym)
+        else (!sym.isType || sym.isClass))
+      }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
       //if (!clazz.isPackageClass) System.out.println("Decls of "+clazz+" after explicitOuter = " + decls1);//DEBUG
       //if ((parents1 eq parents) && (decls1 eq decls)) tp

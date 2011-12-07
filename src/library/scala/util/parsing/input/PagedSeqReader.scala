@@ -20,15 +20,25 @@ object PagedSeqReader {
   final val EofCh = '\032'
 }
 
+<<<<<<< HEAD
 /** A character array reader reads a stream of characters (keeping track of their positions) 
+=======
+/** A character array reader reads a stream of characters (keeping track of their positions)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * from an array.
  *
  * @param source the source sequence
  * @param offset  starting offset.
  *
+<<<<<<< HEAD
  * @author Martin Odersky 
  */
 class PagedSeqReader(seq: PagedSeq[Char], 
+=======
+ * @author Martin Odersky
+ */
+class PagedSeqReader(seq: PagedSeq[Char],
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                      override val offset: Int) extends Reader[Char] {
   import PagedSeqReader._
 
@@ -39,6 +49,7 @@ class PagedSeqReader(seq: PagedSeq[Char],
    */
   def this(seq: PagedSeq[Char]) = this(seq, 0)
 
+<<<<<<< HEAD
   /** Returns the first element of the reader, or EofCh if reader is at its end 
    */
   def first = 
@@ -46,6 +57,15 @@ class PagedSeqReader(seq: PagedSeq[Char],
 
   /** Returns a PagedSeqReader consisting of all elements except the first 
    * 
+=======
+  /** Returns the first element of the reader, or EofCh if reader is at its end
+   */
+  def first =
+    if (seq.isDefinedAt(offset)) seq(offset) else EofCh
+
+  /** Returns a PagedSeqReader consisting of all elements except the first
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * @return If `atEnd` is `true`, the result will be `this`;
    *         otherwise, it's a `PagedSeqReader` containing the rest of input.
    */
@@ -61,10 +81,18 @@ class PagedSeqReader(seq: PagedSeq[Char],
    *  EofCh's).
    */
   def atEnd = !seq.isDefinedAt(offset)
+<<<<<<< HEAD
     
   /** Returns an abstract reader consisting of all elements except the first
    *  `n` elements.
    */ 
   override def drop(n: Int): PagedSeqReader = 
+=======
+
+  /** Returns an abstract reader consisting of all elements except the first
+   *  `n` elements.
+   */
+  override def drop(n: Int): PagedSeqReader =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     new PagedSeqReader(seq, offset + n)
 }

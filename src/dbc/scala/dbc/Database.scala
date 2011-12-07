@@ -19,9 +19,15 @@ import java.sql._
  *  @author  Gilles Dubochet
  */
 @deprecated(DbcIsDeprecated, "2.9.0") case class Database(dbms: Vendor) {
+<<<<<<< HEAD
   
   class Closed extends Exception {}
   
+=======
+
+  class Closed extends Exception {}
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A lock used for operations that need to be atomic for this database
    *  instance. */
   private val lock: scala.concurrent.Lock = new scala.concurrent.Lock()
@@ -37,7 +43,11 @@ import java.sql._
 
   /** Whether the database no longer accepts new connections. */
   private var closing: Boolean = false;
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Retrieves a connection from the available connection pool or creates
    *  a new one.
    *
@@ -65,7 +75,11 @@ import java.sql._
       }
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Closes a connection to this database. A closed connection might
    *  also return to the available connection pool if the latter is depleted.
    *
@@ -116,7 +130,11 @@ import java.sql._
       closeConnection(connection)
       statement.typeCheck(this)
     }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Executes a statement that updates the state of the database.
     * @param statusStatement The statement to execute.
     * @return The status of the database after the statement has been executed. */
@@ -141,7 +159,11 @@ import java.sql._
       val touchedCount = Some(jdbcStatement.getUpdateCount());
       closeConnection(connection);
     }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Executes a list of statements or other operations inside a transaction.
    *  Only statements are protected in a transaction, other Scala code is not.
    *
@@ -150,7 +172,11 @@ import java.sql._
    */
   def executeStatement[ResultType](transactionStatement: statement.Transaction[ResultType]): result.Status[ResultType] =
     executeStatement(transactionStatement, false);
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Executes a list of statements or other operations inside a transaction.
    *  Only statements are protected in a transaction, other Scala code is not.
    *
@@ -183,5 +209,9 @@ import java.sql._
       closeConnection(connection)
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

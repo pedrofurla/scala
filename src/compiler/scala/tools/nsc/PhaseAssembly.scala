@@ -9,6 +9,7 @@ package scala.tools.nsc
 import java.io.{ BufferedWriter, FileWriter }
 import scala.collection.mutable
 
+<<<<<<< HEAD
 /** 
  * PhaseAssembly
  * Trait made to separate the constraint solving of the phase order from
@@ -18,6 +19,17 @@ import scala.collection.mutable
 trait PhaseAssembly {
   self: Global =>
   
+=======
+/**
+ * PhaseAssembly
+ * Trait made to separate the constraint solving of the phase order from
+ * the rest of the compiler. See SIP 00002
+ *
+ */
+trait PhaseAssembly {
+  self: Global =>
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /**
    * Aux datastructure for solving the constraint system
    * The depency graph container with helper methods for node and edge creation
@@ -27,8 +39,13 @@ trait PhaseAssembly {
     /**
      * Simple edge with to and from refs
      */
+<<<<<<< HEAD
     class Edge(var frm: Node, var to: Node, var hard: Boolean) 
     
+=======
+    class Edge(var frm: Node, var to: Node, var hard: Boolean)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /**
      * Simple node with name and object ref for the phase object,
      * also sets of in and out going dependencies
@@ -68,7 +85,11 @@ trait PhaseAssembly {
      */
     def getNodeByPhase(name: String): Node =
       nodes.getOrElseUpdate(name, new Node(name))
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /* Connect the frm and to nodes with an edge and make it soft.
      * Also add the edge object to the set of edges, and to the dependency
      * list of the nodes
@@ -76,11 +97,19 @@ trait PhaseAssembly {
     def softConnectNodes(frm: Node, to: Node) {
       var e = new Edge(frm, to, false)
       this.edges += e
+<<<<<<< HEAD
       
       frm.after += e
       to.before += e
     }
     
+=======
+
+      frm.after += e
+      to.before += e
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /* Connect the frm and to nodes with an edge and make it hard.
      * Also add the edge object to the set of edges, and to the dependency
      * list of the nodes
@@ -88,7 +117,11 @@ trait PhaseAssembly {
     def hardConnectNodes(frm: Node, to: Node) {
       var e = new Edge(frm, to, true)
       this.edges += e
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       frm.after += e
       to.before += e
     }
@@ -110,7 +143,11 @@ trait PhaseAssembly {
       }
 
       if (node.level < lvl) node.level = lvl
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       var hls = Nil ++ node.before.filter(_.hard)
       while (hls.size > 0) {
         for (hl <- hls) {
@@ -123,7 +160,11 @@ trait PhaseAssembly {
         hls = Nil ++ node.before.filter(_.hard)
       }
       node.visited = true
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       for (edge <- node.before) {
         collapseHardLinksAndLevels( edge.frm, lvl + 1)
       }
@@ -160,9 +201,15 @@ trait PhaseAssembly {
             }
             msg += "\nRe-run with -Xgenerate-phase-graph <filename> to better see the problem."
             throw new FatalError(msg)
+<<<<<<< HEAD
             
           } else {
             
+=======
+
+          } else {
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             var promote = hl.to.before.filter(e => (!e.hard))
             hl.to.before.clear
             sanity foreach (edge => hl.to.before += edge)
@@ -189,7 +236,11 @@ trait PhaseAssembly {
         val msg = "dropping dependency on node with no phase object: "+node.phasename
         informProgress(msg)
         nodes -= node.phasename
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         for (edge <- node.before) {
           edges -= edge
           edge.frm.after -= edge
@@ -204,7 +255,11 @@ trait PhaseAssembly {
    */
   def buildCompilerFromPhasesSet(): List[SubComponent] = {
 
+<<<<<<< HEAD
     // Add all phases in the set to the graph  
+=======
+    // Add all phases in the set to the graph
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val graph = phasesSetToDepGraph(phasesSet)
 
     // Output the phase dependency graph at this stage
@@ -212,13 +267,21 @@ trait PhaseAssembly {
       graphToDotFile(graph, settings.genPhaseGraph.value + "1.dot")
 
     // Remove nodes without phaseobj
+<<<<<<< HEAD
     graph.removeDanglingNodes() 
+=======
+    graph.removeDanglingNodes()
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     // Output the phase dependency graph at this stage
     if (settings.genPhaseGraph.value != "")
       graphToDotFile(graph, settings.genPhaseGraph.value + "2.dot")
 
+<<<<<<< HEAD
     // Validate and Enforce hardlinks / runsRightAfter and promote nodes down the tree    
+=======
+    // Validate and Enforce hardlinks / runsRightAfter and promote nodes down the tree
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     graph.validateAndEnforceHardlinks()
 
     // Output the phase dependency graph at this stage
@@ -231,7 +294,11 @@ trait PhaseAssembly {
     // Output the phase dependency graph at this stage
     if (settings.genPhaseGraph.value != "")
       graphToDotFile(graph, settings.genPhaseGraph.value + "4.dot")
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // assemble the compiler
     graph.compilerPhaseList()
   }
@@ -243,9 +310,15 @@ trait PhaseAssembly {
     val graph = new DependencyGraph()
 
     for (phs <- phsSet) {
+<<<<<<< HEAD
       
       var fromnode = graph.getNodeByPhase(phs)
       
+=======
+
+      var fromnode = graph.getNodeByPhase(phs)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       phs.runsRightAfter match {
         case None =>
           for (phsname <- phs.runsAfter) {
@@ -253,7 +326,11 @@ trait PhaseAssembly {
               val tonode = graph.getNodeByPhase(phsname)
               graph.softConnectNodes(fromnode, tonode)
             } else {
+<<<<<<< HEAD
               globalError("[phase assembly, after dependency on terminal phase not allowed: " + fromnode.phasename + " => "+ phsname + "]")            
+=======
+              globalError("[phase assembly, after dependency on terminal phase not allowed: " + fromnode.phasename + " => "+ phsname + "]")
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             }
           }
           for (phsname <- phs.runsBefore) {
@@ -261,7 +338,11 @@ trait PhaseAssembly {
               val tonode = graph.getNodeByPhase(phsname)
               graph.softConnectNodes(tonode, fromnode)
             } else {
+<<<<<<< HEAD
               globalError("[phase assembly, before dependency on parser phase not allowed: " + phsname + " => "+ fromnode.phasename + "]")            
+=======
+              globalError("[phase assembly, before dependency on parser phase not allowed: " + phsname + " => "+ fromnode.phasename + "]")
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             }
           }
         case Some(phsname) =>

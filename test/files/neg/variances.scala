@@ -29,7 +29,11 @@ object Covariant {
         def b2a(b : B) : A
         def doit(b : B) = setA(b2a(b))
       }
+<<<<<<< HEAD
       ()
+=======
+      println("")
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
   }
   class Foo3[+A] {

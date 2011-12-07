@@ -17,12 +17,22 @@ import collection.parallel.mutable.ParHashSet
 /** This class implements mutable sets using a hashtable.
  *
  *  $cannotStoreNull
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author  Matthias Zenger
  *  @author  Martin Odersky
  *  @version 2.0, 31/12/2006
  *  @since   1
+<<<<<<< HEAD
  *  
+=======
+ *  @see [[http://docs.scala-lang.org/overviews/collections/concrete-mutable-collection-classes.html#hash_tables "Scala's Collection Library overview"]]
+ *  section on `Hash Tables` for more information.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define Coll mutable.HashSet
  *  @define coll mutable hash set
  *  @define thatinfo the class of the returned collection. In the standard library configuration,
@@ -37,17 +47,30 @@ import collection.parallel.mutable.ParHashSet
  */
 @SerialVersionUID(1L)
 class HashSet[A] private[collection] (contents: FlatHashTable.Contents[A])
+<<<<<<< HEAD
 extends Set[A] 
    with GenericSetTemplate[A, HashSet]
    with SetLike[A, HashSet[A]] 
+=======
+extends AbstractSet[A]
+   with Set[A]
+   with GenericSetTemplate[A, HashSet]
+   with SetLike[A, HashSet[A]]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    with FlatHashTable[A]
    with CustomParallelizable[A, ParHashSet[A]]
    with Serializable
 {
   initWithContents(contents)
+<<<<<<< HEAD
   
   def this() = this(null)
   
+=======
+
+  def this() = this(null)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def companion: GenericCompanion[HashSet] = HashSet
 
   override def size = tableSize
@@ -55,6 +78,7 @@ extends Set[A]
   def contains(elem: A): Boolean = containsEntry(elem)
 
   def += (elem: A): this.type = { addEntry(elem); this }
+<<<<<<< HEAD
   def -= (elem: A): this.type = { removeEntry(elem); this }
   
   override def par = new ParHashSet(hashTableContents)
@@ -64,6 +88,19 @@ extends Set[A]
 
   override def clear() = clearTable()
   
+=======
+
+  def -= (elem: A): this.type = { removeEntry(elem); this }
+
+  override def par = new ParHashSet(hashTableContents)
+
+  override def add(elem: A): Boolean = addEntry(elem)
+
+  override def remove(elem: A): Boolean = removeEntry(elem).isDefined
+
+  override def clear() = clearTable()
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def foreach[U](f: A =>  U) {
     var i = 0
     val len = table.length
@@ -75,6 +112,7 @@ extends Set[A]
   }
 
   override def clone() = new HashSet[A] ++= this
+<<<<<<< HEAD
   
   private def writeObject(s: java.io.ObjectOutputStream) {
     serializeTo(s)
@@ -84,12 +122,27 @@ extends Set[A]
     init(in, x => x)
   }
   
+=======
+
+  private def writeObject(s: java.io.ObjectOutputStream) {
+    serializeTo(s)
+  }
+
+  private def readObject(in: java.io.ObjectInputStream) {
+    init(in, x => x)
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Toggles whether a size map is used to track hash map statistics.
    */
   def useSizeMap(t: Boolean) = if (t) {
     if (!isSizeMapDefined) sizeMapInitAndRebuild
   } else sizeMapDisable
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 /** $factoryInfo

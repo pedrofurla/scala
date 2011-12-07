@@ -25,13 +25,21 @@ trait TokenTests {
    *  (#x20 | #x9 | #xD | #xA)+
    *  }}} */
   final def isSpace(cs: Seq[Char]): Boolean = cs.nonEmpty && (cs forall isSpace)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** These are 99% sure to be redundant but refactoring on the safe side. */
   def isAlpha(c: Char) = (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')
   def isAlphaDigit(c: Char) = isAlpha(c) || (c >= '0' && c <= '9')
 
   /** {{{
+<<<<<<< HEAD
    *  NameChar ::= Letter | Digit | '.' | '-' | '_' | ':' 
+=======
+   *  NameChar ::= Letter | Digit | '.' | '-' | '_' | ':'
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *             | CombiningChar | Extender
    *  }}}
    *  See [4] and Appendix B of XML 1.0 specification.
@@ -41,7 +49,11 @@ trait TokenTests {
     // The constants represent groups Mc, Me, Mn, Lm, and Nd.
 
     isNameStart(ch) || (getType(ch).toByte match {
+<<<<<<< HEAD
       case COMBINING_SPACING_MARK | 
+=======
+      case COMBINING_SPACING_MARK |
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               ENCLOSING_MARK | NON_SPACING_MARK |
               MODIFIER_LETTER | DECIMAL_DIGIT_NUMBER => true
       case _                                         => ".-:" contains ch
@@ -51,7 +63,11 @@ trait TokenTests {
   /** {{{
    *  NameStart ::= ( Letter | '_' )
    *  }}}
+<<<<<<< HEAD
    *  where Letter means in one of the Unicode general 
+=======
+   *  where Letter means in one of the Unicode general
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  categories `{ Ll, Lu, Lo, Lt, Nl }`.
    *
    *  We do not allow a name to start with `:`.
@@ -59,7 +75,11 @@ trait TokenTests {
    */
   def isNameStart(ch: Char) = {
     import java.lang.Character._
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     getType(ch).toByte match {
       case LOWERCASE_LETTER |
               UPPERCASE_LETTER | OTHER_LETTER |

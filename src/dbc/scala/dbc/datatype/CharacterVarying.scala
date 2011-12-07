@@ -16,7 +16,11 @@ package datatype;
  *  maximal length and arbitrary character set.
  */
 @deprecated(DbcIsDeprecated, "2.9.0") abstract class CharacterVarying extends CharacterString {
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def isEquivalent(datatype: DataType) = datatype match {
     case dt: CharacterVarying =>
       length == dt.length && encoding == dt.encoding
@@ -30,7 +34,11 @@ package datatype;
     case _ =>
       false
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** The maximal length of the string defined in characters. */
   def length: Int;
 

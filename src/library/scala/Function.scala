@@ -39,6 +39,7 @@ object Function {
    *                f returns `Some(_)` and undefined where `f` returns `None`.
    *  @see [[scala.PartialFunction#lift]]
    */
+<<<<<<< HEAD
   def unlift[T, R](f: T => Option[R]): PartialFunction[T, R] = new PartialFunction[T, R] {
     def apply(x: T): R = f(x).get
     def isDefinedAt(x: T): Boolean = f(x).isDefined
@@ -80,6 +81,14 @@ object Function {
     x1 => x2 => x3 => x4 => x5 => f(x1, x2, x3, x4, x5)
   }
 
+=======
+  def unlift[T, R](f: T => Option[R]): PartialFunction[T, R] = new runtime.AbstractPartialFunction[T, R] {
+    def apply(x: T): R = f(x).get
+    def _isDefinedAt(x: T): Boolean = f(x).isDefined
+    override def lift: T => Option[R] = f
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Uncurrying for functions of arity 2. This transforms a unary function
    *  returning another unary function into a function of arity 2.
    */
@@ -122,7 +131,11 @@ object Function {
   /** Tupling for functions of arity 3. This transforms a function
    *  of arity 3 into a unary function that takes a triple of arguments.
    */
+<<<<<<< HEAD
   // @deprecated("Use `f.tupled` instead") 
+=======
+  // @deprecated("Use `f.tupled` instead")
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def tupled[a1, a2, a3, b](f: (a1, a2, a3) => b): Tuple3[a1, a2, a3] => b = {
     case Tuple3(x1, x2, x3) => f(x1, x2, x3)
   }
@@ -130,7 +143,11 @@ object Function {
   /** Tupling for functions of arity 4. This transforms a function
    *  of arity 4 into a unary function that takes a 4-tuple of arguments.
    */
+<<<<<<< HEAD
   // @deprecated("Use `f.tupled` instead") 
+=======
+  // @deprecated("Use `f.tupled` instead")
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def tupled[a1, a2, a3, a4, b](f: (a1, a2, a3, a4) => b): Tuple4[a1, a2, a3, a4] => b = {
     case Tuple4(x1, x2, x3, x4) => f(x1, x2, x3, x4)
   }
@@ -138,7 +155,11 @@ object Function {
   /** Tupling for functions of arity 5. This transforms a function
    *  of arity 5 into a unary function that takes a 5-tuple of arguments.
    */
+<<<<<<< HEAD
   // @deprecated("Use `f.tupled` instead") 
+=======
+  // @deprecated("Use `f.tupled` instead")
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def tupled[a1, a2, a3, a4, a5, b](f: (a1, a2, a3, a4, a5) => b): Tuple5[a1, a2, a3, a4, a5] => b = {
     case Tuple5(x1, x2, x3, x4, x5) => f(x1, x2, x3, x4, x5)
   }

@@ -5,7 +5,11 @@
 
 package scala.tools.nsc
 package symtab
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 import scala.tools.nsc.util.BatchSourceFile
 import scala.tools.nsc.io.AbstractFile
 
@@ -27,7 +31,11 @@ abstract class BrowsingLoaders extends SymbolLoaders {
    */
   override protected def enterIfNew(owner: Symbol, member: Symbol, completer: SymbolLoader): Symbol = {
     completer.sourcefile match {
+<<<<<<< HEAD
       case Some(src) => 
+=======
+      case Some(src) =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         (if (member.isModule) member.moduleClass else member).sourceFile = src
       case _ =>
     }
@@ -42,7 +50,11 @@ abstract class BrowsingLoaders extends SymbolLoaders {
       member
     } else {
       if (member.sourceFile != null) {
+<<<<<<< HEAD
         if (existing.sourceFile != member.sourceFile) 
+=======
+        if (existing.sourceFile != member.sourceFile)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           error(member+"is defined twice,"+
                 "\n in "+existing.sourceFile+
                 "\n and also in "+member.sourceFile)
@@ -54,7 +66,11 @@ abstract class BrowsingLoaders extends SymbolLoaders {
   /** Browse the top-level of given abstract file `src` and enter
    *  eny encountered top-level classes and modules in `root`
    */
+<<<<<<< HEAD
   def browseTopLevel(root: Symbol, src: AbstractFile) {  
+=======
+  def browseTopLevel(root: Symbol, src: AbstractFile) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     class BrowserTraverser extends Traverser {
       var packagePrefix = ""
@@ -84,7 +100,11 @@ abstract class BrowsingLoaders extends SymbolLoaders {
             entered += 1
             if (name == nme.PACKAGEkw) {
               println("open package module: "+module)
+<<<<<<< HEAD
               loaders.openPackageModule(module)()
+=======
+              openPackageModule(module, root)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             }
           } else println("prefixes differ: "+packagePrefix+","+root.fullName)
         case _ =>
@@ -97,7 +117,11 @@ abstract class BrowsingLoaders extends SymbolLoaders {
 //    System.out.println(body)
     val browser = new BrowserTraverser
     browser.traverse(body)
+<<<<<<< HEAD
     if (browser.entered == 0) 
+=======
+    if (browser.entered == 0)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       warning("No classes or objects found in "+source+" that go in "+root)
   }
 
@@ -107,7 +131,11 @@ abstract class BrowsingLoaders extends SymbolLoaders {
     try {
       if (root == definitions.RootClass || root == definitions.EmptyPackageClass)
         super.enterToplevelsFromSource(root, name, src)
+<<<<<<< HEAD
       else 
+=======
+      else
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         browseTopLevel(root, src)
     } catch {
       case ex: syntaxAnalyzer.MalformedInput =>

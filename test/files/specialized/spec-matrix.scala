@@ -2,7 +2,11 @@
  */
 
 class Matrix[@specialized A: ClassManifest](val rows: Int, val cols: Int) {
+<<<<<<< HEAD
   private val arr: Array[Array[A]] = new Array[Array[A]](rows, cols)
+=======
+  private val arr: Array[Array[A]] = Array.ofDim[A](rows, cols)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   
   def apply(i: Int, j: Int): A = {
     if (i < 0 || i >= rows || j < 0 || j >= cols)

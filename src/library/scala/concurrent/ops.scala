@@ -39,7 +39,11 @@ object ops
 
   /** Evaluates an expression asynchronously, and returns a closure for
    *  retrieving the result.
+<<<<<<< HEAD
    *  
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param  p the expression to evaluate
    *  @return   a closure which returns the result once it has been computed
    */
@@ -49,10 +53,17 @@ object ops
 
   /** Evaluates two expressions in parallel. Invoking `par` blocks the current
    *  thread until both expressions have been evaluated.
+<<<<<<< HEAD
    *  
    *  @param  xp the first expression to evaluate
    *  @param  yp the second expression to evaluate
    *  
+=======
+   *
+   *  @param  xp the first expression to evaluate
+   *  @param  yp the second expression to evaluate
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @return    a pair holding the evaluation results
    */
   def par[A, B](xp: => A, yp: => B)(implicit runner: TaskRunner = defaultRunner): (A, B) = {
@@ -61,6 +72,7 @@ object ops
     (xp, getOrThrow(y.get))
   }
 
+<<<<<<< HEAD
   /**
    *  @param start ...
    *  @param end   ...
@@ -79,6 +91,8 @@ object ops
     }
   }
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 /*
   def parMap[a,b](f: a => b, xs: Array[a]): Array[b] = {
     val results = new Array[b](xs.length);

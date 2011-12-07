@@ -6,11 +6,17 @@
 **                          |/                                          **
 \*                                                                      */
 
+<<<<<<< HEAD
 
 
 package scala.swing
 
 import java.awt.{Window => AWTWindow, Frame => AWTFrame}
+=======
+package scala.swing
+
+import java.awt.{ Window => AWTWindow, Frame => AWTFrame }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 import javax.swing._
 import Swing._
 
@@ -21,20 +27,34 @@ object RichWindow {
   trait Undecorated extends RichWindow {
     // we do a mixin here, since setUndecorated is only allowed to be called
     // when the component is not displayable.
+<<<<<<< HEAD
     peer.setUndecorated(true) 
+=======
+    peer.setUndecorated(true)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   }
 }
 
 /**
+<<<<<<< HEAD
  * A window that adds some functionality to the plain Window class and serves as 
  * the common base class for frames and dialogs.
  * 
+=======
+ * A window that adds some functionality to the plain Window class and serves as
+ * the common base class for frames and dialogs.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * Implementation note: this class is sealed since we need to know that a rich
  * window is either a dialog or a frame at some point.
  */
 sealed trait RichWindow extends Window {
   def peer: AWTWindow with InterfaceMixin
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait InterfaceMixin extends super.InterfaceMixin {
     def getJMenuBar(): JMenuBar
     def setJMenuBar(b: JMenuBar)
@@ -44,14 +64,22 @@ sealed trait RichWindow extends Window {
     def setResizable(b: Boolean)
     def isResizable(): Boolean
   }
+<<<<<<< HEAD
   
   def title: String = peer.getTitle
   def title_=(s: String) = peer.setTitle(s)
   
+=======
+
+  def title: String = peer.getTitle
+  def title_=(s: String) = peer.setTitle(s)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /**
    * The menu bar of this frame or `NoMenuBar` if no menu bar is set.
    */
   def menuBar: MenuBar = {
+<<<<<<< HEAD
       val m = UIElement.cachedWrapper[MenuBar](peer.getJMenuBar)
       if (m != null) m else MenuBar.NoMenuBar 
   }
@@ -62,12 +90,25 @@ sealed trait RichWindow extends Window {
   def menuBar_=(m: MenuBar) = 
     peer.setJMenuBar(if(m == MenuBar.NoMenuBar) null else m.peer)
   
+=======
+    val m = UIElement.cachedWrapper[MenuBar](peer.getJMenuBar)
+    if (m != null) m else MenuBar.NoMenuBar
+  }
+  /**
+   * Set the current menu bar of this frame. Pass `NoMenuBar` if this frame
+   * should not show a menu bar.
+   */
+  def menuBar_=(m: MenuBar) =
+    peer.setJMenuBar(if (m == MenuBar.NoMenuBar) null else m.peer)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def resizable_=(b: Boolean) { peer.setResizable(b) }
   def resizable = peer.isResizable
 }
 
 /**
  * A window with decoration such as a title, border, and action buttons.
+<<<<<<< HEAD
  * 
  * An AWT window cannot be wrapped dynamically with this class, i.e., you cannot 
  * write something like new Window { def peer = myAWTWindow }
@@ -92,13 +133,35 @@ class Frame extends RichWindow {
   def unmaximize() { peer.setExtendedState(peer.getExtendedState & ~AWTFrame.MAXIMIZED_BOTH) }
   def maximized() { (peer.getExtendedState & AWTFrame.MAXIMIZED_BOTH) != 0 }
   
+=======
+ *
+ * An AWT window cannot be wrapped dynamically with this class, i.e., you cannot
+ * write something like new Window { def peer = myAWTWindow }
+ *
+ * @see javax.swing.JFrame
+ */
+class Frame(gc: java.awt.GraphicsConfiguration = null) extends RichWindow {
+  override lazy val peer: JFrame with InterfaceMixin = new JFrame(gc) with InterfaceMixin with SuperMixin
+
+  def iconify() { peer.setExtendedState(peer.getExtendedState | AWTFrame.ICONIFIED) }
+  def uniconify() { peer.setExtendedState(peer.getExtendedState & ~AWTFrame.ICONIFIED) }
+  def iconified: Boolean = (peer.getExtendedState & AWTFrame.ICONIFIED) != 0
+  def maximize() { peer.setExtendedState(peer.getExtendedState | AWTFrame.MAXIMIZED_BOTH) }
+  def unmaximize() { peer.setExtendedState(peer.getExtendedState & ~AWTFrame.MAXIMIZED_BOTH) }
+  def maximized: Boolean = (peer.getExtendedState & AWTFrame.MAXIMIZED_BOTH) != 0
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def iconImage: Image = peer.getIconImage
   def iconImage_=(i: Image) { peer.setIconImage(i) }
 }
 
 /**
  * Simple predefined dialogs.
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * @see javax.swing.JOptionPane
  */
 object Dialog {
@@ -112,7 +175,11 @@ object Dialog {
     val Question = Value(JOptionPane.QUESTION_MESSAGE)
     val Plain = Value(JOptionPane.PLAIN_MESSAGE)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /**
    * The possible answers a user can select.
    */
@@ -122,7 +189,11 @@ object Dialog {
     val YesNoCancel = Value(JOptionPane.YES_NO_CANCEL_OPTION)
     val OkCancel = Value(JOptionPane.OK_CANCEL_OPTION)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /**
    * The selected result of dialog.
    */
@@ -133,6 +204,7 @@ object Dialog {
     val Cancel = Value(JOptionPane.CANCEL_OPTION)
     val Closed = Value(JOptionPane.CLOSED_OPTION)
   }
+<<<<<<< HEAD
   
   private def uiString(txt: String) = UIManager.getString(txt)
   
@@ -181,11 +253,62 @@ object Dialog {
                   icon: Icon = EmptyIcon) {
      JOptionPane.showMessageDialog(nullPeer(parent), message, title, 
                                    messageType.id, Swing.wrapIcon(icon))
+=======
+
+  private def uiString(txt: String) = UIManager.getString(txt)
+
+  def showConfirmation(parent: Component = null,
+                       message: Any,
+                       title: String = uiString("OptionPane.titleText"),
+                       optionType: Options.Value = Options.YesNo,
+                       messageType: Message.Value = Message.Question,
+                       icon: Icon = EmptyIcon): Result.Value =
+    Result(JOptionPane.showConfirmDialog(nullPeer(parent), message, title,
+      optionType.id, messageType.id, Swing.wrapIcon(icon)))
+
+  def showOptions(parent: Component = null,
+                  message: Any,
+                  title: String = uiString("OptionPane.titleText"),
+                  optionType: Options.Value = Options.YesNo,
+                  messageType: Message.Value = Message.Question,
+                  icon: Icon = EmptyIcon,
+                  entries: Seq[Any],
+                  initial: Int): Result.Value = {
+    val r = JOptionPane.showOptionDialog(nullPeer(parent), message, title,
+      optionType.id, messageType.id, Swing.wrapIcon(icon),
+      entries map toAnyRef toArray, entries(initial))
+    Result(r)
+  }
+
+  def showInput[A](parent: Component = null,
+                   message: Any,
+                   title: String = uiString("OptionPane.inputDialogTitle"),
+                   messageType: Message.Value = Message.Question,
+                   icon: Icon = EmptyIcon,
+                   entries: Seq[A] = Nil,
+                   initial: A): Option[A] = {
+    val e = if (entries.isEmpty) null
+    else entries map toAnyRef toArray
+    val r = JOptionPane.showInputDialog(nullPeer(parent), message, title,
+      messageType.id, Swing.wrapIcon(icon),
+      e, initial)
+
+    toOption[A](r)
+  }
+  def showMessage(parent: Component = null,
+                  message: Any,
+                  title: String = uiString("OptionPane.messageDialogTitle"),
+                  messageType: Message.Value = Message.Info,
+                  icon: Icon = EmptyIcon) {
+    JOptionPane.showMessageDialog(nullPeer(parent), message, title,
+      messageType.id, Swing.wrapIcon(icon))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   }
 }
 
 /**
  * A dialog window.
+<<<<<<< HEAD
  * 
  * @see javax.swing.JDialog
  */
@@ -199,6 +322,21 @@ class Dialog(owner: Window) extends RichWindow {
   
   def this() = this(null)
   
+=======
+ *
+ * @see javax.swing.JDialog
+ */
+class Dialog(owner: Window, gc: java.awt.GraphicsConfiguration = null) extends RichWindow {
+  override lazy val peer: JDialog with InterfaceMixin =
+    if (owner == null) new JDialog with InterfaceMixin with SuperMixin
+    else owner match {
+      case f: Frame => new JDialog(f.peer, "", false, gc) with InterfaceMixin with SuperMixin
+      case d: Dialog => new JDialog(d.peer, "", false, gc) with InterfaceMixin with SuperMixin
+    }
+
+  def this() = this(null)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def modal_=(b: Boolean) { peer.setModal(b) }
   def modal = peer.isModal
 }

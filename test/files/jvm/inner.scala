@@ -71,6 +71,7 @@ object Scalatest {
     val tmpfile = new FileWriter(tmpfilename)
     tmpfile.write(src)
     tmpfile.close
+<<<<<<< HEAD
     exec(javac + " -d " + outputdir + " -classpath " + classpath + " " + tmpfilename)
   }
 
@@ -80,6 +81,17 @@ object Scalatest {
   /** Execute cmd, wait for the process to end and pipe it's output to stdout */
   private def exec(cmd: String) {
     val proc = Runtime.getRuntime().exec(cmd)
+=======
+    exec(javac, "-d", outputdir, "-classpath", classpath, tmpfilename)
+  }
+
+  def java(cname: String) =
+    exec(javacmd, "-cp", classpath, cname)
+
+  /** Execute cmd, wait for the process to end and pipe it's output to stdout */
+  private def exec(args: String*) {
+    val proc = Runtime.getRuntime().exec(args.toArray)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val inp = new BufferedReader(new InputStreamReader(proc.getInputStream))
     val errp = new BufferedReader(new InputStreamReader(proc.getErrorStream))
     proc.waitFor()

@@ -2,7 +2,11 @@
  * Copyright 2005-2011 LAMP/EPFL
  * @author Paul Phillips
  */
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 package scala.tools.nsc
 package interpreter
 
@@ -22,6 +26,7 @@ trait CompletionAware {
    *  object will complete.
    */
   def completions(verbosity: Int): List[String]
+<<<<<<< HEAD
   
   /** Default filter to apply to completions.
    */
@@ -39,6 +44,25 @@ trait CompletionAware {
    */
   def follow(id: String): Option[CompletionAware] = None
   
+=======
+
+  /** Default filter to apply to completions.
+   */
+  def filterNotFunction(s: String): Boolean = false
+
+  /** Default sort.
+   */
+  def sortFunction(s1: String, s2: String): Boolean = s1 < s2
+
+  /** Default map.
+   */
+  def mapFunction(s: String) = NameTransformer decode s
+
+  /** The next completor in the chain.
+   */
+  def follow(id: String): Option[CompletionAware] = None
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** What to return if this completion is given as a command.  It
    *  returns None by default, which means to allow the repl to interpret
    *  the line normally.  Returning Some(_) means the line will never
@@ -58,12 +82,20 @@ trait CompletionAware {
    *  signatures.
    */
   def alternativesFor(id: String): List[String] = Nil
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Given string 'buf', return a list of all the strings
    *  to which it can complete.  This may involve delegating
    *  to other CompletionAware objects.
    */
+<<<<<<< HEAD
   def completionsFor(parsed: Parsed): List[String] = {    
+=======
+  def completionsFor(parsed: Parsed): List[String] = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     import parsed.{ buffer, verbosity }
     val comps = completions(verbosity) filter (_ startsWith buffer)
     val exact = comps contains buffer
@@ -74,15 +106,26 @@ trait CompletionAware {
         if (verbosity > 0 && exact) alternativesFor(buffer)
         else comps
       else follow(parsed.bufferHead) map (_ completionsFor parsed.bufferTail) getOrElse Nil
+<<<<<<< HEAD
   
     results filterNot filterNotFunction map mapFunction sortWith (sortFunction _)
   }
   
+=======
+
+    results filterNot filterNotFunction map mapFunction sortWith (sortFunction _)
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** TODO - unify this and completionsFor under a common traverser.
    */
   def executionFor(parsed: Parsed): Option[Any] = {
     import parsed._
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (isUnqualified && !isLastDelimiter && (completions(verbosity) contains buffer)) execute(buffer)
     else if (!isQualified) None
     else follow(bufferHead) flatMap (_ executionFor bufferTail)
@@ -101,7 +144,11 @@ object CompletionAware {
   //     "implicits" -> CompletionAware(() => allImplicits map (_.toString))
   //   )
   // )
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // class Forwarder(underlying: CompletionAware) extends CompletionAware {
   //   override def completions() = underlying.completions()
   //   override def filterNotFunction(s: String) = underlying.filterNotFunction(s)
@@ -111,14 +158,24 @@ object CompletionAware {
   //   override def execute(id: String) = underlying.execute(id)
   //   override def completionsFor(parsed: Parsed) = underlying.completionsFor(parsed)
   //   override def executionFor(parsed: Parsed) = underlying.executionFor(parsed)
+<<<<<<< HEAD
   // } 
   //
   
+=======
+  // }
+  //
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def unapply(that: Any): Option[CompletionAware] = that match {
     case x: CompletionAware => Some((x))
     case _                  => None
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Create a CompletionAware object from the given functions.
    *  The first should generate the list of completions whenever queried,
    *  and the second should return Some(CompletionAware) object if

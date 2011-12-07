@@ -16,7 +16,11 @@ import parallel.ParMap
 
 /** A template trait for maps, which associate keys with values.
  *
+<<<<<<< HEAD
  *  $mapNote 
+=======
+ *  $mapNote
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  $mapTags
  *  @since 2.8
  *
@@ -40,7 +44,11 @@ import parallel.ParMap
  *    }}}
  *    It is also good idea to override methods `foreach` and
  *    `size` for efficiency.
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define mapTags
  *  @tparam A    the type of the keys.
  *  @tparam B    the type of associated values.
@@ -48,18 +56,30 @@ import parallel.ParMap
  *
  *  @author  Martin Odersky
  *  @version 2.8
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define coll map
  *  @define Coll Map
  *  @define willNotTerminateInf
  *  @define mayNotTerminateInf
  */
 trait MapLike[A, +B, +This <: MapLike[A, B, This] with Map[A, B]]
+<<<<<<< HEAD
   extends PartialFunction[A, B] 
      with IterableLike[(A, B), This] 
      with GenMapLike[A, B, This]
      with Subtractable[A, This] 
      with Parallelizable[(A, B), ParMap[A, B]] 
+=======
+  extends PartialFunction[A, B]
+     with IterableLike[(A, B), This]
+     with GenMapLike[A, B, This]
+     with Subtractable[A, This]
+     with Parallelizable[(A, B), ParMap[A, B]]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 {
 self =>
 
@@ -67,7 +87,11 @@ self =>
    *   @return   an empty map of type `This`.
    */
   def empty: This
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A common implementation of `newBuilder` for all maps in terms of `empty`.
    *  Overridden for mutable maps in `mutable.MapLike`.
    */
@@ -82,6 +106,7 @@ self =>
   def get(key: A): Option[B]
 
   /** Creates a new iterator over all key/value pairs of this map
+<<<<<<< HEAD
    *  
    *  @return the new iterator
    */
@@ -90,6 +115,16 @@ self =>
   /** Adds a key/value pair to this map, returning a new map. 
    *  @param    kv the key/value pair
    *  @tparam   B1 the type of the value in the key/value pair. 
+=======
+   *
+   *  @return the new iterator
+   */
+  def iterator: Iterator[(A, B)]
+
+  /** Adds a key/value pair to this map, returning a new map.
+   *  @param    kv the key/value pair
+   *  @tparam   B1 the type of the value in the key/value pair.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @return   a new map with the new binding added to this map
    *  @usecase  def + (kv: (A, B)): Map[A, B]
    */
@@ -108,18 +143,30 @@ self =>
    */
   override def isEmpty: Boolean = size == 0
 
+<<<<<<< HEAD
   /**  Returns the value associated with a key, or a default value if the key is not contained in the map. 
    *   @param   key      the key.
    *   @param   default  a computation that yields a default value in case no binding for `key` is
    *                     found in the map.
    *   @tparam  B1       the result type of the default computation. 
+=======
+  /**  Returns the value associated with a key, or a default value if the key is not contained in the map.
+   *   @param   key      the key.
+   *   @param   default  a computation that yields a default value in case no binding for `key` is
+   *                     found in the map.
+   *   @tparam  B1       the result type of the default computation.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *   @return  the value associated with `key` if it exists,
    *            otherwise the result of the `default` computation.
    *   @usecase def getOrElse(key: A, default: => B): B
    */
   def getOrElse[B1 >: B](key: A, default: => B1): B1 = get(key) match {
     case Some(v) => v
+<<<<<<< HEAD
     case None => default 
+=======
+    case None => default
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   }
 
   /** Retrieves the value which is associated with the given key. This
@@ -159,7 +206,11 @@ self =>
 
   /** The implementation class of the set returned by `keySet`.
    */
+<<<<<<< HEAD
   protected class DefaultKeySet extends Set[A] {
+=======
+  protected class DefaultKeySet extends AbstractSet[A] with Set[A] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def contains(key : A) = self.contains(key)
     def iterator = keysIterator
     def + (elem: A): Set[A] = (Set[A]() ++ this + elem).asInstanceOf[Set[A]] // !!! concrete overrides abstract problem
@@ -172,21 +223,33 @@ self =>
    *
    *  @return an iterator over all keys.
    */
+<<<<<<< HEAD
   def keysIterator: Iterator[A] = new Iterator[A] {
+=======
+  def keysIterator: Iterator[A] = new AbstractIterator[A] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val iter = self.iterator
     def hasNext = iter.hasNext
     def next() = iter.next._1
   }
 
   /** Collects all keys of this map in an iterable collection.
+<<<<<<< HEAD
    *  
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @return the keys of this map as an iterable.
    */
   @migration(2, 8, "As of 2.8, keys returns Iterable[A] rather than Iterator[A].")
   def keys: Iterable[A] = keySet
 
   /** Collects all values of this map in an iterable collection.
+<<<<<<< HEAD
    *  
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @return the values of this map as an iterable.
    */
   @migration(2, 8, "As of 2.8, values returns Iterable[B] rather than Iterator[B].")
@@ -194,7 +257,11 @@ self =>
 
   /** The implementation class of the iterable returned by `values`.
    */
+<<<<<<< HEAD
   protected class DefaultValuesIterable extends Iterable[B] {
+=======
+  protected class DefaultValuesIterable extends AbstractIterable[B] with Iterable[B] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def iterator = valuesIterator
     override def size = self.size
     override def foreach[C](f: B => C) = self.valuesIterator foreach f
@@ -204,7 +271,11 @@ self =>
    *
    *  @return an iterator over all values that are associated with some key in this map.
    */
+<<<<<<< HEAD
   def valuesIterator: Iterator[B] = new Iterator[B] {
+=======
+  def valuesIterator: Iterator[B] = new AbstractIterator[B] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val iter = self.iterator
     def hasNext = iter.hasNext
     def next() = iter.next._2
@@ -220,25 +291,41 @@ self =>
    */
   def default(key: A): B =
     throw new NoSuchElementException("key not found: " + key)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Filters this map by retaining only keys satisfying a predicate.
    *  @param  p   the predicate used to test keys
    *  @return an immutable map consisting only of those key value pairs of this map where the key satisfies
    *          the predicate `p`. The resulting map wraps the original map without copying any elements.
    */
+<<<<<<< HEAD
   def filterKeys(p: A => Boolean): Map[A, B] = new DefaultMap[A, B] {
+=======
+  def filterKeys(p: A => Boolean): Map[A, B] = new AbstractMap[A, B] with DefaultMap[A, B] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     override def foreach[C](f: ((A, B)) => C): Unit = for (kv <- self) if (p(kv._1)) f(kv)
     def iterator = self.iterator.filter(kv => p(kv._1))
     override def contains(key: A) = self.contains(key) && p(key)
     def get(key: A) = if (!p(key)) None else self.get(key)
+<<<<<<< HEAD
   }    
+=======
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** Transforms this map by applying a function to every retrieved value.
    *  @param  f   the function used to transform values of this map.
    *  @return a map view which maps every key of this map
    *          to `f(this(key))`. The resulting map wraps the original map without copying any elements.
    */
+<<<<<<< HEAD
   def mapValues[C](f: B => C): Map[A, C] = new DefaultMap[A, C] {
+=======
+  def mapValues[C](f: B => C): Map[A, C] = new AbstractMap[A, C] with DefaultMap[A, C] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     override def foreach[D](g: ((A, C)) => D): Unit = for ((k, v) <- self) g((k, f(v)))
     def iterator = for ((k, v) <- self.iterator) yield (k, f(v))
     override def size = self.size
@@ -246,14 +333,21 @@ self =>
     def get(key: A) = self.get(key).map(f)
   }
 
+<<<<<<< HEAD
   @deprecated("use `mapValues` instead", "2.8.0")
   def mapElements[C](f: B => C) = mapValues(f)
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // The following 5 operations (updated, two times +, two times ++) should really be
   // generic, returning This[B]. We need better covariance support to express that though.
   // So right now we do the brute force approach of code duplication.
 
+<<<<<<< HEAD
   /** Creates a new map obtained by updating this map with a given key/value pair. 
+=======
+  /** Creates a new map obtained by updating this map with a given key/value pair.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param    key the key
    *  @param    value the value
    *  @tparam   B1 the type of the added value
@@ -285,7 +379,11 @@ self =>
    *  @return   a new map with the given bindings added to this map
    *  @usecase  def ++ (xs: Traversable[(A, B)]): Map[A, B]
    */
+<<<<<<< HEAD
   def ++[B1 >: B](xs: GenTraversableOnce[(A, B1)]): Map[A, B1] = 
+=======
+  def ++[B1 >: B](xs: GenTraversableOnce[(A, B1)]): Map[A, B1] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     ((repr: Map[A, B1]) /: xs.seq) (_ + _)
 
   @bridge
@@ -298,7 +396,11 @@ self =>
    *           predicate is false from this set.
    *           If removal is slow, or you expect that most elements of the set
    *           will be removed, you might consider using `filter`
+<<<<<<< HEAD
    *           with a negated predicate instead. 
+=======
+   *           with a negated predicate instead.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param p    A predicate over key-value pairs
    *  @return     A new map containing elements not satisfying the predicate.
    */
@@ -308,7 +410,11 @@ self =>
       if (p(kv)) res = (res - kv._1).asInstanceOf[This] // !!! concrete overrides abstract problem
     res
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Overridden for efficiency. */
   override def toSeq: Seq[(A, B)] = toBuffer[(A, B)]
   override def toBuffer[C >: (A, B)]: mutable.Buffer[C] = {
@@ -316,14 +422,22 @@ self =>
     copyToBuffer(result)
     result
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected[this] override def parCombiner = ParMap.newCombiner[A, B]
 
   /** Appends all bindings of this map to a string builder using start, end, and separator strings.
    *  The written text begins with the string `start` and ends with the string
    *  `end`. Inside, the string representations of all bindings of this map
    *  in the form of `key -> value` are separated by the string `sep`.
+<<<<<<< HEAD
    *   
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param b     the builder to which strings are appended.
    *  @param start the starting string.
    *  @param sep   the separator string.
@@ -341,5 +455,9 @@ self =>
 
   override /*PartialFunction*/
   def toString = super[IterableLike].toString
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

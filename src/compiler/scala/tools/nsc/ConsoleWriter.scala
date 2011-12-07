@@ -14,9 +14,15 @@ import java.io.Writer
  */
 class ConsoleWriter extends Writer {
   def close = flush
+<<<<<<< HEAD
   
   def flush = Console.flush
   
+=======
+
+  def flush = Console.flush
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def write(cbuf: Array[Char], off: Int, len: Int) {
     if (len > 0)
       write(new String(cbuf.slice(off, off+len)))

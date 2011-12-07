@@ -8,7 +8,10 @@ package interpreter
 
 import scala.collection.{ mutable, immutable }
 import scala.PartialFunction.cond
+<<<<<<< HEAD
 import scala.reflect.NameTransformer
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 import scala.reflect.internal.Chars
 
 trait ReplStrings {
@@ -24,7 +27,11 @@ trait ReplStrings {
   /** Convert a string into code that can recreate the string.
    *  This requires replacing all special characters by escape
    *  codes. It does not add the surrounding " marks.  */
+<<<<<<< HEAD
   def string2code(str: String): String = {    
+=======
+  def string2code(str: String): String = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val res = new StringBuilder
     for (c <- str) c match {
       case '"' | '\'' | '\\'  => res += '\\' ; res += c
@@ -37,7 +44,11 @@ trait ReplStrings {
   def string2codeQuoted(str: String) =
     "\"" + string2code(str) + "\""
 
+<<<<<<< HEAD
   def any2stringOf(x: Any, maxlen: Int) = 
+=======
+  def any2stringOf(x: Any, maxlen: Int) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     "scala.runtime.ScalaRunTime.replStringOf(%s, %s)".format(x, maxlen)
 
   def words(s: String) = s.trim split "\\s+" filterNot (_ == "") toList

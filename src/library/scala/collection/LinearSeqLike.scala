@@ -17,10 +17,17 @@ import scala.util.control.Breaks._
 /** A template trait for linear sequences of type `LinearSeq[A]`.
  *
  *  $linearSeqInfo
+<<<<<<< HEAD
  * 
  *  This trait just implements `iterator` in terms of `isEmpty, ``head`, and `tail`.
  *  However, see `LinearSeqOptimized` for an implementation trait that overrides operations
  *  to make them run faster under the assumption of fast linear access with `head` and `tail`. 
+=======
+ *
+ *  This trait just implements `iterator` in terms of `isEmpty, ``head`, and `tail`.
+ *  However, see `LinearSeqOptimized` for an implementation trait that overrides operations
+ *  to make them run faster under the assumption of fast linear access with `head` and `tail`.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *
  *  @define  linearSeqInfo
  *  Linear sequences are defined in terms of three abstract methods, which are assumed
@@ -41,16 +48,33 @@ import scala.util.control.Breaks._
  *  @tparam A    the element type of the $coll
  *  @tparam Repr the type of the actual $coll containing the elements.
  */
+<<<<<<< HEAD
 trait LinearSeqLike[+A, +Repr <: LinearSeqLike[A, Repr]] extends SeqLike[A, Repr] { self: Repr =>
+=======
+trait LinearSeqLike[+A, +Repr <: LinearSeqLike[A, Repr]] extends SeqLike[A, Repr] {
+  self: Repr =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   override protected[this] def thisCollection: LinearSeq[A] = this.asInstanceOf[LinearSeq[A]]
   override protected[this] def toCollection(repr: Repr): LinearSeq[A] = repr.asInstanceOf[LinearSeq[A]]
 
+<<<<<<< HEAD
   override /*IterableLike*/ 
   def iterator: Iterator[A] = new Iterator[A] {
     var these = self
     def hasNext: Boolean = !these.isEmpty
     def next: A = 
+=======
+  def seq: LinearSeq[A]
+
+  override def hashCode() = util.MurmurHash3.seqHash(seq) // TODO - can we get faster via "linearSeqHash" ?
+
+  override /*IterableLike*/
+  def iterator: Iterator[A] = new AbstractIterator[A] {
+    var these = self
+    def hasNext: Boolean = !these.isEmpty
+    def next(): A =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (hasNext) {
         val result = these.head; these = these.tail; result
       } else Iterator.empty.next

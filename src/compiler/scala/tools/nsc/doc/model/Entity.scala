@@ -88,7 +88,11 @@ trait TemplateEntity extends Entity {
 
   /** The self-type of this template, if it differs from the template type. */
   def selfType : Option[TypeEntity]
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 
@@ -265,7 +269,11 @@ trait Class extends Trait with HigherKinded {
   /** The value parameters of this case class, or an empty list if this class is not a case class. As case class value
     * parameters cannot be curried, the outer list has exactly one element. */
   def valueParams: List[List[ValueParam]]
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 
@@ -291,7 +299,11 @@ trait Package extends Object {
 
 /** The root package, which contains directly or indirectly all members in the universe. A universe
   * contains exactly one root package. */
+<<<<<<< HEAD
 trait RootPackage extends Package 
+=======
+trait RootPackage extends Package
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 
 /** A non-template member (method, value, lazy value, variable, constructor, alias type, and abstract type). */
@@ -301,6 +313,17 @@ trait NonTemplateMemberEntity extends MemberEntity {
     * It corresponds to a real member, and provides a simplified, yet compatible signature for that member. */
   def isUseCase: Boolean
 
+<<<<<<< HEAD
+=======
+  /** If this symbol is a use case, the useCaseOf will contain the member it was derived from, containing the full
+    * signature and the complete parameter descriptions. */
+  def useCaseOf: Option[MemberEntity]
+
+  /** Whether this member is a bridge member. A bridge member does only exist for binary compatibility reasons
+    * and should not appear in ScalaDoc. */
+  def isBridge: Boolean
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 
@@ -361,14 +384,22 @@ trait ParameterEntity extends Entity {
 
   /** Whether this parameter is a value parameter. */
   def isValueParam: Boolean
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 
 /** A type parameter to a class, trait, or method. */
 trait TypeParam extends ParameterEntity with HigherKinded {
 
+<<<<<<< HEAD
   /** The variance of this type type parameter. Valid values are "+", "-", and the empty string. */
+=======
+  /** The variance of this type parameter. Valid values are "+", "-", and the empty string. */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def variance: String
 
   /** The lower bound for this type parameter, if it has been defined. */
@@ -403,5 +434,9 @@ trait Annotation extends Entity {
 
   /** The arguments passed to the constructor of the annotation class. */
   def arguments: List[ValueArgument]
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

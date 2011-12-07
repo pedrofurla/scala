@@ -6,7 +6,10 @@
 package scala.reflect
 package internal
 
+<<<<<<< HEAD
 import scala.reflect.NameTransformer
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 import scala.io.Codec
 import java.security.MessageDigest
 
@@ -40,7 +43,11 @@ trait Names extends api.Names {
   private def hashValue(cs: Array[Char], offset: Int, len: Int): Int =
     if (len > 0)
       (len * (41 * 41 * 41) +
+<<<<<<< HEAD
        cs(offset) * (41 * 41) +      
+=======
+       cs(offset) * (41 * 41) +
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
        cs(offset + len - 1) * 41 +
        cs(offset + (len >> 1)))
     else 0;
@@ -76,6 +83,7 @@ trait Names extends api.Names {
     val h = hashValue(cs, offset, len) & HASH_MASK
     var n = termHashtable(h)
     while ((n ne null) && (n.length != len || !equals(n.start, cs, offset, len)))
+<<<<<<< HEAD
     n = n.next;
     if (n eq null) {
       n = new TermName(nc, len, h)
@@ -84,6 +92,20 @@ trait Names extends api.Names {
     n
   }
   
+=======
+      n = n.next
+    if (n eq null) {
+      // The logic order here is future-proofing against the possibility
+      // that name.toString will become an eager val, in which case the call
+      // to enterChars cannot follow the construction of the TermName.
+      val ncStart = nc
+      enterChars(cs, offset, len)
+      n = new TermName(ncStart, len, h)
+    }
+    n
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Create a term name from string. */
   def newTermName(s: String): TermName =
     newTermName(s.toCharArray(), 0, s.length())
@@ -144,11 +166,22 @@ trait Names extends api.Names {
 
     /** @return the string representation of this name */
     final override def toString(): String = new String(chrs, index, len)
+<<<<<<< HEAD
+=======
+    // Should we opt to make toString into a val to avoid the creation
+    // of 750,000 copies of x$1, here's the line.
+    // final override val toString = new String(chrs, index, len)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def debugString() = NameTransformer.decode(toString) + (if (isTypeName) "!" else "")
 
     /** Write to UTF8 representation of this name to given character array.
      *  Start copying to index `to`. Return index of next free byte in array.
+<<<<<<< HEAD
      *  Array must have enough remaining space for all bytes 
+=======
+     *  Array must have enough remaining space for all bytes
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *  (i.e. maximally 3*length bytes).
      */
     final def copyUTF8(bs: Array[Byte], offset: Int): Int = {
@@ -166,19 +199,31 @@ trait Names extends api.Names {
       val cmp = this eq other.asInstanceOf[AnyRef]
       if (cmp || !nameDebug)
         return cmp
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       other match {
         case x: String  =>
           Console.println("Compared " + debugString + " and String '" + x + "'")
         case x: Name    =>
           if (this.isTermName != x.isTermName) {
             val panic = this.toTermName == x.toTermName
+<<<<<<< HEAD
             Console.println("Compared '%s' and '%s', one term, one type.%s".format(this, x, 
+=======
+            Console.println("Compared '%s' and '%s', one term, one type.%s".format(this, x,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               if (panic) "  And they contain the same name string!"
               else ""
             ))
           }
+<<<<<<< HEAD
         case _ => 
+=======
+        case _ =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       }
       false
     }
@@ -258,7 +303,11 @@ trait Names extends api.Names {
     final def lastPos(s: String, start: Int): Int = {
       var i = lastPos(s.charAt(0), start)
       while (i >= 0) {
+<<<<<<< HEAD
         var j = 1; 
+=======
+        var j = 1;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         while (s.charAt(j) == chrs(index + i + j)) {
           j += 1
           if (j == s.length()) return i;
@@ -286,7 +335,11 @@ trait Names extends api.Names {
     /** Does this name end with suffix just before given end index? */
     final def endsWith(suffix: Name, end: Int): Boolean = {
       var i = 1
+<<<<<<< HEAD
       while (i <= suffix.length && i <= end && 
+=======
+      while (i <= suffix.length && i <= end &&
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
              chrs(index + end - i) == chrs(suffix.start + suffix.length - i))
         i += 1;
       i > suffix.length
@@ -299,7 +352,11 @@ trait Names extends api.Names {
       while (start <= last && !startsWith(subname, start)) start += 1
       start <= last
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Some thoroughly self-explanatory convenience functions.  They
      *  assume that what they're being asked to do is known to be valid.
      */
@@ -313,10 +370,17 @@ trait Names extends api.Names {
     final def stripStart(prefix: String): Name  = subName(prefix.length, len)
     final def stripEnd(suffix: Name): Name      = subName(0, len - suffix.length)
     final def stripEnd(suffix: String): Name    = subName(0, len - suffix.length)
+<<<<<<< HEAD
     
     def lastIndexOf(ch: Char) = toChars lastIndexOf ch
 
     /** Return the subname with characters from start to end-1. */
+=======
+
+    def lastIndexOf(ch: Char) = toChars lastIndexOf ch
+
+    /** Return the subname with characters from from to to-1. */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def subName(from: Int, to: Int): Name
 
     /** Replace all occurrences of `from` by `to` in
@@ -335,21 +399,35 @@ trait Names extends api.Names {
 
     /** Replace operator symbols by corresponding $op_name. */
     def encode: Name = {
+<<<<<<< HEAD
       val str = toString()
+=======
+      val str = toString
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       val res = NameTransformer.encode(str)
       if (res == str) this
       else if (isTypeName) newTypeName(res)
       else newTermName(res)
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def append(suffix: String): Name
     def append(suffix: Name): Name
 
     /** Replace $op_name by corresponding operator symbol. */
     def decode: String = (
+<<<<<<< HEAD
       NameTransformer.decode(toString()) +
       (if (nameDebug && isTypeName) "!" else ""))//debug
     
+=======
+      NameTransformer.decode(toString) +
+      (if (nameDebug && isTypeName) "!" else ""))//debug
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def isOperatorName: Boolean = decode != toString
     def nameKind: String = if (isTypeName) "type" else "term"
     def longString: String = nameKind + " " + NameTransformer.decode(toString)
@@ -392,7 +470,11 @@ trait Names extends api.Names {
       n
     }
     def toTypeName: TypeName = this
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def append(suffix: String): TypeName = newTypeName(this + suffix)
     def append(suffix: Name): TypeName = append(suffix.toString)
     def companionName: TermName = toTermName

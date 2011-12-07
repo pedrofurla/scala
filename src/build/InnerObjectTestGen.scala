@@ -29,9 +29,15 @@ object Contexts extends Enumeration {
 object TestGen {
   val testFile = "object-testers-automated.scala"
 
+<<<<<<< HEAD
   val payload = 
 """      var ObjCounter = 0
       
+=======
+  val payload =
+"""      var ObjCounter = 0
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       object Obj  { ObjCounter += 1}
       Obj // one
 
@@ -50,9 +56,15 @@ object TestGen {
       }
 """
 
+<<<<<<< HEAD
   val payloadPrivate = 
 """      var ObjCounter = 0
       
+=======
+  val payloadPrivate =
+"""      var ObjCounter = 0
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       private object Obj  { ObjCounter += 1}
       Obj // one
 
@@ -71,9 +83,15 @@ object TestGen {
       }
 """
 
+<<<<<<< HEAD
   val payloadMT = 
 """     @volatile var ObjCounter = 0
       
+=======
+  val payloadMT =
+"""     @volatile var ObjCounter = 0
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       object Obj  { ObjCounter += 1}
 
       def multiThreadedAccess() {
@@ -117,7 +135,11 @@ object Test {
     counter += 1
     name + counter
   }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   val bodies = new mutable.ListBuffer[String]
   val triggers = new mutable.ListBuffer[String]
 
@@ -127,14 +149,24 @@ object Test {
                trigger: String,   // the code that needs to be invoked to run the test so far
                nested: List[Contexts.Value],  // the path from the innermost to the outermost context
                p: List[Contexts.Value] => Boolean,  // a predicate for filtering problematic cases
+<<<<<<< HEAD
                privateObj: Boolean = false) {  // are we using a private object? 
 
     def shouldBeTopLevel = 
+=======
+               privateObj: Boolean = false) {  // are we using a private object?
+
+    def shouldBeTopLevel =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       ((depth == 1)
        || (nested.headOption == Some(PrivateMethod))
        || (nested.isEmpty && privateObj))
 
+<<<<<<< HEAD
     val enums = 
+=======
+    val enums =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (shouldBeTopLevel) Contexts.topLevel else Contexts.values.toList
 
     if (depth == 0) {
@@ -195,7 +227,11 @@ object Test {
                  %s // trigger
                }
              """.format(name, body, trigger), name)
+<<<<<<< HEAD
                
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           case LazyVal =>
             val name = freshName("lzvalue") + "_" + depth
             ("""
@@ -218,10 +254,17 @@ object Test {
            val name = freshName("Class") + "_" + depth
            ("""
              class %s {
+<<<<<<< HEAD
                { // in primary constructor 
                  %s
                  %s // trigger
                } 
+=======
+               { // in primary constructor
+                 %s
+                 %s // trigger
+               }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
              }
            """.format(name, body, trigger), "(new %s)".format(name))
 
@@ -229,10 +272,17 @@ object Test {
            val name = freshName("Trait") + "_" + depth
            ("""
              trait %s {
+<<<<<<< HEAD
                { // in primary constructor 
                  %s
                  %s // trigger
                } 
+=======
+               { // in primary constructor
+                 %s
+                 %s // trigger
+               }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
              }
            """.format(name, body, trigger), "(new %s {})".format(name))
 
@@ -247,7 +297,11 @@ object Test {
     var nesting = structure
     while ((nesting ne Nil) && nesting.head == Object) {
       nesting = nesting.tail
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (nesting ne Nil)
       !(nesting.head == Val)
     else
@@ -255,7 +309,11 @@ object Test {
   } && !objectInsideLazyVal(structure)
 
   /** Known bug: object inside lazyval leads to deadlock. */
+<<<<<<< HEAD
   private def objectInsideLazyVal(structure: List[Contexts.Value]): Boolean = 
+=======
+  private def objectInsideLazyVal(structure: List[Contexts.Value]): Boolean =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     structure.contains(LazyVal)
 
 
@@ -290,12 +348,20 @@ object Test {
 
     val depth = if (args.length < 1) 2 else args(0).toInt
 
+<<<<<<< HEAD
     val header = 
+=======
+    val header =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 """
 /* ================================================================================
          Automatically generated on %tF. Do Not Edit (unless you have to).
          (%d-level nesting)
+<<<<<<< HEAD
    ================================================================================ */ 
+=======
+   ================================================================================ */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 """.format(new java.util.Date, depth)
 
     generate(depth, payload, "runTest", List(), x => true)

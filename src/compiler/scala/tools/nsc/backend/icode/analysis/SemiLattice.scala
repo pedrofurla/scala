@@ -17,7 +17,11 @@ trait SemiLattice {
    *  and structural equality for other values.
    */
   final case class IState[V, S](vars: V, stack: S) {
+<<<<<<< HEAD
     override def hashCode = vars.hashCode + stack.hashCode    
+=======
+    override def hashCode = vars.hashCode + stack.hashCode
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     override def equals(other: Any): Boolean = other match {
       case x: IState[_, _]  =>
         if ((this eq bottom) || (this eq top) || (x eq bottom) || (x eq top)) this eq x
@@ -42,7 +46,11 @@ trait SemiLattice {
   def bottom: Elem
 
   /** Compute the least upper bound of a list of elements. */
+<<<<<<< HEAD
   def lub(xs: List[Elem], exceptional: Boolean): Elem = 
+=======
+  def lub(xs: List[Elem], exceptional: Boolean): Elem =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (xs.isEmpty) bottom
     else try xs reduceLeft lub2(exceptional)
     catch { case e: LubException  => Console.println("Lub on blocks: " + xs) ; throw e }

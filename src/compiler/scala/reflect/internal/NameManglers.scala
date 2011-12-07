@@ -16,10 +16,17 @@ import Chars.isOperatorPart
  */
 trait NameManglers {
   self: SymbolTable =>
+<<<<<<< HEAD
   
   trait NameManglingCommon {
     self: CommonNames =>
     
+=======
+
+  trait NameManglingCommon {
+    self: CommonNames =>
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val MODULE_SUFFIX_STRING = NameTransformer.MODULE_SUFFIX_STRING
     val NAME_JOIN_STRING     = NameTransformer.NAME_JOIN_STRING
 
@@ -56,32 +63,55 @@ trait NameManglers {
       prefix + marker + md5chars + marker + suffix
     }
     private def compactedString(s: String) =
+<<<<<<< HEAD
       if (s.length <= MaxNameLength) s 
+=======
+      if (s.length <= MaxNameLength) s
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       else toMD5(s, MaxNameLength / 4)
   }
 
   trait TypeNameMangling extends NameManglingCommon {
     self: tpnme.type =>
+<<<<<<< HEAD
     
   }
 
   trait TermNameMangling extends NameManglingCommon {
     self: nme.type =>    
     
+=======
+
+  }
+
+  trait TermNameMangling extends NameManglingCommon {
+    self: nme.type =>
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val IMPL_CLASS_SUFFIX             = "$class"
     val LOCALDUMMY_PREFIX             = "<local "   // owner of local blocks
     val PROTECTED_PREFIX              = "protected$"
     val PROTECTED_SET_PREFIX          = PROTECTED_PREFIX + "set"
+<<<<<<< HEAD
     val SELECTOR_DUMMY                = "<unapply-selector>"
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val SETTER_SUFFIX                 = encode("_=")
     val SINGLETON_SUFFIX              = ".type"
     val SUPER_PREFIX_STRING           = "super$"
     val TRAIT_SETTER_SEPARATOR_STRING = "$_setter_$"
+<<<<<<< HEAD
   
     def isConstructorName(name: Name)       = name == CONSTRUCTOR || name == MIXIN_CONSTRUCTOR    
     def isExceptionResultName(name: Name)   = name startsWith EXCEPTION_RESULT_PREFIX
     /** !!! Foo$class$1 is an implClassName, I think.  */
     def isImplClassName(name: Name)         = name endsWith IMPL_CLASS_SUFFIX
+=======
+
+    def isConstructorName(name: Name)       = name == CONSTRUCTOR || name == MIXIN_CONSTRUCTOR
+    def isExceptionResultName(name: Name)   = name startsWith EXCEPTION_RESULT_PREFIX
+    def isImplClassName(name: Name)         = stripAnonNumberSuffix(name) endsWith IMPL_CLASS_SUFFIX
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def isLocalDummyName(name: Name)        = name startsWith LOCALDUMMY_PREFIX
     def isLocalName(name: Name)             = name endsWith LOCAL_SUFFIX_STRING
     def isLoopHeaderLabel(name: Name)       = (name startsWith WHILE_PREFIX) || (name startsWith DO_WHILE_PREFIX)
@@ -94,16 +124,28 @@ trait NameManglers {
 
     def isOpAssignmentName(name: Name) = name match {
       case raw.NE | raw.LE | raw.GE | EMPTY => false
+<<<<<<< HEAD
       case _                                => 
         name.endChar == '=' && name.startChar != '=' && isOperatorPart(name.startChar)
     }
 
     /** The expanded setter name of `name` relative to this class `base` 
+=======
+      case _                                =>
+        name.endChar == '=' && name.startChar != '=' && isOperatorPart(name.startChar)
+    }
+
+    /** The expanded setter name of `name` relative to this class `base`
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      */
     def expandedSetterName(name: TermName, base: Symbol): TermName =
       expandedName(name, base, separator = TRAIT_SETTER_SEPARATOR_STRING)
 
+<<<<<<< HEAD
     /** If `name` is an expandedName name, the original name. 
+=======
+    /** If `name` is an expandedName name, the original name.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *  Otherwise `name` itself.
      */
     def originalName(name: Name): Name = {
@@ -148,7 +190,11 @@ trait NameManglers {
       else
         name stripEnd SETTER_SUFFIX toTermName
     }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def defaultGetterName(name: Name, pos: Int): TermName = {
       val prefix = if (isConstructorName(name)) "init" else name
       newTermName(prefix + DEFAULT_GETTER_STRING + pos)
@@ -159,10 +205,37 @@ trait NameManglers {
       else name
     }
 
+<<<<<<< HEAD
     def stripModuleSuffix(name: Name): Name = (
       if (isModuleName(name)) name stripEnd MODULE_SUFFIX_STRING else name
     )
     
+=======
+    /** !!! I'm putting this logic in place because I can witness
+     *  trait impls get lifted and acquiring names like 'Foo$class$1'
+     *  while clearly still being what they were. It's only being used on
+     *  isImplClassName. However, it's anyone's guess how much more
+     *  widely this logic actually ought to be applied. Anything which
+     *  tests for how a name ends is a candidate for breaking down once
+     *  something is lifted from a method.
+     *
+     *  TODO: resolve this significant problem.
+     */
+    def stripAnonNumberSuffix(name: Name): Name = {
+      val str = "" + name
+      if (str == "" || !str.endChar.isDigit) name
+      else {
+        val idx = name.lastPos('$')
+        if (idx < 0 || str.substring(idx + 1).exists(c => !c.isDigit)) name
+        else name.subName(0, idx)
+      }
+    }
+
+    def stripModuleSuffix(name: Name): Name = (
+      if (isModuleName(name)) name stripEnd MODULE_SUFFIX_STRING else name
+    )
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Note that for performance reasons, stripEnd does not verify that the
      *  suffix is actually the suffix specified.
      */
@@ -170,10 +243,17 @@ trait NameManglers {
     def singletonName(name: Name): TypeName     = name append SINGLETON_SUFFIX toTypeName
     def implClassName(name: Name): TypeName     = name append IMPL_CLASS_SUFFIX toTypeName
     def interfaceName(implname: Name): TypeName = implname stripEnd IMPL_CLASS_SUFFIX toTypeName
+<<<<<<< HEAD
     def localDummyName(clazz: Symbol): TermName = newTermName(LOCALDUMMY_PREFIX + clazz.name + ">") 
     def productAccessorName(i: Int): TermName   = newTermName("_" + i)
     def superName(name: Name): TermName         = newTermName(SUPER_PREFIX_STRING + name)
     
+=======
+    def localDummyName(clazz: Symbol): TermName = newTermName(LOCALDUMMY_PREFIX + clazz.name + ">")
+    def productAccessorName(i: Int): TermName   = newTermName("_" + i)
+    def superName(name: Name): TermName         = newTermName(SUPER_PREFIX_STRING + name)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** The name of an accessor for protected symbols. */
     def protName(name: Name): TermName = newTermName(PROTECTED_PREFIX + name)
 

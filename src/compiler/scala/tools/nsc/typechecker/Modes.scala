@@ -5,7 +5,11 @@
 
 package scala.tools.nsc
 package typechecker
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 /** Mode constants.
  */
 trait Modes {
@@ -14,11 +18,19 @@ trait Modes {
   final val NOmode        = 0x000
   final val EXPRmode      = 0x001
   final val PATTERNmode   = 0x002
+<<<<<<< HEAD
   
   /** TYPEmode needs a comment. <-- XXX.
    */
   final val TYPEmode      = 0x004
  
+=======
+
+  /** TYPEmode needs a comment. <-- XXX.
+   */
+  final val TYPEmode      = 0x004
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** SCCmode is orthogonal to above. When set we are
    *  in the this or super constructor call of a constructor.
    */
@@ -57,7 +69,11 @@ trait Modes {
   /** LHSmode is set for the left-hand side of an assignment.
    */
   final val LHSmode       = 0x400
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** STARmode is set when star patterns are allowed.
    *  (This was formerly called REGPATmode.)
    */
@@ -66,12 +82,20 @@ trait Modes {
   /** ALTmode is set when we are under a pattern alternative.
    */
   final val ALTmode       = 0x2000
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** HKmode is set when we are typing a higher-kinded type.
    *  adapt should then check kind-arity based on the prototypical type's
    *  kind arity.  Type arguments should not be inferred.
    */
+<<<<<<< HEAD
   final val HKmode        = 0x4000 // @M: could also use POLYmode | TAPPmode 
+=======
+  final val HKmode        = 0x4000 // @M: could also use POLYmode | TAPPmode
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** BYVALmode is set when we are typing an expression
    *  that occurs in a by-value position. An expression e1 is in by-value
@@ -87,17 +111,28 @@ trait Modes {
   final val TYPEPATmode   = 0x10000
 
   final private val StickyModes   = EXPRmode | PATTERNmode | TYPEmode | ALTmode
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   final def onlyStickyModes(mode: Int) =
     mode & StickyModes
 
   final def forFunMode(mode: Int) =
     mode & (StickyModes | SCCmode) | FUNmode | POLYmode | BYVALmode
 
+<<<<<<< HEAD
   final def forTypeMode(mode: Int) = 
     if (inAnyMode(mode, PATTERNmode | TYPEPATmode)) TYPEmode | TYPEPATmode
     else TYPEmode
   
+=======
+  final def forTypeMode(mode: Int) =
+    if (inAnyMode(mode, PATTERNmode | TYPEPATmode)) TYPEmode | TYPEPATmode
+    else TYPEmode
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   final def inAllModes(mode: Int, required: Int)  = (mode & required) == required
   final def inAnyMode(mode: Int, required: Int)   = (mode & required) != 0
   final def inNoModes(mode: Int, prohibited: Int) = (mode & prohibited) == 0
@@ -105,10 +140,17 @@ trait Modes {
   final def inFunMode(mode: Int)                  = (mode & FUNmode) != 0
   final def inPolyMode(mode: Int)                 = (mode & POLYmode) != 0
   final def inPatternMode(mode: Int)              = (mode & PATTERNmode) != 0
+<<<<<<< HEAD
   
   final def inExprModeButNot(mode: Int, prohibited: Int) = 
     (mode & (EXPRmode | prohibited)) == EXPRmode
   
+=======
+
+  final def inExprModeButNot(mode: Int, prohibited: Int) =
+    (mode & (EXPRmode | prohibited)) == EXPRmode
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Translates a mask of mode flags into something readable.
    */
   private val modeNameMap = Map[Int, String](

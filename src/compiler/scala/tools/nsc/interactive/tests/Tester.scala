@@ -42,7 +42,11 @@ class Tester(ntests: Int, inputs: Array[SourceFile], settings: Settings) {
   def askTypeCompletion(pos: Position) = askAndListen("type at", pos, compiler.askTypeCompletion)
   def askScopeCompletion(pos: Position) = askAndListen("type at", pos, compiler.askScopeCompletion)
 
+<<<<<<< HEAD
   val rand = new java.util.Random() 
+=======
+  val rand = new java.util.Random()
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   private def randomInverse(n: Int) = n / (rand.nextInt(n) + 1)
 
@@ -75,7 +79,11 @@ class Tester(ntests: Int, inputs: Array[SourceFile], settings: Settings) {
     private var pos = start
     private var deleted: List[Char] = List()
 
+<<<<<<< HEAD
     override def toString = 
+=======
+    override def toString =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       "In "+inputs(sfidx)+" at "+start+" take "+nchars+" to "+
       (if (toLeft) "left" else "right")
 
@@ -94,7 +102,11 @@ class Tester(ntests: Int, inputs: Array[SourceFile], settings: Settings) {
           if (pos > 0 && pos <= inputs(sfidx).length) {
             pos -= 1
             deleteOne()
+<<<<<<< HEAD
           } 
+=======
+          }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         } else {
           if (pos  < inputs(sfidx).length) {
             deleteOne()
@@ -102,7 +114,11 @@ class Tester(ntests: Int, inputs: Array[SourceFile], settings: Settings) {
         }
       }
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def insertAll() {
       for (chr <- if (toLeft) deleted else deleted.reverse) {
         val sf = inputs(sfidx)
@@ -142,7 +158,11 @@ class Tester(ntests: Int, inputs: Array[SourceFile], settings: Settings) {
       val changes = Vector.fill(/**/randomChangesPerBatch()) {
         /**/
         new Change(sfidx, randomPositionIn(inputs(sfidx)), randomNumChars(), rand.nextBoolean())
+<<<<<<< HEAD
       } 
+=======
+      }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       doTest(sfidx, changes, testPositions, otherTest) match {
         case Some(errortrace) =>
           println(errortrace)
@@ -155,7 +175,11 @@ class Tester(ntests: Int, inputs: Array[SourceFile], settings: Settings) {
   def doTest(sfidx: Int, changes: Seq[Change], testPositions: Seq[Int], otherTest: () => Unit): Option[ErrorTrace] = {
     print("new round with "+changes.length+" changes:")
     changes foreach (_.deleteAll())
+<<<<<<< HEAD
     otherTest() 
+=======
+    otherTest()
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def errorCount() = compiler.ask(() => reporter.ERROR.count)
 //    println("\nhalf test round: "+errorCount())
     changes.view.reverse foreach (_.insertAll())
@@ -163,13 +187,21 @@ class Tester(ntests: Int, inputs: Array[SourceFile], settings: Settings) {
     println("done test round: "+errorCount())
     if (errorCount() != 0)
       Some(ErrorTrace(sfidx, changes, reporter.infos, inputs(sfidx).content))
+<<<<<<< HEAD
     else 
+=======
+    else
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       None
   }
 
   case class ErrorTrace(
     sfidx: Int, changes: Seq[Change], infos: collection.Set[reporter.Info], content: Array[Char]) {
+<<<<<<< HEAD
     override def toString = 
+=======
+    override def toString =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       "Sourcefile: "+inputs(sfidx)+
       "\nChanges:\n  "+changes.mkString("\n  ")+
       "\nErrors:\n  "+infos.mkString("\n  ")+
@@ -205,4 +237,8 @@ object Tester {
     new Tester(args(0).toInt, files, settings).run()
     sys.exit(0)
   }
+<<<<<<< HEAD
 } 
+=======
+}
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0

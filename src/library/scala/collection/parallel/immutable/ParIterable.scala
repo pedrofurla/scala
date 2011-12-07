@@ -19,6 +19,7 @@ import scala.collection.GenIterable
 
 
 /** A template trait for immutable parallel iterable collections.
+<<<<<<< HEAD
  *  
  *  $paralleliterableinfo
  *  
@@ -26,6 +27,15 @@ import scala.collection.GenIterable
  *  
  *  @tparam T    the element type of the collection
  *  
+=======
+ *
+ *  $paralleliterableinfo
+ *
+ *  $sideeffects
+ *
+ *  @tparam T    the element type of the collection
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author Aleksandar Prokopec
  *  @since 2.9
  */
@@ -36,12 +46,21 @@ extends collection/*.immutable*/.GenIterable[T]
    with ParIterableLike[T, ParIterable[T], collection.immutable.Iterable[T]]
 {
   override def companion: GenericCompanion[ParIterable] with GenericParCompanion[ParIterable] = ParIterable
+<<<<<<< HEAD
   
   // if `immutable.ParIterableLike` is introduced, please move these 4 methods there
   override def toIterable: ParIterable[T] = this
   
   override def toSeq: ParSeq[T] = toParCollection[T, ParSeq[T]](() => ParSeq.newCombiner[T])
   
+=======
+
+  // if `immutable.ParIterableLike` is introduced, please move these 4 methods there
+  override def toIterable: ParIterable[T] = this
+
+  override def toSeq: ParSeq[T] = toParCollection[T, ParSeq[T]](() => ParSeq.newCombiner[T])
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 
@@ -50,11 +69,19 @@ extends collection/*.immutable*/.GenIterable[T]
 object ParIterable extends ParFactory[ParIterable] {
   implicit def canBuildFrom[T]: CanCombineFrom[Coll, T, ParIterable[T]] =
     new GenericCanCombineFrom[T]
+<<<<<<< HEAD
   
   def newBuilder[T]: Combiner[T, ParIterable[T]] = ParVector.newBuilder[T]
   
   def newCombiner[T]: Combiner[T, ParIterable[T]] = ParVector.newCombiner[T]
   
+=======
+
+  def newBuilder[T]: Combiner[T, ParIterable[T]] = ParVector.newBuilder[T]
+
+  def newCombiner[T]: Combiner[T, ParIterable[T]] = ParVector.newCombiner[T]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 

@@ -69,7 +69,11 @@ FIXED:
       override val fieldType = Some(datatype);
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   implicit def statementFieldToSelectDerivedField (fv:StatementField): SelectDerivedField = new SelectDerivedField {
     val fieldValue = fv;
   }
@@ -77,7 +81,11 @@ FIXED:
   implicit def stringToSelectDerivedField (fv:String): SelectDerivedField = new SelectDerivedField {
     val fieldValue: StatementField = StatementExpression.stringToStatementField(fv);
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   abstract class SelectDerivedColumns {
     def selectList: List[statement.DerivedColumn];
     def selectTypes: List[DataType];
@@ -187,7 +195,11 @@ FIXED:
       val fieldTypes = Nil;
     });
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   implicit def selectToSelectSourceTables (sct:statement.Select): SelectSourceTables = new SelectSourceTables {
     val fromClause = List(sct);
   }
@@ -195,7 +207,11 @@ FIXED:
   implicit def selectSourceTableToSelectSourceTables (sct:SelectSourceTable): SelectSourceTables = new SelectSourceTables {
     val fromClause = List(sct.fromRelation);
   }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // SELECT BEYOND ...
 
   abstract class SelectBeyond {
@@ -270,5 +286,9 @@ FIXED:
       val fieldName = se;
     });
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

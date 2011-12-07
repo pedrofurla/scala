@@ -22,7 +22,11 @@ package scala.util.control
  *  }}}
  *  Calls to break from one instantiation of `Breaks` will never
  *  target breakable objects of some other instantiation.
+<<<<<<< HEAD
  */  
+=======
+ */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 class Breaks {
 
   private val breakException = new BreakControl
@@ -74,7 +78,11 @@ class Breaks {
    * @note This might be different than the statically closest enclosing block!
    */
   def break() { throw breakException }
+<<<<<<< HEAD
 } 
+=======
+}
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 /** An object that can be used for the break control abstraction.
  *  Example usage:
@@ -87,7 +95,11 @@ class Breaks {
  *    }
  *  }
  *  }}}
+<<<<<<< HEAD
  */  
+=======
+ */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 object Breaks extends Breaks
 
 private class BreakControl extends ControlThrowable

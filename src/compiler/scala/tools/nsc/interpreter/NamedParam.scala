@@ -14,7 +14,11 @@ trait NamedParamCreator {
   def apply(name: String, tpe: String, value: Any): NamedParam = NamedParamClass(name, tpe, value)
   def apply[T: Manifest](name: String, x: T): NamedParam = new Typed[T](name, x)
   def apply[T: Manifest](x: T): NamedParam = apply(freshName(), x)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def clazz(name: String, x: Any): NamedParam = new Untyped(name, x)
   def clazz(x: Any): NamedParam = clazz(freshName(), x)
 
@@ -29,8 +33,13 @@ object NamedParam extends NamedParamCreator {
   class Untyped(val name: String, val value: Any) extends NamedParam {
     val tpe = TypeStrings.fromValue(value)
   }
+<<<<<<< HEAD
   
   protected val freshName = { 
+=======
+
+  protected val freshName = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     var counter = 0
     () => { counter += 1; "p" + counter }
   }

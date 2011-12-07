@@ -9,7 +9,11 @@ package typechecker
 import util.Statistics._
 
 /** The main attribution phase.
+<<<<<<< HEAD
  */ 
+=======
+ */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 trait Analyzer extends AnyRef
             with Contexts
             with Namers
@@ -18,8 +22,14 @@ trait Analyzer extends AnyRef
             with Implicits
             with Variances
             with EtaExpansion
+<<<<<<< HEAD
             with SyntheticMethods 
             with Unapplies
+=======
+            with SyntheticMethods
+            with Unapplies
+            with Macros
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             with NamesDefaults
             with TypeDiagnostics
 {
@@ -55,7 +65,11 @@ trait Analyzer extends AnyRef
         override def traverse(tree: Tree): Unit = tree match {
           case ModuleDef(_, _, _) =>
             if (tree.symbol.name == nme.PACKAGEkw) {
+<<<<<<< HEAD
               loaders.openPackageModule(tree.symbol)()
+=======
+              openPackageModule(tree.symbol, tree.symbol.owner)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             }
           case ClassDef(_, _, _, _) => () // make it fast
           case _ => super.traverse(tree)
@@ -75,12 +89,21 @@ trait Analyzer extends AnyRef
     val runsRightAfter = Some("packageobjects")
     def newPhase(_prev: Phase): StdPhase = new StdPhase(_prev) {
       override def keepsTypeParams = false
+<<<<<<< HEAD
       resetTyper() 
       // the log accumulates entries over time, even though it should not (Adriaan, Martin said so). 
       // Lacking a better fix, we clear it here (before the phase is created, meaning for each 
       // compiler run). This is good enough for the resident compiler, which was the most affected.
       undoLog.clear()
       override def run() { 
+=======
+      resetTyper()
+      // the log accumulates entries over time, even though it should not (Adriaan, Martin said so).
+      // Lacking a better fix, we clear it here (before the phase is created, meaning for each
+      // compiler run). This is good enough for the resident compiler, which was the most affected.
+      undoLog.clear()
+      override def run() {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         val start = startTimer(typerNanos)
         global.echoPhaseSummary(this)
         currentRun.units foreach applyPhase

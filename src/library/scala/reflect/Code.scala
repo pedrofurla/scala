@@ -11,7 +11,14 @@
 package scala.reflect
 
 /** This type is required by the compiler and <b>should not be used in client code</b>. */
+<<<<<<< HEAD
 class Code[T](val tree: scala.reflect.mirror.Tree)
+=======
+class Code[T: Manifest](val tree: scala.reflect.mirror.Tree) {
+  val manifest = implicitly[Manifest[T]]
+  override def toString = "Code(tree = "+tree+", manifest = "+manifest+")"
+}
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 /** This type is required by the compiler and <b>should not be used in client code</b>. */
 object Code {

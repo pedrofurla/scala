@@ -21,7 +21,11 @@ import java.io.Writer
  *
  *  These Picklers build on the work of Andrew Kennedy. They are most closely inspired by
  *  Iulian Dragos' picklers for Scala to XML. See:
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  <a href="http://code.google.com/p/gdata-scala-client/wiki/DevelopersGuide">
  *  http://code.google.com/p/gdata-scala-client/wiki/DevelopersGuide
  *  </a>
@@ -36,8 +40,13 @@ abstract class Pickler[T] {
    */
   def pickle(wr: Writer, x: T)
 
+<<<<<<< HEAD
   /** Reads value from pickled form. 
    * 
+=======
+  /** Reads value from pickled form.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param  rd   the lexer from which lexemes are read
    *  @return An `UnpickleSuccess value if the current input corresponds to the
    *          kind of value that is unpickled by the current subclass of `Pickler`,
@@ -56,7 +65,11 @@ abstract class Pickler[T] {
 
   /** A pickler that adds a label to the current pickler, using the representation
    *   `label ( <current pickler> )`
+<<<<<<< HEAD
    *  
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @label  the string to be added as a label.
    */
   def labelled(label: String): Pickler[T] = labelledPickler(label, this)
@@ -123,13 +136,21 @@ object Pickler {
       case UnpickleSuccess(x) => this
       case f: UnpickleFailure => alt
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Transforms failures into thrown `MalformedInput` exceptions.
      *  @throws  MalformedInput   if current result is a failure
      */
     def requireSuccess: UnpickleSuccess[T] = this match {
       case s @ UnpickleSuccess(x) => s
+<<<<<<< HEAD
       case f: UnpickleFailure => 
+=======
+      case f: UnpickleFailure =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         throw new MalformedInput(f.rd, "Unrecoverable unpickle failure:\n"+f.errMsg)
     }
   }
@@ -150,8 +171,13 @@ object Pickler {
     override def toString = "Failure at "+rd.tokenPos+":\n"+msg
   }
 
+<<<<<<< HEAD
   private def errorExpected(rd: Lexer, msg: => String) = 
     new UnpickleFailure("expected: "+msg+"\n" + 
+=======
+  private def errorExpected(rd: Lexer, msg: => String) =
+    new UnpickleFailure("expected: "+msg+"\n" +
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                         "found   : "+rd.token,
                         rd)
 
@@ -186,20 +212,35 @@ object Pickler {
    *  into wrapper methods that can be passed as second argument to `wrap`.
    */
   implicit def toTilde[T1, T2, S](f: S => Option[(T1, T2)]): S => T1 ~ T2 = { x => (f(x): @unchecked) match { case Some((x1, x2)) => x1 ~ x2 } }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Same as `p.labelled(label)`.
    */
   def labelledPickler[T](label: String, p: Pickler[T]): Pickler[T] = new Pickler[T] {
     def pickle(wr: Writer, x: T) = {
+<<<<<<< HEAD
       wr.write(quoted(label)); 
+=======
+      wr.write(quoted(label));
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       wr.write("(")
       p.pickle(wr, x)
       wr.write(")")
     }
+<<<<<<< HEAD
     def unpickle(rd: Lexer): Unpickled[T] = 
       rd.token match {
         case StringLit(`label`) =>
           rd.nextToken() 
+=======
+    def unpickle(rd: Lexer): Unpickled[T] =
+      rd.token match {
+        case StringLit(`label`) =>
+          rd.nextToken()
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           rd.accept('(')
           val result = p.unpickle(rd).requireSuccess
           rd.accept(')')
@@ -221,7 +262,11 @@ object Pickler {
   def conditionalPickler[T](p: Pickler[T], condition: Any => Boolean) = new CondPickler[T](condition) {
     def pickle(wr: Writer, x: T) = p.pickle(wr, x)
     def unpickle(rd: Lexer) = p.unpickle(rd)
+<<<<<<< HEAD
   }    
+=======
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** Same as `p ~ q`
    */
@@ -232,13 +277,19 @@ object Pickler {
       wr.write(',')
       q.pickle(wr, x.snd)
     }
+<<<<<<< HEAD
     def unpickle(rd: Lexer) = 
       for (x <- p.unpickle(rd); y <- { rd.accept(','); qq.unpickle(rd).requireSuccess }) 
+=======
+    def unpickle(rd: Lexer) =
+      for (x <- p.unpickle(rd); y <- { rd.accept(','); qq.unpickle(rd).requireSuccess })
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       yield x ~ y
   }
 
   /** Same as `p | q`
    */
+<<<<<<< HEAD
   def eitherPickler[T, U <: T, V <: T](p: CondPickler[U], q: => CondPickler[V]) = 
     new CondPickler[T](x => p.canPickle(x) || q.canPickle(x)) {
       lazy val qq = q
@@ -247,15 +298,31 @@ object Pickler {
       def pickle(wr: Writer, x: T) = 
         require(tryPickle(wr, x), 
                 "no pickler found for "+x+" of class "+x.asInstanceOf[AnyRef].getClass.getName)
+=======
+  def eitherPickler[T, U <: T, V <: T](p: CondPickler[U], q: => CondPickler[V]) =
+    new CondPickler[T](x => p.canPickle(x) || q.canPickle(x)) {
+      lazy val qq = q
+      override def tryPickle(wr: Writer, x: Any): Boolean =
+        p.tryPickle(wr, x) || qq.tryPickle(wr, x)
+      def pickle(wr: Writer, x: T) =
+        require(tryPickle(wr, x),
+                "no pickler found for "+x+" of class "+x.getClass.getName)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       def unpickle(rd: Lexer) = p.unpickle(rd) orElse qq.unpickle(rd)
     }
 
   /** Same as `p.orNull`
    */
   def nullablePickler[T](p: Pickler[T])(implicit fromNull: Null <:< T): Pickler[T] = new Pickler[T] {
+<<<<<<< HEAD
     def pickle(wr: Writer, x: T) = 
       if (x == null) wr.write("null") else p.pickle(wr, x)
     def unpickle(rd: Lexer): Unpickled[T] = 
+=======
+    def pickle(wr: Writer, x: T) =
+      if (x == null) wr.write("null") else p.pickle(wr, x)
+    def unpickle(rd: Lexer): Unpickled[T] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (rd.token == NullLit) nextSuccess(rd, fromNull(null))
       else p.unpickle(rd)
   }
@@ -264,10 +331,17 @@ object Pickler {
    *  with the object's underlying class as a label.
    *  Example: Object scala.None would be represented as `scala.None$()`.
    */
+<<<<<<< HEAD
   def singletonPickler[T <: AnyRef](x: T): CondPickler[T] = 
     unitPickler
       .wrapped { _ => x } { x => () } 
       .labelled (x.getClass.getName) 
+=======
+  def singletonPickler[T <: AnyRef](x: T): CondPickler[T] =
+    unitPickler
+      .wrapped { _ => x } { x => () }
+      .labelled (x.getClass.getName)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       .cond (x eq _.asInstanceOf[AnyRef])
 
   /** A pickler the handles instances of classes that have an empty constructor.
@@ -313,7 +387,11 @@ object Pickler {
       }
     })
   }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A pickler that handles values that can be represented as a single token.
    *  @param   kind   the kind of token representing the value, used in error messages
    *                  for unpickling.
@@ -322,12 +400,17 @@ object Pickler {
    */
   private def tokenPickler[T](kind: String)(matcher: PartialFunction[Token, T]) = new Pickler[T] {
     def pickle(wr: Writer, x: T) = wr.write(x.toString)
+<<<<<<< HEAD
     def unpickle(rd: Lexer) = 
+=======
+    def unpickle(rd: Lexer) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (matcher isDefinedAt rd.token) nextSuccess(rd, matcher(rd.token))
       else errorExpected(rd, kind)
   }
 
   /** A pickler for values of type `Long`, represented as integer literals */
+<<<<<<< HEAD
   implicit val longPickler: Pickler[Long] = 
     tokenPickler("integer literal") { case IntLit(s) => s.toLong }
   
@@ -335,6 +418,15 @@ object Pickler {
   implicit val doublePickler: Pickler[Double] = 
     tokenPickler("floating point literal") { case FloatLit(s) => s.toDouble }
   
+=======
+  implicit val longPickler: Pickler[Long] =
+    tokenPickler("integer literal") { case IntLit(s) => s.toLong }
+
+  /** A pickler for values of type `Double`, represented as floating point literals */
+  implicit val doublePickler: Pickler[Double] =
+    tokenPickler("floating point literal") { case FloatLit(s) => s.toDouble }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A pickler for values of type `Byte`, represented as integer literals */
   implicit val bytePickler: Pickler[Byte] = longPickler.wrapped { _.toByte } { _.toLong }
 
@@ -348,6 +440,7 @@ object Pickler {
   implicit val floatPickler: Pickler[Float] = doublePickler.wrapped { _.toFloat } { _.toLong }
 
   /** A conditional pickler for the boolean value `true` */
+<<<<<<< HEAD
   private val truePickler = 
     tokenPickler("boolean literal") { case TrueLit => true } cond { _ == true }
  
@@ -355,6 +448,15 @@ object Pickler {
   private val falsePickler = 
     tokenPickler("boolean literal") { case FalseLit => false } cond { _ == false }
   
+=======
+  private val truePickler =
+    tokenPickler("boolean literal") { case TrueLit => true } cond { _ == true }
+
+  /** A conditional pickler for the boolean value `false` */
+  private val falsePickler =
+    tokenPickler("boolean literal") { case FalseLit => false } cond { _ == false }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A pickler for values of type `Boolean`, represented as the literals `true` or `false`. */
   implicit def booleanPickler: Pickler[Boolean] = truePickler | falsePickler
 
@@ -375,11 +477,16 @@ object Pickler {
   }
 
   /** A pickler for values of type `Char`, represented as string literals of length 1 */
+<<<<<<< HEAD
   implicit val charPickler: Pickler[Char] = 
+=======
+  implicit val charPickler: Pickler[Char] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     stringPickler
       .wrapped { s => require(s.length == 1, "single character string literal expected, but "+quoted(s)+" found"); s(0) } { _.toString }
 
   /** A pickler for pairs, represented as `~`-pairs */
+<<<<<<< HEAD
   implicit def tuple2Pickler[T1: Pickler, T2: Pickler]: Pickler[(T1, T2)] = 
     (pkl[T1] ~ pkl[T2])
       .wrapped { case x1 ~ x2 => (x1, x2) } { case (x1, x2) => x1 ~ x2 } 
@@ -395,19 +502,41 @@ object Pickler {
   implicit def tuple4Pickler[T1, T2, T3, T4](implicit p1: Pickler[T1], p2: Pickler[T2], p3: Pickler[T3], p4: Pickler[T4]): Pickler[(T1, T2, T3, T4)] = 
     (p1 ~ p2 ~ p3 ~ p4)
       .wrapped { case x1 ~ x2 ~ x3 ~ x4 => (x1, x2, x3, x4) } { case (x1, x2, x3, x4) => x1 ~ x2 ~ x3 ~ x4 } 
+=======
+  implicit def tuple2Pickler[T1: Pickler, T2: Pickler]: Pickler[(T1, T2)] =
+    (pkl[T1] ~ pkl[T2])
+      .wrapped { case x1 ~ x2 => (x1, x2) } { case (x1, x2) => x1 ~ x2 }
+      .labelled ("tuple2")
+
+  /** A pickler for 3-tuples, represented as `~`-tuples */
+  implicit def tuple3Pickler[T1, T2, T3](implicit p1: Pickler[T1], p2: Pickler[T2], p3: Pickler[T3]): Pickler[(T1, T2, T3)] =
+    (p1 ~ p2 ~ p3)
+      .wrapped { case x1 ~ x2 ~ x3 => (x1, x2, x3) } { case (x1, x2, x3) => x1 ~ x2 ~ x3 }
+      .labelled ("tuple3")
+
+  /** A pickler for 4-tuples, represented as `~`-tuples */
+  implicit def tuple4Pickler[T1, T2, T3, T4](implicit p1: Pickler[T1], p2: Pickler[T2], p3: Pickler[T3], p4: Pickler[T4]): Pickler[(T1, T2, T3, T4)] =
+    (p1 ~ p2 ~ p3 ~ p4)
+      .wrapped { case x1 ~ x2 ~ x3 ~ x4 => (x1, x2, x3, x4) } { case (x1, x2, x3, x4) => x1 ~ x2 ~ x3 ~ x4 }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       .labelled ("tuple4")
 
   /** A conditional pickler for the `scala.None` object */
   implicit val nonePickler = singletonPickler(None)
 
   /** A conditional pickler for instances of class `scala.Some` */
+<<<<<<< HEAD
   implicit def somePickler[T: Pickler]: CondPickler[Some[T]] = 
+=======
+  implicit def somePickler[T: Pickler]: CondPickler[Some[T]] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     pkl[T]
       .wrapped { Some(_) } { _.get }
       .asClass (classOf[Some[T]])
 
   /** A pickler for optional values */
   implicit def optionPickler[T: Pickler]: Pickler[Option[T]] = nonePickler | somePickler[T]
+<<<<<<< HEAD
                                                                 
   /** A pickler for list values */
   implicit def listPickler[T: Pickler]: Pickler[List[T]] = 
@@ -419,6 +548,19 @@ object Pickler {
 
   /** A pickler for array values */
   implicit def array[T : ClassManifest : Pickler]: Pickler[Array[T]] = 
+=======
+
+  /** A pickler for list values */
+  implicit def listPickler[T: Pickler]: Pickler[List[T]] =
+    iterPickler[T] .wrapped { _.toList } { _.iterator } .labelled ("scala.List")
+
+  /** A pickler for vector values */
+  implicit def vectorPickler[T: Pickler]: Pickler[Vector[T]] =
+    iterPickler[T] .wrapped { Vector() ++ _ } { _.iterator } .labelled ("scala.Vector")
+
+  /** A pickler for array values */
+  implicit def array[T : ClassManifest : Pickler]: Pickler[Array[T]] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     iterPickler[T] .wrapped { _.toArray} { _.iterator } .labelled ("scala.Array")
 }
 
@@ -449,7 +591,11 @@ abstract class CondPickler[T](val canPickle: Any => Boolean) extends Pickler[T] 
    *  @param U    The handled type of the alternative pickler.
    *  @param that The alternative pickler.
    */
+<<<<<<< HEAD
   def | [V >: T, U <: V] (that: => CondPickler[U]): CondPickler[V] = 
+=======
+  def | [V >: T, U <: V] (that: => CondPickler[U]): CondPickler[V] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     eitherPickler[V, T, U](this, that)
 }
 

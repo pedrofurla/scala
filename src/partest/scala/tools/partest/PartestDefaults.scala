@@ -9,11 +9,19 @@ object PartestDefaults {
   import nsc.Properties._
   private def wrapAccessControl[T](body: => Option[T]): Option[T] =
     try body catch { case _: java.security.AccessControlException => None }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def testRootName  = propOrNone("partest.root")
   def srcDirName    = propOrElse("partest.srcdir", "files")
   def testRootDir   = testRootName map (x => Directory(x))
 
+<<<<<<< HEAD
+=======
+  // def classPath   = propOrElse("partest.classpath", "")
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def classPath   = PathResolver.Environment.javaUserClassPath    // XXX
 
   def javaCmd     = propOrElse("partest.javacmd", "java")

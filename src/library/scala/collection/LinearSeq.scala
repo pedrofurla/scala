@@ -16,10 +16,18 @@ import mutable.Builder
 /** A base trait for linear sequences.
  *  $linearSeqInfo
  */
+<<<<<<< HEAD
 trait LinearSeq[+A] extends Seq[A] 
                             with GenericTraversableTemplate[A, LinearSeq]
                             with LinearSeqLike[A, LinearSeq[A]] {
   override def companion: GenericCompanion[LinearSeq] = LinearSeq
+=======
+trait LinearSeq[+A] extends Seq[A]
+                            with GenericTraversableTemplate[A, LinearSeq]
+                            with LinearSeqLike[A, LinearSeq[A]] {
+  override def companion: GenericCompanion[LinearSeq] = LinearSeq
+  override def seq: LinearSeq[A] = this
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 /** $factoryInfo

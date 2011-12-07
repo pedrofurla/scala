@@ -43,8 +43,13 @@ public class AnsiWindowsTerminal
     /**
      * Returns an ansi output stream handler. We return whatever was
      * passed if we determine we cannot handle ansi based on Kernel32 calls.
+<<<<<<< HEAD
      * 
      * @return an @{link AltWindowAnsiOutputStream} instance or the passed 
+=======
+     *
+     * @return an @{link AltWindowAnsiOutputStream} instance or the passed
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      * stream.
      */
     private static OutputStream wrapOutputStream(final OutputStream stream) {

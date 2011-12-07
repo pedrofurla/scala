@@ -9,7 +9,11 @@
 package scala.concurrent
 
 /** The `ManagedBlocker` trait...
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author Philipp Haller
  */
 trait ManagedBlocker {

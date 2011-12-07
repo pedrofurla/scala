@@ -16,7 +16,11 @@ import org.apache.tools.ant.types.{ Path, Reference }
 
 trait ScalaTask {
   self: Task =>
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Generates a build error. Error location will be the
    *  current task in the ant file.
    *

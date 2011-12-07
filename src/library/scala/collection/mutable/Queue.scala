@@ -20,10 +20,19 @@ import generic._
  *  @author  Martin Odersky
  *  @version 2.8
  *  @since   1
+<<<<<<< HEAD
  *  
  *  @define Coll mutable.Queue
  *  @define coll mutable queue
  *  @define orderDependent 
+=======
+ *  @see [[http://docs.scala-lang.org/overviews/collections/concrete-mutable-collection-classes.html#mutable_queues "Scala's Collection Library overview"]]
+ *  section on `Queues` for more information.
+ *
+ *  @define Coll mutable.Queue
+ *  @define coll mutable queue
+ *  @define orderDependent
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define orderDependentFold
  *  @define mayNotTerminateInf
  *  @define willNotTerminateInf
@@ -34,18 +43,30 @@ extends MutableList[A]
    with GenericTraversableTemplate[A, Queue]
    with Cloneable[Queue[A]]
    with Serializable
+<<<<<<< HEAD
 {  
   override def companion: GenericCompanion[Queue] = Queue
   
   override protected[this] def newBuilder = companion.newBuilder[A]
   
+=======
+{
+  override def companion: GenericCompanion[Queue] = Queue
+
+  override protected[this] def newBuilder = companion.newBuilder[A]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private[mutable] def this(fst: LinkedList[A], lst: LinkedList[A], lng: Int) {
     this()
     first0 = fst
     last0 = lst
     len = lng
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Adds all elements to the queue.
    *
    *  @param  elems       the elements to add.
@@ -169,6 +190,10 @@ extends MutableList[A]
 
 object Queue extends SeqFactory[Queue] {
   implicit def canBuildFrom[A]: CanBuildFrom[Coll, A, Queue[A]] = ReusableCBF.asInstanceOf[GenericCanBuildFrom[A]]
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def newBuilder[A]: Builder[A, Queue[A]] = new MutableList[A] mapResult { _.toQueue }
 }

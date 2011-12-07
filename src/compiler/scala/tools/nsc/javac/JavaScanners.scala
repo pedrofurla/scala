@@ -60,7 +60,11 @@ trait JavaScanners extends ast.parser.ScannersCommon {
 
     /** the last error position
      */
+<<<<<<< HEAD
     var errpos: ScanPosition 
+=======
+    var errpos: ScanPosition
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     var lastPos: ScanPosition
     def skipToken: ScanPosition
     def nextToken(): Unit
@@ -130,7 +134,11 @@ trait JavaScanners extends ast.parser.ScannersCommon {
       javanme.VOLATILEkw     -> VOLATILE,
       javanme.WHILEkw        -> WHILE
     )
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private var kwOffset = -1
     private val kwArray: Array[Int] = {
       val (offset, arr) = createKeywordArray(allKeywords, IDENTIFIER)
@@ -217,7 +225,11 @@ trait JavaScanners extends ast.parser.ScannersCommon {
         }
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A scanner for Java.
    *
    *  @author     Martin Odersky
@@ -237,7 +249,11 @@ trait JavaScanners extends ast.parser.ScannersCommon {
     }
 
     /** character buffer for literals
+<<<<<<< HEAD
      */  
+=======
+     */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val cbuf = new StringBuilder()
 
     /** append Unicode character to "lit" buffer
@@ -259,8 +275,13 @@ trait JavaScanners extends ast.parser.ScannersCommon {
       docBuffer = null
       ret
     }
+<<<<<<< HEAD
   
     /** add the given character to the documentation buffer 
+=======
+
+    /** add the given character to the documentation buffer
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      */
     protected def putDocChar(c: Char) {
       if (docBuffer ne null) docBuffer.append(c)
@@ -281,7 +302,11 @@ trait JavaScanners extends ast.parser.ScannersCommon {
       val p = pos; nextToken
       p - 1
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def nextToken() {
       if (next.token == EMPTY) {
         fetchToken()
@@ -341,7 +366,11 @@ trait JavaScanners extends ast.parser.ScannersCommon {
                   base = 8
                 }
                 getNumber
+<<<<<<< HEAD
                 return   
+=======
+                return
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
               case '1' | '2' | '3' | '4' |
                    '5' | '6' | '7' | '8' | '9' =>
@@ -349,7 +378,11 @@ trait JavaScanners extends ast.parser.ScannersCommon {
                 getNumber
                 return
 
+<<<<<<< HEAD
               case '\"' => 
+=======
+              case '\"' =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 in.next
                 while (in.ch != '\"' && (in.isUnicode || in.ch != CR && in.ch != LF && in.ch != SU)) {
                   getlitch()
@@ -381,9 +414,15 @@ trait JavaScanners extends ast.parser.ScannersCommon {
                 if (in.ch == '=') {
                   token = EQEQ
                   in.next
+<<<<<<< HEAD
                 } 
                 return
               
+=======
+                }
+                return
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               case '>' =>
                 token = GT
                 in.next
@@ -406,7 +445,11 @@ trait JavaScanners extends ast.parser.ScannersCommon {
                   }
                 }
                 return
+<<<<<<< HEAD
               
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               case '<' =>
                 token = LT
                 in.next
@@ -429,9 +472,15 @@ trait JavaScanners extends ast.parser.ScannersCommon {
                 if (in.ch == '=') {
                   token = BANGEQ
                   in.next
+<<<<<<< HEAD
                 } 
                 return
                 
+=======
+                }
+                return
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               case '~' =>
                 token = TILDE
                 in.next
@@ -441,7 +490,11 @@ trait JavaScanners extends ast.parser.ScannersCommon {
                 token = QMARK
                 in.next
                 return
+<<<<<<< HEAD
                 
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               case ':' =>
                 token = COLON
                 in.next
@@ -461,7 +514,11 @@ trait JavaScanners extends ast.parser.ScannersCommon {
                 } else if (in.ch == '=') {
                   token = AMPEQ
                   in.next
+<<<<<<< HEAD
                 } 
+=======
+                }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 return
 
               case '|' =>
@@ -473,7 +530,11 @@ trait JavaScanners extends ast.parser.ScannersCommon {
                 } else if (in.ch == '=') {
                   token = BAREQ
                   in.next
+<<<<<<< HEAD
                 } 
+=======
+                }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 return
 
               case '+' =>
@@ -485,7 +546,11 @@ trait JavaScanners extends ast.parser.ScannersCommon {
                 } else if (in.ch == '=') {
                   token = PLUSEQ
                   in.next
+<<<<<<< HEAD
                 } 
+=======
+                }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 return
 
               case '-' =>
@@ -497,7 +562,11 @@ trait JavaScanners extends ast.parser.ScannersCommon {
                 } else if (in.ch == '=') {
                   token = MINUSEQ
                   in.next
+<<<<<<< HEAD
                 } 
+=======
+                }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 return
 
               case '*' =>
@@ -506,7 +575,11 @@ trait JavaScanners extends ast.parser.ScannersCommon {
                 if (in.ch == '=') {
                   token = ASTERISKEQ
                   in.next
+<<<<<<< HEAD
                 } 
+=======
+                }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 return
 
               case '/' =>
@@ -517,26 +590,43 @@ trait JavaScanners extends ast.parser.ScannersCommon {
                   if (in.ch == '=') {
                     token = SLASHEQ
                     in.next
+<<<<<<< HEAD
                   } 
                   return
                 }
               
+=======
+                  }
+                  return
+                }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               case '^' =>
                 token = HAT
                 in.next
                 if (in.ch == '=') {
                   token = HATEQ
                   in.next
+<<<<<<< HEAD
                 } 
                 return
               
+=======
+                }
+                return
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               case '%' =>
                 token = PERCENT
                 in.next
                 if (in.ch == '=') {
                   token = PERCENTEQ
                   in.next
+<<<<<<< HEAD
                 } 
+=======
+                }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 return
 
               case '.' =>
@@ -553,7 +643,11 @@ trait JavaScanners extends ast.parser.ScannersCommon {
                 }
                 return
 
+<<<<<<< HEAD
               case ';' => 
+=======
+              case ';' =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 token = SEMI
                 in.next
                 return
@@ -563,7 +657,11 @@ trait JavaScanners extends ast.parser.ScannersCommon {
                 in.next
                 return
 
+<<<<<<< HEAD
               case '(' =>   
+=======
+              case '(' =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 token = LPAREN
                 in.next
                 return
@@ -667,7 +765,11 @@ trait JavaScanners extends ast.parser.ScannersCommon {
                '5' | '6' | '7' | '8' | '9' =>
             putChar(in.ch)
             in.next
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           case '_' =>
             putChar(in.ch)
             in.next
@@ -808,15 +910,26 @@ trait JavaScanners extends ast.parser.ScannersCommon {
     /** convert name, base to double value
     */
     def floatVal(negated: Boolean): Double = {
+<<<<<<< HEAD
       val limit: Double = 
         if (token == DOUBLELIT) Double.MaxValue else Float.MaxValue
       try {
         val value: Double = java.lang.Double.valueOf(name.toString()).doubleValue()
+=======
+      val limit: Double =
+        if (token == DOUBLELIT) Double.MaxValue else Float.MaxValue
+      try {
+        val value: Double = java.lang.Double.valueOf(name.toString).doubleValue()
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         if (value > limit)
           syntaxError("floating point number too large")
         if (negated) -value else value
       } catch {
+<<<<<<< HEAD
         case _: NumberFormatException => 
+=======
+        case _: NumberFormatException =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           syntaxError("malformed floating point number")
           0.0
       }
@@ -833,7 +946,11 @@ trait JavaScanners extends ast.parser.ScannersCommon {
         val lookahead = in.copy
         lookahead.next
         lookahead.ch match {
+<<<<<<< HEAD
           case '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | 
+=======
+          case '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' |
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                '8' | '9' | 'd' | 'D' | 'e' | 'E' | 'f' | 'F' =>
             putChar(in.ch)
             in.next
@@ -845,8 +962,13 @@ trait JavaScanners extends ast.parser.ScannersCommon {
               return getFraction
             }
         }
+<<<<<<< HEAD
       } 
       if (base <= 10 && 
+=======
+      }
+      if (base <= 10 &&
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           (in.ch == 'e' || in.ch == 'E' ||
            in.ch == 'f' || in.ch == 'F' ||
            in.ch == 'd' || in.ch == 'D')) {
@@ -903,7 +1025,11 @@ trait JavaScanners extends ast.parser.ScannersCommon {
         JavaScannerConfiguration.token2string(token)
     }
 
+<<<<<<< HEAD
     /** INIT: read lookahead character and token. 
+=======
+    /** INIT: read lookahead character and token.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      */
     def init() {
       in.next
@@ -912,13 +1038,21 @@ trait JavaScanners extends ast.parser.ScannersCommon {
   }
 
   /** ...
+<<<<<<< HEAD
    */   
+=======
+   */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class JavaUnitScanner(unit: CompilationUnit) extends JavaScanner {
     in = new JavaCharArrayReader(unit.source.content, !settings.nouescape.value, syntaxError)
     init
     def warning(pos: Int, msg: String) = unit.warning(pos, msg)
     def error  (pos: Int, msg: String) = unit.  error(pos, msg)
     def incompleteInputError(pos: Int, msg: String) = unit.incompleteInputError(pos, msg)
+<<<<<<< HEAD
+=======
+    def deprecationWarning(pos: Int, msg: String) = unit.deprecationWarning(pos, msg)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     implicit def p2g(pos: Position): Int = if (pos.isDefined) pos.point else -1
     implicit def g2p(pos: Int): Position = new OffsetPosition(unit.source, pos)
   }

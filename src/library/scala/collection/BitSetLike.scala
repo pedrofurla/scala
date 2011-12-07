@@ -32,10 +32,17 @@ import mutable.StringBuilder
  *  @define coll bitset
  *  @define Coll BitSet
  */
+<<<<<<< HEAD
 trait BitSetLike[+This <: BitSetLike[This] with Set[Int]] extends SetLike[Int, This] { self =>
 
   def empty: This
  
+=======
+trait BitSetLike[+This <: BitSetLike[This] with SortedSet[Int]] extends SortedSetLike[Int, This] { self =>
+
+  def empty: This
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** The number of words (each with 64 bits) making up the set */
   protected def nwords: Int
 
@@ -46,27 +53,85 @@ trait BitSetLike[+This <: BitSetLike[This] with Set[Int]] extends SetLike[Int, T
 
   /** Creates a new set of this kind from an array of longs
    */
+<<<<<<< HEAD
   protected def fromArray(elems: Array[Long]): This
+=======
+  protected def fromBitMaskNoCopy(elems: Array[Long]): This
+
+  /** Creates a bit mask for this set as a new array of longs
+   */
+  def toBitMask: Array[Long] = {
+    val a = new Array[Long](nwords)
+    var i = a.length
+    while(i > 0) {
+      i -= 1
+      a(i) = word(i)
+    }
+    a
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   override def size: Int = {
     var s = 0
     var i = nwords
     while (i > 0) {
       i -= 1
+<<<<<<< HEAD
       s += popCount(word(i))
+=======
+      s += java.lang.Long.bitCount(word(i))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
     s
   }
 
+<<<<<<< HEAD
   def iterator = new Iterator[Int] {
+=======
+  implicit def ordering: Ordering[Int] = Ordering.Int
+
+  def rangeImpl(from: Option[Int], until: Option[Int]): This = {
+    val a = toBitMask
+    val len = a.length
+    if(from.isDefined) {
+      var f = from.get
+      var pos = 0
+      while(f >= 64 && pos < len) {
+        f -= 64
+        a(pos) = 0
+        pos += 1
+      }
+      if(f > 0 && pos < len) a(pos) &= ~((1L << f)-1)
+    }
+    if(until.isDefined) {
+      val u = until.get
+      val w = u / 64
+      val b = u % 64
+      var clearw = w+1
+      while(clearw < len) {
+        a(clearw) = 0
+        clearw += 1
+      }
+      if(w < len) a(w) &= (1L << b)-1
+    }
+    fromBitMaskNoCopy(a)
+  }
+
+  def iterator: Iterator[Int] = new AbstractIterator[Int] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private var current = 0
     private val end = nwords * WordLength
     def hasNext: Boolean = {
       while (current < end && !self.contains(current)) current += 1
       current < end
     }
+<<<<<<< HEAD
     def next(): Int = 
       if (hasNext) { val r = current; current += 1; r } 
+=======
+    def next(): Int =
+      if (hasNext) { val r = current; current += 1; r }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       else Iterator.empty.next
   }
 
@@ -84,13 +149,18 @@ trait BitSetLike[+This <: BitSetLike[This] with Set[Int]] extends SetLike[Int, T
    *
    *  @param   other  the bitset to form the union with.
    *  @return  a new bitset consisting of all bits that are in this
+<<<<<<< HEAD
    *           bitset or in the given bitset `other`. 
+=======
+   *           bitset or in the given bitset `other`.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */
   def | (other: BitSet): This = {
     val len = this.nwords max other.nwords
     val words = new Array[Long](len)
     for (idx <- 0 until len)
       words(idx) = this.word(idx) | other.word(idx)
+<<<<<<< HEAD
     fromArray(words)
   }
 
@@ -99,18 +169,37 @@ trait BitSetLike[+This <: BitSetLike[This] with Set[Int]] extends SetLike[Int, T
    *  @param   that  the bitset to intersect with.
    *  @return  a new bitset consisting of all elements that are both in this
    *  bitset and in the given bitset `other`. 
+=======
+    fromBitMaskNoCopy(words)
+  }
+
+  /** Computes the intersection between this bitset and another bitset by performing
+   *  a bitwise "and".
+   *  @param   that  the bitset to intersect with.
+   *  @return  a new bitset consisting of all elements that are both in this
+   *  bitset and in the given bitset `other`.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */
   def & (other: BitSet): This = {
     val len = this.nwords min other.nwords
     val words = new Array[Long](len)
     for (idx <- 0 until len)
       words(idx) = this.word(idx) & other.word(idx)
+<<<<<<< HEAD
     fromArray(words)
   }
 
   /** Computes the difference of this bitset and another bitset by performing 
    *  a bitwise "and-not".
    * 
+=======
+    fromBitMaskNoCopy(words)
+  }
+
+  /** Computes the difference of this bitset and another bitset by performing
+   *  a bitwise "and-not".
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param that the set of bits to exclude.
    *  @return     a bitset containing those bits of this
    *              bitset that are not also contained in the given bitset `other`.
@@ -120,6 +209,7 @@ trait BitSetLike[+This <: BitSetLike[This] with Set[Int]] extends SetLike[Int, T
     val words = new Array[Long](len)
     for (idx <- 0 until len)
       words(idx) = this.word(idx) & ~other.word(idx)
+<<<<<<< HEAD
     fromArray(words)
   }
 
@@ -127,6 +217,15 @@ trait BitSetLike[+This <: BitSetLike[This] with Set[Int]] extends SetLike[Int, T
    *  a bitwise "exclusive-or".
    * 
    *  @param that the other bitset to take part in the symmetric difference. 
+=======
+    fromBitMaskNoCopy(words)
+  }
+
+  /** Computes the symmetric difference of this bitset and another bitset by performing
+   *  a bitwise "exclusive-or".
+   *
+   *  @param that the other bitset to take part in the symmetric difference.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @return     a bitset containing those bits of this
    *              bitset or the other bitset that are not contained in both bitsets.
    */
@@ -135,7 +234,11 @@ trait BitSetLike[+This <: BitSetLike[This] with Set[Int]] extends SetLike[Int, T
     val words = new Array[Long](len)
     for (idx <- 0 until len)
       words(idx) = this.word(idx) ^ other.word(idx)
+<<<<<<< HEAD
     fromArray(words)
+=======
+    fromBitMaskNoCopy(words)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   }
 
   def contains(elem: Int): Boolean =
@@ -161,7 +264,11 @@ trait BitSetLike[+This <: BitSetLike[This] with Set[Int]] extends SetLike[Int, T
     sb append end
   }
 
+<<<<<<< HEAD
   override def stringPrefix = "BitSet"                                                                                      
+=======
+  override def stringPrefix = "BitSet"
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 /** Companion object for BitSets. Contains private data only */
@@ -180,6 +287,7 @@ object BitSetLike {
     else assert(w == 0L)
     newelems
   }
+<<<<<<< HEAD
 
   private val pc1: Array[Int] = {
     def countBits(x: Int): Int = if (x == 0) 0 else x % 2 + countBits(x >>> 1)
@@ -191,4 +299,6 @@ object BitSetLike {
     def pc4(w: Int) = if (w == 0) 0 else pc2(w & 0xffff) + pc2(w >>> 16)
     if (w == 0L) 0 else pc4(w.toInt) + pc4((w >>> 32).toInt)
   }
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

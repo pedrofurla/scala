@@ -7,7 +7,11 @@
 \*                                                                      */
 
 package scala.annotation
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 /** A method annotation which verifies that the method will be compiled
  *  with tail call optimization.
  *

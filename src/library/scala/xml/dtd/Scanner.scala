@@ -10,7 +10,11 @@
 package scala.xml
 package dtd
 
+<<<<<<< HEAD
 /** Scanner for regexps (content models in DTD element declarations) 
+=======
+/** Scanner for regexps (content models in DTD element declarations)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  todo: cleanup
  */
 class Scanner extends Tokens with parsing.TokenTests {
@@ -19,7 +23,11 @@ class Scanner extends Tokens with parsing.TokenTests {
 
   var token:Int = END
   var value:String = _
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private var it: Iterator[Char] = null
   private var c: Char = 'z'
 
@@ -38,18 +46,31 @@ class Scanner extends Tokens with parsing.TokenTests {
   }
 
   // todo: see XML specification... probably isLetter,isDigit is fine
+<<<<<<< HEAD
   final def isIdentChar = ( ('a' <= c && c <= 'z') 
                            || ('A' <= c && c <= 'Z'));
   
   final def next() = if (it.hasNext) c = it.next else c = ENDCH
 
   final def acc(d: Char) { 
+=======
+  final def isIdentChar = ( ('a' <= c && c <= 'z')
+                           || ('A' <= c && c <= 'Z'));
+
+  final def next() = if (it.hasNext) c = it.next else c = ENDCH
+
+  final def acc(d: Char) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (c == d) next else sys.error("expected '"+d+"' found '"+c+"' !");
   }
 
   final def accS(ds: Seq[Char]) { ds foreach acc }
 
+<<<<<<< HEAD
   final def readToken: Int = 
+=======
+  final def readToken: Int =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (isSpace(c)) {
       while (isSpace(c)) c = it.next
       S
@@ -63,11 +84,19 @@ class Scanner extends Tokens with parsing.TokenTests {
       case '|'   => next; CHOICE
       case '#'   => next; accS( "PCDATA" ); TOKEN_PCDATA
       case ENDCH => END
+<<<<<<< HEAD
       case _     => 
         if (isNameStart(c)) name; // NAME 
         else sys.error("unexpected character:" + c)
     }
   
+=======
+      case _     =>
+        if (isNameStart(c)) name; // NAME
+        else sys.error("unexpected character:" + c)
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   final def name = {
     val sb = new StringBuilder()
     do { sb.append(c); next } while (isNameChar(c));

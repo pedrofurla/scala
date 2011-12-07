@@ -19,9 +19,16 @@ import io.{ Path }
 
 class ConsoleRunner extends DirectRunner {
   import PathSettings.{ srcDir, testRoot }
+<<<<<<< HEAD
   
   case class TestSet(kind: String, filter: Path => Boolean, msg: String)
   def stdFilter(p: Path) = p.isDirectory || (p hasExtension "scala")
+=======
+
+  case class TestSet(kind: String, filter: Path => Boolean, msg: String)
+  private def stdFilter(p: Path) = p.isDirectory || (p hasExtension "scala")
+  private def antFilter(p: Path) = p.isFile && (p endsWith "build.xml")
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   val testSets = {
     val pathFilter: Path => Boolean = x => x.isDirectory || (x hasExtension "scala")
@@ -31,14 +38,23 @@ class ConsoleRunner extends DirectRunner {
       TestSet("neg", stdFilter, "Testing compiler (on files whose compilation should fail)"),
       TestSet("run", stdFilter, "Testing interpreter and backend"),
       TestSet("jvm", stdFilter, "Testing JVM backend"),
+<<<<<<< HEAD
       TestSet("res", x => x.isFile && (x hasExtension "res"), "Testing resident compiler"),              
+=======
+      TestSet("res", x => x.isFile && (x hasExtension "res"), "Testing resident compiler"),
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       TestSet("buildmanager", _.isDirectory, "Testing Build Manager"),
       TestSet("shootout", stdFilter, "Testing shootout tests"),
       TestSet("script", stdFilter, "Testing script tests"),
       TestSet("scalacheck", stdFilter, "Testing ScalaCheck tests"),
       TestSet("scalap", _.isDirectory, "Run scalap decompiler tests"),
       TestSet("specialized", stdFilter, "Testing specialized tests"),
+<<<<<<< HEAD
       TestSet("presentation", _.isDirectory, "Testing presentation compiler tests.")
+=======
+      TestSet("presentation", _.isDirectory, "Testing presentation compiler tests."),
+      TestSet("ant", antFilter, "Run Ant task tests.")
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     )
   }
 
@@ -49,25 +65,45 @@ class ConsoleRunner extends DirectRunner {
   private val testSetKinds  = testSets map (_.kind)
   private val testSetArgs   = testSets map ("--" + _.kind)
   private val testSetArgMap = testSetArgs zip testSets toMap
+<<<<<<< HEAD
   
   def denotesTestSet(arg: String)  = testSetArgs contains arg
 
   private def printVersion() { NestUI outline (versionMsg + "\n") }
   
+=======
+
+  def denotesTestSet(arg: String)  = testSetArgs contains arg
+
+  private def printVersion() { NestUI outline (versionMsg + "\n") }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private val unaryArgs = List(
     "--pack", "--all", "--verbose", "--show-diff", "--show-log",
     "--failed", "--update-check", "--version", "--ansi", "--debug", "--help"
   ) ::: testSetArgs
+<<<<<<< HEAD
   
   private val binaryArgs = List(
     "--grep", "--srcpath", "--buildpath", "--classpath"
   )
   
+=======
+
+  private val binaryArgs = List(
+    "--grep", "--srcpath", "--buildpath", "--classpath"
+  )
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // true if a test path matches the --grep expression.
   private def pathMatchesExpr(path: Path, expr: String) = {
     def pred(p: Path) = file2String(p.toFile) contains expr
     def srcs = path.toDirectory.deepList() filter (_.hasExtension("scala", "java"))
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     (path.isFile && pred(path)) ||
     (path.isDirectory && srcs.exists(pred)) ||
     (pred(path changeExtension "check"))
@@ -76,20 +112,33 @@ class ConsoleRunner extends DirectRunner {
   def main(argstr: String) {
     val parsed = CommandLineParser(argstr) withUnaryArgs unaryArgs withBinaryArgs binaryArgs
     val args   = onlyValidTestPaths(parsed.residualArgs)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Early return on no args, version, or invalid args */
     if (argstr == "") return NestUI.usage()
     if (parsed isSet "--version") return printVersion
     if (parsed isSet "--help") return NestUI.usage()
 
     parsed get "--srcpath" foreach (x => setProp("partest.srcdir", x))
+<<<<<<< HEAD
     
     fileManager =      
+=======
+
+    fileManager =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (parsed isSet "--buildpath") new ConsoleFileManager(parsed("--buildpath"))
       else if (parsed isSet "--classpath") new ConsoleFileManager(parsed("--classpath"), true)
       else if (parsed isSet "--pack") new ConsoleFileManager("build/pack")
       else new ConsoleFileManager  // auto detection, see ConsoleFileManager.findLatest
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def argNarrowsTests(x: String) = denotesTestSet(x) || denotesTestPath(x)
 
     NestUI._verbose         = parsed isSet "--verbose"
@@ -98,7 +147,11 @@ class ConsoleRunner extends DirectRunner {
     fileManager.updateCheck = parsed isSet "--update-check"
     fileManager.showLog     = parsed isSet "--show-log"
     fileManager.failed      = parsed isSet "--failed"
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (parsed isSet "--ansi") NestUI initialize NestUI.MANY
     if (parsed isSet "--timeout") fileManager.timeout = parsed("--timeout")
     if (parsed isSet "--debug") setProp("partest.debug", "true")
@@ -115,13 +168,21 @@ class ConsoleRunner extends DirectRunner {
     }
 
     // If --grep is given we suck in every file it matches.
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val grepOption = parsed get "--grep"
     val grepPaths = grepOption.toList flatMap { expr =>
       val subjectDirs = testSetKinds map (srcDir / _ toDirectory)
       val testPaths   = subjectDirs flatMap (_.files filter stdFilter)
       val paths       = testPaths filter (p => pathMatchesExpr(p, expr))
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (paths.isEmpty)
          NestUI.failure("--grep string '%s' matched no tests." format expr)
 
@@ -131,6 +192,7 @@ class ConsoleRunner extends DirectRunner {
 
     grepPaths foreach addTestFile
     args foreach (x => addTestFile(new File(x)))
+<<<<<<< HEAD
     
     // If no file arguments were given, we assume --all
     val enabledTestSets: List[TestSet] = {
@@ -140,6 +202,17 @@ class ConsoleRunner extends DirectRunner {
       else enabledArgs map testSetArgMap
     }
     
+=======
+
+    // If no file arguments were given, we assume --all
+    val enabledTestSets: List[TestSet] = {
+      val enabledArgs = testSetArgs filter parsed.isSet
+
+      if (args.isEmpty && !(parsed isSet "--grep") && (enabledArgs.isEmpty || (parsed isSet "--all"))) testSets
+      else enabledArgs map testSetArgMap
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val dir =
       if (fileManager.testClasses.isDefined) fileManager.testClassesDir
       else fileManager.testBuildFile getOrElse {
@@ -149,7 +222,11 @@ class ConsoleRunner extends DirectRunner {
     val vmBin  = javaHome + File.separator + "bin"
     val vmName = "%s (build %s, %s)".format(javaVmName, javaVmVersion, javaVmInfo)
     val vmOpts = fileManager.JAVA_OPTS
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     NestUI.verbose("enabled test sets: " + (enabledTestSets map (_.kind) mkString " "))
 
     List(
@@ -172,15 +249,25 @@ class ConsoleRunner extends DirectRunner {
     val start = System.currentTimeMillis
     val (successes, failures) = testCheckAll(enabledTestSets)
     val end = System.currentTimeMillis
+<<<<<<< HEAD
     
     val total = successes + failures
     
+=======
+
+    val total = successes + failures
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val elapsedSecs = (end - start)/1000
     val elapsedMins = elapsedSecs/60
     val elapsedHrs  = elapsedMins/60
     val dispMins = elapsedMins - elapsedHrs  * 60
     val dispSecs = elapsedSecs - elapsedMins * 60
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val dispElapsed = {
       def form(num: Long) = if (num < 10) "0"+num else ""+num
       form(elapsedHrs)+":"+form(dispMins)+":"+form(dispSecs)
@@ -196,7 +283,11 @@ class ConsoleRunner extends DirectRunner {
   }
 
   def runTests(testSet: TestSet): (Int, Int) = {
+<<<<<<< HEAD
     val TestSet(kind, filter, msg) = testSet    
+=======
+    val TestSet(kind, filter, msg) = testSet
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     fileManager.getFiles(kind, filter) match {
       case Nil    => NestUI.verbose("test dir empty\n") ; (0, 0)
@@ -212,13 +303,21 @@ class ConsoleRunner extends DirectRunner {
    */
   def testCheckAll(enabledSets: List[TestSet]): (Int, Int) = {
     def kindOf(f: File) = (srcDir relativize Path(f).toCanonical).segments.head
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val (valid, invalid) = testFiles partition (x => testSetKinds contains kindOf(x))
     invalid foreach (x => NestUI.failure(
       "Invalid test file '%s', skipping.\n".format(x) +
       "(Test kind '%s' not in known set '%s')".format(kindOf(x), testSetKinds))
     )
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val grouped = (valid groupBy kindOf).toList sortBy (x => testSetKinds indexOf x._1)
     val runTestsFileLists =
       for ((kind, files) <- grouped) yield {
@@ -230,7 +329,11 @@ class ConsoleRunner extends DirectRunner {
       NestUI.verbose("Run sets: "+enabledSets)
 
     val results = runTestsFileLists ::: (enabledSets map runTests)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     (results map (_._1) sum, results map (_._2) sum)
   }
 }

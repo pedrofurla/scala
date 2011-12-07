@@ -16,13 +16,21 @@ import generic._
 
 /** A trait for all traversable collections which may possibly
  *  have their operations implemented in parallel.
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author Martin Odersky
  *  @author Aleksandar Prokopec
  *  @since 2.9
  */
 trait GenTraversable[+A]
+<<<<<<< HEAD
 extends GenTraversableLike[A, GenTraversable[A]] 
+=======
+extends GenTraversableLike[A, GenTraversable[A]]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    with GenTraversableOnce[A]
    with GenericTraversableTemplate[A, GenTraversable]
 {

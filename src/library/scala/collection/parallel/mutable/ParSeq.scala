@@ -25,7 +25,11 @@ import scala.collection.GenSeq
 
 
 /** A mutable variant of `ParSeq`.
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define Coll mutable.ParSeq
  *  @define coll mutable parallel sequence
  */
@@ -37,11 +41,19 @@ trait ParSeq[T] extends collection/*.mutable*/.GenSeq[T] // was: collection.muta
 self =>
   override def companion: GenericCompanion[ParSeq] with GenericParCompanion[ParSeq] = ParSeq
   //protected[this] override def newBuilder = ParSeq.newBuilder[T]
+<<<<<<< HEAD
   
   def update(i: Int, elem: T): Unit
   
   def seq: collection.mutable.Seq[T]
   
+=======
+
+  def update(i: Int, elem: T): Unit
+
+  def seq: collection.mutable.Seq[T]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def toSeq: ParSeq[T] = this
 }
 
@@ -52,9 +64,15 @@ self =>
  */
 object ParSeq extends ParFactory[ParSeq] {
   implicit def canBuildFrom[T]: CanCombineFrom[Coll, T, ParSeq[T]] = new GenericCanCombineFrom[T]
+<<<<<<< HEAD
   
   def newBuilder[T]: Combiner[T, ParSeq[T]] = ParArrayCombiner[T]
   
+=======
+
+  def newBuilder[T]: Combiner[T, ParSeq[T]] = ParArrayCombiner[T]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def newCombiner[T]: Combiner[T, ParSeq[T]] = ParArrayCombiner[T]
 }
 

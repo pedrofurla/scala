@@ -26,12 +26,21 @@ import scala.collection.generic.Signalling
 
 /** A template trait for mutable parallel maps. This trait is to be mixed in
  *  with concrete parallel maps to override the representation type.
+<<<<<<< HEAD
  *  
  *  $sideeffects
  *  
  *  @tparam K    the key type of the map
  *  @tparam V    the value type of the map
  *  
+=======
+ *
+ *  $sideeffects
+ *
+ *  @tparam K    the key type of the map
+ *  @tparam V    the value type of the map
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author Aleksandar Prokopec
  *  @since 2.9
  */
@@ -43,15 +52,24 @@ extends GenMapLike[K, V, Repr]
    with ParIterableLike[(K, V), Repr, Sequential]
 {
 self =>
+<<<<<<< HEAD
   
   def default(key: K): V = throw new NoSuchElementException("key not found: " + key)
   
   def empty: Repr
   
+=======
+
+  def default(key: K): V = throw new NoSuchElementException("key not found: " + key)
+
+  def empty: Repr
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def apply(key: K) = get(key) match {
     case Some(v) => v
     case None => default(key)
   }
+<<<<<<< HEAD
   
   def getOrElse[U >: V](key: K, default: => U): U = get(key) match {
     case Some(v) => v
@@ -62,6 +80,18 @@ self =>
   
   def isDefinedAt(key: K): Boolean = contains(key)
   
+=======
+
+  def getOrElse[U >: V](key: K, default: => U): U = get(key) match {
+    case Some(v) => v
+    case None => default
+  }
+
+  def contains(key: K): Boolean = get(key).isDefined
+
+  def isDefinedAt(key: K): Boolean = contains(key)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private[this] def keysIterator(s: IterableSplitter[(K, V)] @uncheckedVariance): IterableSplitter[K] =
     new IterableSplitter[K] {
       i =>
@@ -77,9 +107,15 @@ self =>
       def remaining = iter.remaining
       def dup = keysIterator(iter.dup)
     }
+<<<<<<< HEAD
   
   def keysIterator: IterableSplitter[K] = keysIterator(splitter)
   
+=======
+
+  def keysIterator: IterableSplitter[K] = keysIterator(splitter)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private[this] def valuesIterator(s: IterableSplitter[(K, V)] @uncheckedVariance): IterableSplitter[V] =
     new IterableSplitter[V] {
       i =>
@@ -95,9 +131,15 @@ self =>
       def remaining = iter.remaining
       def dup = valuesIterator(iter.dup)
     }
+<<<<<<< HEAD
   
   def valuesIterator: IterableSplitter[V] = valuesIterator(splitter)
   
+=======
+
+  def valuesIterator: IterableSplitter[V] = valuesIterator(splitter)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected class DefaultKeySet extends ParSet[K] {
     def contains(key : K) = self.contains(key)
     def splitter = keysIterator(self.splitter)
@@ -109,13 +151,18 @@ self =>
     override def foreach[S](f: K => S) = for ((k, v) <- self) f(k)
     override def seq = self.seq.keySet
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected class DefaultValuesIterable extends ParIterable[V] {
     def splitter = valuesIterator(self.splitter)
     override def size = self.size
     override def foreach[S](f: V => S) = for ((k, v) <- self) f(v)
     def seq = self.seq.values
   }
+<<<<<<< HEAD
   
   def keySet: ParSet[K] = new DefaultKeySet
   
@@ -123,6 +170,15 @@ self =>
   
   def values: ParIterable[V] = new DefaultValuesIterable
   
+=======
+
+  def keySet: ParSet[K] = new DefaultKeySet
+
+  def keys: ParIterable[K] = keySet
+
+  def values: ParIterable[V] = new DefaultValuesIterable
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def filterKeys(p: K => Boolean): ParMap[K, V] = new ParMap[K, V] {
     lazy val filtered = self.filter(kv => p(kv._1))
     override def foreach[S](f: ((K, V)) => S): Unit = for (kv <- self) if (p(kv._1)) f(kv)
@@ -134,7 +190,11 @@ self =>
     def + [U >: V](kv: (K, U)): ParMap[K, U] = ParMap[K, U]() ++ this + kv
     def - (key: K): ParMap[K, V] = ParMap[K, V]() ++ this - key
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def mapValues[S](f: V => S): ParMap[K, S] = new ParMap[K, S] {
     override def foreach[Q](g: ((K, S)) => Q): Unit = for ((k, v) <- self) g((k, f(v)))
     def splitter = self.splitter.map(kv => (kv._1, f(kv._2)))
@@ -145,7 +205,11 @@ self =>
     def + [U >: S](kv: (K, U)): ParMap[K, U] = ParMap[K, U]() ++ this + kv
     def - (key: K): ParMap[K, S] = ParMap[K, S]() ++ this - key
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // note - should not override toMap (could be mutable)
 }
 

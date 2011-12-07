@@ -11,7 +11,11 @@ import scala.tools.nsc.util.FakePos //Position
 import scala.tools.util.SocketServer
 import settings.FscSettings
 
+<<<<<<< HEAD
 /** 
+=======
+/**
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  The server part of the fsc offline compiler.  It awaits compilation
  *  commands and executes them.  It caches a compiler instance so
  *  that it can respond more quickly.
@@ -29,9 +33,13 @@ class StandardCompileServer extends SocketServer {
   var shutdown = false
   var verbose = false
 
+<<<<<<< HEAD
   val versionMsg = "Fast Scala compiler " +
     Properties.versionString + " -- " +
     Properties.copyrightString
+=======
+  val versionMsg = "Fast " + Properties.versionMsg
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   val MaxCharge = 0.8
 
@@ -45,16 +53,27 @@ class StandardCompileServer extends SocketServer {
     }
 
   override def timeout() {
+<<<<<<< HEAD
     if (!compileSocket.portFile(port).exists)    
       fatal("port file no longer exists; skipping cleanup")
   }
   
+=======
+    if (!compileSocket.portFile(port).exists)
+      fatal("port file no longer exists; skipping cleanup")
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def printMemoryStats() {
     def mb(bytes: Long) = "%dMB".format(bytes / 1000000)
     info("New session: total memory = %s, max memory = %s, free memory = %s".format(
       mb(totalMemory), mb(maxMemory), mb(freeMemory)))
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def isMemoryFullEnough() = {
     runtime.gc()
     (totalMemory - freeMemory).toDouble / maxMemory.toDouble > MaxCharge
@@ -62,7 +81,11 @@ class StandardCompileServer extends SocketServer {
 
   protected def newOfflineCompilerCommand(arguments: List[String], settings: FscSettings): OfflineCompilerCommand =
     new OfflineCompilerCommand(arguments, settings)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Problematically, Settings are only considered equal if every setting
    *  is exactly equal.  In fsc this immediately breaks down because the randomly
    *  chosen temporary outdirs differ between client and server.  Among other
@@ -77,7 +100,11 @@ class StandardCompileServer extends SocketServer {
     )
     val ss1 = trim(s1)
     val ss2 = trim(s2)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     (ss1 union ss2) -- (ss1 intersect ss2)
   }
 
@@ -91,7 +118,11 @@ class StandardCompileServer extends SocketServer {
     )
     if (input == null || password != guessedPassword)
       return
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val args        = input.split("\0", -1).toList
     val newSettings = new FscSettings(fscError)
     this.verbose    = newSettings.verbose.value
@@ -99,13 +130,21 @@ class StandardCompileServer extends SocketServer {
 
     info("Settings after normalizing paths: " + newSettings)
     printMemoryStats()
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // Update the idle timeout if given
     if (!newSettings.idleMins.isDefault) {
       val mins = newSettings.idleMins.value
       if (mins == 0) echo("Disabling idle timeout on compile server.")
       else echo("Setting idle timeout to " + mins + " minutes.")
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       this.idleMinutes = mins
     }
     if (newSettings.shutdown.value) {
@@ -136,7 +175,11 @@ class StandardCompileServer extends SocketServer {
       }
       unequal.isEmpty
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (command.shouldStopWithInfo)
       reporter.info(null, command.getInfoMessage(newGlobal(newSettings, reporter)), true)
     else if (command.files.isEmpty)
@@ -175,12 +218,22 @@ object CompileServer extends StandardCompileServer {
   /** A directory holding redirected output */
   private lazy val redirectDir = (compileSocket.tmpDir / "output-redirects").createDirectory()
 
+<<<<<<< HEAD
   private def redirect(setter: PrintStream => Unit, filename: String): Unit =
     setter(new PrintStream((redirectDir / filename).createFile().bufferedOutput()))
   
   def main(args: Array[String]) {
     val debug = args contains "-v"
     
+=======
+  private def redirect(setter: PrintStream => Unit, filename: String) {
+    setter(new PrintStream((redirectDir / filename).createFile().bufferedOutput()))
+  }
+
+  def main(args: Array[String]) {
+    val debug = args contains "-v"
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (debug) {
       echo("Starting CompileServer on port " + port)
       echo("Redirect dir is " + redirectDir)
@@ -190,10 +243,18 @@ object CompileServer extends StandardCompileServer {
     redirect(System.setErr, "scala-compile-server-err.log")
     System.err.println("...starting server on socket "+port+"...")
     System.err.flush()
+<<<<<<< HEAD
     compileSocket.setPort(port)
     run()
 
     compileSocket.deletePort(port)
     sys.exit(0)
+=======
+    compileSocket setPort port
+    run()
+
+    compileSocket deletePort port
+    sys exit 0
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   }
 }

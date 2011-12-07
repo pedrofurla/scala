@@ -117,7 +117,11 @@ public class PEFile {
 	fileFormatCheck(readByte() != 0x50, "Invalid PE file format: " + filename); // 'P'
 	fileFormatCheck(readByte() != 0x45, "Invalid PE file format: " + filename); // 'E'
     fileFormatCheck(readByte() != 0x00, "Invalid PE file format: " + filename); //  0
+<<<<<<< HEAD
     fileFormatCheck(readByte() != 0x00, "Invalid PE file format: " + filename); //  0 
+=======
+    fileFormatCheck(readByte() != 0x00, "Invalid PE file format: " + filename); //  0
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 	//trace("PE signature offset = 0x" + Table.int2hex(PE_SIGNATURE_OFFSET));
 
@@ -125,8 +129,13 @@ public class PEFile {
 	PE_HEADER_OFFSET = COFF_HEADER_OFFSET + 20;
 
 	seek(COFF_HEADER_OFFSET);
+<<<<<<< HEAD
         
     /* start of PE file header, Sec. 25.2.2 in Partition II  */    
+=======
+
+    /* start of PE file header, Sec. 25.2.2 in Partition II  */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 	skip(2); // Machine (always 0x14c)
     numOfSections = readShort(); // Number of sections; indicates size of the Section Table
 	Date timeStamp = new Date(readInt() * 1000L);
@@ -903,7 +912,11 @@ public class PEFile {
 
 	public void skipCustomMods() {
 	    while (getByte() == ELEMENT_TYPE_CMOD_OPT /* 0x20 */
+<<<<<<< HEAD
 		   || getByte() == ELEMENT_TYPE_CMOD_REQD /* 0x1f */ ) 
+=======
+		   || getByte() == ELEMENT_TYPE_CMOD_REQD /* 0x1f */ )
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 		{
             boolean isREQD = (getByte() == ELEMENT_TYPE_CMOD_REQD); // 0x1f
                     // skip the tag 23.2.7
@@ -918,12 +931,20 @@ public class PEFile {
 	}
 
     /**
+<<<<<<< HEAD
      * @see CustomModifier    
+=======
+     * @see CustomModifier
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      */
 	public CustomModifier[] getCustomMods() {
       java.util.List/*<CustomModifier>*/ cmods = new java.util.LinkedList();
       while (getByte() == ELEMENT_TYPE_CMOD_OPT || getByte() == ELEMENT_TYPE_CMOD_REQD) {
+<<<<<<< HEAD
         boolean isReqd = (getByte() == ELEMENT_TYPE_CMOD_REQD); 
+=======
+        boolean isReqd = (getByte() == ELEMENT_TYPE_CMOD_REQD);
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         readByte(); // tag 23.2.7
         Type t = pemodule.getTypeDefOrRef(decodeInt()); // TypeDefOrRefEncoded (23.2.8)
         cmods.add(new CustomModifier(isReqd, t));
@@ -931,7 +952,11 @@ public class PEFile {
       CustomModifier[] res = (CustomModifier[])cmods.toArray(new CustomModifier[0]);
       return res;
 	}
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     //######################################################################
 
     }  // class Sig

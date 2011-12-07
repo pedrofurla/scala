@@ -15,6 +15,7 @@ package interpreter
  *  a transcript should itself be pasteable and should achieve
  *  the same result.
  */
+<<<<<<< HEAD
 abstract class Pasted {  
   def ContinueString: String
   def PromptString: String
@@ -26,6 +27,19 @@ abstract class Pasted {
   
   private def matchesString(line: String, target: String): Boolean = (
     (line startsWith target) || 
+=======
+abstract class Pasted {
+  def ContinueString: String
+  def PromptString: String
+  def interpret(line: String): Unit
+
+  def matchesPrompt(line: String) = matchesString(line, PromptString)
+  def matchesContinue(line: String) = matchesString(line, ContinueString)
+  def running = isRunning
+
+  private def matchesString(line: String, target: String): Boolean = (
+    (line startsWith target) ||
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     (line.nonEmpty && " \t".toSet(line.head) && matchesString(line.tail, target))
   )
   private def stripString(line: String, target: String) = line indexOf target match {
@@ -36,7 +50,11 @@ abstract class Pasted {
   private val resReference = """(?<!^)(res\d+)""".r
   private val resCreation  = """^\s*(res\d+):.*""".r
   private val resAssign    = """^val (res\d+).*""".r
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private class PasteAnalyzer(val lines: List[String]) {
     val referenced = lines flatMap (resReference findAllIn _.trim.stripPrefix("res")) toSet
     val cmds       = lines reduceLeft append split PromptString filterNot (_.trim == "") toList
@@ -47,10 +65,17 @@ abstract class Pasted {
      */
     def append(code: String, line: String): String =
       if (matchesPrompt(line)) code + "\n" + line
+<<<<<<< HEAD
       else if (matchesContinue(line)) code + "\n" + stripString(line, ContinueString) 
       else fixResRefs(code, line)
     
     /** If the line looks like 
+=======
+      else if (matchesContinue(line)) code + "\n" + stripString(line, ContinueString)
+      else fixResRefs(code, line)
+
+    /** If the line looks like
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *    res15: Int
      *
      *  and the additional conditions hold that:
@@ -62,14 +87,22 @@ abstract class Pasted {
      *  rewrite the line containing <expr> as
      *    val res15 = { <expr> }
      *  and the rest as they say is rewritten history.
+<<<<<<< HEAD
      *  
+=======
+     *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *  In all other cases, discard the line.
      */
     def fixResRefs(code: String, line: String) = line match {
       case resCreation(resName) if referenced(resName) =>
         code.lastIndexOf(PromptString) match {
           case -1   => code
+<<<<<<< HEAD
           case idx  => 
+=======
+          case idx  =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             val (str1, str2) = code splitAt (idx + PromptString.length)
             str2 match {
               case resAssign(`resName`) => code
@@ -78,7 +111,11 @@ abstract class Pasted {
         }
       case _ => code
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def run() {
       println("// Replaying %d commands from transcript.\n" format cmds.size)
       cmds foreach { cmd =>
@@ -87,7 +124,11 @@ abstract class Pasted {
       }
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Commands start on lines beginning with "scala>" and each successive
    *  line which begins with the continuation string is appended to that command.
    *  Everything else is discarded.  When the end of the transcript is spotted,

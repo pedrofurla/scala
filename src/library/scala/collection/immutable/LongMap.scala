@@ -24,7 +24,11 @@ private[immutable] object LongMapUtils extends BitOperations.Long {
     if (zero(p1, m)) LongMap.Bin(p, m, t1, t2)
     else LongMap.Bin(p, m, t2, t1);
   }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def bin[T](prefix : Long, mask : Long, left : LongMap[T], right : LongMap[T]) : LongMap[T] = (left, right) match {
     case (left, LongMap.Nil) => left;
     case (LongMap.Nil, right) => right;
@@ -35,7 +39,11 @@ private[immutable] object LongMapUtils extends BitOperations.Long {
 import LongMapUtils._
 
 /** A companion object for long maps.
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define Coll  LongMap
  *  @define mapCanBuildFromInfo
  *    The standard `CanBuildFrom` instance for `$Coll` objects.
@@ -48,10 +56,17 @@ object LongMap {
     def apply(from: LongMap[A]): Builder[(Long, B), LongMap[B]] = apply()
     def apply(): Builder[(Long, B), LongMap[B]] = new MapBuilder[Long, B, LongMap[B]](empty[B])
   }
+<<<<<<< HEAD
   
   def empty[T] : LongMap[T]  = LongMap.Nil;
   def singleton[T](key : Long, value : T) : LongMap[T] = LongMap.Tip(key, value);
   def apply[T](elems : (Long, T)*) : LongMap[T] = 
+=======
+
+  def empty[T] : LongMap[T]  = LongMap.Nil;
+  def singleton[T](key : Long, value : T) : LongMap[T] = LongMap.Tip(key, value);
+  def apply[T](elems : (Long, T)*) : LongMap[T] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     elems.foldLeft(empty[T])((x, y) => x.updated(y._1, y._2));
 
   private[immutable] case object Nil extends LongMap[Nothing] {
@@ -64,7 +79,11 @@ object LongMap {
   };
 
   private[immutable] case class Tip[+T](key : Long, value : T) extends LongMap[T]{
+<<<<<<< HEAD
     def withValue[S](s : S) = 
+=======
+    def withValue[S](s : S) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (s.asInstanceOf[AnyRef] eq value.asInstanceOf[AnyRef]) this.asInstanceOf[LongMap.Tip[S]];
       else LongMap.Tip(key, s);
   }
@@ -79,6 +98,7 @@ object LongMap {
 import LongMap._
 
 // Iterator over a non-empty LongMap.
+<<<<<<< HEAD
 private[immutable] abstract class LongMapIterator[V, T](it : LongMap[V]) extends Iterator[T]{
 
   // Basically this uses a simple stack to emulate conversion over the tree. However 
@@ -88,6 +108,17 @@ private[immutable] abstract class LongMapIterator[V, T](it : LongMap[V]) extends
   var index = 0;
   var buffer = new Array[AnyRef](65);
  
+=======
+private[immutable] abstract class LongMapIterator[V, T](it : LongMap[V]) extends AbstractIterator[T] {
+
+  // Basically this uses a simple stack to emulate conversion over the tree. However
+  // because we know that Longs are only 64 bits we can have at most 64 LongMap.Bins and
+  // one LongMap.Tip sitting on the tree at any point. Therefore we know the maximum stack
+  // depth is 65
+  var index = 0;
+  var buffer = new Array[AnyRef](65);
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def pop() = {
     index -= 1;
     buffer(index).asInstanceOf[LongMap[V]];
@@ -95,7 +126,11 @@ private[immutable] abstract class LongMapIterator[V, T](it : LongMap[V]) extends
 
   def push(x : LongMap[V]) {
     buffer(index) = x.asInstanceOf[AnyRef];
+<<<<<<< HEAD
     index += 1; 
+=======
+    index += 1;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   }
   push(it);
 
@@ -104,9 +139,15 @@ private[immutable] abstract class LongMapIterator[V, T](it : LongMap[V]) extends
    */
   def valueOf(tip : LongMap.Tip[V]) : T;
 
+<<<<<<< HEAD
   def hasNext = index != 0; 
   final def next : T = 
     pop() match {      
+=======
+  def hasNext = index != 0;
+  final def next : T =
+    pop() match {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       case LongMap.Bin(_,_, t@LongMap.Tip(_, _), right) => {
         push(right);
         valueOf(t);
@@ -120,7 +161,11 @@ private[immutable] abstract class LongMapIterator[V, T](it : LongMap[V]) extends
       // This should never happen. We don't allow LongMap.Nil in subtrees of the LongMap
       // and don't return an LongMapIterator for LongMap.Nil.
       case LongMap.Nil => sys.error("Empty maps not allowed as subtrees");
+<<<<<<< HEAD
     }    
+=======
+    }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 private[immutable] class LongMapEntryIterator[V](it : LongMap[V]) extends LongMapIterator[V, (Long, V)](it){
@@ -138,6 +183,7 @@ private[immutable] class LongMapKeyIterator[V](it : LongMap[V]) extends LongMapI
 import LongMap._;
 
 /**
+<<<<<<< HEAD
  *  Specialised immutable map structure for long keys, based on 
  *  <a href="http://citeseer.ist.psu.edu/okasaki98fast.html">Fast Mergeable Long Maps</a>
  *  by Okasaki and Gill. Essentially a trie based on binary digits of the integers.
@@ -146,24 +192,50 @@ import LongMap._;
  *  
  *  @tparam T      type of the values associated with the long keys.
  *  
+=======
+ *  Specialised immutable map structure for long keys, based on
+ *  <a href="http://citeseer.ist.psu.edu/okasaki98fast.html">Fast Mergeable Long Maps</a>
+ *  by Okasaki and Gill. Essentially a trie based on binary digits of the integers.
+ *
+ *  Note: This class is as of 2.8 largely superseded by HashMap.
+ *
+ *  @tparam T      type of the values associated with the long keys.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @since 2.7
  *  @define Coll immutable.LongMap
  *  @define coll immutable long integer map
  *  @define mayNotTerminateInf
  *  @define willNotTerminateInf
  */
+<<<<<<< HEAD
 sealed abstract class LongMap[+T] extends Map[Long, T] with MapLike[Long, T, LongMap[T]] {
+=======
+sealed abstract class LongMap[+T]
+extends AbstractMap[Long, T]
+   with Map[Long, T]
+   with MapLike[Long, T, LongMap[T]] {
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def empty: LongMap[T] = LongMap.Nil;
 
   override def toList = {
     val buffer = new scala.collection.mutable.ListBuffer[(Long, T)];
     foreach(buffer += _);
     buffer.toList;
+<<<<<<< HEAD
   } 
 
   /**
    * Iterator over key, value pairs of the map in unsigned order of the keys.
    * 
+=======
+  }
+
+  /**
+   * Iterator over key, value pairs of the map in unsigned order of the keys.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * @return an iterator over pairs of long keys and corresponding values.
    */
   def iterator: Iterator[(Long, T)] = this match {
@@ -172,7 +244,11 @@ sealed abstract class LongMap[+T] extends Map[Long, T] with MapLike[Long, T, Lon
   }
 
   /**
+<<<<<<< HEAD
    * Loops over the key, value pairs of the map in unsigned order of the keys. 
+=======
+   * Loops over the key, value pairs of the map in unsigned order of the keys.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */
   override final def foreach[U](f : ((Long, T)) =>  U) : Unit = this match {
     case LongMap.Bin(_, _, left, right) => {left.foreach(f); right.foreach(f); }
@@ -212,7 +288,11 @@ sealed abstract class LongMap[+T] extends Map[Long, T] with MapLike[Long, T, Lon
     case LongMap.Bin(_, _, left, right) => {left.foreachValue(f); right.foreachValue(f); }
     case LongMap.Tip(_, value) => f(value);
     case LongMap.Nil => {};
+<<<<<<< HEAD
   }  
+=======
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   override def stringPrefix = "LongMap"
 
@@ -224,7 +304,11 @@ sealed abstract class LongMap[+T] extends Map[Long, T] with MapLike[Long, T, Lon
       if ((left eq newleft) && (right eq newright)) this;
       else bin(prefix, mask, newleft, newright);
     }
+<<<<<<< HEAD
     case LongMap.Tip(key, value) => 
+=======
+    case LongMap.Tip(key, value) =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (f((key, value))) this
       else LongMap.Nil;
     case LongMap.Nil => LongMap.Nil;
@@ -232,7 +316,11 @@ sealed abstract class LongMap[+T] extends Map[Long, T] with MapLike[Long, T, Lon
 
   def transform[S](f : (Long, T) => S) : LongMap[S] = this match {
     case b@LongMap.Bin(prefix, mask, left, right) => b.bin(left.transform(f), right.transform(f));
+<<<<<<< HEAD
     case t@LongMap.Tip(key, value) => t.withValue(f(key, value));  
+=======
+    case t@LongMap.Tip(key, value) => t.withValue(f(key, value));
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     case LongMap.Nil => LongMap.Nil;
   }
 
@@ -250,6 +338,7 @@ sealed abstract class LongMap[+T] extends Map[Long, T] with MapLike[Long, T, Lon
 
   final override def getOrElse[S >: T](key : Long, default : =>S) : S = this match {
     case LongMap.Nil => default;
+<<<<<<< HEAD
     case LongMap.Tip(key2, value) => if (key == key2) value else default; 
     case LongMap.Bin(prefix, mask, left, right) => if (zero(key, mask)) left.getOrElse(key, default) else right.getOrElse(key, default);
   } 
@@ -259,13 +348,28 @@ sealed abstract class LongMap[+T] extends Map[Long, T] with MapLike[Long, T, Lon
     case LongMap.Tip(key2, value) => if (key == key2) value else sys.error("Key not found"); 
     case LongMap.Nil => sys.error("key not found");
   } 
+=======
+    case LongMap.Tip(key2, value) => if (key == key2) value else default;
+    case LongMap.Bin(prefix, mask, left, right) => if (zero(key, mask)) left.getOrElse(key, default) else right.getOrElse(key, default);
+  }
+
+  final override def apply(key : Long) : T = this match {
+    case LongMap.Bin(prefix, mask, left, right) => if (zero(key, mask)) left(key) else right(key);
+    case LongMap.Tip(key2, value) => if (key == key2) value else sys.error("Key not found");
+    case LongMap.Nil => sys.error("key not found");
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   def + [S >: T] (kv: (Long, S)): LongMap[S] = updated(kv._1, kv._2)
 
   override def updated[S >: T](key : Long, value : S) : LongMap[S] = this match {
     case LongMap.Bin(prefix, mask, left, right) => if (!hasMatch(key, prefix, mask)) join(key, LongMap.Tip(key, value), prefix, this);
                                           else if (zero(key, mask)) LongMap.Bin(prefix, mask, left.updated(key, value), right)
+<<<<<<< HEAD
                                           else LongMap.Bin(prefix, mask, left, right.updated(key, value)); 
+=======
+                                          else LongMap.Bin(prefix, mask, left, right.updated(key, value));
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     case LongMap.Tip(key2, value2) => if (key == key2) LongMap.Tip(key, value);
                              else join(key, LongMap.Tip(key, value), key2, this);
     case LongMap.Nil => LongMap.Tip(key, value);
@@ -273,6 +377,7 @@ sealed abstract class LongMap[+T] extends Map[Long, T] with MapLike[Long, T, Lon
 
   /**
    * Updates the map, using the provided function to resolve conflicts if the key is already present.
+<<<<<<< HEAD
    * 
    * Equivalent to 
    * {{{
@@ -282,6 +387,17 @@ sealed abstract class LongMap[+T] extends Map[Long, T] with MapLike[Long, T, Lon
    *   }
    * }}}
    * 
+=======
+   *
+   * Equivalent to
+   * {{{
+   *   this.get(key) match {
+   *     case None => this.update(key, value);
+   *     case Some(oldvalue) => this.update(key, f(oldvalue, value)
+   *   }
+   * }}}
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * @tparam S     The supertype of values in this `LongMap`.
    * @param key    The key to update.
    * @param value  The value to use if there is no conflict.
@@ -291,18 +407,30 @@ sealed abstract class LongMap[+T] extends Map[Long, T] with MapLike[Long, T, Lon
   def updateWith[S >: T](key : Long, value : S, f : (T, S) => S) : LongMap[S] = this match {
     case LongMap.Bin(prefix, mask, left, right) => if (!hasMatch(key, prefix, mask)) join(key, LongMap.Tip(key, value), prefix, this);
                                           else if (zero(key, mask)) LongMap.Bin(prefix, mask, left.updateWith(key, value, f), right)
+<<<<<<< HEAD
                                           else LongMap.Bin(prefix, mask, left, right.updateWith(key, value, f)); 
+=======
+                                          else LongMap.Bin(prefix, mask, left, right.updateWith(key, value, f));
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     case LongMap.Tip(key2, value2) => if (key == key2) LongMap.Tip(key, f(value2, value));
                              else join(key, LongMap.Tip(key, value), key2, this);
     case LongMap.Nil => LongMap.Tip(key, value);
   }
 
   def -(key : Long) : LongMap[T] = this match {
+<<<<<<< HEAD
     case LongMap.Bin(prefix, mask, left, right) => 
       if (!hasMatch(key, prefix, mask)) this;
       else if (zero(key, mask)) bin(prefix, mask, left - key, right);
       else bin(prefix, mask, left, right - key);
     case LongMap.Tip(key2, _) => 
+=======
+    case LongMap.Bin(prefix, mask, left, right) =>
+      if (!hasMatch(key, prefix, mask)) this;
+      else if (zero(key, mask)) bin(prefix, mask, left - key, right);
+      else bin(prefix, mask, left, right - key);
+    case LongMap.Tip(key2, _) =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (key == key2) LongMap.Nil;
       else this;
     case LongMap.Nil => LongMap.Nil;
@@ -312,7 +440,11 @@ sealed abstract class LongMap[+T] extends Map[Long, T] with MapLike[Long, T, Lon
    * A combined transform and filter function. Returns an `LongMap` such that
    * for each `(key, value)` mapping in this map, if `f(key, value) == None`
    * the map contains no mapping for key, and if `f(key, value)`.
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * @tparam S    The type of the values in the resulting `LongMap`.
    * @param f     The transforming function.
    * @return      The modified map.
@@ -323,6 +455,7 @@ sealed abstract class LongMap[+T] extends Map[Long, T] with MapLike[Long, T, Lon
         val newright = right.modifyOrRemove(f);
         if ((left eq newleft) && (right eq newright)) this.asInstanceOf[LongMap[S]];
         else bin(prefix, mask, newleft, newright)
+<<<<<<< HEAD
       }              
     case LongMap.Tip(key, value) => f(key, value) match {
       case None => LongMap.Nil;
@@ -348,6 +481,33 @@ sealed abstract class LongMap[+T] extends Map[Long, T] with MapLike[Long, T, Lon
         if (!hasMatch(p2, p1, m1)) join(p1, this, p2, that);
         else if (zero(p2, m1)) LongMap.Bin(p1, m1, l1.unionWith(that, f), r1);
         else LongMap.Bin(p1, m1, l1, r1.unionWith(that, f)); 
+=======
+      }
+    case LongMap.Tip(key, value) => f(key, value) match {
+      case None => LongMap.Nil;
+      case Some(value2) =>
+        //hack to preserve sharing
+        if (value.asInstanceOf[AnyRef] eq value2.asInstanceOf[AnyRef]) this.asInstanceOf[LongMap[S]]
+        else LongMap.Tip(key, value2);
+      }
+    case LongMap.Nil => LongMap.Nil;
+  }
+
+  /**
+   * Forms a union map with that map, using the combining function to resolve conflicts.
+   *
+   * @tparam S      The type of values in `that`, a supertype of values in `this`.
+   * @param that    The map to form a union with.
+   * @param f       The function used to resolve conflicts between two mappings.
+   * @return        Union of `this` and `that`, with identical key conflicts resolved using the function `f`.
+   */
+  def unionWith[S >: T](that : LongMap[S], f : (Long, S, S) => S) : LongMap[S] = (this, that) match{
+    case (LongMap.Bin(p1, m1, l1, r1), that@(LongMap.Bin(p2, m2, l2, r2))) =>
+      if (shorter(m1, m2)) {
+        if (!hasMatch(p2, p1, m1)) join(p1, this, p2, that);
+        else if (zero(p2, m1)) LongMap.Bin(p1, m1, l1.unionWith(that, f), r1);
+        else LongMap.Bin(p1, m1, l1, r1.unionWith(that, f));
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       } else if (shorter(m2, m1)){
         if (!hasMatch(p1, p2, m2)) join(p1, this, p2, that);
         else if (zero(p1, m2)) LongMap.Bin(p2, m2, this.unionWith(l2, f), r2);
@@ -355,8 +515,13 @@ sealed abstract class LongMap[+T] extends Map[Long, T] with MapLike[Long, T, Lon
       }
       else {
         if (p1 == p2) LongMap.Bin(p1, m1, l1.unionWith(l2,f), r1.unionWith(r2, f));
+<<<<<<< HEAD
         else join(p1, this, p2, that); 
       } 
+=======
+        else join(p1, this, p2, that);
+      }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     case (LongMap.Tip(key, value), x) => x.updateWith(key, value, (x, y) => f(key, y, x));
     case (x, LongMap.Tip(key, value)) => x.updateWith[S](key, value, (x, y) => f(key, x, y));
     case (LongMap.Nil, x) => x;
@@ -367,7 +532,11 @@ sealed abstract class LongMap[+T] extends Map[Long, T] with MapLike[Long, T, Lon
    * Forms the intersection of these two maps with a combining function. The
    * resulting map is a map that has only keys present in both maps and has
    * values produced from the original mappings by combining them with `f`.
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * @tparam S      The type of values in `that`.
    * @tparam R      The type of values in the resulting `LongMap`.
    * @param that    The map to intersect with.
@@ -375,7 +544,11 @@ sealed abstract class LongMap[+T] extends Map[Long, T] with MapLike[Long, T, Lon
    * @return        Intersection of `this` and `that`, with values for identical keys produced by function `f`.
    */
   def intersectionWith[S, R](that : LongMap[S], f : (Long, T, S) => R) : LongMap[R] = (this, that) match {
+<<<<<<< HEAD
     case (LongMap.Bin(p1, m1, l1, r1), that@LongMap.Bin(p2, m2, l2, r2)) => 
+=======
+    case (LongMap.Bin(p1, m1, l1, r1), that@LongMap.Bin(p2, m2, l2, r2)) =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (shorter(m1, m2)) {
         if (!hasMatch(p2, p1, m1)) LongMap.Nil;
         else if (zero(p2, m1)) l1.intersectionWith(that, f);
@@ -395,11 +568,19 @@ sealed abstract class LongMap[+T] extends Map[Long, T] with MapLike[Long, T, Lon
       case Some(value2) => LongMap.Tip(key, f(key, value2, value));
     }
     case (_, _) => LongMap.Nil;
+<<<<<<< HEAD
   }  
 
   /**
    * Left biased intersection. Returns the map that has all the same mappings as this but only for keys
    * which are present in the other map. 
+=======
+  }
+
+  /**
+   * Left biased intersection. Returns the map that has all the same mappings as this but only for keys
+   * which are present in the other map.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *
    * @tparam R      The type of values in `that`.
    * @param that    The map to intersect with.

@@ -12,14 +12,22 @@ package generic
 
 /** This trait forms part of collections that can be reduced
  *  using a `-=` operator.
+<<<<<<< HEAD
  *        
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author   Martin Odersky
  *  @version 2.8
  *  @since   2.8
  *  @define coll shrinkable collection
  *  @define Coll Shrinkable
  */
+<<<<<<< HEAD
 trait Shrinkable[-A] { 
+=======
+trait Shrinkable[-A] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** Removes a single element from this $coll.
    *
@@ -36,7 +44,11 @@ trait Shrinkable[-A] {
    *  @return the $coll itself
    */
   def -=(elem1: A, elem2: A, elems: A*): this.type = {
+<<<<<<< HEAD
     this -= elem1 
+=======
+    this -= elem1
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     this -= elem2
     this --= elems
   }
@@ -48,7 +60,13 @@ trait Shrinkable[-A] {
    */
   def --=(xs: TraversableOnce[A]): this.type = { xs.seq foreach -= ; this }
 }
+<<<<<<< HEAD
   
 
   
+=======
+
+
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 

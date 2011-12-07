@@ -8,11 +8,19 @@ package internal
 
 trait TypeDebugging {
   self: SymbolTable =>
+<<<<<<< HEAD
   
   import definitions._
 
   // @M toString that is safe during debugging (does not normalize, ...)
   object typeDebug {  
+=======
+
+  import definitions._
+
+  // @M toString that is safe during debugging (does not normalize, ...)
+  object typeDebug {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private def to_s(x: Any): String = x match {
       // otherwise case classes are caught looking like products
       case _: Tree | _: Type     => "" + x
@@ -27,13 +35,21 @@ trait TypeDebugging {
         val width = pairs map (_._1.length) max
         val fmt   = "%-" + (width + 1) + "s %s"
         val strs  = pairs map { case (k, v) => fmt.format(k, to_s(v)) }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         strs.mkString(label + " {\n  ", "\n  ", "\n}")
       }
     }
     def ptLine(label: String, pairs: (String, Any)*): String = {
       val strs = pairs map { case (k, v) => k + "=" + to_s(v) }
+<<<<<<< HEAD
       strs.mkString(label + ": ", ", ", "")      
+=======
+      strs.mkString(label + ": ", ", ", "")
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
     def ptTree(t: Tree) = t match {
       case PackageDef(pid, _)            => "package " + pid
@@ -47,9 +63,15 @@ trait TypeDebugging {
       def brackets(xs: List[_]): String        = if (xs.isEmpty) "" else xs.mkString("[", ", ", "]")
       def tparams(tparams: List[Type]): String = brackets(tparams map debug)
       def parents(ps: List[Type]): String      = (ps map debug).mkString(" with ")
+<<<<<<< HEAD
       def refine(defs: Scope): String          = defs.toList.mkString("{", " ;\n ", "}")      
     }
     
+=======
+      def refine(defs: Scope): String          = defs.toList.mkString("{", " ;\n ", "}")
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def dump(tp: Type): Unit = {
       println("** " + tp + " / " + tp.getClass + " **")
       import tp._
@@ -76,7 +98,11 @@ trait TypeDebugging {
       println("baseClasses = " + baseClasses)
       println("toLongString = " + toLongString)
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private def debug(tp: Type): String = tp match {
       case TypeRef(pre, sym, args)             => debug(pre) + "." + sym.nameString + str.tparams(args)
       case ThisType(sym)                       => sym.nameString + ".this"

@@ -33,6 +33,11 @@ import generic._
   *  @author Martin Odersky
   *  @version 2.8
   *  @since   1
+<<<<<<< HEAD
+=======
+  *  @see [[http://docs.scala-lang.org/overviews/collections/concrete-mutable-collection-classes.html#linked_lists "Scala's Collection Library overview"]]
+  *  section on `Linked Lists` for more information.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   *
   *  @tparam A     the type of the elements contained in this linked list.
   *
@@ -73,7 +78,12 @@ import generic._
   *  }}}
   */
 @SerialVersionUID(-7308240733518833071L)
+<<<<<<< HEAD
 class LinkedList[A]() extends LinearSeq[A] 
+=======
+class LinkedList[A]() extends AbstractSeq[A]
+                         with LinearSeq[A]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                          with GenericTraversableTemplate[A, LinkedList]
                          with LinkedListLike[A, LinkedList[A]]
                          with Serializable {

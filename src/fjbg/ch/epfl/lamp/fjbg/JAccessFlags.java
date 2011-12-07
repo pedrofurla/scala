@@ -28,8 +28,15 @@ public interface JAccessFlags {
     public static int ACC_SYNTHETIC = 0x1000;
     public static int ACC_ANNOTATION= 0x2000;
     public static int ACC_ENUM      = 0x4000;
+<<<<<<< HEAD
     
     // 1.5 specifics
     public static int ACC_BRIDGE    = 0x0040;
     public static int ACC_VARARGS   = 0x0080;    
+=======
+
+    // 1.5 specifics
+    public static int ACC_BRIDGE    = 0x0040;
+    public static int ACC_VARARGS   = 0x0080;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

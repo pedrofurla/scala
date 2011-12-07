@@ -295,7 +295,11 @@ object Test {
     while (!stop) {
       try {
         calibrator.f(n, n);
+<<<<<<< HEAD
         if (n >= Math.MAX_INT / 2) error("calibration failure");
+=======
+        if (n >= Int.MaxValue / 2) error("calibration failure");
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         n = 2 * n;
       } catch {
         case exception: compat.Platform.StackOverflowError => stop = true

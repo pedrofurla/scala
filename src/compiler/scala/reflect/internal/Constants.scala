@@ -55,6 +55,11 @@ trait Constants extends api.Constants {
     def isLongRange: Boolean  = ByteTag <= tag && tag <= LongTag
     def isFloatRange: Boolean = ByteTag <= tag && tag <= FloatTag
     def isNumeric: Boolean    = ByteTag <= tag && tag <= DoubleTag
+<<<<<<< HEAD
+=======
+    def isNonUnitAnyVal       = BooleanTag <= tag && tag <= DoubleTag
+    def isAnyVal              = UnitTag <= tag && tag <= DoubleTag
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     def tpe: Type = tag match {
       case UnitTag    => UnitClass.tpe
@@ -80,8 +85,13 @@ trait Constants extends api.Constants {
     /** We need the equals method to take account of tags as well as values.
      */
     override def equals(other: Any): Boolean = other match {
+<<<<<<< HEAD
       case that: Constant => 
         this.tag == that.tag && 
+=======
+      case that: Constant =>
+        this.tag == that.tag &&
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         (this.value == that.value || this.isNaN && that.isNaN)
       case _ => false
     }
@@ -92,7 +102,11 @@ trait Constants extends api.Constants {
       case _ => false
     }
 
+<<<<<<< HEAD
     def booleanValue: Boolean = 
+=======
+    def booleanValue: Boolean =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (tag == BooleanTag) value.asInstanceOf[Boolean]
       else throw new Error("value " + value + " is not a boolean");
 
@@ -230,6 +244,10 @@ trait Constants extends api.Constants {
 
     override def hashCode: Int = value.## * 41 + 17
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   object Constant extends ConstantExtractor
 }

@@ -67,14 +67,22 @@ abstract class PriorityQueueProxy[A](implicit ord: Ordering[A]) extends Priority
    *  @return   the element with the highest priority.
    */
   override def dequeue(): A = self.dequeue
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Returns the element with the highest priority in the queue,
    *  or throws an error if there is no element contained in the queue.
    *
    *  @return   the element with the highest priority.
    */
   override def head: A = self.head
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Returns the element with the highest priority in the queue,
    *  or throws an error if there is no element contained in the queue.
    *

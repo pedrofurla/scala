@@ -17,6 +17,7 @@ import parallel.mutable.ParArray
 /** A class for polymorphic arrays of elements that's represented
  *  internally by an array of objects. This means that elements of
  *  primitive types are boxed.
+<<<<<<< HEAD
  *  
  *  @author Martin Odersky
  *  @version 2.8
@@ -25,6 +26,18 @@ import parallel.mutable.ParArray
  *  @tparam A      type of the elements contained in this array sequence.
  *  @param length  the length of the underlying array.
  *  
+=======
+ *
+ *  @author Martin Odersky
+ *  @version 2.8
+ *  @since   2.8
+ *  @see [[http://docs.scala-lang.org/overviews/collections/concrete-mutable-collection-classes.html#array_sequences "Scala's Collection Library overview"]]
+ *  section on `Array Sequences` for more information.
+ *
+ *  @tparam A      type of the elements contained in this array sequence.
+ *  @param length  the length of the underlying array.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define Coll ArraySeq
  *  @define coll array sequence
  *  @define thatinfo the class of the returned collection. In the standard library configuration,
@@ -34,14 +47,23 @@ import parallel.mutable.ParArray
  *    result class `That` from the current representation type `Repr`
  *    and the new element type `B`. This is usually the `canBuildFrom` value
  *    defined in object `ArraySeq`.
+<<<<<<< HEAD
  *  @define orderDependent 
+=======
+ *  @define orderDependent
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define orderDependentFold
  *  @define mayNotTerminateInf
  *  @define willNotTerminateInf
  */
 @SerialVersionUID(1530165946227428979L)
 class ArraySeq[A](override val length: Int)
+<<<<<<< HEAD
 extends IndexedSeq[A] 
+=======
+extends AbstractSeq[A]
+   with IndexedSeq[A]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    with GenericTraversableTemplate[A, ArraySeq]
    with IndexedSeqOptimized[A, ArraySeq[A]]
    with CustomParallelizable[A, ParArray[A]]
@@ -51,19 +73,31 @@ extends IndexedSeq[A]
   override def companion: GenericCompanion[ArraySeq] = ArraySeq
 
   val array: Array[AnyRef] = new Array[AnyRef](length)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def par = ParArray.handoff(array.asInstanceOf[Array[A]], length)
 
   def apply(idx: Int): A = {
     if (idx >= length) throw new IndexOutOfBoundsException(idx.toString)
     array(idx).asInstanceOf[A]
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def update(idx: Int, elem: A) {
     if (idx >= length) throw new IndexOutOfBoundsException(idx.toString)
     array(idx) = elem.asInstanceOf[AnyRef]
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def foreach[U](f: A =>  U) {
     var i = 0
     while (i < length) {
@@ -85,7 +119,11 @@ extends IndexedSeq[A]
     val len1 = len min (xs.length - start) min length
     Array.copy(array, 0, xs, start, len1)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 /** $factoryInfo
@@ -95,8 +133,13 @@ extends IndexedSeq[A]
 object ArraySeq extends SeqFactory[ArraySeq] {
   /** $genericCanBuildFromInfo */
   implicit def canBuildFrom[A]: CanBuildFrom[Coll, A, ArraySeq[A]] = ReusableCBF.asInstanceOf[GenericCanBuildFrom[A]]
+<<<<<<< HEAD
   def newBuilder[A]: Builder[A, ArraySeq[A]] = 
     new ArrayBuffer[A] mapResult { buf => 
+=======
+  def newBuilder[A]: Builder[A, ArraySeq[A]] =
+    new ArrayBuffer[A] mapResult { buf =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       val result = new ArraySeq[A](buf.length)
       buf.copyToArray(result.array.asInstanceOf[Array[Any]], 0)
       result

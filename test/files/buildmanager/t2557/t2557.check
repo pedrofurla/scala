@@ -3,8 +3,14 @@ compiling Set(A.scala, B.scala, C.scala, D.scala, E.scala, F.scala)
 Changes: Map()
 builder > D.scala
 compiling Set(D.scala)
+<<<<<<< HEAD
 Changes: Map(trait D -> List(Changed(Class(D))[List((java.lang.Object,java.lang.Object), (C,B), (B,C))]))
 invalidate E.scala because parents have changed [Changed(Class(D))[List((java.lang.Object,java.lang.Object), (C,B), (B,C))]]
 invalidate F.scala because parents have changed [Changed(Class(D))[List((java.lang.Object,java.lang.Object), (C,B), (B,C))]]
+=======
+Changes: Map(trait D -> List(Changed(Class(D))[List((Object,Object), (C,B), (B,C))]))
+invalidate E.scala because parents have changed [Changed(Class(D))[List((Object,Object), (C,B), (B,C))]]
+invalidate F.scala because parents have changed [Changed(Class(D))[List((Object,Object), (C,B), (B,C))]]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 compiling Set(E.scala, F.scala)
 Changes: Map(object F -> List(), trait E -> List())

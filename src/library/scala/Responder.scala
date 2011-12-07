@@ -45,6 +45,7 @@ object Responder {
     result
   }
 
+<<<<<<< HEAD
   def loop[A](r: Responder[Unit]): Responder[Nothing] = 
     for (_ <- r; val y <- loop(r)) yield y
 
@@ -52,6 +53,14 @@ object Responder {
     if (cond) for (_ <- r; val y <- loopWhile(cond)(r)) yield y
     else constant(())
 
+=======
+  def loop[A](r: Responder[Unit]): Responder[Nothing] =
+    for (_ <- r; y <- loop(r)) yield y
+
+  def loopWhile[A](cond: => Boolean)(r: Responder[Unit]): Responder[Unit] =
+    if (cond) for (_ <- r; y <- loopWhile(cond)(r)) yield y
+    else constant(())
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 /** Instances of responder are the building blocks of small programs

@@ -14,7 +14,11 @@ import java.io.{ PipedInputStream, PipedOutputStream }
 
 private[process] trait ProcessImpl {
   self: Process.type =>
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Runs provided code in a new Thread and returns the Thread instance. */
   private[process] object Spawn {
     def apply(f: => Unit): Thread = apply(f, false)
@@ -31,12 +35,20 @@ private[process] trait ProcessImpl {
       def run(): Unit =
         try result set Right(f)
         catch { case e: Exception => result set Left(e) }
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       Spawn(run)
 
       () => result.get match {
         case Right(value)    => value
+<<<<<<< HEAD
         case Left(exception) => throw exception      
+=======
+        case Left(exception) => throw exception
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       }
     }
   }
@@ -65,7 +77,11 @@ private[process] trait ProcessImpl {
     io: ProcessIO,
     evaluateSecondProcess: Int => Boolean
   ) extends CompoundProcess {
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     protected[this] override def runAndExitValue() = {
       val first = a.run(io)
       runInterruptible(first.exitValue)(first.destroy()) flatMap { codeA =>
@@ -113,7 +129,11 @@ private[process] trait ProcessImpl {
       val pipeOut       = new PipedOutputStream
       val source        = new PipeSource(currentSource, pipeOut, a.toString)
       source.start()
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       val pipeIn      = new PipedInputStream(pipeOut)
       val currentSink = new SyncVar[Option[OutputStream]]
       val sink        = new PipeSink(pipeIn, currentSink, b.toString)
@@ -127,7 +147,11 @@ private[process] trait ProcessImpl {
         else
           defaultIO.withOutput(handleOutOrError)
       val secondIO = defaultIO.withInput(toInput => currentSink put Some(toInput))
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       val second = b.run(secondIO)
       val first = a.run(firstIO)
       try {
@@ -153,7 +177,11 @@ private[process] trait ProcessImpl {
 
   private[process] abstract class PipeThread(isSink: Boolean, labelFn: () => String) extends Thread {
     def run(): Unit
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private[process] def runloop(src: InputStream, dst: OutputStream): Unit = {
       try     BasicIO.transferFully(src, dst)
       catch   ioFailure(ioHandler)
@@ -194,7 +222,11 @@ private[process] trait ProcessImpl {
       case Some(sink) =>
         try runloop(pipe, sink)
         finally currentSink.unset()
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         run()
       case None =>
         currentSink.unset()

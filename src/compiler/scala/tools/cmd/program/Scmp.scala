@@ -23,6 +23,7 @@ object Scmp {
   )
   private val scmpInfo = Simple.scalaProgramInfo("scmp", scmpUsage)
   lazy val ScmpSpec = Simple(scmpInfo, Nil, scmpOptions, x => returning(x)(_.onlyKnownOptions = false))
+<<<<<<< HEAD
   
   def main(args0: Array[String]): Unit = {
     if (args0.isEmpty)
@@ -34,11 +35,28 @@ object Scmp {
     val p1args = parsed.getOrElse("--p1", "")
     val p2args = parsed.getOrElse("--p2", "")
     
+=======
+
+  def main(args0: Array[String]): Unit = {
+    if (args0.isEmpty)
+      return println(scmpUsage)
+
+    val runner = ScmpSpec instance args0
+    import runner._
+
+    val p1args = parsed.getOrElse("--p1", "")
+    val p2args = parsed.getOrElse("--p2", "")
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (p1args.isEmpty && p2args.isEmpty)
       return println("At least one of --p1 and --p2 must be given.")
     if (residualArgs.isEmpty)
       return println("There is no command to run.")
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def createCmd(extras: String) =
       fromArgs(residualArgs.patch(1, toArgs(extras), 0))
 
@@ -50,10 +68,17 @@ object Scmp {
 
     val cmds = List(p1args, p2args) map createCmd
     println(cmds.mkString("Running command lines:\n  ", "\n  ", ""))
+<<<<<<< HEAD
     
     val files = cmds map runCmd map (_.path)
     val diff = "diff %s %s".format(files: _*).!!
     
+=======
+
+    val files = cmds map runCmd map (_.path)
+    val diff = "diff %s %s".format(files: _*).!!
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (diff.isEmpty) println("No differences.")
     else println(diff)
   }

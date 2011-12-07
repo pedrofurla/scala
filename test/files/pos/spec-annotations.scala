@@ -23,7 +23,11 @@ object Test {
   //bug #1214
   val y = new (Integer @ann(0))(2)
 
+<<<<<<< HEAD
   import scala.reflect.BeanProperty
+=======
+  import scala.beans.BeanProperty
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   // bug #637
   trait S { def getField(): Int }

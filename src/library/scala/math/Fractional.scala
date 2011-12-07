@@ -13,7 +13,11 @@ package scala.math
  */
 trait Fractional[T] extends Numeric[T] {
   def div(x: T, y: T): T
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class FractionalOps(lhs: T) extends Ops(lhs) {
     def /(rhs: T) = div(lhs, rhs)
   }

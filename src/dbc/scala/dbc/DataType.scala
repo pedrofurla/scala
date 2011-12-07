@@ -15,14 +15,22 @@ package scala.dbc;
  *  database specific types should be provided by the database driver.
  */
 @deprecated(DbcIsDeprecated, "2.9.0") abstract class DataType {
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Tests whether this datatype is equivalent to another. Usually, two
    *  types are defined as equivalent if they are equal. Two types can be
    *  equivalent without being equal if values of those types will be
    *  encoded in the same native Scala type.
    */
   def isEquivalent(datatype: DataType): Boolean;
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Tests whether this datatype is equivalent or a subtype of another
    *  datatype. Type <code>A</code> is said to be subtype of type
    *  <code>B</code> if any value of type <code>A</code> can be

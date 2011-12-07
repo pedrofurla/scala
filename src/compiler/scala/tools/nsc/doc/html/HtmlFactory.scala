@@ -23,6 +23,71 @@ class HtmlFactory(val universe: doc.Universe, index: doc.Index) {
 
   def siteRoot: JFile = new JFile(universe.settings.outdir.value)
 
+<<<<<<< HEAD
+=======
+  def libResources = List(
+    "index.js",
+    "jquery-ui.js",
+    "jquery.js",
+    "jquery.layout.js",
+    "scheduler.js",
+    "template.js",
+    "tools.tooltip.js",
+
+    "index.css",
+    "ref-index.css",
+    "template.css",
+
+    "class.png",
+    "class_big.png",
+    "object.png",
+    "object_big.png",
+    "package.png",
+    "package_big.png",
+    "trait.png",
+    "trait_big.png",
+
+    "class_to_object_big.png",
+    "object_to_class_big.png",
+    "object_to_trait_big.png",
+    "trait_to_object_big.png",
+
+    "arrow-down.png",
+    "arrow-right.png",
+    "filter_box_left.png",
+    "filter_box_left2.gif",
+    "filter_box_right.png",
+    "filterbg.gif",
+    "filterboxbarbg.gif",
+    "filterboxbg.gif",
+
+    "constructorsbg.gif",
+    "defbg-blue.gif",
+    "defbg-green.gif",
+    "filterboxbarbg.png",
+    "fullcommenttopbg.gif",
+    "ownderbg2.gif",
+    "ownerbg.gif",
+    "ownerbg2.gif",
+    "packagesbg.gif",
+    "signaturebg.gif",
+    "signaturebg2.gif",
+    "typebg.gif",
+    "valuemembersbg.gif",
+
+    "navigation-li-a.png",
+    "navigation-li.png",
+    "remove.png",
+    "selected-right.png",
+    "selected.png",
+    "selected2-right.png",
+    "selected2.png",
+    "unselected.png",
+
+    "rootdoc.txt"
+  )
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Generates the Scaladoc site for a model into the site root.
     * A scaladoc site is a set of HTML and related files
     * that document a model extracted from a compiler run.
@@ -31,8 +96,14 @@ class HtmlFactory(val universe: doc.Universe, index: doc.Index) {
 
     def copyResource(subPath: String) {
       val bytes = new Streamable.Bytes {
+<<<<<<< HEAD
         val inputStream = getClass.getResourceAsStream("/scala/tools/nsc/doc/html/resource/" + subPath)
         assert(inputStream != null)
+=======
+        val p = "/scala/tools/nsc/doc/html/resource/" + subPath
+        val inputStream = getClass.getResourceAsStream(p)
+        assert(inputStream != null, p)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       }.toByteArray
       val dest = Directory(siteRoot) / subPath
       dest.parent.createDirectory()
@@ -41,6 +112,7 @@ class HtmlFactory(val universe: doc.Universe, index: doc.Index) {
       finally out.close()
     }
 
+<<<<<<< HEAD
     copyResource("lib/jquery.js")
     copyResource("lib/jquery-ui.js")
     copyResource("lib/jquery.layout.js")
@@ -98,13 +170,22 @@ class HtmlFactory(val universe: doc.Universe, index: doc.Index) {
     copyResource("lib/selected2-right.png")
     copyResource("lib/selected2.png")
     copyResource("lib/unselected.png")
+=======
+    libResources foreach (s => copyResource("lib/" + s))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     new page.Index(universe, index) writeFor this
     new page.IndexScript(universe, index) writeFor this
 
+<<<<<<< HEAD
     writeTemplates(page => page.writeFor(this))
 
     for(letter <- index.firstLetterIndex) {
+=======
+    writeTemplates(_ writeFor this)
+
+    for (letter <- index.firstLetterIndex) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       new html.page.ReferenceIndex(letter._1, index, universe) writeFor this
     }
   }
@@ -116,11 +197,18 @@ class HtmlFactory(val universe: doc.Universe, index: doc.Index) {
       if (!(written contains tpl)) {
         writeForThis(new page.Template(tpl))
         written += tpl
+<<<<<<< HEAD
         tpl.templates map (writeTemplate(_))
+=======
+        tpl.templates map writeTemplate
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       }
     }
 
     writeTemplate(universe.rootPackage)
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

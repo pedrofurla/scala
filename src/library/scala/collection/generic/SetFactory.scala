@@ -20,6 +20,10 @@ abstract class SetFactory[CC[X] <: Set[X] with SetLike[X, CC[X]]]
   @bridge
   override def empty[A]: CC[A] = super.empty[A]
 
+<<<<<<< HEAD
   @bridge 
+=======
+  @bridge
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def apply[A](elems: A*): CC[A] = super.apply(elems: _*)
 }

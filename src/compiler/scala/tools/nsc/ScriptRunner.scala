@@ -76,7 +76,11 @@ class ScriptRunner extends HasCompileSocket {
     val compSettings     = settings.visibleSettings.toList filter (compSettingNames contains _.name)
     val coreCompArgs     = compSettings flatMap (_.unparse)
     val compArgs         = coreCompArgs ++ List("-Xscript", scriptMain(settings), scriptFile)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     CompileSocket getOrCreateSocket "" match {
       case Some(sock) => compileOnServer(sock, compArgs)
       case _          => false
@@ -84,7 +88,11 @@ class ScriptRunner extends HasCompileSocket {
   }
 
   protected def newGlobal(settings: Settings, reporter: Reporter) =
+<<<<<<< HEAD
     new Global(settings, reporter)
+=======
+    Global(settings, reporter)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** Compile a script and then run the specified closure with
     * a classpath for the compiled script.
@@ -121,7 +129,11 @@ class ScriptRunner extends HasCompileSocket {
         if (reporter.hasErrors) None else Some(compiledPath)
       }
       else if (compileWithDaemon(settings, scriptFile)) Some(compiledPath)
+<<<<<<< HEAD
       else None            
+=======
+      else None
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
 
     /** The script runner calls sys.exit to communicate a return value, but this must
@@ -139,11 +151,19 @@ class ScriptRunner extends HasCompileSocket {
             case Some(compiledPath) =>
               try io.Jar.create(jarFile, compiledPath, mainClass)
               catch { case _: Exception => jarFile.delete() }
+<<<<<<< HEAD
               
               if (jarOK) {
                 compiledPath.deleteRecursively()
                 handler(jarFile.toAbsolute.path)
               }            
+=======
+
+              if (jarOK) {
+                compiledPath.deleteRecursively()
+                handler(jarFile.toAbsolute.path)
+              }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               // jar failed; run directly from the class files
               else handler(compiledPath.path)
             case _  => false
@@ -158,7 +178,11 @@ class ScriptRunner extends HasCompileSocket {
     }
   }
 
+<<<<<<< HEAD
   /** Run a script after it has been compiled 
+=======
+  /** Run a script after it has been compiled
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *
    * @return true if execution succeeded, false otherwise
    */
@@ -202,7 +226,11 @@ class ScriptRunner extends HasCompileSocket {
     catch { case e => Left(unwrap(e)) }
   }
 
+<<<<<<< HEAD
   /** Run a command 
+=======
+  /** Run a command
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *
    * @return true if compilation and execution succeeded, false otherwise.
    */
@@ -210,11 +238,19 @@ class ScriptRunner extends HasCompileSocket {
     settings: GenericRunnerSettings,
     command: String,
     scriptArgs: List[String]): Boolean =
+<<<<<<< HEAD
   {    
     val scriptFile = File.makeTemp("scalacmd", ".scala")
     // save the command to the file
     scriptFile writeAll command
     
+=======
+  {
+    val scriptFile = File.makeTemp("scalacmd", ".scala")
+    // save the command to the file
+    scriptFile writeAll command
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     try withCompiledScript(settings, scriptFile.path) { runCompiled(settings, _, scriptArgs) }
     finally scriptFile.delete()  // in case there was a compilation error
   }

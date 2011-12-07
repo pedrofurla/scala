@@ -13,7 +13,11 @@ package scala.collection
  *
  *  Methods in this trait are either abstract or can be implemented in terms
  *  of other methods.
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define Coll GenTraversableOnce
  *  @define coll collection or iterator
  *  @define possiblyparinfo
@@ -22,11 +26,19 @@ package scala.collection
  *  The order in which operations are performed on elements is unspecified
  *  and may be nondeterministic.
  *  @define orderDependent
+<<<<<<< HEAD
  * 
  *    Note: might return different results for different runs, unless the
  *    underlying collection type is ordered.
  *  @define orderDependentFold
  * 
+=======
+ *
+ *    Note: might return different results for different runs, unless the
+ *    underlying collection type is ordered.
+ *  @define orderDependentFold
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *    Note: might return different results for different runs, unless the
  *    underlying collection type is ordered or the operator is associative
  *    and commutative.
@@ -64,7 +76,11 @@ trait GenTraversableOnce[+A] {
   def isEmpty: Boolean
 
   /** Tests whether the $coll is not empty.
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @return    `true` if the $coll contains at least one element, `false` otherwise.
    */
   def nonEmpty: Boolean
@@ -77,9 +93,15 @@ trait GenTraversableOnce[+A] {
   def isTraversableAgain: Boolean
 
   /** Reduces the elements of this $coll using the specified associative binary operator.
+<<<<<<< HEAD
    *  
    *  $undefinedorder
    *  
+=======
+   *
+   *  $undefinedorder
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @tparam A1      A type parameter for the binary operator, a supertype of `A`.
    *  @param op       A binary operator that must be associative.
    *  @return         The result of applying reduce operator `op` between all the elements if the $coll is nonempty.
@@ -90,6 +112,7 @@ trait GenTraversableOnce[+A] {
 
   /** Reduces the elements of this $coll, if any, using the specified
    *  associative binary operator.
+<<<<<<< HEAD
    *  
    *  $undefinedorder
    *  
@@ -97,6 +120,15 @@ trait GenTraversableOnce[+A] {
    *  @param op      A binary operator that must be associative.
    *  @return        An option value containing result of applying reduce operator `op` between all
    *                 the elements if the collection is nonempty, and `None` otherwise. 
+=======
+   *
+   *  $undefinedorder
+   *
+   *  @tparam A1     A type parameter for the binary operator, a supertype of `A`.
+   *  @param op      A binary operator that must be associative.
+   *  @return        An option value containing result of applying reduce operator `op` between all
+   *                 the elements if the collection is nonempty, and `None` otherwise.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */
   def reduceOption[A1 >: A](op: (A1, A1) => A1): Option[A1]
 
@@ -104,7 +136,11 @@ trait GenTraversableOnce[+A] {
    *  binary operator.
    *
    *  $undefinedorder
+<<<<<<< HEAD
    *  
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @tparam A1     a type parameter for the binary operator, a supertype of `A`.
    *  @param z       a neutral element for the fold operation; may be added to the result
    *                 an arbitrary number of times, and must not change the result (e.g., `Nil` for list concatenation,
@@ -115,7 +151,11 @@ trait GenTraversableOnce[+A] {
   def fold[A1 >: A](z: A1)(op: (A1, A1) => A1): A1
 
   /** A syntactic sugar for out of order folding. See `fold`.
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * Example:
    * {{{
    *      scala> val a = LinkedList(1,2,3,4)
@@ -168,7 +208,11 @@ trait GenTraversableOnce[+A] {
    *  `xs foldRight z`.
    *  $willNotTerminateInf
    *  $orderDependentFold
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  Examples:
    *
    *  Note that the folding function used to compute b is equivalent to that used to compute c.
@@ -198,7 +242,11 @@ trait GenTraversableOnce[+A] {
 
   /** Applies a binary operator to a start value and all elements of this $coll,
    *  going left to right.
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  $willNotTerminateInf
    *  $orderDependentFold
    *
@@ -216,7 +264,11 @@ trait GenTraversableOnce[+A] {
 
   /** Applies a binary operator to all elements of this $coll and a start value,
    *  going right to left.
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  $willNotTerminateInf
    *  $orderDependentFold
    *  @param   z    the start value.
@@ -232,7 +284,11 @@ trait GenTraversableOnce[+A] {
   def foldRight[B](z: B)(op: (A, B) => B): B
 
   /** Aggregates the results of applying an operator to subsequent elements.
+<<<<<<< HEAD
    *  
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  This is a more general form of `fold` and `reduce`. It has similar
    *  semantics, but does not require the result to be a supertype of the
    *  element type. It traverses the elements in different partitions
@@ -240,7 +296,11 @@ trait GenTraversableOnce[+A] {
    *  `combop` to results from different partitions. The implementation of
    *  this operation may operate on an arbitrary number of collection
    *  partitions, so `combop` may be invoked an arbitrary number of times.
+<<<<<<< HEAD
    *  
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  For example, one might want to process some elements and then produce
    *  a `Set`. In this case, `seqop` would process an element and append it
    *  to the list, while `combop` would concatenate two lists from different
@@ -248,10 +308,17 @@ trait GenTraversableOnce[+A] {
    *  {{{
    *    pc.aggregate(Set[Int]())(_ += process(_), _ ++ _)
    *  }}}
+<<<<<<< HEAD
    *  
    *  Another example is calculating geometric mean from a collection of doubles
    *  (one would typically require big doubles for this).
    *  
+=======
+   *
+   *  Another example is calculating geometric mean from a collection of doubles
+   *  (one would typically require big doubles for this).
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @tparam B        the type of accumulated results
    *  @param z         the initial value for the accumulated result of the partition - this
    *                   will typically be the neutral element for the `seqop` operator (e.g.
@@ -260,11 +327,19 @@ trait GenTraversableOnce[+A] {
    *  @param combop    an associative operator used to combine results from different partitions
    */
   def aggregate[B](z: B)(seqop: (B, A) => B, combop: (B, B) => B): B
+<<<<<<< HEAD
   
   /** Applies a binary operator to all elements of this $coll, going right to left.
    *  $willNotTerminateInf
    *  $orderDependentFold
    * 
+=======
+
+  /** Applies a binary operator to all elements of this $coll, going right to left.
+   *  $willNotTerminateInf
+   *  $orderDependentFold
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param  op    the binary operator.
    *  @tparam  B    the result type of the binary operator.
    *  @return  the result of inserting `op` between consecutive elements of this $coll,
@@ -276,11 +351,19 @@ trait GenTraversableOnce[+A] {
    *  @throws `UnsupportedOperationException` if this $coll is empty.
    */
   def reduceRight[B >: A](op: (A, B) => B): B
+<<<<<<< HEAD
   
   /** Optionally applies a binary operator to all elements of this $coll, going left to right.
    *  $willNotTerminateInf
    *  $orderDependentFold
    *  
+=======
+
+  /** Optionally applies a binary operator to all elements of this $coll, going left to right.
+   *  $willNotTerminateInf
+   *  $orderDependentFold
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param  op    the binary operator.
    *  @tparam  B    the result type of the binary operator.
    *  @return  an option value containing the result of `reduceLeft(op)` is this $coll is nonempty,
@@ -292,20 +375,29 @@ trait GenTraversableOnce[+A] {
    *  right to left.
    *  $willNotTerminateInf
    *  $orderDependentFold
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param  op    the binary operator.
    *  @tparam  B    the result type of the binary operator.
    *  @return  an option value containing the result of `reduceRight(op)` is this $coll is nonempty,
    *           `None` otherwise.
    */
   def reduceRightOption[B >: A](op: (A, B) => B): Option[B]
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Counts the number of elements in the $coll which satisfy a predicate.
    *
    *  @param p     the predicate  used to test elements.
    *  @return      the number of elements satisfying the predicate `p`.
    */
   def count(p: A => Boolean): Int
+<<<<<<< HEAD
   
   /** Sums up the elements of this collection.
    * 
@@ -372,6 +464,74 @@ trait GenTraversableOnce[+A] {
   
   /** Finds the first element of the $coll satisfying a predicate, if any.
    * 
+=======
+
+  /** Sums up the elements of this collection.
+   *
+   *   @param   num  an implicit parameter defining a set of numeric operations
+   *                 which includes the `+` operator to be used in forming the sum.
+   *   @tparam  B    the result type of the `+` operator.
+   *   @return       the sum of all elements of this $coll with respect to the `+` operator in `num`.
+   *
+   *   @usecase def sum: A
+   *
+   *   @return       the sum of all elements in this $coll of numbers of type `Int`.
+   *   Instead of `Int`, any other type `T` with an implicit `Numeric[T]` implementation
+   *   can be used as element type of the $coll and as result type of `sum`.
+   *   Examples of such types are: `Long`, `Float`, `Double`, `BigInt`.
+   *
+   */
+  def sum[A1 >: A](implicit num: Numeric[A1]): A1
+
+  /** Multiplies up the elements of this collection.
+   *
+   *   @param   num  an implicit parameter defining a set of numeric operations
+   *                 which includes the `*` operator to be used in forming the product.
+   *   @tparam  B    the result type of the `*` operator.
+   *   @return       the product of all elements of this $coll with respect to the `*` operator in `num`.
+   *
+   *   @usecase def product: A
+   *
+   *   @return       the product of all elements in this $coll of numbers of type `Int`.
+   *   Instead of `Int`, any other type `T` with an implicit `Numeric[T]` implementation
+   *   can be used as element type of the $coll and as result type of `product`.
+   *   Examples of such types are: `Long`, `Float`, `Double`, `BigInt`.
+   */
+  def product[A1 >: A](implicit num: Numeric[A1]): A1
+
+  /** Finds the smallest element.
+   *
+   *  @param    cmp   An ordering to be used for comparing elements.
+   *  @tparam   B     The type over which the ordering is defined.
+   *  @return   the smallest element of this $coll with respect to the ordering `cmp`.
+   *
+   *  @usecase def min: A
+   *  @return   the smallest element of this $coll
+   */
+  def min[A1 >: A](implicit ord: Ordering[A1]): A
+
+  /** Finds the largest element.
+   *
+   *  @param    cmp   An ordering to be used for comparing elements.
+   *  @tparam   B     The type over which the ordering is defined.
+   *  @return   the largest element of this $coll with respect to the ordering `cmp`.
+   *
+   *  @usecase def max: A
+   *  @return   the largest element of this $coll.
+   */
+  def max[A1 >: A](implicit ord: Ordering[A1]): A
+
+  def maxBy[B](f: A => B)(implicit cmp: Ordering[B]): A
+
+  def minBy[B](f: A => B)(implicit cmp: Ordering[B]): A
+
+  def forall(pred: A => Boolean): Boolean
+
+  def exists(pred: A => Boolean): Boolean
+
+  /** Finds the first element of the $coll satisfying a predicate, if any.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  $mayNotTerminateInf
    *  $orderDependent
    *
@@ -380,13 +540,18 @@ trait GenTraversableOnce[+A] {
    *              that satisfies `p`, or `None` if none exists.
    */
   def find(pred: A => Boolean): Option[A]
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Copies values of this $coll to an array.
    *  Fills the given array `xs` with values of this $coll.
    *  Copying will stop once either the end of the current $coll is reached,
    *  or the end of the array is reached.
    *
    *  $willNotTerminateInf
+<<<<<<< HEAD
    * 
    *  @param  xs     the array to fill.
    *  @tparam B      the type of the elements of the array. 
@@ -395,23 +560,46 @@ trait GenTraversableOnce[+A] {
    */
   def copyToArray[B >: A](xs: Array[B]): Unit
   
+=======
+   *
+   *  @param  xs     the array to fill.
+   *  @tparam B      the type of the elements of the array.
+   *
+   *  @usecase def copyToArray(xs: Array[A]): Unit
+   */
+  def copyToArray[B >: A](xs: Array[B]): Unit
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Copies values of this $coll to an array.
    *  Fills the given array `xs` with values of this $coll, beginning at index `start`.
    *  Copying will stop once either the end of the current $coll is reached,
    *  or the end of the array is reached.
    *
    *  $willNotTerminateInf
+<<<<<<< HEAD
    * 
    *  @param  xs     the array to fill.
    *  @param  start  the starting index.
    *  @tparam B      the type of the elements of the array. 
+=======
+   *
+   *  @param  xs     the array to fill.
+   *  @param  start  the starting index.
+   *  @tparam B      the type of the elements of the array.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *
    *  @usecase def copyToArray(xs: Array[A], start: Int): Unit
    */
   def copyToArray[B >: A](xs: Array[B], start: Int): Unit
+<<<<<<< HEAD
   
   def copyToArray[B >: A](xs: Array[B], start: Int, len: Int): Unit
   
+=======
+
+  def copyToArray[B >: A](xs: Array[B], start: Int, len: Int): Unit
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Displays all elements of this $coll in a string using start, end, and
    *  separator strings.
    *
@@ -427,7 +615,11 @@ trait GenTraversableOnce[+A] {
    *  @example  `List(1, 2, 3).mkString("(", "; ", ")") = "(1; 2; 3)"`
    */
   def mkString(start: String, sep: String, end: String): String
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Displays all elements of this $coll in a string using a separator string.
    *
    *  @param sep   the separator string.
@@ -438,7 +630,11 @@ trait GenTraversableOnce[+A] {
    *  @example  `List(1, 2, 3).mkString("|") = "1|2|3"`
    */
   def mkString(sep: String): String
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Displays all elements of this $coll in a string.
    *
    *  @return a string representation of this $coll. In the resulting string
@@ -447,10 +643,17 @@ trait GenTraversableOnce[+A] {
    *          separator string.
    */
   def mkString: String
+<<<<<<< HEAD
   
   /** Converts this $coll to an array.
    *  $willNotTerminateInf
    * 
+=======
+
+  /** Converts this $coll to an array.
+   *  $willNotTerminateInf
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @tparam B the type of the elements of the array. A `ClassManifest` for
    *            this type must be available.
    *  @return   an array containing all elements of this $coll.
@@ -460,12 +663,17 @@ trait GenTraversableOnce[+A] {
    *           A `ClassManifest` must be available for the element type of this $coll.
    */
   def toArray[A1 >: A: ClassManifest]: Array[A1]
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Converts this $coll to a list.
    *  $willNotTerminateInf
    *  @return a list containing all elements of this $coll.
    */
   def toList: List[A]
+<<<<<<< HEAD
   
   /** Converts this $coll to an indexed sequence.
    *  $willNotTerminateInf
@@ -473,16 +681,30 @@ trait GenTraversableOnce[+A] {
    */	
   def toIndexedSeq[A1 >: A]: immutable.IndexedSeq[A1]
   
+=======
+
+  /** Converts this $coll to an indexed sequence.
+   *  $willNotTerminateInf
+   *  @return an indexed sequence containing all elements of this $coll.
+   */
+  def toIndexedSeq[A1 >: A]: immutable.IndexedSeq[A1]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Converts this $coll to a stream.
    *  $willNotTerminateInf
    *  @return a stream containing all elements of this $coll.
    */
   def toStream: Stream[A]
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Returns an Iterator over the elements in this $coll.  Will return
    *  the same Iterator if this instance is already an Iterator.
    *  $willNotTerminateInf
    *  @return an Iterator containing all elements of this $coll.
+<<<<<<< HEAD
    */	
   def toIterator: Iterator[A]
   
@@ -492,18 +714,36 @@ trait GenTraversableOnce[+A] {
    */	
   def toBuffer[A1 >: A]: collection.mutable.Buffer[A1]
   
+=======
+   */
+  def toIterator: Iterator[A]
+
+  /** Converts this $coll to a mutable buffer.
+   *  $willNotTerminateInf
+   *  @return a buffer containing all elements of this $coll.
+   */
+  def toBuffer[A1 >: A]: collection.mutable.Buffer[A1]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Converts this $coll to an unspecified Traversable.  Will return
    *  the same collection if this instance is already Traversable.
    *  $willNotTerminateInf
    *  @return a Traversable containing all elements of this $coll.
+<<<<<<< HEAD
    */	
   def toTraversable: GenTraversable[A]
   
+=======
+   */
+  def toTraversable: GenTraversable[A]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Converts this $coll to an iterable collection.  Note that
    *  the choice of target `Iterable` is lazy in this default implementation
    *  as this `TraversableOnce` may be lazy and unevaluated (i.e. it may
    *  be an iterator which is only traversable once).
    *
+<<<<<<< HEAD
    *  $willNotTerminateInf 
    *  @return an `Iterable` containing all elements of this $coll.
    */	
@@ -518,12 +758,32 @@ trait GenTraversableOnce[+A] {
    */	
   def toSeq: GenSeq[A]
   
+=======
+   *  $willNotTerminateInf
+   *  @return an `Iterable` containing all elements of this $coll.
+   */
+  def toIterable: GenIterable[A]
+
+  /** Converts this $coll to a sequence. As with `toIterable`, it's lazy
+   *  in this default implementation, as this `TraversableOnce` may be
+   *  lazy and unevaluated.
+   *
+   *  $willNotTerminateInf
+   *  @return a sequence containing all elements of this $coll.
+   */
+  def toSeq: GenSeq[A]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Converts this $coll to a set.
    *  $willNotTerminateInf
    *  @return      a set containing all elements of this $coll.
    */
   def toSet[A1 >: A]: GenSet[A1]
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Converts this $coll to a map.  This method is unavailable unless
    *  the elements are members of Tuple2, each ((T, U)) becoming a key-value
    *  pair in the map.  Duplicate keys will be overwritten by later keys:

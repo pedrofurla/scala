@@ -5,13 +5,21 @@
 
 package scala.tools.nsc
 
+<<<<<<< HEAD
 import java.io.IOException
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 import scala.collection.mutable.ListBuffer
 import io.File
 
 /** A class representing command line info for scalac */
 class CompilerCommand(arguments: List[String], val settings: Settings) {
   def this(arguments: List[String], error: String => Unit) = this(arguments, new Settings(error))
+<<<<<<< HEAD
+=======
+  def this(arguments: List[String], settings: Settings, error: String => Unit) = this(arguments, settings withErrorFn error)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   type Setting = Settings#Setting
 
   /** file extensions of files that the compiler can process */
@@ -31,7 +39,11 @@ class CompilerCommand(arguments: List[String], val settings: Settings) {
     |Boolean settings are always false unless set.
     |Where multiple values are accepted, they should be comma-separated.
     |  example: -Xplugin:plugin1,plugin2
+<<<<<<< HEAD
     |<phase> means one or a list of:
+=======
+    |<phases> means one or a comma-separated list of:
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     |  (partial) phase names, phase ids, phase id ranges, or the string "all".
     |  example: -Xprint:all prints all phases.
     |  example: -Xprint:expl,24-26 prints phases explicitouter, closelim, dce, jvm.
@@ -55,6 +67,7 @@ class CompilerCommand(arguments: List[String], val settings: Settings) {
         case _         => ""
       }
       str + suffix
+<<<<<<< HEAD
     }    
     val debugs      = baseList filter (_.isForDebug)
     val deprecateds = baseList filter (_.isDeprecated)
@@ -63,6 +76,16 @@ class CompilerCommand(arguments: List[String], val settings: Settings) {
     def sstring(msg: String, xs: List[Setting]) =
       if (xs.isEmpty) None else Some(msg :: xs.map(helpStr) mkString "\n  ")
    
+=======
+    }
+    val debugs      = baseList filter (_.isForDebug)
+    val deprecateds = baseList filter (_.isDeprecated)
+    val theRest     = baseList filterNot (debugs.toSet ++ deprecateds)
+
+    def sstring(msg: String, xs: List[Setting]) =
+      if (xs.isEmpty) None else Some(msg :: xs.map(helpStr) mkString "\n  ")
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     List(
       sstring("", theRest),
       sstring("\nAdditional debug settings:", debugs),
@@ -76,7 +99,11 @@ class CompilerCommand(arguments: List[String], val settings: Settings) {
       Some(explainAdvanced) filter (_ => shouldExplain),
       Some(label + " options include:")
     ).flatten mkString "\n"
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     prefix + createUsageMsg(cond)
   }
 
@@ -113,6 +140,7 @@ class CompilerCommand(arguments: List[String], val settings: Settings) {
     val file = File(arg stripPrefix "@")
     if (!file.exists)
       throw new java.io.FileNotFoundException("argument file %s could not be found" format file.name)
+<<<<<<< HEAD
     
     settings splitParams (file.lines() map stripComment mkString " ")
   }
@@ -120,13 +148,26 @@ class CompilerCommand(arguments: List[String], val settings: Settings) {
   // override this if you don't want arguments processed here
   def shouldProcessArguments: Boolean = true
   
+=======
+
+    settings splitParams (file.lines() map stripComment mkString " ")
+  }
+
+  // override this if you don't want arguments processed here
+  def shouldProcessArguments: Boolean = true
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def processArguments: (Boolean, List[String]) = {
     // expand out @filename to the contents of that filename
     val expandedArguments = arguments flatMap {
       case x if x startsWith "@"  => expandArg(x)
       case x                      => List(x)
     }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     settings.processArguments(expandedArguments, true)
   }
 }

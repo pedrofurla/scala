@@ -6,8 +6,11 @@
 **                          |/                                          **
 \*                                                                      */
 
+<<<<<<< HEAD
 // $Id$
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 package scala.tools
 package partest
 
@@ -23,7 +26,45 @@ import java.lang.reflect.Method
 
 import org.apache.tools.ant.Task
 import org.apache.tools.ant.types.{Path, Reference, FileSet}
+<<<<<<< HEAD
 
+=======
+import org.apache.tools.ant.types.Commandline.Argument
+
+/** An Ant task to execute the Scala test suite (NSC).
+ *
+ *  This task can take the following parameters as attributes:
+ *  - `srcdir`,
+ *  - `classpath`,
+ *  - `classpathref`,
+ *  - `showlog`,
+ *  - `showdiff`,
+ *  - `erroronfailed`,
+ *  - `javacmd`,
+ *  - `javaccmd`,
+ *  - `scalacopts`,
+ *  - `timeout`,
+ *  - `debug`,
+ *  - `junitreportdir`.
+ *
+ *  It also takes the following parameters as nested elements:
+ *  - `compilationpath`.
+ *  - `postests`,
+ *  - `negtests`,
+ *  - `runtests`,
+ *  - `jvmtests`,
+ *  - `residenttests`,
+ *  - `buildmanagertests`,
+ *  - `shootouttests`,
+ *  - `scalaptests`,
+ *  - `scalachecktests`,
+ *  - `specializedtests`,
+ *  - `presentationtests`,
+ *  - `scripttests`.
+ *
+ * @author Philippe Haller
+ */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 class PartestTask extends Task with CompilationPathProperty {
 
   def addConfiguredPosTests(input: FileSet) {
@@ -45,11 +86,19 @@ class PartestTask extends Task with CompilationPathProperty {
   def addConfiguredResidentTests(input: FileSet) {
     residentFiles = Some(input)
   }
+<<<<<<< HEAD
   
   def addConfiguredBuildManagerTests(input: FileSet) {
     buildManagerFiles = Some(input)
   }
   
+=======
+
+  def addConfiguredBuildManagerTests(input: FileSet) {
+    buildManagerFiles = Some(input)
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def addConfiguredScalacheckTests(input: FileSet) {
     scalacheckFiles = Some(input)
   }
@@ -65,7 +114,11 @@ class PartestTask extends Task with CompilationPathProperty {
   def addConfiguredScalapTests(input: FileSet) {
     scalapFiles = Some(input)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def addConfiguredSpecializedTests(input: FileSet) {
     specializedFiles = Some(input)
   }
@@ -74,7 +127,15 @@ class PartestTask extends Task with CompilationPathProperty {
     presentationFiles = Some(input)
   }
 
+<<<<<<< HEAD
   
+=======
+  def addConfiguredAntTests(input: FileSet) {
+    antFiles = Some(input)
+  }
+
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def setSrcDir(input: String) {
     srcDir = Some(input)
   }
@@ -90,6 +151,7 @@ class PartestTask extends Task with CompilationPathProperty {
     if (classpath.isEmpty) classpath = Some(new Path(getProject()))
     classpath.get.createPath()
   }
+<<<<<<< HEAD
   
   def setClasspathref(input: Reference) {
     createClasspath().setRefid(input)
@@ -107,6 +169,25 @@ class PartestTask extends Task with CompilationPathProperty {
     errorOnFailed = input
   }
     
+=======
+
+  def setClasspathref(input: Reference) {
+    createClasspath().setRefid(input)
+  }
+
+  def setShowLog(input: Boolean) {
+    showLog = input
+  }
+
+  def setShowDiff(input: Boolean) {
+    showDiff = input
+  }
+
+  def setErrorOnFailed(input: Boolean) {
+    errorOnFailed = input
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def setJavaCmd(input: File) {
     javacmd = Some(input)
   }
@@ -115,8 +196,20 @@ class PartestTask extends Task with CompilationPathProperty {
     javaccmd = Some(input)
   }
 
+<<<<<<< HEAD
   def setScalacOpts(opts: String) {
     scalacOpts = Some(opts)
+=======
+  def setScalacOpts(input: String) {
+    val s = input.split(' ').map { s => val a = new Argument; a.setValue(s); a }
+    scalacArgs = Some(scalacArgs.getOrElse(Seq()) ++ s)
+  }
+
+  def createCompilerArg(): Argument = {
+    val a = new Argument
+    scalacArgs = Some(scalacArgs.getOrElse(Seq()) :+ a)
+    a
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   }
 
   def setTimeout(delay: String) {
@@ -126,7 +219,11 @@ class PartestTask extends Task with CompilationPathProperty {
   def setDebug(input: Boolean) {
     debug = input
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def setJUnitReportDir(input: File) {
     jUnitReportDir = Some(input)
   }
@@ -150,8 +247,14 @@ class PartestTask extends Task with CompilationPathProperty {
   private var scalapFiles: Option[FileSet] = None
   private var specializedFiles: Option[FileSet] = None
   private var presentationFiles: Option[FileSet] = None
+<<<<<<< HEAD
   private var errorOnFailed: Boolean = false
   private var scalacOpts: Option[String] = None
+=======
+  private var antFiles: Option[FileSet] = None
+  private var errorOnFailed: Boolean = false
+  private var scalacArgs: Option[Seq[Argument]] = None
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private var timeout: Option[String] = None
   private var jUnitReportDir: Option[File] = None
   private var debug = false
@@ -172,12 +275,20 @@ class PartestTask extends Task with CompilationPathProperty {
     case Some(fs) =>
       def shouldExclude(name: String) = (name endsWith ".obj") || (name startsWith ".")
       // println("----> " + fileSet)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       val fileTests = getFiles(Some(fs)) filterNot (x => shouldExclude(x.getName))
       val dirResult = getDirs(Some(fs))  filterNot (x => shouldExclude(x.getName))
       // println("dirs: " + dirResult.toList)
       // println("files: " + fileTests.toList)
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       dirResult ++ fileTests
   }
 
@@ -185,10 +296,17 @@ class PartestTask extends Task with CompilationPathProperty {
     case None     => Array()
     case Some(fs) =>
       def shouldExclude(name: String) = (name endsWith ".obj") || (name startsWith ".")
+<<<<<<< HEAD
     
       val dirTests: Iterator[SPath] = fileSetToDir(fs).dirs filterNot (x => shouldExclude(x.name))
       val dirResult = dirTests.toList.toArray map (_.jfile)
       
+=======
+
+      val dirTests: Iterator[SPath] = fileSetToDir(fs).dirs filterNot (x => shouldExclude(x.name))
+      val dirResult = dirTests.toList.toArray map (_.jfile)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       dirResult
   }
 
@@ -205,17 +323,41 @@ class PartestTask extends Task with CompilationPathProperty {
   private def getScalapFiles       = getFiles(scalapFiles)
   private def getSpecializedFiles  = getFiles(specializedFiles)
   private def getPresentationFiles = getDirs(presentationFiles)
+<<<<<<< HEAD
 
   override def execute() {
+=======
+  private def getAntFiles          = getFiles(antFiles)
+
+  override def execute() {
+    val opts = getProject().getProperties() get "env.PARTEST_OPTS"
+    if (opts != null && opts.toString != "")
+      opts.toString.split(" ") foreach { propDef =>
+        log("setting system property " + propDef)
+        val kv = propDef split "="
+        val key = kv(0) substring 2
+        val value = kv(1)
+        setProp(key, value)
+      }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (isPartestDebug || debug) {
       setProp("partest.debug", "true")
       nest.NestUI._verbose = true
     }
+<<<<<<< HEAD
     
     srcDir foreach (x => setProp("partest.srcdir", x))
     
     val classpath = this.compilationPath getOrElse sys.error("Mandatory attribute 'compilationPath' is not set.")
     
+=======
+
+    srcDir foreach (x => setProp("partest.srcdir", x))
+
+    val classpath = this.compilationPath getOrElse sys.error("Mandatory attribute 'compilationPath' is not set.")
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val scalaLibrary = {
       (classpath.list map { fs => new File(fs) }) find { f =>
         f.getName match {
@@ -224,22 +366,44 @@ class PartestTask extends Task with CompilationPathProperty {
           case _ => false
         }
       }
+<<<<<<< HEAD
     } getOrElse sys.error("Provided classpath does not contain a Scala library.") 
     
     val antRunner = new scala.tools.partest.nest.AntRunner
     val antFileManager = antRunner.fileManager
     
+=======
+    } getOrElse sys.error("Provided classpath does not contain a Scala library.")
+
+    def scalacArgsFlat: Option[Seq[String]] = scalacArgs map (_ flatMap { a =>
+      val parts = a.getParts
+      if(parts eq null) Seq[String]() else parts.toSeq
+    })
+
+    val antRunner = new scala.tools.partest.nest.AntRunner
+    val antFileManager = antRunner.fileManager
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     antFileManager.showDiff = showDiff
     antFileManager.showLog = showLog
     antFileManager.failed = runFailed
     antFileManager.CLASSPATH = ClassPath.join(classpath.list: _*)
     antFileManager.LATEST_LIB = scalaLibrary.getAbsolutePath
+<<<<<<< HEAD
     
     javacmd foreach (x => antFileManager.JAVACMD = x.getAbsolutePath)
     javaccmd foreach (x => antFileManager.JAVAC_CMD = x.getAbsolutePath)
     scalacOpts foreach (antFileManager.SCALAC_OPTS = _)
     timeout foreach (antFileManager.timeout = _)
     
+=======
+
+    javacmd foreach (x => antFileManager.JAVACMD = x.getAbsolutePath)
+    javaccmd foreach (x => antFileManager.JAVAC_CMD = x.getAbsolutePath)
+    scalacArgsFlat foreach (antFileManager.SCALAC_OPTS = _)
+    timeout foreach (antFileManager.timeout = _)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     type TFSet = (Array[File], String, String)
     val testFileSets = List(
       (getPosFiles, "pos", "Compiling files that are expected to build"),
@@ -253,9 +417,16 @@ class PartestTask extends Task with CompilationPathProperty {
       (getShootoutFiles, "shootout", "Running shootout tests"),
       (getScalapFiles, "scalap", "Running scalap tests"),
       (getSpecializedFiles, "specialized", "Running specialized files"),
+<<<<<<< HEAD
       (getPresentationFiles, "presentation", "Running presentation compiler test files")
     )
     
+=======
+      (getPresentationFiles, "presentation", "Running presentation compiler test files"),
+      (getAntFiles, "ant", "Running ant task tests")
+    )
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def runSet(set: TFSet): (Int, Int, Iterable[String]) = {
       val (files, name, msg) = set
       if (files.isEmpty) (0, 0, List())
@@ -272,11 +443,19 @@ class PartestTask extends Task with CompilationPathProperty {
         // create JUnit Report xml files if directory was specified
         jUnitReportDir foreach { d =>
           d.mkdir
+<<<<<<< HEAD
           
           val report = testReport(name, results, succs, fails)
           scala.xml.XML.save(d.getAbsolutePath+"/"+name+".xml", report)
         }
         
+=======
+
+          val report = testReport(name, results, succs, fails)
+          scala.xml.XML.save(d.getAbsolutePath+"/"+name+".xml", report)
+        }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         (succs, fails, failed)
       }
     }
@@ -294,19 +473,34 @@ class PartestTask extends Task with CompilationPathProperty {
         allFailedPaths.mkString("\n")
       else if (allSuccesses == 0) "There were no tests to run."
       else "Test suite finished with no failures."
+<<<<<<< HEAD
     
     f(msg)
   }
   def oneResult(res: (String, Int)) =
+=======
+
+    f(msg)
+  }
+
+  private def oneResult(res: (String, Int)) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     <testcase name={res._1}>{
   	  res._2 match {
   	    case 0 => scala.xml.NodeSeq.Empty
         case 1 => <failure message="Test failed"/>
         case 2 => <failure message="Test timed out"/>
+<<<<<<< HEAD
   	  } 
   	}</testcase>
    
   def testReport(kind: String, results: Iterable[(String, Int)], succs: Int, fails: Int) =
+=======
+  	  }
+  	}</testcase>
+
+  private def testReport(kind: String, results: Iterable[(String, Int)], succs: Int, fails: Int) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     <testsuite name={kind} tests={(succs + fails).toString} failures={fails.toString}>
   	  <properties/>
   	  {

@@ -13,7 +13,11 @@ package mutable
 
 
 /** A trait for mutable maps with multiple values assigned to a key.
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  This class is typically used as a mixin. It turns maps which map `A`
  *  to `Set[B]` objects into multi maps which map `A` to
  *  `B` objects.
@@ -21,29 +25,48 @@ package mutable
  *  @define coll multimap
  *  @define Coll MultiMap
  *  @author  Matthias Zenger
+<<<<<<< HEAD
  *  @author  Martin Odersky 
+=======
+ *  @author  Martin Odersky
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @version 2.8
  *  @since   1
  */
 trait MultiMap[A, B] extends Map[A, Set[B]] {
   /** Creates a new set.
+<<<<<<< HEAD
    *  
    *  Classes that use this trait as a mixin can override this method
    *  to have the desired implementation of sets assigned to new keys.
    *  By default this is `HashSet`.
    *  
+=======
+   *
+   *  Classes that use this trait as a mixin can override this method
+   *  to have the desired implementation of sets assigned to new keys.
+   *  By default this is `HashSet`.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @return An empty set of values of type `B`.
    */
   protected def makeSet: Set[B] = new HashSet[B]
 
+<<<<<<< HEAD
   @deprecated("use addBinding instead", "2.8.0")
   def add(key: A, value: B): this.type = addBinding(key, value)
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Assigns the specified `value` to a specified `key`, replacing
    *  the existing value assigned to that `key` if it is equal to
    *  the specified value. Otherwise, simply adds another binding to
    *  the `key`.
+<<<<<<< HEAD
    *  
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param key    The key to which to bind the new value.
    *  @param value  The value to bind to the key.
    *  @return       A reference to this multimap.
@@ -61,10 +84,17 @@ trait MultiMap[A, B] extends Map[A, Set[B]] {
   }
 
   /** Removes the binding of `value` to `key` if it exists.
+<<<<<<< HEAD
    *  
    *  If this was the last value assigned to the specified key, the
    *  set assigned to that key will be removed as well.
    *  
+=======
+   *
+   *  If this was the last value assigned to the specified key, the
+   *  set assigned to that key will be removed as well.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param key     The key of the binding.
    *  @param value   The value to remove.
    *  @return        A reference to this multimap.
@@ -78,9 +108,15 @@ trait MultiMap[A, B] extends Map[A, Set[B]] {
     }
     this
   }
+<<<<<<< HEAD
   
   /** Checks if there exists a binding to `key` such that it satisfies the predicate `p`.
    *  
+=======
+
+  /** Checks if there exists a binding to `key` such that it satisfies the predicate `p`.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param key   The key for which the predicate is checked.
    *  @param p     The predicate which a value assigned to the key must satisfy.
    *  @return      A boolean if such a binding exists

@@ -15,36 +15,60 @@ trait DependencyAnalysis extends SubComponent with Files {
   def off                  = settings.make.isDefault || settings.make.value == "all"
   def shouldCheckClasspath = settings.make.value != "transitivenocp"
 
+<<<<<<< HEAD
   def newPhase(prev: Phase) = new AnalysisPhase(prev) 
   
   private def depPath = Path(settings.dependenciesFile.value)
   def loadDependencyAnalysis(): Boolean = (
     depPath.path != "none" && depPath.isFile && loadFrom(
       AbstractFile.getFile(depPath), 
+=======
+  def newPhase(prev: Phase) = new AnalysisPhase(prev)
+
+  private def depPath = Path(settings.dependenciesFile.value)
+  def loadDependencyAnalysis(): Boolean = (
+    depPath.path != "none" && depPath.isFile && loadFrom(
+      AbstractFile.getFile(depPath),
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       path => AbstractFile.getFile(depPath.parent resolve Path(path))
     )
   )
   def saveDependencyAnalysis(): Unit = {
     if (!depPath.exists)
       dependenciesFile = AbstractFile.getFile(depPath.createFile())
+<<<<<<< HEAD
   
     /** The directory where file lookup should start */
     val rootPath = depPath.parent.normalize  
+=======
+
+    /** The directory where file lookup should start */
+    val rootPath = depPath.parent.normalize
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     saveDependencies(
       file => rootPath.relativize(Path(file.file).normalize).path
     )
   }
 
   lazy val maxDepth = settings.make.value match {
+<<<<<<< HEAD
     case "changed"   => 0 
     case "immediate" => 1 
+=======
+    case "changed"   => 0
+    case "immediate" => 1
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     case _           => Int.MaxValue
   }
 
   // todo: order insensible checking and, also checking timestamp?
   def validateClasspath(cp1: String, cp2: String): Boolean = cp1 == cp2
 
+<<<<<<< HEAD
   def nameToFile(src: AbstractFile, name: String) = 
+=======
+  def nameToFile(src: AbstractFile, name: String) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     settings.outputDirs.outputDirFor(src)
       .lookupPathUnchecked(name.toString.replace(".", java.io.File.separator) + ".class", false)
 
@@ -63,27 +87,45 @@ trait DependencyAnalysis extends SubComponent with Files {
   var dependencies = newDeps
 
   def managedFiles = dependencies.dependencies.keySet
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Top level definitions per source file. */
   val definitions: mutable.Map[AbstractFile, List[Symbol]] =
     new mutable.HashMap[AbstractFile, List[Symbol]] {
       override def default(f: AbstractFile) = Nil
   }
+<<<<<<< HEAD
   
   /** External references used by source file. */
   val references: mutable.Map[AbstractFile, immutable.Set[String]] = 
+=======
+
+  /** External references used by source file. */
+  val references: mutable.Map[AbstractFile, immutable.Set[String]] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     new mutable.HashMap[AbstractFile, immutable.Set[String]] {
       override def default(f: AbstractFile) = immutable.Set()
     }
 
   /** External references for inherited members used in the source file */
+<<<<<<< HEAD
   val inherited: mutable.Map[AbstractFile, immutable.Set[Inherited]] = 
+=======
+  val inherited: mutable.Map[AbstractFile, immutable.Set[Inherited]] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     new mutable.HashMap[AbstractFile, immutable.Set[Inherited]] {
       override def default(f: AbstractFile) = immutable.Set()
     }
 
   /** Write dependencies to the current file. */
+<<<<<<< HEAD
   def saveDependencies(fromFile: AbstractFile => String) = 
+=======
+  def saveDependencies(fromFile: AbstractFile => String) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if(dependenciesFile.isDefined)
       dependencies.writeTo(dependenciesFile.get, fromFile)
 
@@ -93,27 +135,43 @@ trait DependencyAnalysis extends SubComponent with Files {
   def loadFrom(f: AbstractFile, toFile: String => AbstractFile): Boolean = {
     dependenciesFile = f
     FileDependencies.readFrom(f, toFile) match {
+<<<<<<< HEAD
       case Some(fd) =>      
+=======
+      case Some(fd) =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         val success = if (shouldCheckClasspath) validateClasspath(fd.classpath, classpath) else true
         dependencies = if (success) fd else {
           if (settings.debug.value)
             println("Classpath has changed. Nuking dependencies")
           newDeps
         }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         success
       case None => false
     }
   }
 
+<<<<<<< HEAD
   def calculateFiles(files: List[SourceFile]): List[SourceFile] = 
+=======
+  def calculateFiles(files: List[SourceFile]): List[SourceFile] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (off) files
     else if (dependencies.isEmpty) {
       println("No known dependencies. Compiling " +
               (if (settings.debug.value) files.mkString(", ") else "everything"))
       files
     } else {
+<<<<<<< HEAD
       val (direct, indirect) = dependencies.invalidatedFiles(maxDepth);  
+=======
+      val (direct, indirect) = dependencies.invalidatedFiles(maxDepth);
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       val filtered = files.filter(x => {
         val f = x.file.absolute
         direct(f) || indirect(f) || !dependencies.containsFile(f);
@@ -130,6 +188,7 @@ trait DependencyAnalysis extends SubComponent with Files {
   case class Inherited(qualifier: String, member: Name)
 
   class AnalysisPhase(prev: Phase) extends StdPhase(prev) {
+<<<<<<< HEAD
       
     override def cancelled(unit: CompilationUnit) =
       super.cancelled(unit) && !unit.isJava
@@ -137,6 +196,15 @@ trait DependencyAnalysis extends SubComponent with Files {
     def apply(unit : global.CompilationUnit) { 
       val f = unit.source.file.file
       // When we're passed strings by the interpreter 
+=======
+
+    override def cancelled(unit: CompilationUnit) =
+      super.cancelled(unit) && !unit.isJava
+
+    def apply(unit : global.CompilationUnit) {
+      val f = unit.source.file.file
+      // When we're passed strings by the interpreter
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       // they  have no source file. We simply ignore this case
       // as irrelevant to dependency analysis.
       if (f != null){
@@ -217,13 +285,21 @@ trait DependencyAnalysis extends SubComponent with Files {
               super.traverse(tree)
           }
         }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         def checkType(tpe: Type): Unit =
           tpe match {
             case t: MethodType =>
               checkType(t.resultType)
               for (s <- t.params) checkType(s.tpe)
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             case t: TypeRef    =>
               if (t.sym.isAliasType) {
                   updateReferences(t.typeSymbolDirect.fullName)
@@ -231,7 +307,11 @@ trait DependencyAnalysis extends SubComponent with Files {
               }
               updateReferences(t.typeSymbol.fullName)
               for (tp <- t.args) checkType(tp)
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             case t: PolyType   =>
               checkType(t.resultType)
               updateReferences(t.typeSymbol.fullName)
@@ -243,7 +323,11 @@ trait DependencyAnalysis extends SubComponent with Files {
             case t             =>
               updateReferences(t.typeSymbol.fullName)
           }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         def updateReferences(s: String): Unit =
           references += file -> (references(file) + s)
 

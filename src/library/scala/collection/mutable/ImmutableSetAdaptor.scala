@@ -22,7 +22,14 @@ package mutable
  *  @version 1.0, 21/07/2003
  *  @since   1
  */
+<<<<<<< HEAD
 class ImmutableSetAdaptor[A](protected var set: immutable.Set[A]) extends Set[A] with Serializable {
+=======
+class ImmutableSetAdaptor[A](protected var set: immutable.Set[A])
+extends AbstractSet[A]
+   with Set[A]
+   with Serializable {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   override def size: Int = set.size
 
@@ -40,9 +47,12 @@ class ImmutableSetAdaptor[A](protected var set: immutable.Set[A]) extends Set[A]
 
   def iterator: Iterator[A] = set.iterator
 
+<<<<<<< HEAD
   @deprecated("use `iterator` instead", "2.8.0")
   override def elements: Iterator[A] = iterator
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def +=(elem: A): this.type = { set = set + elem; this }
 
   def -=(elem: A): this.type = { set = set - elem; this }

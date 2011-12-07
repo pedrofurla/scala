@@ -6,19 +6,30 @@
 **                          |/                                          **
 \*                                                                      */
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 package scala
 
 /** This class provides a simple way to get unique objects for equal strings.
  *  Since symbols are interned, they can be compared using reference equality.
  *  Instances of `Symbol` can be created easily with Scala's built-in quote
  *  mechanism.
+<<<<<<< HEAD
  *  
  *  For instance, the [[http://scala-lang.org/#_top Scala]] term `'mysym` will
  *  invoke the constructor of the `Symbol` class in the following way:
  *  `Symbol("mysym")`.
  *  
+=======
+ *
+ *  For instance, the [[http://scala-lang.org/#_top Scala]] term `'mysym` will
+ *  invoke the constructor of the `Symbol` class in the following way:
+ *  `Symbol("mysym")`.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author  Martin Odersky, Iulian Dragos
  *  @version 1.8
  */
@@ -29,6 +40,11 @@ final class Symbol private (val name: String) extends Serializable {
 
   @throws(classOf[java.io.ObjectStreamException])
   private def readResolve(): Any = Symbol.apply(name)
+<<<<<<< HEAD
+=======
+  override def hashCode = name.hashCode()
+  override def equals(other: Any) = this eq other.asInstanceOf[AnyRef]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 object Symbol extends UniquenessCache[String, Symbol]
@@ -68,7 +84,11 @@ private[scala] abstract class UniquenessCache[K, V >: Null]
       try {
         val res = cached()
         if (res != null) res
+<<<<<<< HEAD
         else {        
+=======
+        else {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           val sym = valueFromKey(name)
           map.put(name, new WeakReference(sym))
           sym

@@ -10,18 +10,30 @@ package scala.io
 
 import java.io.{ InputStream, BufferedReader, InputStreamReader, PushbackReader }
 import Source.DefaultBufSize
+<<<<<<< HEAD
 import scala.collection.Iterator
+=======
+import scala.collection.{ Iterator, AbstractIterator }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 /** This object provides convenience methods to create an iterable
  *  representation of a source file.
  *
  *  @author  Burak Emir, Paul Phillips
  */
+<<<<<<< HEAD
 class BufferedSource(inputStream: InputStream, bufferSize: Int)(implicit val codec: Codec) extends Source {  
   def this(inputStream: InputStream)(implicit codec: Codec) = this(inputStream, DefaultBufSize)(codec)
   def reader() = new InputStreamReader(inputStream, codec.decoder)
   def bufferedReader() = new BufferedReader(reader(), bufferSize)
   
+=======
+class BufferedSource(inputStream: InputStream, bufferSize: Int)(implicit val codec: Codec) extends Source {
+  def this(inputStream: InputStream)(implicit codec: Codec) = this(inputStream, DefaultBufSize)(codec)
+  def reader() = new InputStreamReader(inputStream, codec.decoder)
+  def bufferedReader() = new BufferedReader(reader(), bufferSize)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // The same reader has to be shared between the iterators produced
   // by iter and getLines. This is because calling hasNext can cause a
   // block of data to be read from the stream, which will then be lost
@@ -32,7 +44,11 @@ class BufferedSource(inputStream: InputStream, bufferSize: Int)(implicit val cod
     charReaderCreated = true
     bufferedReader()
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override lazy val iter = (
     Iterator
     continually (codec wrap charReader.read())
@@ -40,7 +56,11 @@ class BufferedSource(inputStream: InputStream, bufferSize: Int)(implicit val cod
     map (_.toChar)
   )
 
+<<<<<<< HEAD
   class BufferedLineIterator extends Iterator[String] {
+=======
+  class BufferedLineIterator extends AbstractIterator[String] with Iterator[String] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // Don't want to lose a buffered char sitting in iter either. Yes,
     // this is ridiculous, but if I can't get rid of Source, and all the
     // Iterator bits are designed into Source, and people create Sources
@@ -65,7 +85,11 @@ class BufferedSource(inputStream: InputStream, bufferSize: Int)(implicit val cod
     override def hasNext = {
       if (nextLine == null)
         nextLine = lineReader.readLine
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       nextLine != null
     }
     override def next(): String = {

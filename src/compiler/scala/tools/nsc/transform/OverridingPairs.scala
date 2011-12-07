@@ -32,9 +32,15 @@ abstract class OverridingPairs {
 
     /** Symbols to exclude: Here these are constructors, private locals,
      *  and bridges. But it may be refined in subclasses.
+<<<<<<< HEAD
      * 
      */
     protected def exclude(sym: Symbol): Boolean = 
+=======
+     *
+     */
+    protected def exclude(sym: Symbol): Boolean =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       sym.isConstructor || sym.isPrivateLocal || sym.hasFlag(BRIDGE)
 
     /** The parents of base (may also be refined).
@@ -129,7 +135,11 @@ abstract class OverridingPairs {
       for (p <- parents) {
         index get p.typeSymbol match {
           case Some(pIndex) =>
+<<<<<<< HEAD
             for (bc <- p.baseClasses) 
+=======
+            for (bc <- p.baseClasses)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               if (p.baseType(bc) =:= self.baseType(bc))
                 index get bc match {
                   case Some(bcIndex) =>
@@ -177,7 +187,11 @@ abstract class OverridingPairs {
       if (curEntry ne null) {
         overriding = curEntry.sym
         if (nextEntry ne null) {
+<<<<<<< HEAD
           do { 
+=======
+          do {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             do {
               nextEntry = decls.lookupNextEntry(nextEntry);
               /* DEBUG

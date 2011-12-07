@@ -19,7 +19,11 @@ import PartialFunction._
  *  error messages into some broad groups and provide some mechanism for
  *  being more or less verbose on a selective basis.  Possible groups include
  *  such examples as
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *    arity errors
  *    kind errors
  *    variance errors
@@ -38,9 +42,15 @@ trait TypeDiagnostics {
   import global._
   import definitions._
   import global.typer.{ infer, context }
+<<<<<<< HEAD
   
   private def currentUnit = currentRun.currentUnit
   
+=======
+
+  private def currentUnit = currentRun.currentUnit
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** The common situation of making sure nothing is erroneous could be
    *  nicer if Symbols, Types, and Trees all implemented some common interface
    *  in which isErroneous and similar would be placed.
@@ -48,7 +58,11 @@ trait TypeDiagnostics {
   def noErroneousTypes(tps: Type*)    = tps forall (x => !x.isErroneous)
   def noErroneousSyms(syms: Symbol*)  = syms forall (x => !x.isErroneous)
   def noErroneousTrees(trees: Tree*)  = trees forall (x => !x.isErroneous)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** For errors which are artifacts of the implementation: such messages
    *  indicate that the restriction may be lifted in the future.
    */
@@ -56,7 +70,11 @@ trait TypeDiagnostics {
     unit.warning(pos, "Implementation restriction: " + msg)
   def restrictionError(pos: Position, unit: CompilationUnit, msg: String): Unit =
     unit.error(pos, "Implementation restriction: " + msg)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A map of Positions to addendums - if an error involves a position in
    *  the map, the addendum should also be printed.
    */
@@ -76,12 +94,31 @@ trait TypeDiagnostics {
     )
     prefix + name.decode
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Does the positioned line assigned to t1 precede that of t2?
    */
   def posPrecedes(p1: Position, p2: Position) = p1.isDefined && p2.isDefined && p1.line < p2.line
   def linePrecedes(t1: Tree, t2: Tree) = posPrecedes(t1.pos, t2.pos)
+<<<<<<< HEAD
   
+=======
+
+  private object DealiasedType extends TypeMap {
+    def apply(tp: Type): Type = tp match {
+      // Avoid "explaining" that String is really java.lang.String,
+      // while still dealiasing types from non-default namespaces.
+      case TypeRef(pre, sym, args) if sym.isAliasType && !sym.isInDefaultNamespace =>
+        mapOver(tp.dealias)
+      case _ =>
+        mapOver(tp)
+    }
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def notAMemberMessage(pos: Position, qual: Tree, name: Name) = {
     val owner            = qual.tpe.typeSymbol
     val target           = qual.tpe.widen
@@ -112,18 +149,39 @@ trait TypeDiagnostics {
       else nameString + " is not a member of " + targetKindString + target + addendum
     )
   }
+<<<<<<< HEAD
   def notAMemberError(pos: Position, qual: Tree, name: Name) =
     context.error(pos, notAMemberMessage(pos, qual, name))
   
+=======
+
+  /** An explanatory note to be added to error messages
+   *  when there's a problem with abstract var defs */
+  def abstractVarMessage(sym: Symbol): String =
+    if (underlyingSymbol(sym).isVariable)
+      "\n(Note that variables need to be initialized to be defined)"
+    else ""
+
+  def notAMemberError(pos: Position, qual: Tree, name: Name) =
+    context.error(pos, notAMemberMessage(pos, qual, name))
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Only prints the parameter names if they're not synthetic,
    *  since "x$1: Int" does not offer any more information than "Int".
    */
   private def methodTypeErrorString(tp: Type) = tp match {
     case mt @ MethodType(params, resultType)  =>
+<<<<<<< HEAD
       def forString = 
         if (params exists (_.isSynthetic)) params map (_.tpe)
         else params map (_.defString)
                   
+=======
+      def forString =
+        if (params exists (_.isSynthetic)) params map (_.tpe)
+        else params map (_.defString)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
        forString.mkString("(", ",", ")") + resultType
     case x                                    => x.toString
   }
@@ -149,10 +207,35 @@ trait TypeDiagnostics {
 
     "missing parameter type" + suffix
   }
+<<<<<<< HEAD
   
   def treeSymTypeMsg(tree: Tree): String = {
     val sym               = tree.symbol
     def hasParams         = tree.tpe.paramSectionCount > 0    
+=======
+
+  /** The symbol which the given accessor represents (possibly in part).
+   *  This is used for error messages, where we want to speak in terms
+   *  of the actual declaration or definition, not in terms of the generated setters
+   *  and getters.
+   */
+  def underlyingSymbol(member: Symbol): Symbol =
+    if (!member.hasAccessorFlag) member
+    else if (!member.isDeferred) member.accessed
+    else {
+      val getter = if (member.isSetter) member.getter(member.owner) else member
+      val flags  = if (getter.setter(member.owner) != NoSymbol) DEFERRED | MUTABLE else DEFERRED
+
+      ( getter.owner.newValue(getter.pos, getter.name.toTermName)
+          setInfo getter.tpe.resultType
+          setFlag flags
+      )
+    }
+
+  def treeSymTypeMsg(tree: Tree): String = {
+    val sym               = tree.symbol
+    def hasParams         = tree.tpe.paramSectionCount > 0
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def preResultString   = if (hasParams) ": " else " of type "
 
     def nullMessage       = "expression of type " + tree.tpe
@@ -167,7 +250,11 @@ trait TypeDiagnostics {
     else if (sym.name == nme.apply) applyMessage
     else defaultMessage
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def notEnoughArgumentsMsg(fun: Tree, missing: List[Symbol]): String = {
     val suffix = {
       if (missing.isEmpty) ""
@@ -183,7 +270,11 @@ trait TypeDiagnostics {
 
     "not enough arguments for " + treeSymTypeMsg(fun) + suffix
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def applyErrorMsg(tree: Tree, msg: String, argtpes: List[Type], pt: Type) = {
     def asParams(xs: List[Any]) = xs.mkString("(", ", ", ")")
 
@@ -195,23 +286,51 @@ trait TypeDiagnostics {
       treeSymTypeMsg(tree) + msg + asParams(argtpes) + resType
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def disambiguate(ss: List[String]) = ss match {
     case Nil      => Nil
     case s :: ss  => s :: (ss map { case `s` => "(some other)"+s ; case x => x })
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // todo: use also for other error messages
   def existentialContext(tp: Type) = tp.existentialSkolems match {
     case Nil  => ""
     case xs   => " where " + (disambiguate(xs map (_.existentialToString)) mkString ", ")
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def varianceWord(sym: Symbol): String =
     if (sym.variance == 1) "covariant"
     else if (sym.variance == -1) "contravariant"
     else "invariant"
+<<<<<<< HEAD
   
+=======
+
+  def explainAlias(tp: Type) = {
+    // Don't automatically normalize standard aliases; they still will be
+    // expanded if necessary to disambiguate simple identifiers.
+    if ((tp eq tp.normalize) || tp.typeSymbolDirect.isInDefaultNamespace) ""
+    else {
+      // A sanity check against expansion being identical to original.
+      val s = "" + DealiasedType(tp)
+      if (s == "" + tp) ""
+      else "\n    (which expands to)  " + s
+    }
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Look through the base types of the found type for any which
    *  might have been valid subtypes if given conformant type arguments.
    *  Examine those for situations where the type error would have been
@@ -226,17 +345,28 @@ trait TypeDiagnostics {
         val foundArgs = tp.typeArgs
         val reqArgs   = req.typeArgs
         val params    = req.typeConstructor.typeParams
+<<<<<<< HEAD
         
         if (foundArgs.nonEmpty && foundArgs.length == reqArgs.length) {
           val relationships = (foundArgs, reqArgs, params).zipped map {
             case (arg, reqArg, param) =>      
+=======
+
+        if (foundArgs.nonEmpty && foundArgs.length == reqArgs.length) {
+          val relationships = (foundArgs, reqArgs, params).zipped map {
+            case (arg, reqArg, param) =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               def mkMsg(isSubtype: Boolean) = {
                 val op      = if (isSubtype) "<:" else ">:"
                 val suggest = if (isSubtype) "+" else "-"
                 val reqsym  = req.typeSymbol
                 def isJava  = reqsym.isJavaDefined
                 def isScala = reqsym hasTransOwner ScalaPackageClass
+<<<<<<< HEAD
                 
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 val explainFound = "%s %s %s%s, but ".format(
                   arg, op, reqArg,
                   // If the message involves a type from the base type sequence rather than the
@@ -270,7 +400,11 @@ trait TypeDiagnostics {
                 || ((reqArg <:< arg) && param.isContravariant)
               )
               val invariant = param.variance == 0
+<<<<<<< HEAD
               
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               if (conforms)                             Some("")
               else if ((arg <:< reqArg) && invariant)   mkMsg(true)   // covariant relationship
               else if ((reqArg <:< arg) && invariant)   mkMsg(false)  // contravariant relationship
@@ -285,6 +419,7 @@ trait TypeDiagnostics {
     }
     ""    // no elaborable variance situation found
   }
+<<<<<<< HEAD
   
   def foundReqMsg(found: Type, req: Type): String = {
     (withDisambiguation(List(), found, req) {
@@ -293,6 +428,15 @@ trait TypeDiagnostics {
     }) + explainVariance(found, req)
   }
   
+=======
+  def foundReqMsg(found: Type, req: Type): String = (
+    withDisambiguation(Nil, found, req)(
+      ";\n found   : " + found.toLongString + existentialContext(found) + explainAlias(found) +
+       "\n required: " + req + existentialContext(req) + explainAlias(req)
+    ) + explainVariance(found, req)
+  )
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   case class TypeDiag(tp: Type, sym: Symbol) extends Ordered[TypeDiag] {
     // save the name because it will be mutated until it has been
     // distinguished from the other types in the same error message
@@ -302,8 +446,16 @@ trait TypeDiagnostics {
     def modifyName(f: String => String) =
       sym.name = newTypeName(f(sym.name.toString))
 
+<<<<<<< HEAD
     def scalaQualify() = {
       val intersect = Set(trueOwner, aliasOwner) intersect Set(ScalaPackageClass, PredefModuleClass)
+=======
+    /** Prepend java.lang, scala., or Predef. if this type originated
+     *  in one of those.
+     */
+    def qualifyDefaultNamespaces() = {
+      val intersect = Set(trueOwner, aliasOwner) intersect UnqualifiedOwners
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (intersect.nonEmpty) preQualify()
     }
 
@@ -313,15 +465,25 @@ trait TypeDiagnostics {
     def typeQualify()  = if (sym.isTypeParameterOrSkolem) postQualify()
     def nameQualify()  = if (trueOwner.isPackageClass) preQualify() else postQualify()
 
+<<<<<<< HEAD
     def trueOwner  = tp.typeSymbol.owner.skipPackageObject
     def aliasOwner = tp.typeSymbolDirect.owner.skipPackageObject
     
+=======
+    def trueOwner  = tp.typeSymbol.effectiveOwner
+    def aliasOwner = tp.typeSymbolDirect.effectiveOwner
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def sym_==(other: TypeDiag)     = tp.typeSymbol == other.tp.typeSymbol
     def owner_==(other: TypeDiag)   = trueOwner == other.trueOwner
     def string_==(other: TypeDiag)  = tp.toString == other.tp.toString
     def name_==(other: TypeDiag)    = sym.name == other.sym.name
 
+<<<<<<< HEAD
     def compare(other: TypeDiag) = 
+=======
+    def compare(other: TypeDiag) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (this == other) 0
       else if (sym isLess other.sym) -1
       else 1
@@ -346,10 +508,17 @@ trait TypeDiagnostics {
         case _                      => None
       }
     }
+<<<<<<< HEAD
     
     for (tp <- types.toList; SymExtractor(t, sym) <- tp) yield TypeDiag(t, sym)
   }
   
+=======
+
+    for (tp <- types.toList; SymExtractor(t, sym) <- tp) yield TypeDiag(t, sym)
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** The distinct pairs from an ordered list. */
   private def pairs[T <: Ordered[T]](xs: Seq[T]): Seq[(T, T)] = {
     for (el1 <- xs ; el2 <- xs ; if el1 < el2) yield
@@ -378,7 +547,11 @@ trait TypeDiagnostics {
         // scala package or predef, qualify with scala so it is not confusing why
         // e.g. java.util.Iterator and Iterator are different types.
         if (td1 name_== td2)
+<<<<<<< HEAD
           tds foreach (_.scalaQualify())
+=======
+          tds foreach (_.qualifyDefaultNamespaces())
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
         // If they still print identically:
         //   a) If they are type parameters with different owners, append (in <owner>)
@@ -394,13 +567,25 @@ trait TypeDiagnostics {
       op
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait TyperDiagnostics {
     self: Typer =>
 
     private def contextError(pos: Position, msg: String) = context.error(pos, msg)
     private def contextError(pos: Position, err: Throwable) = context.error(pos, err)
+<<<<<<< HEAD
     
+=======
+    private def contextWarning(pos: Position, msg: String) = context.unit.warning(pos, msg)
+
+    def permanentlyHiddenWarning(pos: Position, hidden: Name, defn: Symbol) =
+      contextWarning(pos, "imported `%s' is permanently hidden by definition of %s".format(hidden, defn.fullLocationString))
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     object checkDead {
       private var expr: Symbol = NoSymbol
       private def exprOK = expr != Object_synchronized
@@ -414,7 +599,11 @@ trait TypeDiagnostics {
         // Error suppression will squash some of these warnings unless we circumvent it.
         // It is presumed if you are using a -Y option you would really like to hear
         // the warnings you've requested.
+<<<<<<< HEAD
         if (settings.warnDeadCode.value && context.unit != null && treeOK(tree) && exprOK) {
+=======
+        if (settings.warnDeadCode.value && context.unit.exists && treeOK(tree) && exprOK) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           val saved = context.reportGeneralErrors
           try {
             context.reportGeneralErrors = true
@@ -432,6 +621,7 @@ trait TypeDiagnostics {
         else tree
       }
     }
+<<<<<<< HEAD
     
     def symWasOverloaded(sym: Symbol) = sym.owner.isClass && sym.owner.info.member(sym.name).isOverloaded
     def cyclicAdjective(sym: Symbol)  = if (symWasOverloaded(sym)) "overloaded" else "recursive"
@@ -444,6 +634,20 @@ trait TypeDiagnostics {
       case DefDef(_, _, _, _, tpt, _) if tpt.tpe == null  => List(cyclicAdjective(sym), sym, "needs result type") mkString " "
     }
   
+=======
+
+    def symWasOverloaded(sym: Symbol) = sym.owner.isClass && sym.owner.info.member(sym.name).isOverloaded
+    def cyclicAdjective(sym: Symbol)  = if (symWasOverloaded(sym)) "overloaded" else "recursive"
+
+    /** Returns Some(msg) if the given tree is untyped apparently due
+     *  to a cyclic reference, and None otherwise.
+     */
+    def cyclicReferenceMessage(sym: Symbol, tree: Tree) = condOpt(tree) {
+      case ValDef(_, _, tpt, _) if tpt.tpe == null        => "recursive "+sym+" needs type"
+      case DefDef(_, _, _, _, tpt, _) if tpt.tpe == null  => List(cyclicAdjective(sym), sym, "needs result type") mkString " "
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Report a type error.
      *
      *  @param pos0   The position where to report the error
@@ -457,8 +661,13 @@ trait TypeDiagnostics {
       ex match {
         case CyclicReference(sym, info: TypeCompleter) =>
           contextError(ex.pos, cyclicReferenceMessage(sym, info.tree) getOrElse ex.getMessage())
+<<<<<<< HEAD
           
           if (sym == ObjectClass) 
+=======
+
+          if (sym == ObjectClass)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             throw new FatalError("cannot redefine root "+sym)
         case _ =>
           contextError(ex.pos, ex)

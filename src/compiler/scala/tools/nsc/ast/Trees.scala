@@ -15,9 +15,15 @@ import scala.reflect.internal.Flags.PRESUPER
 import scala.reflect.internal.Flags.TRAIT
 
 trait Trees extends reflect.internal.Trees { self: Global =>
+<<<<<<< HEAD
   
   // --- additional cases --------------------------------------------------------
   
+=======
+
+  // --- additional cases --------------------------------------------------------
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Only used during parsing */
   case class Parens(args: List[Tree]) extends Tree
 
@@ -30,13 +36,18 @@ trait Trees extends reflect.internal.Trees { self: Global =>
     override def isTerm = definition.isTerm
     override def isType = definition.isType
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** Either an assignment or a named argument. Only appears in argument lists,
    *  eliminated by typecheck (doTypedApply)
    */
   case class AssignOrNamedArg(lhs: Tree, rhs: Tree)
        extends TermTree
+<<<<<<< HEAD
   
  /** Array selection <qualifier> . <name> only used during erasure */
   case class SelectFromArray(qualifier: Tree, name: Name, erasure: Type)
@@ -48,6 +59,19 @@ trait Trees extends reflect.internal.Trees { self: Global =>
   // --- factory methods ----------------------------------------------------------
 
     /** Generates a template with constructor corresponding to 
+=======
+
+ /** Array selection <qualifier> . <name> only used during erasure */
+  case class SelectFromArray(qualifier: Tree, name: Name, erasure: Type)
+       extends TermTree with RefTree { }
+
+  /** emitted by typer, eliminated by refchecks */
+  case class TypeTreeWithDeferredRefCheck()(val check: () => TypeTree) extends TypTree
+
+  // --- factory methods ----------------------------------------------------------
+
+    /** Generates a template with constructor corresponding to
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *
    *  constrmods (vparams1_) ... (vparams_n) preSuper { presupers }
    *  extends superclass(args_1) ... (args_n) with mixins { self => body }
@@ -57,7 +81,11 @@ trait Trees extends reflect.internal.Trees { self: Global =>
    *  extends superclass with mixins { self =>
    *    presupers' // presupers without rhs
    *    vparamss   // abstract fields corresponding to value parameters
+<<<<<<< HEAD
    *    def <init>(vparamss) { 
+=======
+   *    def <init>(vparamss) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *      presupers
    *      super.<init>(args)
    *    }
@@ -66,9 +94,15 @@ trait Trees extends reflect.internal.Trees { self: Global =>
    */
   def Template(parents: List[Tree], self: ValDef, constrMods: Modifiers, vparamss: List[List[ValDef]], argss: List[List[Tree]], body: List[Tree], superPos: Position): Template = {
     /* Add constructor to template */
+<<<<<<< HEAD
     
     // create parameters for <init> as synthetic trees.
     var vparamss1 = 
+=======
+
+    // create parameters for <init> as synthetic trees.
+    var vparamss1 =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       vparamss map (vps => vps.map { vd =>
         atPos(focusPos(vd.pos)) {
           ValDef(
@@ -80,8 +114,13 @@ trait Trees extends reflect.internal.Trees { self: Global =>
     val (lvdefs, gvdefs) = evdefs map {
       case vdef @ ValDef(mods, name, tpt, rhs) =>
         val fld = treeCopy.ValDef(
+<<<<<<< HEAD
           vdef.duplicate, mods, name, 
           atPos(focusPos(vdef.pos)) { TypeTree() setOriginal tpt setPos focusPos(tpt.pos) }, // atPos in case 
+=======
+          vdef.duplicate, mods, name,
+          atPos(focusPos(vdef.pos)) { TypeTree() setOriginal tpt setPos focusPos(tpt.pos) }, // atPos in case
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           EmptyTree)
         val local = treeCopy.ValDef(vdef, Modifiers(PRESUPER), name, tpt, rhs)
         (local, fld)
@@ -105,11 +144,19 @@ trait Trees extends reflect.internal.Trees { self: Global =>
           atPos(wrappingPos(superPos, lvdefs ::: argss.flatten)) (
             DefDef(constrMods, nme.CONSTRUCTOR, List(), vparamss1, TypeTree(), Block(lvdefs ::: List(superCall), Literal(Constant())))))
       }
+<<<<<<< HEAD
     } 
     // println("typed template, gvdefs = "+gvdefs+", parents = "+parents+", constrs = "+constrs)
     constrs foreach (ensureNonOverlapping(_, parents ::: gvdefs))
     // vparamss2 are used as field definitions for the class. remove defaults
     val vparamss2 = vparamss map (vps => vps map { vd => 
+=======
+    }
+    // println("typed template, gvdefs = "+gvdefs+", parents = "+parents+", constrs = "+constrs)
+    constrs foreach (ensureNonOverlapping(_, parents ::: gvdefs))
+    // vparamss2 are used as field definitions for the class. remove defaults
+    val vparamss2 = vparamss map (vps => vps map { vd =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       treeCopy.ValDef(vd, vd.mods &~ DEFAULTPARAM, vd.name, vd.tpt, EmptyTree)
     })
     Template(parents, self, gvdefs ::: vparamss2.flatten ::: constrs ::: etdefs ::: rest)
@@ -127,26 +174,45 @@ trait Trees extends reflect.internal.Trees { self: Global =>
    *                    and value parameter fields.
    */
   def ClassDef(sym: Symbol, constrMods: Modifiers, vparamss: List[List[ValDef]], argss: List[List[Tree]], body: List[Tree], superPos: Position): ClassDef =
+<<<<<<< HEAD
     ClassDef(sym, 
       Template(sym.info.parents map TypeTree, 
+=======
+    ClassDef(sym,
+      Template(sym.info.parents map TypeTree,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                if (sym.thisSym == sym || phase.erasedTypes) emptyValDef else ValDef(sym.thisSym),
                constrMods, vparamss, argss, body, superPos))
 
  // --- subcomponents --------------------------------------------------
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   object treeInfo extends {
     val global: Trees.this.type = self
   } with TreeInfo
 
   lazy val treePrinter = newTreePrinter()
+<<<<<<< HEAD
   
   // --- additional cases in operations ----------------------------------
   
+=======
+
+  // --- additional cases in operations ----------------------------------
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override protected def xtraverse(traverser: Traverser, tree: Tree): Unit = tree match {
     case Parens(ts) =>
       traverser.traverseTrees(ts)
     case DocDef(comment, definition) =>
+<<<<<<< HEAD
       traverser.traverse(definition) 
+=======
+      traverser.traverse(definition)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     case AssignOrNamedArg(lhs, rhs) =>
       traverser.traverse(lhs); traverser.traverse(rhs)
     case SelectFromArray(qualifier, selector, erasure) =>
@@ -155,17 +221,28 @@ trait Trees extends reflect.internal.Trees { self: Global =>
       // (and rewrap the result? how to update the deferred check? would need to store wrapped tree instead of returning it from check)
     case _ => super.xtraverse(traverser, tree)
   }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait TreeCopier extends super.TreeCopierOps {
     def DocDef(tree: Tree, comment: DocComment, definition: Tree): DocDef
     def AssignOrNamedArg(tree: Tree, lhs: Tree, rhs: Tree): AssignOrNamedArg
     def SelectFromArray(tree: Tree, qualifier: Tree, selector: Name, erasure: Type): SelectFromArray
     def TypeTreeWithDeferredRefCheck(tree: Tree): TypeTreeWithDeferredRefCheck
   }
+<<<<<<< HEAD
   
   def newStrictTreeCopier: TreeCopier = new StrictTreeCopier
   def newLazyTreeCopier: TreeCopier = new LazyTreeCopier
  
+=======
+
+  def newStrictTreeCopier: TreeCopier = new StrictTreeCopier
+  def newLazyTreeCopier: TreeCopier = new LazyTreeCopier
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class StrictTreeCopier extends super.StrictTreeCopier with TreeCopier {
     def DocDef(tree: Tree, comment: DocComment, definition: Tree) =
       new DocDef(comment, definition).copyAttrs(tree)
@@ -177,7 +254,11 @@ trait Trees extends reflect.internal.Trees { self: Global =>
       case dc@TypeTreeWithDeferredRefCheck() => new TypeTreeWithDeferredRefCheck()(dc.check).copyAttrs(tree)
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class LazyTreeCopier extends super.LazyTreeCopier with TreeCopier {
     def DocDef(tree: Tree, comment: DocComment, definition: Tree) = tree match {
       case t @ DocDef(comment0, definition0)
@@ -199,11 +280,26 @@ trait Trees extends reflect.internal.Trees { self: Global =>
       case _ => this.treeCopy.TypeTreeWithDeferredRefCheck(tree)
     }
   }
+<<<<<<< HEAD
   
   class Transformer extends super.Transformer {
     def transformUnit(unit: CompilationUnit) { unit.body = transform(unit.body) }
   }
   
+=======
+
+  class Transformer extends super.Transformer {
+    def transformUnit(unit: CompilationUnit) {
+      try unit.body = transform(unit.body)
+      catch {
+        case ex: Exception =>
+          println("unhandled exception while transforming "+unit)
+          throw ex
+      }
+    }
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override protected def xtransform(transformer: super.Transformer, tree: Tree): Tree = tree match {
     case DocDef(comment, definition) =>
       transformer.treeCopy.DocDef(tree, comment, transformer.transform(definition))
@@ -227,7 +323,11 @@ trait Trees extends reflect.internal.Trees { self: Global =>
    */
   def resetAllAttrs[A<:Tree](x:A): A = { new ResetAttrsTraverser().traverse(x); x }
   def resetLocalAttrs[A<:Tree](x:A): A = { new ResetLocalAttrsTraverser().traverse(x); x }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A traverser which resets symbol and tpe fields of all nodes in a given tree
    *  except for (1) TypeTree nodes, whose <code>.tpe</code> field is kept, and
    *  (2) This(pkg) nodes, where pkg refers to a package symbol -- their attributes are kept, and
@@ -237,7 +337,11 @@ trait Trees extends reflect.internal.Trees { self: Global =>
    *  (2) is necessary because some This(pkg) are generated where pkg is not
    *  an enclosing package.n In that case, resetting the symbol would cause the
    *  next type checking run to fail. See #3152.
+<<<<<<< HEAD
    *   
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  (bq:) This traverser has mutable state and should be discarded after use
    */
   private class ResetAttrsTraverser extends Traverser {
@@ -250,6 +354,13 @@ trait Trees extends reflect.internal.Trees { self: Global =>
         case _: DefTree | Function(_, _) | Template(_, _, _) =>
           resetDef(tree)
           tree.tpe = null
+<<<<<<< HEAD
+=======
+          tree match {
+            case tree: DefDef => tree.tpt.tpe = null
+            case _ => ()
+          }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case tpt: TypeTree =>
           if (tpt.wasEmpty) tree.tpe = null
         case This(_) if tree.symbol != null && tree.symbol.isPackageClass =>
@@ -280,7 +391,11 @@ trait Trees extends reflect.internal.Trees { self: Global =>
         super.traverse(tree)
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /* New pattern matching cases:
 
    case Parens(expr)                                               (only used during parsing)
@@ -290,5 +405,9 @@ trait Trees extends reflect.internal.Trees { self: Global =>
    case SelectFromArray(_, _, _) =>                                (created and eliminated by erasure)
 
   */
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  }

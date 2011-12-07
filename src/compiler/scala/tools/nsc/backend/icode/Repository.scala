@@ -41,7 +41,11 @@ trait Repository {
   def load(sym: Symbol) {
     try {
       val (c1, c2) = icodeReader.readClass(sym)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       assert(c1.symbol == sym || c2.symbol == sym,
         "c1.symbol = %s, c2.symbol = %s, sym = %s".format(c1.symbol, c2.symbol, sym))
       loaded += (c1.symbol -> c1)

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 caseinherit.scala:2: error: case class `class B' has case ancestor `class A'. Case-to-case inheritance is prohibited. To overcome this limitation use extractors to pattern match on non-leaf nodes.
 case class B(y: Int) extends A(y)
            ^
@@ -7,4 +8,15 @@ case object Bippy extends A(55)
 caseinherit.scala:6: error: case class `class Dingus' has case ancestor `class A'. Case-to-case inheritance is prohibited. To overcome this limitation use extractors to pattern match on non-leaf nodes.
 case class Dingus(y: Int) extends Innocent
            ^
+=======
+caseinherit.scala:3: error: case class B has case ancestor foo.A, but case-to-case inheritance is prohibited. To overcome this limitation, use extractors to pattern match on non-leaf nodes.
+  case class B(y: Int) extends A(y)
+             ^
+caseinherit.scala:4: error: case object Bippy has case ancestor foo.A, but case-to-case inheritance is prohibited. To overcome this limitation, use extractors to pattern match on non-leaf nodes.
+  case object Bippy extends A(55)
+              ^
+caseinherit.scala:11: error: case class Dingus has case ancestor foo.A, but case-to-case inheritance is prohibited. To overcome this limitation, use extractors to pattern match on non-leaf nodes.
+  case class Dingus(y: Int) extends Innocent
+             ^
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 three errors found

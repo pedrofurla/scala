@@ -30,7 +30,11 @@ object GridBagPanel {
     val West = Value(GridBagConstraints.WEST)
     val NorthWest = Value(GridBagConstraints.NORTHWEST)
     val Center = Value(GridBagConstraints.CENTER)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val PageStart = Value(GridBagConstraints.PAGE_START)
     val PageEnd = Value(GridBagConstraints.PAGE_END)
     val LineStart = Value(GridBagConstraints.LINE_START)
@@ -43,7 +47,11 @@ object GridBagPanel {
 }
 
 /**
+<<<<<<< HEAD
  * A panel that arranges its children in a grid. Layout details can be 
+=======
+ * A panel that arranges its children in a grid. Layout details can be
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * given for each cell of the grid.
  *
  * @see java.awt.GridBagLayout
@@ -51,11 +59,19 @@ object GridBagPanel {
 class GridBagPanel extends Panel with LayoutContainer {
   override lazy val peer = new javax.swing.JPanel(new GridBagLayout) with SuperMixin
   import GridBagPanel._
+<<<<<<< HEAD
   
   private def layoutManager = peer.getLayout.asInstanceOf[GridBagLayout]
 
   /**
    * Convenient conversion from xy-coords given as pairs to 
+=======
+
+  private def layoutManager = peer.getLayout.asInstanceOf[GridBagLayout]
+
+  /**
+   * Convenient conversion from xy-coords given as pairs to
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * grid bag constraints.
    */
   implicit def pair2Constraints(p: (Int, Int)): Constraints = {
@@ -67,6 +83,7 @@ class GridBagPanel extends Panel with LayoutContainer {
 
   class Constraints(val peer: GridBagConstraints) extends Proxy {
     def self = peer
+<<<<<<< HEAD
     def this(gridx: Int, gridy: Int, 
              gridwidth: Int, gridheight: Int, 
              weightx: Double, weighty: Double, 
@@ -76,6 +93,17 @@ class GridBagPanel extends Panel with LayoutContainer {
                                   gridwidth, gridheight, 
                                   weightx, weighty, 
                                   anchor, fill, insets, 
+=======
+    def this(gridx: Int, gridy: Int,
+             gridwidth: Int, gridheight: Int,
+             weightx: Double, weighty: Double,
+             anchor: Int, fill: Int, insets: Insets,
+             ipadx: Int, ipady: Int) =
+      this(new GridBagConstraints(gridx, gridy,
+                                  gridwidth, gridheight,
+                                  weightx, weighty,
+                                  anchor, fill, insets,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                                   ipadx, ipady))
     def this() = this(new GridBagConstraints())
     def gridx: Int = peer.gridx
@@ -87,11 +115,19 @@ class GridBagPanel extends Panel with LayoutContainer {
       gridx = c._1
       gridy = c._2
     }
+<<<<<<< HEAD
         
     def gridwidth: Int = peer.gridwidth
     def gridwidth_=(w: Int) { peer.gridwidth = w }
     def gridheight: Int = peer.gridheight
     def gridheight_=(h: Int) { peer.gridheight = h }    
+=======
+
+    def gridwidth: Int = peer.gridwidth
+    def gridwidth_=(w: Int) { peer.gridwidth = w }
+    def gridheight: Int = peer.gridheight
+    def gridheight_=(h: Int) { peer.gridheight = h }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def weightx: Double = peer.weightx
     def weightx_=(x: Double) { peer.weightx = x }
     def weighty: Double = peer.weighty
@@ -107,10 +143,17 @@ class GridBagPanel extends Panel with LayoutContainer {
     def ipady: Int = peer.ipady
     def ipady_=(y: Int) { peer.ipady = y }
   }
+<<<<<<< HEAD
   
   protected def constraintsFor(comp: Component) =
     new Constraints(layoutManager.getConstraints(comp.peer))
   
+=======
+
+  protected def constraintsFor(comp: Component) =
+    new Constraints(layoutManager.getConstraints(comp.peer))
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected def areValid(c: Constraints): (Boolean, String) = (true, "")
   protected def add(c: Component, l: Constraints) { peer.add(c.peer, l.peer) }
 }

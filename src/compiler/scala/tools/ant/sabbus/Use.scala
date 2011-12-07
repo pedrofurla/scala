@@ -16,6 +16,7 @@ import org.apache.tools.ant.types.{Path, Reference}
 import org.apache.tools.ant.util.{GlobPatternMapper, SourceFileScanner}
 
 class Use extends ScalaMatchingTask {
+<<<<<<< HEAD
   
   def setId(input: String) {
     id = Some(input)
@@ -33,11 +34,34 @@ class Use extends ScalaMatchingTask {
     failOnError = input
   }
   
+=======
+
+  def setId(input: String) {
+    id = Some(input)
+  }
+
+  def setSrcdir(input: File) {
+    sourceDir = Some(input)
+  }
+
+  def setDestdir(input: File) {
+    destinationDir = Some(input)
+  }
+
+  def setFailOnError(input: Boolean) {
+    failOnError = input
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private var id: Option[String] = None
   private var sourceDir: Option[File] = None
   private var destinationDir: Option[File] = None
   private var failOnError: Boolean = true
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def execute() {
     if (id.isEmpty) sys.error("Mandatory attribute 'id' is not set.")
     if (sourceDir.isEmpty) sys.error("Mandatory attribute 'srcdir' is not set.")
@@ -70,5 +94,9 @@ class Use extends ScalaMatchingTask {
           if (failOnError) sys.error(errorMsg) else log(errorMsg)
       }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

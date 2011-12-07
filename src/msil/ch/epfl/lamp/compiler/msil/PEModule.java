@@ -344,7 +344,11 @@ final class PEModule extends Module {
      */
     MethodBase getMethod(int row) {
 	for (int i = 0; i < types.length; i++) {
+<<<<<<< HEAD
 	    PEType type = (PEType)types[i]; 
+=======
+	    PEType type = (PEType)types[i];
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 	    if ((type.methodListBeg <= row) && (row < type.methodListEnd)) {
 		type.initMethods();
 		return type.methoddefs[row - type.methodListBeg];

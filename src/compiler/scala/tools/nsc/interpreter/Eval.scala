@@ -17,11 +17,19 @@ trait Eval {
   //     |  val f1 = f
   //     |  if (f1 == null) None else Some(f1(%s))
   //     |}""".stripMargin.format(f1string, f1string, id)
+<<<<<<< HEAD
   //   
   //   evalExpr[Option[CompletionAware]](code)
   // }
   
   // Coming soon  
+=======
+  //
+  //   evalExpr[Option[CompletionAware]](code)
+  // }
+
+  // Coming soon
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // implicit def string2liftedcode(s: String): LiftedCode = new LiftedCode(s)
   // case class LiftedCode(code: String) {
   //   val lifted: String = {

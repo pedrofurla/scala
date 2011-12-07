@@ -18,13 +18,21 @@ abstract class TreeGen extends reflect.internal.TreeGen {
 
   import global._
   import definitions._
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def mkCheckInit(tree: Tree): Tree = {
     val tpe =
       if (tree.tpe != null || !tree.hasSymbol) tree.tpe
       else tree.symbol.tpe
 
+<<<<<<< HEAD
     if (!global.phase.erasedTypes && settings.warnSelectNullable.value && 
+=======
+    if (!global.phase.erasedTypes && settings.warnSelectNullable.value &&
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         tpe <:< NotNullClass.tpe && !tpe.isNotNull)
       mkRuntimeCall(nme.checkInitialized, List(tree))
     else
@@ -32,7 +40,36 @@ abstract class TreeGen extends reflect.internal.TreeGen {
   }
 
   // wrap the given expression in a SoftReference so it can be gc-ed
+<<<<<<< HEAD
   def mkSoftRef(expr: Tree): Tree = New(TypeTree(SoftReferenceClass.tpe), List(List(expr)))
+=======
+  def mkSoftRef(expr: Tree): Tree = atPos(expr.pos) {
+    New(SoftReferenceClass, expr)
+  }
+  // annotate the expression with @unchecked
+  def mkUnchecked(expr: Tree): Tree = atPos(expr.pos) {
+    // This can't be "Annotated(New(UncheckedClass), expr)" because annotations
+    // are very pick about things and it crashes the compiler with "unexpected new".
+    Annotated(New(scalaDot(UncheckedClass.name), List(Nil)), expr)
+  }
+  // if it's a Match, mark the selector unchecked; otherwise nothing.
+  def mkUncheckedMatch(tree: Tree) = tree match {
+    case Match(selector, cases) => atPos(tree.pos)(Match(mkUnchecked(selector), cases))
+    case _                      => tree
+  }
+
+  def withDefaultCase(matchExpr: Tree, defaultAction: Tree/*scrutinee*/ => Tree): Tree = matchExpr match {
+    case Match(scrutinee, cases) =>
+      if (cases exists treeInfo.isDefaultCase) matchExpr
+      else {
+        val defaultCase = CaseDef(Ident(nme.WILDCARD), EmptyTree, defaultAction(scrutinee))
+        Match(scrutinee, cases :+ defaultCase)
+      }
+    case _ =>
+      matchExpr
+    // [Martin] Adriaan: please fill in virtpatmat transformation here
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   def mkCached(cvar: Symbol, expr: Tree): Tree = {
     val cvarRef = mkUnattributedRef(cvar)
@@ -57,15 +94,26 @@ abstract class TreeGen extends reflect.internal.TreeGen {
       setInfo accessor.tpe.finalResultType
       setFlag (MODULEVAR)
     )
+<<<<<<< HEAD
     
     mval.addAnnotation(AnnotationInfo(VolatileAttr.tpe, Nil, Nil))
     if (mval.owner.isClass) {
       mval setFlag (PRIVATE | LOCAL | SYNTHETIC)
+=======
+
+    mval addAnnotation VolatileAttr
+    if (mval.owner.isClass) {
+      mval setFlag (PrivateLocal | SYNTHETIC)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       mval.owner.info.decls.enter(mval)
     }
     ValDef(mval)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // def m: T = { if (m$ eq null) m$ = new m$class(...) m$ }
   // where (...) are eventual outer accessors
   def mkCachedModuleAccessDef(accessor: Symbol, mvar: Symbol) =
@@ -75,12 +123,21 @@ abstract class TreeGen extends reflect.internal.TreeGen {
     DefDef(accessor, Select(This(msym.owner), msym))
 
   def newModule(accessor: Symbol, tpe: Type) =
+<<<<<<< HEAD
     New(TypeTree(tpe), 
         List(for (pt <- tpe.typeSymbol.primaryConstructor.info.paramTypes) 
              yield This(accessor.owner.enclClass)))
 
   // def m: T;
   def mkModuleAccessDcl(accessor: Symbol) = 
+=======
+    New(TypeTree(tpe),
+        List(for (pt <- tpe.typeSymbol.primaryConstructor.info.paramTypes)
+             yield This(accessor.owner.enclClass)))
+
+  // def m: T;
+  def mkModuleAccessDcl(accessor: Symbol) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     DefDef(accessor setFlag lateDEFERRED, EmptyTree)
 
   def mkRuntimeCall(meth: Name, args: List[Tree]): Tree =
@@ -88,18 +145,30 @@ abstract class TreeGen extends reflect.internal.TreeGen {
 
   def mkRuntimeCall(meth: Name, targs: List[Type], args: List[Tree]): Tree =
     mkMethodCall(ScalaRunTimeModule, meth, targs, args)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def mkSysErrorCall(message: String): Tree =
     mkMethodCall(Sys_error, List(Literal(Constant(message))))
 
   /** A creator for a call to a scala.reflect.Manifest or ClassManifest factory method.
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param    full          full or partial manifest (target will be Manifest or ClassManifest)
    *  @param    constructor   name of the factory method (e.g. "classType")
    *  @param    tparg         the type argument
    *  @param    args          value arguments
    *  @return   the tree
+<<<<<<< HEAD
    */  
+=======
+   */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def mkManifestFactoryCall(full: Boolean, constructor: String, tparg: Type, args: List[Tree]): Tree =
     mkMethodCall(
       if (full) FullManifestModule else PartialManifestModule,
@@ -109,7 +178,11 @@ abstract class TreeGen extends reflect.internal.TreeGen {
     )
 
   /** Make a synchronized block on 'monitor'. */
+<<<<<<< HEAD
   def mkSynchronized(monitor: Tree, body: Tree): Tree =     
+=======
+  def mkSynchronized(monitor: Tree, body: Tree): Tree =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     Apply(Select(monitor, Object_synchronized), List(body))
 
   def wildcardStar(tree: Tree) =
@@ -149,7 +222,11 @@ abstract class TreeGen extends reflect.internal.TreeGen {
       List(tree)
     )
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Generate a cast for tree Tree representing Array with
    *  elem type elemtp to expected type pt.
    */
@@ -158,7 +235,11 @@ abstract class TreeGen extends reflect.internal.TreeGen {
       mkCast(mkRuntimeCall("toObjectArray", List(tree)), pt)
     else
       mkCast(tree, pt)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Translate names in Select/Ident nodes to type names.
    */
   def convertToTypeName(tree: Tree): Option[RefTree] = tree match {
@@ -173,7 +254,11 @@ abstract class TreeGen extends reflect.internal.TreeGen {
     case Some(qual1)  => SelectFromTypeTree(qual1 setPos qual.pos, origName.toTypeName)
     case _            => EmptyTree
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Create a ValDef initialized to the given expression, setting the
    *  symbol to its packed type, and an function for creating Idents
    *  which refer to it.
@@ -193,7 +278,11 @@ abstract class TreeGen extends reflect.internal.TreeGen {
    */
   def evalOnce(expr: Tree, owner: Symbol, unit: CompilationUnit)(within: (() => Tree) => Tree): Tree = {
     var used = false
+<<<<<<< HEAD
     if (treeInfo.isPureExpr(expr)) {
+=======
+    if (treeInfo.isExprSafeToInline(expr)) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       within(() => if (used) expr.duplicate else { used = true; expr })
     }
     else {
@@ -210,7 +299,11 @@ abstract class TreeGen extends reflect.internal.TreeGen {
     val used = new Array[Boolean](exprs.length)
     var i = 0
     for (expr <- exprs) {
+<<<<<<< HEAD
       if (treeInfo.isPureExpr(expr)) {
+=======
+      if (treeInfo.isExprSafeToInline(expr)) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         exprs1 += {
           val idx = i
           () => if (used(idx)) expr.duplicate else { used(idx) = true; expr }
@@ -239,7 +332,11 @@ abstract class TreeGen extends reflect.internal.TreeGen {
    */
   def mkDoubleCheckedLocking(clazz: Symbol, cond: Tree, syncBody: List[Tree], stats: List[Tree]): Tree =
     mkDoubleCheckedLocking(mkAttributedThis(clazz), cond, syncBody, stats)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def mkDoubleCheckedLocking(attrThis: Tree, cond: Tree, syncBody: List[Tree], stats: List[Tree]): Tree = {
     If(cond,
        Block(

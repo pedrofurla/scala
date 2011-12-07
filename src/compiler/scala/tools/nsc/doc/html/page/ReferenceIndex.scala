@@ -16,7 +16,11 @@ class ReferenceIndex(letter: Char, index: doc.Index, universe: Universe) extends
   def title = {
     val s = universe.settings
     ( if (!s.doctitle.isDefault) s.doctitle.value else "" ) +
+<<<<<<< HEAD
     ( if (!s.docversion.isDefault) (" " + s.docversion.value) else "" ) 
+=======
+    ( if (!s.docversion.isDefault) (" " + s.docversion.value) else "" )
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   }
 
   def headers =

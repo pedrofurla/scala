@@ -19,7 +19,11 @@ import parallel.mutable.ParSet
  *  @tparam This the type of the set itself.
  *
  *  $setnote
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author  Martin Odersky
  *  @version 2.8
  *  @since 2.8
@@ -28,7 +32,11 @@ import parallel.mutable.ParSet
  *  @note
  *    This trait provides most of the operations of a `mutable.Set` independently of its representation.
  *    It is typically inherited by concrete implementations of sets.
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *    To implement a concrete mutable set, you need to provide implementations
  *    of the following methods:
  *    {{{
@@ -52,16 +60,28 @@ import parallel.mutable.ParSet
  *  @define coll mutable set
  *  @define Coll mutable.Set
  */
+<<<<<<< HEAD
 trait SetLike[A, +This <: SetLike[A, This] with Set[A]] 
+=======
+trait SetLike[A, +This <: SetLike[A, This] with Set[A]]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   extends scala.collection.SetLike[A, This]
      with Scriptable[A]
      with Builder[A, This]
      with Growable[A]
+<<<<<<< HEAD
      with Shrinkable[A] 
      with Cloneable[mutable.Set[A]] 
      with Parallelizable[A, ParSet[A]]
 { self =>
   
+=======
+     with Shrinkable[A]
+     with Cloneable[mutable.Set[A]]
+     with Parallelizable[A, ParSet[A]]
+{ self =>
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A common implementation of `newBuilder` for all mutable sets
    *  in terms of `empty`. Overrides the implementation in `collection.SetLike`
    *  for better efficiency.
@@ -69,7 +89,11 @@ trait SetLike[A, +This <: SetLike[A, This] with Set[A]]
   override protected[this] def newBuilder: Builder[A, This] = empty
 
   protected[this] override def parCombiner = ParSet.newCombiner[A]
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Adds an element to this $coll.
    *
    *  @param elem the element to be added
@@ -110,7 +134,11 @@ trait SetLike[A, +This <: SetLike[A, This] with Set[A]]
   }
 
   // abstract methods from Growable/Shrinkable
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Adds a single element to the set. */
   def +=(elem: A): this.type
   def -=(elem: A): this.type
@@ -135,9 +163,15 @@ trait SetLike[A, +This <: SetLike[A, This] with Set[A]]
   def result: This = repr
 
   /** Creates a new set consisting of all the elements of this set and `elem`.
+<<<<<<< HEAD
    *  
    *  $addDuplicates
    *  
+=======
+   *
+   *  $addDuplicates
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param elem  the element to add.
    *  @return      a new set consisting of elements of this set and `elem`.
    */
@@ -149,9 +183,15 @@ trait SetLike[A, +This <: SetLike[A, This] with Set[A]]
 
   /** Creates a new set consisting of all the elements of this set and two or more
    *  specified elements.
+<<<<<<< HEAD
    *  
    *  $addDuplicates
    *  
+=======
+   *
+   *  $addDuplicates
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param elem1 the first element to add.
    *  @param elem2 the second element to add.
    *  @param elems the remaining elements to add.

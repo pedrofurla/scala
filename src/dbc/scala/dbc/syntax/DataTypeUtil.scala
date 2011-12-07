@@ -19,7 +19,11 @@ import java.math.BigInteger;
 
   final val java_lang_Integer_SIZE = 32;
   final val java_lang_Long_SIZE    = 64;
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def boolean = new datatype.Boolean;
   def tinyint = new datatype.ExactNumeric[Byte](dbc.DataType.BYTE) {
     val precisionRadix = 2;
@@ -94,5 +98,9 @@ import java.math.BigInteger;
     def length = _length;
   }
   def characterLargeObject = new datatype.CharacterLargeObject;
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

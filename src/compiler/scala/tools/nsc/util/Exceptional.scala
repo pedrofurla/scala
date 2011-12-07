@@ -24,30 +24,52 @@ class Exceptional(val ex: Throwable)(implicit prefs: ScalaPrefs) {
 
   /** Stack frame contexts are only shown as long as this is true. */
   def spanFn(frame: JavaStackFrame): Boolean = true
+<<<<<<< HEAD
   
   /** The result of this will be printed before a context trace. */
   def contextPrelude: String =
     if (isScanDone) ""
     else "/* Still scanning source path: there may be more momentarily. */\n"
   
+=======
+
+  /** The result of this will be printed before a context trace. */
+  def contextPrelude: String =
+    if (isScanDone || prefs.codeSources.isEmpty) ""
+    else "/* Still scanning source path: there may be more momentarily. */\n"
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Frames with surrounding context. */
   private def contextFrames     = toList takeWhile spanFn
   def contextHead(): String     = contextElems.headOption getOrElse ""
   def contextElems()            = contextFrames map formatter.inContext
   def context(): String         = context(length)
+<<<<<<< HEAD
   def context(num: Int): String = contextPrelude + ojoinOr(contextFrames take num map formatter.inContext, "\n", "No stack trace.")  
   
   /** Exceptional doesn't extend Seq because it turns out to be super 
+=======
+  def context(num: Int): String = contextPrelude + ojoinOr(contextFrames take num map formatter.inContext, "\n", "No stack trace.")
+
+  /** Exceptional doesn't extend Seq because it turns out to be super
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  annoying in the repl: tab-completion sees all the Seq methods.
    */
   def length            = toList.length
   def toList            = table.toList
   def iterator          = table.iterator
   def apply(index: Int) = table(index)
+<<<<<<< HEAD
   
   def causes  = Exceptional.causes(ex)
   def summary = unwrapped.toString + "\n  at " + apply(0).shortNameString
   
+=======
+
+  def causes  = Exceptional.causes(ex)
+  def summary = unwrapped.toString + "\n  at " + apply(0).shortNameString
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def println(msg: Any) = {
     Console println msg
     Console.flush()
@@ -58,14 +80,22 @@ class Exceptional(val ex: Throwable)(implicit prefs: ScalaPrefs) {
   def showCauses()         = println((ex :: causes).mkString("", "\n  caused by -> ", ""))
   def showTable()          = println(table)
   def showSummary()        = println(summary)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def toString = summary
 }
 
 
 object Exceptional {
   type Catcher[+T] = PartialFunction[Throwable, T]
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Creates an exception handler which will only ever catch the given
    *  number of exceptions (if the given pf is defined there) and after
    *  that will disable itself.
@@ -77,13 +107,21 @@ object Exceptional {
         pf(ex)
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** The Throwable => Exceptional implicit plus the associated factory. */
   implicit def throwableToExceptional(ex: Throwable)(implicit prefs: ScalaPrefs): Exceptional = apply(ex)(prefs)
   def apply(ex: Throwable)(implicit prefs: ScalaPrefs) = new Exceptional(ex)(prefs)
 
   /** Some handy functions. */
+<<<<<<< HEAD
   def stack()  = JavaStackFrame frames ((new Throwable).getStackTrace dropWhile isLocal)  
+=======
+  def stack()  = JavaStackFrame frames ((new Throwable).getStackTrace dropWhile isLocal)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def showme() = apply(new Throwable).show()
   def showstack() = apply(new Throwable).showTable()
 
@@ -96,7 +134,11 @@ object Exceptional {
       >> ("class"   -> (_.shortestName))  >+ "."
       << ("method"  -> (_.methodName))
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait Calibrated {
     def newTable(ex: Throwable): TableDef[JavaStackFrame]#Table
     def inContext(frame: JavaStackFrame): String
@@ -138,7 +180,11 @@ object Exceptional {
     case ex   => x :: causes(ex)
   }
   def unwrap(x: Throwable): Throwable = x match {
+<<<<<<< HEAD
     case  _: InvocationTargetException | 
+=======
+    case  _: InvocationTargetException |
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           _: ExceptionInInitializerError |
           _: UndeclaredThrowableException |
           _: ExecutionException

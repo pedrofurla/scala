@@ -9,11 +9,19 @@
 package scala.collection
 package mutable
 
+<<<<<<< HEAD
 /** A builder that constructs its result lazily. Iterators or iterables to 
  *  be added to this builder with `++=` are not evaluated until `result` is called.
  *  
  *  @since 2.8
  *  
+=======
+/** A builder that constructs its result lazily. Iterators or iterables to
+ *  be added to this builder with `++=` are not evaluated until `result` is called.
+ *
+ *  @since 2.8
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @tparam Elem    type of the elements for this builder.
  *  @tparam To      type of the collection this builder builds.
  */
@@ -23,5 +31,9 @@ abstract class LazyBuilder[Elem, +To] extends Builder[Elem, To] {
   def +=(x: Elem): this.type = { parts += List(x); this }
   override def ++=(xs: TraversableOnce[Elem]): this.type = { parts += xs ; this }
   def result(): To
+<<<<<<< HEAD
   def clear() { parts.clear() } 
+=======
+  def clear() { parts.clear() }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

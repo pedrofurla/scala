@@ -15,8 +15,13 @@ trait CompletionOutput {
   val global: Global
 
   import global._
+<<<<<<< HEAD
   import definitions.{ NothingClass, AnyClass, isTupleTypeOrSubtype, isFunctionType, isRepeatedParamType }
   
+=======
+  import definitions.{ isTupleTypeOrSubtype, isFunctionType, isRepeatedParamType }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Reducing fully qualified noise for some common packages.
    */
   val typeTransforms = List(
@@ -25,13 +30,18 @@ trait CompletionOutput {
     "scala.collection.mutable." -> "mutable.",
     "scala.collection.generic." -> "generic."
   )
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def quietString(tp: String): String =
     typeTransforms.foldLeft(tp) {
       case (str, (prefix, replacement)) =>
         if (str startsWith prefix) replacement + (str stripPrefix prefix)
         else str
     }
+<<<<<<< HEAD
   
   class MethodSymbolOutput(method: Symbol) {
     val pkg       = method.ownerChain find (_.isPackageClass) map (_.fullName) getOrElse ""
@@ -46,6 +56,22 @@ trait CompletionOutput {
     def methodTypeToString(mt: MethodType) =
       (mt.paramss map paramsString mkString "") + ": " + relativize(mt.finalResultType)
     
+=======
+
+  class MethodSymbolOutput(method: Symbol) {
+    val pkg       = method.ownerChain find (_.isPackageClass) map (_.fullName) getOrElse ""
+
+    def relativize(str: String): String = quietString(str stripPrefix (pkg + "."))
+    def relativize(tp: Type): String    = relativize(tp.normalize.toString)
+    def relativize(sym: Symbol): String = relativize(sym.info)
+
+    def braceList(tparams: List[String]) = if (tparams.isEmpty) "" else (tparams map relativize).mkString("[", ", ", "]")
+    def parenList(params: List[Any])  = params.mkString("(", ", ", ")")
+
+    def methodTypeToString(mt: MethodType) =
+      (mt.paramss map paramsString mkString "") + ": " + relativize(mt.finalResultType)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def typeToString(tp: Type): String = relativize(
       tp match {
         case x if isFunctionType(x)           => functionString(x)
@@ -73,7 +99,11 @@ trait CompletionOutput {
         case xs                     => xs
       }
       parenList(strs)
+<<<<<<< HEAD
     }    
+=======
+    }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     def methodString() =
       method.keyString + " " + method.nameString + (method.info.normalize match {

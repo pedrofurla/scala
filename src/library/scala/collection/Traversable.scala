@@ -17,7 +17,11 @@ import annotation.bridge
 
 /** A trait for traversable collections.
  *  All operations are guaranteed to be performed in a single-threaded manner.
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  $traversableInfo
  */
 trait Traversable[+A] extends TraversableLike[A, Traversable[A]]
@@ -28,6 +32,7 @@ trait Traversable[+A] extends TraversableLike[A, Traversable[A]]
 
   override def seq: Traversable[A] = this
 
+<<<<<<< HEAD
   @bridge 
   def flatten[B](implicit asTraversable: A => /*<:<!!!*/ GenTraversableOnce[B]): Traversable[B] = super.flatten(asTraversable)
 
@@ -36,6 +41,16 @@ trait Traversable[+A] extends TraversableLike[A, Traversable[A]]
 
   /* The following methods are inherited from TraversableLike
    * 
+=======
+  @bridge
+  def flatten[B](implicit asTraversable: A => /*<:<!!!*/ GenTraversableOnce[B]): Traversable[B] = super.flatten(asTraversable)
+
+  @bridge
+  def transpose[B](implicit asTraversable: A => /*<:<!!!*/ GenTraversableOnce[B]): Traversable[Traversable[B]] = super.transpose(asTraversable)
+
+  /* The following methods are inherited from TraversableLike
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def isEmpty: Boolean
   override def size: Int
   override def hasDefiniteSize
@@ -101,10 +116,19 @@ object Traversable extends TraversableFactory[Traversable] { self =>
 
   /** Provides break functionality separate from client code */
   private[collection] val breaks: Breaks = new Breaks
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** $genericCanBuildFromInfo */
   implicit def canBuildFrom[A]: CanBuildFrom[Coll, A, Traversable[A]] = ReusableCBF.asInstanceOf[GenericCanBuildFrom[A]]
 
   def newBuilder[A]: Builder[A, Traversable[A]] = immutable.Traversable.newBuilder[A]
 }
 
+<<<<<<< HEAD
+=======
+/** Explicit instantiation of the `Traversable` trait to reduce class file size in subclasses. */
+private[scala] abstract class AbstractTraversable[+A] extends Traversable[A]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0

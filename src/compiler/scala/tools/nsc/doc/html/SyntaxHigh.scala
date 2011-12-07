@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* NSC -- new Scala compiler
  * Copyright 2010-2011 LAMP/EPFL
  * @author  Stephane Micheloud
@@ -53,6 +54,63 @@ private[html] object SyntaxHigh {
     val buf = data.getBytes
     val out = new StringBuilder
 
+=======
+/* NSC -- new Scala compiler
+ * Copyright 2010-2011 LAMP/EPFL
+ * @author  Stephane Micheloud
+ */
+
+package scala.tools.nsc.doc.html
+
+import xml.NodeSeq
+
+/** Highlight the syntax of Scala code appearing in a `{{{` wiki block
+  * (see method `HtmlPage.blockToHtml`).
+  *
+  * @author Stephane Micheloud
+  * @version 1.0
+  */
+private[html] object SyntaxHigh {
+
+  /** Reserved words, sorted alphabetically
+    * (see [[scala.reflect.internal.StdNames]]) */
+  val reserved = Array(
+    "abstract", "case", "catch", "class", "def",
+    "do", "else", "extends", "false", "final", "finally",
+    "for", "if", "implicit", "import", "lazy", "match",
+    "new", "null", "object", "override", "package",
+    "private", "protected", "return", "sealed", "super",
+    "this", "throw", "trait", "true", "try", "type",
+    "val", "var", "while", "with", "yield")
+
+  /** Annotations, sorted alphabetically */
+  val annotations = Array(
+    "BeanProperty", "SerialVersionUID",
+    "beanGetter", "beanSetter", "bridge", "cloneable",
+    "deprecated", "deprecatedName",
+    "elidable", "field", "getter", "inline",
+    "migration", "native", "noinline", "param",
+    "remote", "setter", "specialized", "strictfp", "switch",
+    "tailrec", "throws", "transient",
+    "unchecked", "uncheckedStable", "uncheckedVariance",
+    "varargs", "volatile")
+
+  /** Standard library classes/objects, sorted alphabetically */
+  val standards = Array (
+    "Any", "AnyRef", "AnyVal", "App", "Application", "Array",
+    "Boolean", "Byte", "Char", "Class", "Console", "Double",
+    "Enumeration", "Float", "Function", "Int",
+    "List", "Long", "Manifest", "Map",
+    "None", "Nothing", "Null", "Object", "Option",
+    "Pair", "Predef",
+    "Seq", "Set", "Short", "Some", "String", "Symbol",
+    "Triple", "Unit")
+
+  def apply(data: String): NodeSeq = {
+    val buf = data.getBytes
+    val out = new StringBuilder
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def compare(offset: Int, key: String): Int = {
       var i = offset
       var j = 0
@@ -85,6 +143,7 @@ private[html] object SyntaxHigh {
         else return m
       }
       -1
+<<<<<<< HEAD
     }
 
     def comment(i: Int): String = {
@@ -214,10 +273,142 @@ private[html] object SyntaxHigh {
       if (i == buf.length) return i
       buf(i) match {
         case '\n' => 
+=======
+    }
+
+    def comment(i: Int): String = {
+      val out = new StringBuilder("/")
+      def line(i: Int): Int =
+        if (i == buf.length || buf(i) == '\n') i
+        else {
+          out append buf(i).toChar
+          line(i+1)
+        }
+      var level = 0
+      def multiline(i: Int, star: Boolean): Int = {
+        if (i == buf.length) return i
+        val ch = buf(i).toChar
+        out append ch
+        ch match {
+          case '*' =>
+            if (star) level += 1
+            multiline(i+1, !star)
+          case '/' =>
+            if (star) {
+              if (level > 0) level -= 1
+              if (level == 0) i else multiline(i+1, true)
+            } else
+              multiline(i+1, false)
+          case _ =>
+            multiline(i+1, false)
+        }
+      }
+      if (buf(i) == '/') line(i) else multiline(i, true)
+      out.toString
+    }
+
+    /* e.g. `val endOfLine = '\u000A'`*/
+    def charlit(j: Int): String = {
+      val out = new StringBuilder("'")
+      def charlit0(i: Int, bslash: Boolean): Int = {
+        if (i == buf.length) i
+        else if (i > j+6) { out setLength 0; j }
+        else {
+          val ch = buf(i).toChar
+          out append ch
+          ch match {
+            case '\\' =>
+              charlit0(i+1, true)
+            case '\'' if !bslash =>
+              i
+            case _ =>
+              if (bslash && '0' <= ch && ch <= '9') charlit0(i+1, true)
+              else charlit0(i+1, false)
+          }
+        }
+      }
+      charlit0(j, false)
+      out.toString
+    }
+
+    def strlit(i: Int): String = {
+      val out = new StringBuilder("\"")
+      def strlit0(i: Int, bslash: Boolean): Int = {
+        if (i == buf.length) return i
+        val ch = buf(i).toChar
+        out append ch
+        ch match {
+          case '\\' =>
+            strlit0(i+1, true)
+          case '"' if !bslash =>
+            i
+          case _ =>
+            strlit0(i+1, false)
+        }
+      }
+      strlit0(i, false)
+      out.toString
+    }
+
+    def numlit(i: Int): String = {
+      val out = new StringBuilder
+      def intg(i: Int): Int = {
+        if (i == buf.length) return i
+        val ch = buf(i).toChar
+        ch match {
+          case '.' =>
+            out append ch
+            frac(i+1)
+          case _ =>
+            if (Character.isDigit(ch)) {
+              out append ch
+              intg(i+1)
+            } else i
+        }
+      }
+      def frac(i: Int): Int = {
+        if (i == buf.length) return i
+        val ch = buf(i).toChar
+        ch match {
+          case 'e' | 'E' =>
+            out append ch
+            expo(i+1, false)
+          case _ =>
+            if (Character.isDigit(ch)) {
+              out append ch
+              frac(i+1)
+            } else i
+        }
+      }
+      def expo(i: Int, signed: Boolean): Int = {
+        if (i == buf.length) return i
+        val ch = buf(i).toChar
+        ch match {
+          case '+' | '-' if !signed =>
+            out append ch
+            expo(i+1, true)
+          case _ =>
+            if (Character.isDigit(ch)) {
+              out append ch
+              expo(i+1, signed)
+            } else i
+        }
+      }
+      intg(i)
+      out.toString
+    }
+
+    def parse(pre: String, i: Int): Int = {
+      out append pre
+      if (i == buf.length) return i
+      buf(i) match {
+        case '\n' =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           parse("\n", i+1)
         case ' ' =>
           parse(" ", i+1)
         case '&' =>
+<<<<<<< HEAD
           parse("&amp;", i+1)
         case '<' =>
           val ch = buf(i+1).toChar
@@ -284,3 +475,71 @@ private[html] object SyntaxHigh {
     xml.Unparsed(out.toString)
   }
 }
+=======
+          parse("&amp;", i+1)
+        case '<' =>
+          val ch = buf(i+1).toChar
+          if (ch == '-' || ch == ':' || ch == '%')
+            parse("<span class=\"kw\">&lt;"+ch+"</span>", i+2)
+          else
+            parse("&lt;", i+1)
+        case '>' =>
+          if (buf(i+1) == ':')
+            parse("<span class=\"kw\">&gt;:</span>", i+2)
+          else
+            parse("&gt;", i+1)
+        case '=' =>
+          if (buf(i+1) == '>')
+            parse("<span class=\"kw\">=&gt;</span>", i+2)
+          else
+            parse(buf(i).toChar.toString, i+1)
+        case '/' =>
+          if (buf(i+1) == '/' || buf(i+1) == '*') {
+            val c = comment(i+1)
+            parse("<span class=\"cmt\">"+c+"</span>", i+c.length)
+          } else
+            parse(buf(i).toChar.toString, i+1)
+        case '\'' =>
+          val s = charlit(i+1)
+          if (s.length > 0)
+            parse("<span class=\"lit\">"+s+"</span>", i+s.length)
+          else
+            parse(buf(i).toChar.toString, i+1)
+        case '"' =>
+          val s = strlit(i+1)
+          parse("<span class=\"lit\">"+s+"</span>", i+s.length)
+        case '@' =>
+          val k = lookup(annotations, i+1)
+          if (k >= 0)
+            parse("<span class=\"ano\">@"+annotations(k)+"</span>", i+annotations(k).length+1)
+          else
+            parse(buf(i).toChar.toString, i+1)
+        case _ =>
+          if (i == 0 || !Character.isJavaIdentifierPart(buf(i-1).toChar)) {
+            if (Character.isDigit(buf(i)) ||
+                (buf(i) == '.' && Character.isDigit(buf(i+1)))) {
+              val s = numlit(i)
+              parse("<span class=\"num\">"+s+"</span>", i+s.length)
+            } else {
+              val k = lookup(reserved, i)
+              if (k >= 0)
+                parse("<span class=\"kw\">"+reserved(k)+"</span>", i+reserved(k).length)
+              else {
+                val k = lookup(standards, i)
+                if (k >= 0)
+                  parse("<span class=\"std\">"+standards(k)+"</span>", i+standards(k).length)
+                else
+                  parse(buf(i).toChar.toString, i+1)
+              }
+            }
+          } else
+            parse(buf(i).toChar.toString, i+1)
+      }
+      i
+    }
+
+    parse("", 0)
+    xml.Unparsed(out.toString)
+  }
+}
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0

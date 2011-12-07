@@ -12,12 +12,20 @@ import io.{ Directory, Path, AbstractFile }
 
 class FscSettings(error: String => Unit) extends Settings(error) {
   outer =>
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   locally {
     disable(prompt)
     disable(resident)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   val currentDir   = StringSetting ("-current-dir", "path", "Base directory for resolving relative paths", "").internalOnly()
   val reset        = BooleanSetting("-reset",    "Reset compile server caches")
   val shutdown     = BooleanSetting("-shutdown", "Shutdown compile server")

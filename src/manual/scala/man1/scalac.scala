@@ -7,6 +7,10 @@ package scala.man1
 
 /**
  *  @author Stephane Micheloud
+<<<<<<< HEAD
+=======
+ *  @version 1.0
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  */
 object scalac extends Command {
   import _root_.scala.tools.docutil.ManPage._
@@ -51,11 +55,16 @@ object scalac extends Command {
     "current development environment and will be supported in future " &
     "releases. An additional set of non-standard options are specific to " &
     "the current virtual machine implementation and are subject to change " &
+<<<<<<< HEAD
     "in the future.  Non-standard options begin with " & Bold("-X") & ".",
+=======
+    "in the future.  Non-standard options begin with " & MBold("-X") & ".",
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     Section("Standard Options",
       DefinitionList(
         Definition(
+<<<<<<< HEAD
           CmdOption("g:{none,source,line,vars,notc}"),
           SeqPara(
             Mono("\"none\"") & " generates no debugging info,",
@@ -86,6 +95,23 @@ object scalac extends Command {
             "Non variable type-arguments in type patterns are unchecked " &
             "since they are eliminated by erasure",
             "Available since Scala version 2.3.0")),
+=======
+          CmdOptionBound("D", "property=value"),
+          "Pass " & CmdOptionBound("D", "property=value") & " directly to the runtime system."),
+        Definition(
+          CmdOptionBound("J", Argument("flag")),
+          "Pass " & Mono(Argument("flag")) & " directly to the runtime system."),
+        Definition(
+          CmdOptionBound("P:", Argument("plugin:opt")),
+          "Pass an option to a plugin"),
+        Definition(
+          CmdOption("X"),
+          "Print a synopsis of advanced options."),
+        Definition(
+          CmdOption("bootclasspath", Argument("path")),
+          "Override location of bootstrap class files (where to find the " &
+          "standard built-in classes, such as \"" & Mono("scala.List") & "\")."),
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         Definition(
           CmdOption("classpath", Argument("path")),
           SeqPara(
@@ -99,6 +125,7 @@ object scalac extends Command {
             "include the current directory in the search path, you must " &
             "include " & Mono("\".\"") & " in the new settings.")),
         Definition(
+<<<<<<< HEAD
           CmdOption("sourcepath", Argument("path")),
           "Specify where to find input source files."),
         Definition(
@@ -112,6 +139,16 @@ object scalac extends Command {
           CmdOption("d", Argument("directory")),
           "Specify where to place generated class files."),
         Definition(
+=======
+          CmdOption("d", Argument("directory|jar")),
+          "Specify where to place generated class files."),
+        Definition(
+          CmdOption("deprecation"),
+          SeqPara(
+            "Emit warning and location for usages of deprecated APIs.",
+            "Available since Scala version 2.2.1")),
+        Definition(
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           CmdOption("encoding", Argument("encoding")),
           SeqPara(
             "Specify character encoding used by source files.",
@@ -122,13 +159,61 @@ object scalac extends Command {
             MBold("    scala> ") &
             Mono("new java.io.InputStreamReader(System.in).getEncoding"))),
         Definition(
+<<<<<<< HEAD
           CmdOption("target:", Argument("target")),
+=======
+          CmdOption("explaintypes"),
+          "Explain type errors in more detail."),
+        Definition(
+          CmdOption("extdirs", Argument("dirs")),
+          "Override location of installed extensions."),
+        Definition(
+          CmdOptionBound("g:", "{none,source,line,vars,notailcalls}"),
+          SeqPara(
+            Mono("\"none\"") & " generates no debugging info,",
+            Mono("\"source\"") & " generates only the source file attribute,",
+            Mono("\"line\"") & " generates source and line number information,",
+            Mono("\"vars\"") & " generates source, line number and local " &
+            "variable information,",
+            Mono("\"notailcalls\"") & " generates all of the above and " &
+            Italic("will not") & " perform tail call optimization.")),
+        Definition(
+          CmdOption("help"),
+          "Print a synopsis of standard options."),
+        Definition(
+          CmdOption("javabootclasspath", Argument("path")),
+          "Override Java boot classpath."),
+        Definition(
+          CmdOption("javaextdirs", Argument("path")),
+          "Override Java extdirs classpath."),
+        Definition(
+          CmdOption("no-specialization"),
+          "Ignore " & MItalic("@specialize") & " annotations."),
+        Definition(
+          CmdOption("nobootcp"),
+          "Do not use the boot classpath for the Scala jar files."),
+        Definition(
+          CmdOption("nowarn"),
+          "Generate no warnings"),
+        Definition(
+          CmdOption("optimise"),
+          "Generates faster bytecode by applying optimisations to the program."),
+        Definition(
+          CmdOption("print"),
+          "Print program with all Scala-specific features removed."),
+        Definition(
+          CmdOption("sourcepath", Argument("path")),
+          "Specify location(s) of source files."),
+        Definition(
+          CmdOptionBound("target:", Argument("target")),
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           SeqPara(
             "Specify which backend to use (" & Mono("jvm-1.5," &
             "msil") & ").",
             "The default value is " & Mono("\"jvm-1.5\"") & " (was " &
             Mono("\"jvm-1.4\"") & " up to Scala version 2.6.1).")),
         Definition(
+<<<<<<< HEAD
           CmdOption("print"),
           "Print program with all Scala-specific features removed"
         ),
@@ -142,16 +227,41 @@ object scalac extends Command {
         Definition(
           CmdOption("uniqid"),
           "Print identifiers with unique names (debugging option)."),
+=======
+          CmdOption("toolcp", Argument("path")),
+          "Add to the runner classpath."),
+        Definition(
+          CmdOption("unchecked"),
+          SeqPara(
+            "Enable detailed unchecked (erasure) warnings",
+            "Non variable type-arguments in type patterns are unchecked " &
+            "since they are eliminated by erasure",
+            "Available since Scala version 2.3.0")),
+        Definition(
+          CmdOption("uniqid"),
+          "Uniquely tag all identifiers in debugging output."),
+        Definition(
+          CmdOption("verbose"),
+          "Output messages about what the compiler is doing"),
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         Definition(
           CmdOption("version"),
           "Print product version and exit."),
         Definition(
+<<<<<<< HEAD
           /*CmdOption("?") & "| " &*/ CmdOption("help"),
           "Print a synopsis of standard options."))),
+=======
+          Mono(Bold("@") & Argument("file")),
+          "A text file containing compiler arguments (options and source files)")
+      )
+    ),
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     Section("Advanced Options",
       DefinitionList(
         Definition(
+<<<<<<< HEAD
           CmdOption("Xassem", Argument("file")),
           "Name of the output assembly (only relevant with -target:msil)"),
         Definition(
@@ -160,16 +270,70 @@ object scalac extends Command {
         Definition(
           CmdOption("Xcheck-null"),
           "Emit warning on selection of nullable reference"),
+=======
+          CmdOption("Xassem-extdirs", Argument("dirs")),
+          "(Requires " & Mono("-target:msil") &
+          ") List of directories containing assemblies." &
+          "  default:" & Mono("lib") & "."),
+        Definition(
+          CmdOption("Xassem-name", Argument("file")),
+          "(Requires " & Mono("-target:msil") &
+          ") Name of the output assembly."),
+        Definition(
+          CmdOption("Xassem-path", Argument("path")),
+          "(Requires " & Mono("-target:msil") &
+          ") List of assemblies referenced by the program."),
+        Definition(
+          CmdOption("Xcheck-null"),
+          "Warn upon selection of nullable reference"),
+        Definition(
+          CmdOption("Xcheckinit"),
+          "Wrap field accessors to throw an exception on uninitialized access."),
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         Definition(
           CmdOption("Xdisable-assertions"),
           "Generate no assertions and assumptions"),
         Definition(
+<<<<<<< HEAD
           CmdOption("Xexperimental"),
           "enable experimental extensions"),
+=======
+          CmdOption("Xelide-below", Argument("n")),
+          "Calls to " & MItalic("@elidable") &
+          " methods are omitted if method priority is lower than argument."),
+        Definition(
+          CmdOption("Xexperimental"),
+          "Enable experimental extensions"),
+        Definition(
+          CmdOption("Xfatal-warnings"),
+          "Fail the compilation if there are any warnings."),
+        Definition(
+          CmdOption("Xfuture"),
+          "Turn on future language features."),
+        Definition(
+          CmdOption("Xgenerate-phase-graph", Argument("file")),
+          "Generate the phase graphs (outputs .dot files) to fileX.dot."),
+        Definition(
+          CmdOption("Xlint"),
+          "Enable recommended additional warnings."),
+        Definition(
+          CmdOption("Xlog-implicits"),
+          "Show more detail on why some implicits are not applicable."),
+        Definition(
+          CmdOption("Xmax-classfile-name", Argument("n")),
+          "Maximum filename length for generated classes."),
+        Definition(
+          CmdOption("Xmigration"),
+          "Warn about constructs whose behavior may have changed between 2.7 and 2.8."),
+        Definition(
+          CmdOption("Xno-forwarders"),
+          "Do not generate static forwarders in mirror classes."),
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         Definition(
           CmdOption("Xno-uescape"),
           "Disable handling of " & BSlash & "u unicode escapes"),
         Definition(
+<<<<<<< HEAD
           CmdOption("Xplug-types"),
           "Parse but ignore annotations in more locations"),
         Definition(
@@ -177,11 +341,21 @@ object scalac extends Command {
           "Load a plugin from a file"),
         Definition(
           CmdOption("Xplugin-disable:", Argument("plugin")),
+=======
+          CmdOption("Xnojline"),
+          "Do not use JLine for editing."),
+        Definition(
+          CmdOptionBound("Xplugin:", Argument("file")),
+          "Load a plugin from a file"),
+        Definition(
+          CmdOptionBound("Xplugin-disable:", Argument("plugin")),
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           "Disable a plugin"),
         Definition(
           CmdOption("Xplugin-list"),
           "Print a synopsis of loaded plugins"),
         Definition(
+<<<<<<< HEAD
           CmdOption("Xplugin-opt:", Argument("plugin:opt")),
           "Pass an option to a plugin"),
         Definition(
@@ -193,6 +367,22 @@ object scalac extends Command {
         Definition(
           CmdOption("Xprint-pos"),
           "Print tree positions (as offsets)"),
+=======
+          CmdOptionBound("Xplugin-require:", Argument("plugin")),
+          "Abort unless the given plugin(s) are available"),
+        Definition(
+          CmdOption("Xpluginsdir", Argument("path")),
+          "Path to search compiler plugins."),
+        Definition(
+          CmdOptionBound("Xprint:", Argument("phases")),
+          "Print out program after " & Argument("phases") & " (see below)."),
+        Definition(
+          CmdOption("Xprint-icode"),
+          "Log internal icode to *.icode files."),
+        Definition(
+          CmdOption("Xprint-pos"),
+          "Print tree positions, as offsets."),
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         Definition(
           CmdOption("Xprint-types"),
           "Print tree types (debugging option)."),
@@ -204,11 +394,22 @@ object scalac extends Command {
           "Compiler stays resident, files to compile are read from standard " &
           "input."),
         Definition(
+<<<<<<< HEAD
           CmdOption("Xshow-class", Argument("class")),
           "Show class info."),
         Definition(
           CmdOption("Xshow-object", Argument("object")),
           "Show object info."),
+=======
+          CmdOption("Xscript", Argument("object")),
+          "Treat the source file as a script and wrap it in a main method."),
+        Definition(
+          CmdOption("Xshow-class", Argument("class")),
+          "Show internal representation of class."),
+        Definition(
+          CmdOption("Xshow-object", Argument("object")),
+          "Show internal representation of object."),
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         Definition(
           CmdOption("Xshow-phases"),
           "Print a synopsis of compiler phases."),
@@ -216,8 +417,20 @@ object scalac extends Command {
           CmdOption("Xsource-reader", Argument("classname")),
           "Specify a custom method for reading source files."),
         Definition(
+<<<<<<< HEAD
           CmdOption("Xscript", Argument("object")),
           "Compile as a script, wrapping the code into object.main().")
+=======
+          CmdOption("Xsourcedir", Argument("path")),
+          "(Requires " & Mono("-target:msil") &
+          ") Mirror source folder structure in output directory.."),
+        Definition(
+          CmdOption("Xverify"),
+          "Verify generic signatures in generated bytecode."),
+        Definition(
+          CmdOption("Y"),
+          "Print a synopsis of private options.")
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       )
     ),
 
@@ -305,11 +518,19 @@ object scalac extends Command {
         SeqPara(
           "Specify the options to be passed to the " & MBold("java") &
           " command defined by " & MBold("JAVACMD") & ".",
+<<<<<<< HEAD
         
           "With Java 1.5 (or newer) one may for example configure the " &
           "memory usage of the JVM as follows: " &
           Mono("JAVA_OPTS=\"-Xmx512M -Xms16M -Xss16M\""),
         
+=======
+
+          "With Java 1.5 (or newer) one may for example configure the " &
+          "memory usage of the JVM as follows: " &
+          Mono("JAVA_OPTS=\"-Xmx512M -Xms16M -Xss16M\""),
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           "With " & Link("GNU Java", "http://gcc.gnu.org/java/") & " one " &
           "may configure the memory usage of the GIJ as follows: " &
           Mono("JAVA_OPTS=\"--mx512m --ms16m\"")
@@ -352,13 +573,23 @@ object scalac extends Command {
 
   def manpage = new Document {
     title = command
+<<<<<<< HEAD
     date = lastModified // e.g. "June 8, 2006"
     author = "Stephane Micheloud & LAMP"
     version = "0.4"
+=======
+    date = "September 2011"
+    author = "Stephane Micheloud"
+    version = "1.0"
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     sections = List(
       name,
       synopsis,
       parameters,
+<<<<<<< HEAD
+=======
+      description,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       options,
       environment,
       examples,

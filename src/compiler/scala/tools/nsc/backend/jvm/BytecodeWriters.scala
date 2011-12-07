@@ -7,10 +7,17 @@ package scala.tools.nsc
 package backend.jvm
 
 import ch.epfl.lamp.fjbg._
+<<<<<<< HEAD
 import java.io.{ DataOutputStream, OutputStream, File => JFile }
 import scala.tools.nsc.io._ 
 import scala.tools.nsc.util.ScalaClassLoader
 import scala.tools.util.Javap
+=======
+import java.io.{ DataOutputStream, FileOutputStream, OutputStream, File => JFile }
+import scala.tools.nsc.io._
+import scala.tools.nsc.util.ScalaClassLoader
+import scala.tools.util.JavapClass
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 import java.util.jar.{ JarEntry, JarOutputStream, Attributes }
 import Attributes.Name
 
@@ -26,7 +33,11 @@ trait BytecodeWriters {
     settings.outputDirs.outputDirFor {
       atPhase(currentRun.flattenPhase.prev)(sym.sourceFile)
     }
+<<<<<<< HEAD
   )  
+=======
+  )
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def getFile(base: AbstractFile, cls: JClass, suffix: String): AbstractFile = {
     var dir = base
     val pathParts = cls.getName().split("[./]").toList
@@ -37,7 +48,11 @@ trait BytecodeWriters {
   }
   private def getFile(sym: Symbol, cls: JClass, suffix: String): AbstractFile =
     getFile(outputDirectory(sym), cls, suffix)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait BytecodeWriter {
     def writeClass(label: String, jclass: JClass, sym: Symbol): Unit
     def close(): Unit = ()
@@ -67,7 +82,11 @@ trait BytecodeWriters {
 
     def emitJavap(bytes: Array[Byte], javapFile: io.File) {
       val pw    = javapFile.printWriter()
+<<<<<<< HEAD
       val javap = new Javap(ScalaClassLoader.getSystemLoader(), pw) {
+=======
+      val javap = new JavapClass(ScalaClassLoader.appLoader, pw) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         override def findBytes(path: String): Array[Byte] = bytes
       }
 
@@ -77,7 +96,11 @@ trait BytecodeWriters {
     abstract override def writeClass(label: String, jclass: JClass, sym: Symbol) {
       super.writeClass(label, jclass, sym)
 
+<<<<<<< HEAD
       val bytes     = getFile(sym, jclass, ".class").toByteArray      
+=======
+      val bytes     = getFile(sym, jclass, ".class").toByteArray
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       val segments  = jclass.getName().split("[./]")
       val javapFile = segments.foldLeft(baseDir: Path)(_ / _) changeExtension "javap" toFile;
 
@@ -85,7 +108,11 @@ trait BytecodeWriters {
       emitJavap(bytes, javapFile)
     }
   }
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait ClassBytecodeWriter extends BytecodeWriter {
     def writeClass(label: String, jclass: JClass, sym: Symbol) {
       val outfile   = getFile(sym, jclass, ".class")
@@ -96,4 +123,23 @@ trait BytecodeWriters {
       informProgress("wrote '" + label + "' to " + outfile)
     }
   }
+<<<<<<< HEAD
+=======
+  
+  trait DumpBytecodeWriter extends BytecodeWriter {
+    val baseDir = Directory(settings.Ydumpclasses.value).createDirectory()
+    
+    abstract override def writeClass(label: String, jclass: JClass, sym: Symbol) {
+      super.writeClass(label, jclass, sym)
+      
+      val pathName = jclass.getName()
+      var dumpFile = pathName.split("[./]").foldLeft(baseDir: Path) (_ / _) changeExtension "class" toFile;
+      dumpFile.parent.createDirectory()
+      val outstream = new DataOutputStream(new FileOutputStream(dumpFile.path))
+      
+      try jclass writeTo outstream
+      finally outstream.close()
+    }
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

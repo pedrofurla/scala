@@ -13,10 +13,17 @@ package object nsc {
 
   type Phase = scala.reflect.internal.Phase
   val NoPhase = scala.reflect.internal.NoPhase
+<<<<<<< HEAD
   
   type FatalError = scala.reflect.internal.FatalError
   val FatalError = scala.reflect.internal.FatalError
   
+=======
+
+  type FatalError = scala.reflect.internal.FatalError
+  val FatalError = scala.reflect.internal.FatalError
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   type MissingRequirementError = scala.reflect.internal.MissingRequirementError
   val MissingRequirementError = scala.reflect.internal.MissingRequirementError
 }

@@ -2,7 +2,11 @@
  * Copyright 2005-2011 LAMP/EPFL
  * @author Paul Phillips
  */
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 package scala.tools.nsc
 package interpreter
 
@@ -10,7 +14,11 @@ import util.stringFromWriter
 
 trait Formatting {
   def prompt: String
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def spaces(code: String): String = {
     /** Heuristic to avoid indenting and thereby corrupting """-strings and XML literals. */
     val tokens = List("\"\"\"", "</", "/>")

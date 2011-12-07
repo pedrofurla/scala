@@ -14,7 +14,11 @@ package scala.util.control
  *  Note that `Throwable` subclasses which extend this trait may extend any
  *  other `Throwable` subclass (eg. `RuntimeException`) and are not required
  *  to extend `Throwable` directly.
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  Instances of `Throwable` subclasses marked in this way should not normally
  *  be caught. Where catch-all behaviour is required `ControlThrowable`
  *  should be propagated, for example:

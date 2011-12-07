@@ -75,11 +75,19 @@ object Test {
 
   def check_fromArray: Int = {  // ticket #429
     val a = List(1, 2, 3, 4).toArray
+<<<<<<< HEAD
     var xs0 = Iterator.fromArray(a).toList;
     var xs1 = Iterator.fromArray(a, 0, 1).toList;
     var xs2 = Iterator.fromArray(a, 0, 2).toList;
     var xs3 = Iterator.fromArray(a, 0, 3).toList;
     var xs4 = Iterator.fromArray(a, 0, 4).toList;
+=======
+    var xs0 = a.iterator.toList;
+    var xs1 = a.slice(0, 1).iterator.toList;
+    var xs2 = a.slice(0, 2).iterator.toList;
+    var xs3 = a.slice(0, 3).iterator.toList;
+    var xs4 = a.slice(0, 4).iterator.toList;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     xs0.length + xs1.length + xs2.length + xs3.length + xs4.length
   }
   

@@ -294,9 +294,15 @@ public abstract class Type extends MemberInfo {
         where a type-ref should go (e.g., the ParameterType of a ParameterInfo nowadays may point to a PEType).
         The net effect is that this method (CanBeTakenAddressOf) is conservative, it will answer "no"
         for example for !0 where !0 refers to a type-param with the isValuetype constraint set.
+<<<<<<< HEAD
         The whole thing is ok at this point in time, where generics are not supported at the backend. */ 
 	    return IsValueType() && (this != ENUM());
         /* ENUM() is a singleton, i.e. System.Enum is not generic */   
+=======
+        The whole thing is ok at this point in time, where generics are not supported at the backend. */
+	    return IsValueType() && (this != ENUM());
+        /* ENUM() is a singleton, i.e. System.Enum is not generic */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
 
     /** IsGeneric, true for a PEType or TypeBuilder (i.e., a type definition)
@@ -314,6 +320,7 @@ public abstract class Type extends MemberInfo {
         // overridden in TMVarUsage
         return false;
     }
+<<<<<<< HEAD
     
     public boolean IsNestedType() {
         return DeclaringType != null;
@@ -322,6 +329,16 @@ public abstract class Type extends MemberInfo {
     public boolean IsDefinitelyInternal() {
       if(IsNestedType()) {
         return IsNestedPrivate(); 
+=======
+
+    public boolean IsNestedType() {
+        return DeclaringType != null;
+    }
+
+    public boolean IsDefinitelyInternal() {
+      if(IsNestedType()) {
+        return IsNestedPrivate();
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       } else {
         return IsNotPublic();
       }

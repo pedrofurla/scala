@@ -12,14 +12,22 @@ import java.util.logging.Level
 
 /** An annotation for methods for which invocations might
  *  be removed in the generated code.
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  Behavior is influenced by passing `-Xelide-below <arg>` to `scalac`.
  *  Methods marked elidable will be omitted from generated code if the
  *  priority given the annotation is lower than to the command line argument.
  *  Examples:
  *  {{{
  *  import annotation.elidable._
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *    @elidable(WARNING) def foo = log("foo")
  *    @elidable(FINE) def bar = log("bar")
  *

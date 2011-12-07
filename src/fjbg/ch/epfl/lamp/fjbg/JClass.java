@@ -26,8 +26,11 @@ public class JClass extends JMember {
     protected final String sourceFileName;
     protected final JConstantPool pool;
 
+<<<<<<< HEAD
     protected JBootstrapInvokeDynamic bootstrapClassAttr = null;
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     public final static String[] NO_INTERFACES = new String[0];
 
     protected final LinkedList/*<JMethod>*/ methods = new LinkedList();
@@ -205,7 +208,11 @@ public class JClass extends JMember {
     	}
     	return innerClasses;
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /**
      * Decides if the class is an interface.
      * @return The boolean representing if the class is an interface or not.
@@ -307,12 +314,15 @@ public class JClass extends JMember {
         fStream.close();
     }
 
+<<<<<<< HEAD
     public void setBootstrapClass(String bootstrapClass) {
     	assert bootstrapClassAttr == null;
     	bootstrapClassAttr = new JBootstrapInvokeDynamic(context, this, bootstrapClass);
     	addAttribute(bootstrapClassAttr);
     }
     
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /**
      * Writes the contents of the class to a data stream.
      * @param stream The data stream in which the class must be written.

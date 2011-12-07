@@ -14,7 +14,11 @@ package interpreter
 class ISettings(intp: IMain) {
   /** A list of paths where :load should look */
   var loadPath = List(".")
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Set this to true to see repl machinery under -Yrich-exceptions.
    */
   var showInternalStackTraces = false
@@ -25,17 +29,29 @@ class ISettings(intp: IMain) {
    *  truncated.
    */
   var maxPrintString = 800
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** The maximum number of completion candidates to print for tab
    *  completion without requiring confirmation.
    */
   var maxAutoprintCompletion = 250
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** String unwrapping can be disabled if it is causing issues.
    *  Settings this to false means you will see Strings like "$iw.$iw.".
    */
   var unwrapStrings = true
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def deprecation_=(x: Boolean) = {
     val old = intp.settings.deprecation.value
     intp.settings.deprecation.value = x
@@ -43,17 +59,28 @@ class ISettings(intp: IMain) {
     else if (old && !x) println("Disabled -deprecation output.")
   }
   def deprecation: Boolean = intp.settings.deprecation.value
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def allSettings = Map(
     "maxPrintString" -> maxPrintString,
     "maxAutoprintCompletion" -> maxAutoprintCompletion,
     "unwrapStrings" -> unwrapStrings,
     "deprecation" -> deprecation
   )
+<<<<<<< HEAD
   
   private def allSettingsString =
     allSettings.toList sortBy (_._1) map { case (k, v) => "  " + k + " = " + v + "\n" } mkString
     
+=======
+
+  private def allSettingsString =
+    allSettings.toList sortBy (_._1) map { case (k, v) => "  " + k + " = " + v + "\n" } mkString
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def toString = """
     | ISettings {
     | %s

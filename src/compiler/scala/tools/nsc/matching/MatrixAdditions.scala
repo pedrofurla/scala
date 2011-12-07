@@ -14,7 +14,11 @@ import PartialFunction._
  */
 trait MatrixAdditions extends ast.TreeDSL {
   self: ExplicitOuter with ParallelMatching =>
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   import global.{ typer => _, _ }
   import symtab.Flags
   import CODE._
@@ -26,7 +30,11 @@ trait MatrixAdditions extends ast.TreeDSL {
    */
   private[matching] trait Squeezer {
     self: MatrixContext =>
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private val settings_squeeze = !settings.Ynosqueeze.value
 
     class RefTraverser(vd: ValDef) extends Traverser {
@@ -36,6 +44,7 @@ trait MatrixAdditions extends ast.TreeDSL {
 
       def canDrop   = isSafe && safeRefs == 0
       def canInline = isSafe && safeRefs == 1
+<<<<<<< HEAD
   
       override def traverse(tree: Tree): Unit = tree match {
         case t: Ident if t.symbol eq targetSymbol => 
@@ -47,6 +56,19 @@ trait MatrixAdditions extends ast.TreeDSL {
           if (params exists (_.symbol eq targetSymbol))  // cannot substitute this one
             isSafe = false
   
+=======
+
+      override def traverse(tree: Tree): Unit = tree match {
+        case t: Ident if t.symbol eq targetSymbol =>
+          // target symbol's owner should match currentOwner
+          if (targetSymbol.owner == currentOwner) safeRefs += 1
+          else isSafe = false
+
+        case LabelDef(_, params, rhs) =>
+          if (params exists (_.symbol eq targetSymbol))  // cannot substitute this one
+            isSafe = false
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           traverse(rhs)
         case _ if safeRefs > 1 => ()
         case _ =>
@@ -66,16 +88,28 @@ trait MatrixAdditions extends ast.TreeDSL {
     private def squeezedBlock1(vds: List[Tree], exp: Tree): Tree = {
       lazy val squeezedTail = squeezedBlock(vds.tail, exp)
       def default = squeezedTail match {
+<<<<<<< HEAD
         case Block(vds2, exp2) => Block(vds.head :: vds2, exp2)  
         case exp2              => Block(vds.head :: Nil,  exp2)  
       }
 
       if (vds.isEmpty) exp 
+=======
+        case Block(vds2, exp2) => Block(vds.head :: vds2, exp2)
+        case exp2              => Block(vds.head :: Nil,  exp2)
+      }
+
+      if (vds.isEmpty) exp
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       else vds.head match {
         case vd: ValDef =>
           val rt = new RefTraverser(vd)
           rt.atOwner(owner)(rt traverse squeezedTail)
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           if (rt.canDrop)
             squeezedTail
           else if (isConstantType(vd.symbol.tpe) || rt.canInline)
@@ -86,14 +120,24 @@ trait MatrixAdditions extends ast.TreeDSL {
       }
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** The Optimizer, responsible for some of the optimizing.
    */
   private[matching] trait MatchMatrixOptimizer {
     self: MatchMatrix =>
+<<<<<<< HEAD
     
     import self.context._
     
+=======
+
+    import self.context._
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     final def optimize(tree: Tree): Tree = {
       // Uses treeInfo extractors rather than looking at trees directly
       // because the many Blocks obscure our vision.
@@ -105,7 +149,11 @@ trait MatrixAdditions extends ast.TreeDSL {
             transform(cond)
           case IsIf(cond1, IsIf(cond2, thenp, elsep1), elsep2) if elsep1 equalsStructure elsep2 =>
             transform(typer typed If(gen.mkAnd(cond1, cond2), thenp, elsep2))
+<<<<<<< HEAD
           case If(cond1, IsIf(cond2, thenp, Apply(jmp, Nil)), ld: LabelDef) if jmp.symbol eq ld.symbol => 
+=======
+          case If(cond1, IsIf(cond2, thenp, Apply(jmp, Nil)), ld: LabelDef) if jmp.symbol eq ld.symbol =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             transform(typer typed If(gen.mkAnd(cond1, cond2), thenp, ld))
           case _ =>
             super.transform(tree)
@@ -115,12 +163,20 @@ trait MatrixAdditions extends ast.TreeDSL {
       finally clearSyntheticSyms()
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** The Exhauster.
    */
   private[matching] trait MatrixExhaustiveness {
     self: MatchMatrix =>
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     import self.context._
 
     /** Exhaustiveness checking requires looking for sealed classes
@@ -133,7 +189,11 @@ trait MatrixAdditions extends ast.TreeDSL {
 
       private case class Combo(index: Int, sym: Symbol) {
         val isBaseClass = sym.tpe.baseClasses.toSet
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         // is this combination covered by the given pattern?
         def isCovered(p: Pattern) = {
           def coversSym = isBaseClass(decodedEqualsType(p.tpe).typeSymbol)

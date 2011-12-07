@@ -2,7 +2,11 @@
  * Copyright 2005-2011 LAMP/EPFL
  * @author Paul Phillips
  */
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 package scala.tools
 package util
 
@@ -17,7 +21,11 @@ import scala.util.Random
 /** Signal handling code.  100% clean of any references to sun.misc:
  *  it's all reflection and proxies and invocation handlers and lasers,
  *  so even the choosiest runtimes will be cool with it.
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  Sun/Oracle says sun.misc.* is unsupported and therefore so is all
  *  of this.  Simple examples:
  *  {{{
@@ -25,18 +33,27 @@ import scala.util.Random
       // Assignment clears any old handlers; += chains them.
       manager("HUP") = println("HUP 1!")
       manager("HUP") += println("HUP 2!")
+<<<<<<< HEAD
       // Use raise() to raise a signal: this will print both lines 
+=======
+      // Use raise() to raise a signal: this will print both lines
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       manager("HUP").raise()
       // See a report on every signal's current handler
       manager.dump()
  *  }}}
  */
 class SignalManager(classLoader: ScalaClassLoader) {
+<<<<<<< HEAD
   def this() = this(ScalaClassLoader.getSystemLoader)
+=======
+  def this() = this(ScalaClassLoader.appLoader)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private val illegalArgHandler: PartialFunction[Throwable, Boolean] = {
     case x if unwrap(x).isInstanceOf[IllegalArgumentException] => false
   }
   private def fail(msg: String) = new SignalError(msg)
+<<<<<<< HEAD
   
   object rSignalHandler extends Shield {
     val className   = "sun.misc.SignalHandler"
@@ -45,6 +62,16 @@ class SignalManager(classLoader: ScalaClassLoader) {
     lazy val SIG_DFL = field("SIG_DFL") get null
     lazy val SIG_IGN = field("SIG_IGN") get null
     
+=======
+
+  object rSignalHandler extends Shield {
+    val className   = "sun.misc.SignalHandler"
+    val classLoader = SignalManager.this.classLoader
+
+    lazy val SIG_DFL = field("SIG_DFL") get null
+    lazy val SIG_IGN = field("SIG_IGN") get null
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Create a new signal handler based on the function.
      */
     def apply(action: Invoked => Unit) = Mock.fromInterfaces(clazz) {
@@ -57,11 +84,19 @@ class SignalManager(classLoader: ScalaClassLoader) {
   object rSignal extends Shield {
     val className   = "sun.misc.Signal"
     val classLoader = SignalManager.this.classLoader
+<<<<<<< HEAD
     
     lazy val handleMethod = method("handle", 2)
     lazy val raiseMethod  = method("raise", 1)
     lazy val numberMethod = method("getNumber", 0)
     
+=======
+
+    lazy val handleMethod = method("handle", 2)
+    lazy val raiseMethod  = method("raise", 1)
+    lazy val numberMethod = method("getNumber", 0)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Create a new Signal with the given name.
      */
     def apply(name: String)                     = constructor(classOf[String]) newInstance name
@@ -74,13 +109,21 @@ class SignalManager(classLoader: ScalaClassLoader) {
       else raiseMethod.invoke(null, signal)
     }
     def number(signal: AnyRef): Int             = numberMethod.invoke(signal).asInstanceOf[Int]
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     class WSignal(val name: String) {
       lazy val signal             = rSignal apply name
       def number                  = rSignal number signal
       def raise()                 = rSignal raise signal
       def handle(handler: AnyRef) = rSignal.handle(signal, handler)
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       def isError               = false
       def setTo(body: => Unit)  = register(name, false, body)
       def +=(body: => Unit)     = register(name, true, body)
@@ -134,7 +177,11 @@ class SignalManager(classLoader: ScalaClassLoader) {
     val signal  = rSignal(name)
     val current = rSignalHandler(_ => body)
     val prev    = rSignal.handle(signal, current)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (shouldChain) {
       val chainer = rSignalHandler { inv =>
         val signal = inv.args.head
@@ -150,20 +197,32 @@ class SignalManager(classLoader: ScalaClassLoader) {
     }
     else current
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Use apply and update to get and set handlers.
    */
   def apply(name: String): WSignal =
     try   { new WSignal(name) }
     catch { case x: IllegalArgumentException => new SignalError(x.getMessage) }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def update(name: String, body: => Unit): Unit = apply(name) setTo body
 
   class SignalError(message: String) extends WSignal("") {
     override def isError = true
     override def toString = message
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def public(name: String, description: String)(body: => Unit): Unit = {
     try {
       val wsig = apply(name)
@@ -186,7 +245,11 @@ class SignalManager(classLoader: ScalaClassLoader) {
       addPublicHandler(INFO, "Print signal handler registry on console.")
     }
   }
+<<<<<<< HEAD
   private def addPublicHandler(wsig: WSignal, description: String) = {    
+=======
+  private def addPublicHandler(wsig: WSignal, description: String) = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (publicHandlers contains wsig) ()
     else publicHandlers = publicHandlers.updated(wsig, description)
   }
@@ -196,7 +259,11 @@ class SignalManager(classLoader: ScalaClassLoader) {
     val xs = publicHandlers.toList sortBy (_._1.name) map {
       case (wsig, descr) => "  %2d  %5s  %s".format(wsig.number, wsig.name, descr)
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     xs.mkString("\nSignal handler registry:\n", "\n", "")
   }
 }
@@ -204,7 +271,11 @@ class SignalManager(classLoader: ScalaClassLoader) {
 object SignalManager extends SignalManager {
   private implicit def mkWSignal(name: String): WSignal = this(name)
   private lazy val signalNumberMap = all map (x => x.number -> x) toMap
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def all = List(
     HUP, INT, QUIT, ILL, TRAP, ABRT, EMT, FPE,    // 1-8
     KILL, BUS, SEGV, SYS, PIPE, ALRM, TERM, URG,  // 9-15
@@ -219,7 +290,11 @@ object SignalManager extends SignalManager {
   def defaultSignals() = unreserved filter (_.isDefault)
   def ignoredSignals() = unreserved filter (_.isIgnored)
   def findOpenSignal() = Random.shuffle(defaultSignals()).head
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def dump() = all foreach (x => println("%2s %s".format(x.number, x)))
 
   def apply(sigNumber: Int): WSignal = signalNumberMap(sigNumber)
@@ -255,7 +330,11 @@ object SignalManager extends SignalManager {
   def INFO: WSignal   = "INFO"
   def USR1: WSignal   = "USR1"
   def USR2: WSignal   = "USR2"
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Given a number of seconds, a signal, and a function: sets up a handler which upon
    *  receiving the signal once, calls the function with argument true, and if the
    *  signal is received again within the allowed time, calls it with argument false.
@@ -271,5 +350,9 @@ object SignalManager extends SignalManager {
         timer(seconds)(received = false)
       }
     }
+<<<<<<< HEAD
   }  
+=======
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

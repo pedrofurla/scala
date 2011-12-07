@@ -60,9 +60,15 @@ object AbstractFile {
 /**
  * <p>
  *   This class and its children serve to unify handling of files and
+<<<<<<< HEAD
  *   directories. These files and directories may or may not have some 
  *   real counter part within the file system. For example, some file
  *   handles reference files within a zip archive or virtual ones 
+=======
+ *   directories. These files and directories may or may not have some
+ *   real counter part within the file system. For example, some file
+ *   handles reference files within a zip archive or virtual ones
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *   that exist only in memory.
  * </p>
  * <p>
@@ -75,9 +81,15 @@ object AbstractFile {
  * </p>
  * <p>
  *   The interface does <b>not</b> allow to access the content.
+<<<<<<< HEAD
  *   The class <code>symtab.classfile.AbstractFileReader</code> accesses 
  *   bytes, knowing that the character set of classfiles is UTF-8. For 
  *   all other cases, the class <code>SourceFile</code> is used, which honors 
+=======
+ *   The class <code>symtab.classfile.AbstractFileReader</code> accesses
+ *   bytes, knowing that the character set of classfiles is UTF-8. For
+ *   all other cases, the class <code>SourceFile</code> is used, which honors
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *   <code>global.settings.encoding.value</code>.
  * </p>
  */
@@ -88,7 +100,14 @@ abstract class AbstractFile extends AnyRef with Iterable[AbstractFile] {
 
   /** Returns the path of this abstract file. */
   def path: String
+<<<<<<< HEAD
   
+=======
+
+  /** Returns the path of this abstract file in a canonical form. */
+  def canonicalPath: String = if (file == null) path else file.getCanonicalPath
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Checks extension case insensitively. */
   def hasExtension(other: String) = extension == other.toLowerCase
   private lazy val extension: String = Path.extension(name)
@@ -98,10 +117,17 @@ abstract class AbstractFile extends AnyRef with Iterable[AbstractFile] {
 
   /** Returns the containing directory of this abstract file */
   def container : AbstractFile
+<<<<<<< HEAD
   
   /** Returns the underlying File if any and null otherwise. */
   def file: JFile
   
+=======
+
+  /** Returns the underlying File if any and null otherwise. */
+  def file: JFile
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** An underlying source, if known.  Mostly, a zip/jar file. */
   def underlyingSource: Option[AbstractFile] = None
 
@@ -125,16 +151,27 @@ abstract class AbstractFile extends AnyRef with Iterable[AbstractFile] {
 
   /** returns an input stream so the file can be read */
   def input: InputStream
+<<<<<<< HEAD
   
   /** Returns an output stream for writing the file */
   def output: OutputStream
   
+=======
+
+  /** Returns an output stream for writing the file */
+  def output: OutputStream
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Returns a buffered output stream for writing the file - defaults to out */
   def bufferedOutput: BufferedOutputStream = new BufferedOutputStream(output)
 
   /** size of this file if it is a concrete file. */
   def sizeOption: Option[Int] = None
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def toURL: URL = if (file == null) null else file.toURI.toURL
 
   /** Returns contents of file (if applicable) in a Char array.
@@ -149,7 +186,11 @@ abstract class AbstractFile extends AnyRef with Iterable[AbstractFile] {
   @throws(classOf[IOException])
   def toByteArray: Array[Byte] = {
     val in = input
+<<<<<<< HEAD
     var rest = sizeOption.get
+=======
+    var rest = sizeOption.getOrElse(0)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val arr = new Array[Byte](rest)
     while (rest > 0) {
       val res = in.read(arr, arr.length - rest, rest)
@@ -198,7 +239,11 @@ abstract class AbstractFile extends AnyRef with Iterable[AbstractFile] {
 
   private def lookup(getFile: (AbstractFile, String, Boolean) => AbstractFile,
                      path0: String,
+<<<<<<< HEAD
                      directory: Boolean): AbstractFile = {    
+=======
+                     directory: Boolean): AbstractFile = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val separator = java.io.File.separatorChar
     // trim trailing '/'s
     val path: String = if (path0.last == separator) path0 dropRight 1 else path0
@@ -216,7 +261,11 @@ abstract class AbstractFile extends AnyRef with Iterable[AbstractFile] {
     }
     file
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def fileOrSubdirectoryNamed(name: String, isDir: Boolean): AbstractFile = {
     val lookup = lookupName(name, isDir)
     if (lookup != null) lookup
@@ -226,7 +275,11 @@ abstract class AbstractFile extends AnyRef with Iterable[AbstractFile] {
       new PlainFile(jfile)
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /**
    * Get the file in this directory with the given name,
    * creating an empty file if it does not already existing.
@@ -235,7 +288,11 @@ abstract class AbstractFile extends AnyRef with Iterable[AbstractFile] {
     assert(isDirectory, "Tried to find '%s' in '%s' but it is not a directory".format(name, path))
     fileOrSubdirectoryNamed(name, false)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /**
    * Get the subdirectory with a given name, creating it if it
    * does not already exist.
@@ -244,10 +301,17 @@ abstract class AbstractFile extends AnyRef with Iterable[AbstractFile] {
     assert (isDirectory, "Tried to find '%s' in '%s' but it is not a directory".format(name, path))
     fileOrSubdirectoryNamed(name, true)
   }
+<<<<<<< HEAD
   
   protected def unsupported(): Nothing = unsupported(null)
   protected def unsupported(msg: String): Nothing = throw new UnsupportedOperationException(msg)
   
+=======
+
+  protected def unsupported(): Nothing = unsupported(null)
+  protected def unsupported(msg: String): Nothing = throw new UnsupportedOperationException(msg)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Returns the path of this abstract file. */
   override def toString() = path
 

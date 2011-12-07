@@ -36,7 +36,11 @@ class Same extends ScalaMatchingTask {
 /*============================================================================*\
 **                             Ant user-properties                            **
 \*============================================================================*/
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private var origin: Option[File] = None
   private var destination: Option[File] = None
 
@@ -118,7 +122,11 @@ class Same extends ScalaMatchingTask {
     val originBuffer = new Array[Byte](bufferSize)
     val destBuffer = new Array[Byte](bufferSize)
     for (
+<<<<<<< HEAD
       originName: String <- originNames; 
+=======
+      originName: String <- originNames;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       destName: String <- mapper.mapFileName(originName)
     ) {
       //println("originName="+originName)

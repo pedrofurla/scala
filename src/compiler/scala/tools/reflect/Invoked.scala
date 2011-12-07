@@ -2,7 +2,11 @@
  * Copyright 2005-2011 LAMP/EPFL
  * @author Paul Phillips
  */
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 package scala.tools
 package reflect
 
@@ -17,10 +21,17 @@ class Invoked private (val proxy: AnyRef, val m: Method, val args: List[AnyRef])
   def arity                = m.getParameterTypes.size
   def returnType           = m.getReturnType
   def returns[T: Manifest] = returnType == manifest[T].erasure
+<<<<<<< HEAD
   
   def invokeOn(target: AnyRef) = m.invoke(target, args: _*)
   def isObjectMethod = Set("toString", "equals", "hashCode") contains name
   
+=======
+
+  def invokeOn(target: AnyRef) = m.invoke(target, args: _*)
+  def isObjectMethod = Set("toString", "equals", "hashCode") contains name
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def toString = "Invoked: %s called with %s".format(
     m.getName,
     if (args.isEmpty) "no args" else "args '%s'".format(args mkString ", ")

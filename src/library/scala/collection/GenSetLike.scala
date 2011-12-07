@@ -25,9 +25,15 @@ import annotation.bridge
 trait GenSetLike[A, +Repr]
 extends GenIterableLike[A, Repr]
    with (A => Boolean)
+<<<<<<< HEAD
    with Equals 
    with Parallelizable[A, parallel.ParSet[A]] {
   
+=======
+   with Equals
+   with Parallelizable[A, parallel.ParSet[A]] {
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def iterator: Iterator[A]
   def contains(elem: A): Boolean
   def +(elem: A): Repr
@@ -42,12 +48,20 @@ extends GenIterableLike[A, Repr]
    *  @return  `true` if `elem` is contained in this set, `false` otherwise.
    */
   def apply(elem: A): Boolean = this contains elem
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Computes the intersection between this set and another set.
    *
    *  @param   that  the set to intersect with.
    *  @return  a new set consisting of all elements that are both in this
+<<<<<<< HEAD
    *  set and in the given set `that`. 
+=======
+   *  set and in the given set `that`.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */
   def intersect(that: GenSet[A]): Repr = this filter that
 
@@ -59,18 +73,30 @@ extends GenIterableLike[A, Repr]
    *  '''Note:'''  Same as `intersect`.
    *  @param   that  the set to intersect with.
    *  @return  a new set consisting of all elements that are both in this
+<<<<<<< HEAD
    *  set and in the given set `that`. 
+=======
+   *  set and in the given set `that`.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */
   def &(that: GenSet[A]): Repr = this intersect that
 
   @bridge
   def &(that: Set[A]): Repr = &(that: GenSet[A])
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Computes the union between of set and another set.
    *
    *  @param   that  the set to form the union with.
    *  @return  a new set consisting of all elements that are in this
+<<<<<<< HEAD
    *  set or in the given set `that`. 
+=======
+   *  set or in the given set `that`.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */
   def union(that: GenSet[A]): Repr
 
@@ -79,7 +105,11 @@ extends GenIterableLike[A, Repr]
    *  '''Note:'''  Same as `union`.
    *  @param   that  the set to form the union with.
    *  @return  a new set consisting of all elements that are in this
+<<<<<<< HEAD
    *  set or in the given set `that`. 
+=======
+   *  set or in the given set `that`.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */
   def | (that: GenSet[A]): Repr = this union that
 
@@ -116,7 +146,11 @@ extends GenIterableLike[A, Repr]
 
   @bridge
   def subsetOf(that: Set[A]): Boolean = subsetOf(that: GenSet[A])
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Compares this set with another object for equality.
    *
    *  '''Note:''' This operation contains an unchecked cast: if `that`
@@ -137,12 +171,20 @@ extends GenIterableLike[A, Repr]
     case _ =>
       false
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // Careful! Don't write a Set's hashCode like:
   //    override def hashCode() = this map (_.hashCode) sum
   // Calling map on a set drops duplicates: any hashcode collisions would
   // then be dropped before they can be added.
   // Hash should be symmetric in set entries, but without trivial collisions.
+<<<<<<< HEAD
   override def hashCode() = util.MurmurHash.symmetricHash(seq, Set.hashSeed)
 
+=======
+  override def hashCode() = util.MurmurHash3.setHash(seq)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

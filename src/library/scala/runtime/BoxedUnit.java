@@ -15,7 +15,11 @@ public final class BoxedUnit implements java.io.Serializable {
     private static final long serialVersionUID = 8405543498931817370L;
 
     public final static BoxedUnit UNIT = new BoxedUnit();
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     public final static Class<Void> TYPE = java.lang.Void.TYPE;
 
     private BoxedUnit() { }

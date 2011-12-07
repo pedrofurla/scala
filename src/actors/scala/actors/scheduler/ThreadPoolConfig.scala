@@ -42,10 +42,17 @@ private[actors] object ThreadPoolConfig {
       (propIsSetTo("actors.enableForkJoin", "true") || {
         Debug.info(this+": java.version = "+javaVersion)
         Debug.info(this+": java.vm.vendor = "+javaVmVendor)
+<<<<<<< HEAD
       
         // on IBM J9 1.6 do not use ForkJoinPool
         // XXX this all needs to go into Properties.
         isJavaAtLeast("1.6") && ((javaVmVendor contains "Sun") || (javaVmVendor contains "Apple"))
+=======
+
+        // on IBM J9 1.6 do not use ForkJoinPool
+        // XXX this all needs to go into Properties.
+        isJavaAtLeast("1.6") && ((javaVmVendor contains "Oracle") || (javaVmVendor contains "Sun") || (javaVmVendor contains "Apple"))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       })
     catch {
       case _: SecurityException => false

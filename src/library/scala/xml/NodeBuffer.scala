@@ -12,7 +12,11 @@ package scala.xml
  * This class acts as a Buffer for nodes. If it is used as a sequence of
  * nodes `Seq[Node]`, it must be ensured that no updates occur after that
  * point, because `scala.xml.Node` is assumed to be immutable.
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * Despite this being a sequence, don't use it as key in a hashtable.
  * Calling the hashcode function will result in a runtime error.
  *

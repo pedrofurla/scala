@@ -12,12 +12,22 @@ package scala.tools.ant.sabbus
 import java.io.File
 import org.apache.tools.ant.Task
 import org.apache.tools.ant.types.{Path, Reference}
+<<<<<<< HEAD
 
 trait CompilationPathProperty {
   this: Task =>
   
   protected var compilationPath: Option[Path] = None
   
+=======
+import org.apache.tools.ant.types.Commandline.Argument
+
+trait CompilationPathProperty {
+  this: Task =>
+
+  protected var compilationPath: Option[Path] = None
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def setCompilationPath(input: Path) {
     if (compilationPath.isEmpty) compilationPath = Some(input)
     else compilationPath.get.append(input)
@@ -35,6 +45,7 @@ trait CompilationPathProperty {
 
 trait TaskArgs extends CompilationPathProperty {
   this: Task =>
+<<<<<<< HEAD
   
   def setId(input: String) {
     id = Some(input)
@@ -47,6 +58,23 @@ trait TaskArgs extends CompilationPathProperty {
     }
   }
   
+=======
+
+  def setId(input: String) {
+    id = Some(input)
+  }
+
+  def setParams(input: String) {
+    extraArgs ++= input.split(' ').map { s => val a = new Argument; a.setValue(s); a }
+  }
+
+  def createCompilerArg(): Argument = {
+    val a = new Argument
+    extraArgs :+= a
+    a
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def setTarget(input: String) {
     compTarget = Some(input)
   }
@@ -78,6 +106,7 @@ trait TaskArgs extends CompilationPathProperty {
   def setCompilerPathRef(input: Reference) {
     createCompilerPath.setRefid(input)
   }
+<<<<<<< HEAD
   
   def setDestdir(input: File) {
     destinationDir = Some(input)
@@ -85,10 +114,28 @@ trait TaskArgs extends CompilationPathProperty {
   
   protected var id: Option[String] = None
   protected var params: Option[String] = None
+=======
+
+  def setDestdir(input: File) {
+    destinationDir = Some(input)
+  }
+
+  protected var id: Option[String] = None
+  protected var extraArgs: Seq[Argument] = Seq()
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected var compTarget: Option[String] = None
   protected var sourcePath: Option[Path] = None
   protected var compilerPath: Option[Path] = None
   protected var destinationDir: Option[File] = None
+<<<<<<< HEAD
   
+=======
+
+  def extraArgsFlat: Seq[String] = extraArgs flatMap { a =>
+    val parts = a.getParts
+    if(parts eq null) Seq[String]() else parts.toSeq
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def isMSIL = compTarget exists (_ == "msil")
 }

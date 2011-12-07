@@ -8,7 +8,11 @@
 
 package scala.collection
 package immutable
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 import HashMap.{ HashTrieMap, HashMapCollision1, HashMap1 }
 import HashSet.{ HashTrieSet, HashSetCollision1, HashSet1 }
 import annotation.unchecked.{ uncheckedVariance => uV }
@@ -17,25 +21,41 @@ import scala.annotation.tailrec
 /** Abandons any pretense of type safety for speed.  You can't say I
  *  didn't try: see r23934.
  */
+<<<<<<< HEAD
 private[collection] abstract class TrieIterator[+T](elems: Array[Iterable[T]]) extends Iterator[T] {
   outer =>
   
   private[immutable] def getElem(x: AnyRef): T
   
+=======
+private[collection] abstract class TrieIterator[+T](elems: Array[Iterable[T]]) extends AbstractIterator[T] {
+  outer =>
+
+  private[immutable] def getElem(x: AnyRef): T
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def initDepth                                     = 0
   def initArrayStack: Array[Array[Iterable[T @uV]]] = new Array[Array[Iterable[T]]](6)
   def initPosStack                                  = new Array[Int](6)
   def initArrayD: Array[Iterable[T @uV]]            = elems
   def initPosD                                      = 0
   def initSubIter: Iterator[T]                      = null // to traverse collision nodes
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private[this] var depth                                     = initDepth
   private[this] var arrayStack: Array[Array[Iterable[T @uV]]] = initArrayStack
   private[this] var posStack                                  = initPosStack
   private[this] var arrayD: Array[Iterable[T @uV]]            = initArrayD
   private[this] var posD                                      = initPosD
   private[this] var subIter                                   = initSubIter
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private[this] def getElems(x: Iterable[T]): Array[Iterable[T]] = (x match {
     case x: HashTrieMap[_, _] => x.elems
     case x: HashTrieSet[_]    => x.elems
@@ -45,9 +65,15 @@ private[collection] abstract class TrieIterator[+T](elems: Array[Iterable[T]]) e
     case x: HashMapCollision1[_, _] => x.kvs.map(x => HashMap(x)).toArray
     case x: HashSetCollision1[_]    => x.ks.map(x => HashSet(x)).toArray
   }).asInstanceOf[Array[Iterable[T]]]
+<<<<<<< HEAD
   
   private type SplitIterators = ((Iterator[T], Int), Iterator[T])
   
+=======
+
+  private type SplitIterators = ((Iterator[T], Int), Iterator[T])
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def isTrie(x: AnyRef) = x match {
     case _: HashTrieMap[_,_] | _: HashTrieSet[_] => true
     case _                                       => false
@@ -56,7 +82,11 @@ private[collection] abstract class TrieIterator[+T](elems: Array[Iterable[T]]) e
     case _: HashMap1[_, _] | _: HashSet1[_] => true
     case _                                  => false
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   final class DupIterator(xs: Array[Iterable[T]]) extends {
     override val initDepth                                     = outer.depth
     override val initArrayStack: Array[Array[Iterable[T @uV]]] = outer.arrayStack
@@ -69,11 +99,19 @@ private[collection] abstract class TrieIterator[+T](elems: Array[Iterable[T]]) e
   }
 
   def dupIterator: TrieIterator[T] = new DupIterator(elems)
+<<<<<<< HEAD
   
   private[this] def newIterator(xs: Array[Iterable[T]]) = new TrieIterator(xs) {
     final override def getElem(x: AnyRef): T = outer.getElem(x)
   }
   
+=======
+
+  private[this] def newIterator(xs: Array[Iterable[T]]) = new TrieIterator(xs) {
+    final override def getElem(x: AnyRef): T = outer.getElem(x)
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private[this] def iteratorWithSize(arr: Array[Iterable[T]]): (Iterator[T], Int) =
     (newIterator(arr), arr map (_.size) sum)
 
@@ -90,9 +128,15 @@ private[collection] abstract class TrieIterator[+T](elems: Array[Iterable[T]]) e
       case _ =>
         splitArray(getElems(ad(0)))
     }
+<<<<<<< HEAD
   
   def hasNext = (subIter ne null) || depth >= 0
   def next: T = {
+=======
+
+  def hasNext = (subIter ne null) || depth >= 0
+  def next(): T = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (subIter ne null) {
       val el = subIter.next
       if (!subIter.hasNext)
@@ -156,7 +200,11 @@ private[collection] abstract class TrieIterator[+T](elems: Array[Iterable[T]]) e
     //     next
     // }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // assumption: contains 2 or more elements
   // splits this iterator into 2 iterators
   // returns the 1st iterator, its number of elements, and the second iterator
@@ -216,4 +264,8 @@ private[collection] abstract class TrieIterator[+T](elems: Array[Iterable[T]]) e
       }
     }
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0

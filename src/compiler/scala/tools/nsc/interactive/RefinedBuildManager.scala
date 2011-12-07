@@ -25,7 +25,11 @@ import scala.tools.util.PathResolver
 class RefinedBuildManager(val settings: Settings) extends Changes with BuildManager {
 
   class BuilderGlobal(settings: Settings, reporter : Reporter) extends scala.tools.nsc.Global(settings, reporter)  {
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def this(settings: Settings) =
       this(settings, new ConsoleReporter(settings))
 
@@ -33,40 +37,72 @@ class RefinedBuildManager(val settings: Settings) extends Changes with BuildMana
       super.computeInternalPhases
       phasesSet += dependencyAnalysis
     }
+<<<<<<< HEAD
     lazy val _classpath: ClassPath[_] = new NoSourcePathPathResolver(settings).result
     override def classPath: ClassPath[_] = _classpath
     
     def newRun() = new Run()
   }
   
+=======
+    lazy val _classpath = new NoSourcePathPathResolver(settings).result
+    override def classPath = _classpath.asInstanceOf[ClassPath[platform.BinaryRepr]]
+       // See discussion in JavaPlatForm for why we need a cast here.
+
+    def newRun() = new Run()
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class NoSourcePathPathResolver(settings: Settings) extends PathResolver(settings) {
     override def containers = Calculated.basis.dropRight(1).flatten.distinct
   }
 
+<<<<<<< HEAD
   protected def newCompiler(settings: Settings) = new BuilderGlobal(settings) 
   
   val compiler = newCompiler(settings)
   import compiler.{Symbol, Type, atPhase, currentRun}
   import compiler.dependencyAnalysis.Inherited
   
+=======
+  protected def newCompiler(settings: Settings) = new BuilderGlobal(settings)
+
+  val compiler = newCompiler(settings)
+  import compiler.{Symbol, Type, atPhase, currentRun}
+  import compiler.dependencyAnalysis.Inherited
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private case class SymWithHistory(sym: Symbol, befErasure: Type)
 
   /** Managed source files. */
   private val sources: mutable.Set[AbstractFile] = new mutable.HashSet[AbstractFile]
 
+<<<<<<< HEAD
   private val definitions: mutable.Map[AbstractFile, List[SymWithHistory]] = 
+=======
+  private val definitions: mutable.Map[AbstractFile, List[SymWithHistory]] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     new mutable.HashMap[AbstractFile, List[SymWithHistory]] {
       override def default(key: AbstractFile) = Nil
     }
 
   /** External references used by source file. */
   private var references: mutable.Map[AbstractFile, immutable.Set[String]] = _
+<<<<<<< HEAD
   
   /** External references for inherited members */
   private var inherited: mutable.Map[AbstractFile, immutable.Set[Inherited]] = _
   
   /** Reverse of definitions, used for caching */
   private var classes: mutable.Map[String, AbstractFile] = 
+=======
+
+  /** External references for inherited members */
+  private var inherited: mutable.Map[AbstractFile, immutable.Set[Inherited]] = _
+
+  /** Reverse of definitions, used for caching */
+  private var classes: mutable.Map[String, AbstractFile] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     new mutable.HashMap[String, AbstractFile] {
       override def default(key: String) = null
   }
@@ -109,13 +145,21 @@ class RefinedBuildManager(val settings: Settings) extends Changes with BuildMana
     val coll: mutable.Map[AbstractFile, immutable.Set[AbstractFile]] =
         mutable.HashMap[AbstractFile, immutable.Set[AbstractFile]]()
     compiler.reporter.reset()
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // See if we really have corresponding symbols, not just those
     // which share the name
     def isCorrespondingSym(from: Symbol, to: Symbol): Boolean =
       (from.hasFlag(Flags.TRAIT) == to.hasFlag(Flags.TRAIT)) && // has to run in 2.8, so no hasTraitFlag
       (from.hasFlag(Flags.MODULE) == to.hasFlag(Flags.MODULE))
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // For testing purposes only, order irrelevant for compilation
     def toStringSet(set: Set[AbstractFile]): String =
       set.toList sortBy (_.name) mkString("Set(", ", ", ")")
@@ -162,7 +206,11 @@ class RefinedBuildManager(val settings: Settings) extends Changes with BuildMana
                     atPhase(currentRun.erasurePhase.prev) {
                         changeSet(info, sym)
                     }
+<<<<<<< HEAD
                 changesOf(oldSym) = (changes ++ changesErasure).distinct 
+=======
+                changesOf(oldSym) = (changes ++ changesErasure).distinct
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               case _ =>
                 // a new top level definition
                 changesOf(sym) =
@@ -207,26 +255,43 @@ class RefinedBuildManager(val settings: Settings) extends Changes with BuildMana
           if (newDeps.isEmpty) rest else followChain(newDeps, rest ++ newDeps)
       }
       var res:Set[AbstractFile] = mutable.Set()
+<<<<<<< HEAD
       files.foreach( f => 
+=======
+      files.foreach( f =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         if (collect contains f) {
           val chain = followChain(Set(f), immutable.Set()) ++ files
           chain.foreach((fc: AbstractFile) => collect += fc -> chain)
           res ++= chain
+<<<<<<< HEAD
         } else 
+=======
+        } else
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           res += f
        )
 
       initial.foreach((f: AbstractFile) => collect += (f -> (collect.getOrElse(f, immutable.Set()) ++ res)))
       if (res.subsetOf(initial)) Set() else res
+<<<<<<< HEAD
   }  
   
+=======
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Return the set of source files that are invalidated by the given changes. */
   def invalidated(files: Set[AbstractFile], changesOf: collection.Map[Symbol, List[Change]],
                   processed: Set[AbstractFile] = Set.empty):
     Set[AbstractFile] = {
     val buf = new mutable.HashSet[AbstractFile]
     val newChangesOf = new mutable.HashMap[Symbol, List[Change]]
+<<<<<<< HEAD
     var directDeps = 
+=======
+    var directDeps =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       compiler.dependencyAnalysis.dependencies.dependentFiles(1, files)
 
     def invalidate(file: AbstractFile, reason: String, change: Change) = {
@@ -238,7 +303,11 @@ class RefinedBuildManager(val settings: Settings) extends Changes with BuildMana
         newChangesOf(syms.sym) = List(change, parentChangeSet(syms.sym))
       break
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     for ((oldSym, changes) <- changesOf; change <- changes) {
       def checkParents(cls: Symbol, file: AbstractFile) {
         val parentChange = cls.info.parents.exists(_.typeSymbol.fullName == oldSym.fullName)
@@ -260,7 +329,11 @@ class RefinedBuildManager(val settings: Settings) extends Changes with BuildMana
           case _ => ()
         }
       }
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       def checkInterface(cls: Symbol, file: AbstractFile) {
         change match {
           case Added(Definition(name)) =>
@@ -296,7 +369,11 @@ class RefinedBuildManager(val settings: Settings) extends Changes with BuildMana
           }
         }
       }
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       def checkInheritedReferences(file: AbstractFile) {
         val refs = inherited(file)
         if (!refs.isEmpty)
@@ -330,7 +407,11 @@ class RefinedBuildManager(val settings: Settings) extends Changes with BuildMana
 
   /** Update the map of definitions per source file */
   private def updateDefinitions(files: Set[AbstractFile]) {
+<<<<<<< HEAD
     for (src <- files; val localDefs = compiler.dependencyAnalysis.definitions(src)) {
+=======
+    for (src <- files; localDefs = compiler.dependencyAnalysis.definitions(src)) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       definitions(src) = (localDefs map (s => {
         this.classes += s.fullName -> src
         SymWithHistory(
@@ -351,7 +432,11 @@ class RefinedBuildManager(val settings: Settings) extends Changes with BuildMana
       sources ++= compiler.dependencyAnalysis.managedFiles
     success
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Save dependency information to `file`. */
   def saveTo(file: AbstractFile, fromFile: AbstractFile => String) {
     compiler.dependencyAnalysis.dependenciesFile = file

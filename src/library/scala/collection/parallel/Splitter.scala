@@ -12,27 +12,48 @@ import scala.collection.{ Seq, Iterator }
 
 /** A splitter (or a split iterator) can be split into more splitters that traverse over
  *  disjoint subsets of elements.
+<<<<<<< HEAD
  *  
  *  @tparam T    type of the elements this splitter traverses
  *  
+=======
+ *
+ *  @tparam T    type of the elements this splitter traverses
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @since 2.9
  *  @author Aleksandar Prokopec
  */
 trait Splitter[+T] extends Iterator[T] {
+<<<<<<< HEAD
   
   /** Splits the iterator into a sequence of disjunct views.
    *  
+=======
+
+  /** Splits the iterator into a sequence of disjunct views.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  Returns a sequence of split iterators, each iterating over some subset of the
    *  elements in the collection. These subsets are disjoint and should be approximately
    *  equal in size. These subsets are not empty, unless the iterator is empty in which
    *  case this method returns a sequence with a single empty iterator. If the splitter has
    *  more than two elements, this method will return two or more splitters.
+<<<<<<< HEAD
    *  
    *  Implementors are advised to keep this partition relatively small - two splitters are
    *  already enough when partitioning the collection, although there may be a few more.
    *  
    *  '''Note:''' this method actually invalidates the current splitter.
    *  
+=======
+   *
+   *  Implementors are advised to keep this partition relatively small - two splitters are
+   *  already enough when partitioning the collection, although there may be a few more.
+   *
+   *  '''Note:''' this method actually invalidates the current splitter.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @return a sequence of disjunct iterators of the collection
    */
   def split: Seq[Splitter[T]]
@@ -40,6 +61,7 @@ trait Splitter[+T] extends Iterator[T] {
    *  '''Note:''' splitters in this sequence may actually be empty and it can contain a splitter
    *  which iterates over the same elements as the original splitter AS LONG AS calling `split`
    *  a finite number of times on the resulting splitters eventually returns a nontrivial partition.
+<<<<<<< HEAD
    *  
    *  Note that the docs contract above yields implementations which are a subset of implementations
    *  defined by this fineprint.
@@ -47,6 +69,15 @@ trait Splitter[+T] extends Iterator[T] {
    *  The rationale behind this is best given by the following example:
    *  try splitting an iterator over a linear hash table.
    */  
+=======
+   *
+   *  Note that the docs contract above yields implementations which are a subset of implementations
+   *  defined by this fineprint.
+   *
+   *  The rationale behind this is best given by the following example:
+   *  try splitting an iterator over a linear hash table.
+   */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 object Splitter {

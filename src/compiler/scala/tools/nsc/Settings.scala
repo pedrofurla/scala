@@ -11,4 +11,13 @@ import settings.MutableSettings
  */
 class Settings(errorFn: String => Unit) extends MutableSettings(errorFn) {
   def this() = this(Console.println)
+<<<<<<< HEAD
+=======
+
+  override def withErrorFn(errorFn: String => Unit): Settings = {
+    val settings = new Settings(errorFn)
+    copyInto(settings)
+    settings
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

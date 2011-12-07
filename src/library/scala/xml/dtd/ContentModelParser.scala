@@ -31,9 +31,15 @@ object ContentModelParser extends Scanner { // a bit too permissive concerning #
   }
 
   // s [ '+' | '*' | '?' ]
+<<<<<<< HEAD
   def maybeSuffix(s: RegExp) = token match {	
     case STAR => nextToken; Star(s) 
     case PLUS => nextToken; Sequ(s, Star(s)) 
+=======
+  def maybeSuffix(s: RegExp) = token match {
+    case STAR => nextToken; Star(s)
+    case PLUS => nextToken; Sequ(s, Star(s))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     case OPT  => nextToken; Alt(Eps, s)
     case _    => s
   }
@@ -43,6 +49,7 @@ object ContentModelParser extends Scanner { // a bit too permissive concerning #
   def contentspec: ContentModel = token match {
 
     case NAME => value match {
+<<<<<<< HEAD
       case "ANY"   => ANY 
       case "EMPTY" => EMPTY
       case _       => sys.error("expected ANY, EMPTY or '(' instead of " + value );
@@ -50,6 +57,15 @@ object ContentModelParser extends Scanner { // a bit too permissive concerning #
     case LPAREN => 
 
       nextToken; 
+=======
+      case "ANY"   => ANY
+      case "EMPTY" => EMPTY
+      case _       => sys.error("expected ANY, EMPTY or '(' instead of " + value );
+    }
+    case LPAREN =>
+
+      nextToken;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       sOpt;
       if (token != TOKEN_PCDATA)
         ELEMENTS(regexp);
@@ -90,7 +106,11 @@ object ContentModelParser extends Scanner { // a bit too permissive concerning #
   }
 
   //                                             seqRest ::= (',' S? cp S?)+
+<<<<<<< HEAD
   def seqRest(p: RegExp) = { 
+=======
+  def seqRest(p: RegExp) = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     var k = List(p);
     while( token == COMMA ) {
       nextToken;
@@ -102,7 +122,11 @@ object ContentModelParser extends Scanner { // a bit too permissive concerning #
   }
 
   //                                          choiceRest ::= ('|' S? cp S?)+
+<<<<<<< HEAD
   def choiceRest( p:RegExp ) = { 
+=======
+  def choiceRest( p:RegExp ) = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     var k = List( p );
     while( token == CHOICE ) {
       nextToken;
@@ -116,7 +140,11 @@ object ContentModelParser extends Scanner { // a bit too permissive concerning #
   //                                  particle ::=  '(' S? regexp
   //                                             |  name [ '+' | '*' | '?' ]
   def particle = token match {
+<<<<<<< HEAD
     case LPAREN => nextToken; sOpt; regexp; 
+=======
+    case LPAREN => nextToken; sOpt; regexp;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     case NAME   => val a = Letter(ElemName(value)); nextToken; maybeSuffix(a)
     case _      => sys.error("expected '(' or Name, got:"+token2string(token));
   }

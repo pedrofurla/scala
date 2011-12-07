@@ -9,9 +9,15 @@ import ListView._
 object UIDemo extends SimpleSwingApplication {
   def top = new MainFrame {
     title = "Scala Swing Demo"
+<<<<<<< HEAD
     
     /*
      * Create a menu bar with a couple of menus and menu items and 
+=======
+
+    /*
+     * Create a menu bar with a couple of menus and menu items and
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      * set the result as this frame's menu bar.
      */
     menuBar = new MenuBar {
@@ -32,6 +38,7 @@ object UIDemo extends SimpleSwingApplication {
       }
       contents += new Menu("Empty Menu")
     }
+<<<<<<< HEAD
     
     /*
      * The root component in this frame is a panel with a border layout. 
@@ -41,11 +48,26 @@ object UIDemo extends SimpleSwingApplication {
       
       var reactLive = false
       
+=======
+
+    /*
+     * The root component in this frame is a panel with a border layout.
+     */
+    contents = new BorderPanel {
+      import BorderPanel.Position._
+
+      var reactLive = false
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       val tabs = new TabbedPane {
         import TabbedPane._
         val buttons = new FlowPanel {
           border = Swing.EmptyBorder(5,5,5,5)
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           contents += new BoxPanel(Orientation.Vertical) {
             border = CompoundBorder(TitledBorder(EtchedBorder, "Radio Buttons"), EmptyBorder(5,5,5,10))
             val a = new RadioButton("Green Vegetables")
@@ -63,6 +85,7 @@ object UIDemo extends SimpleSwingApplication {
             contents.append(paintLabels, paintTicks, snapTicks, live)
             listenTo(paintLabels, paintTicks, snapTicks, live)
             reactions += {
+<<<<<<< HEAD
               case ButtonClicked(`paintLabels`) => 
                 slider.paintLabels = paintLabels.selected
               case ButtonClicked(`paintTicks`) => 
@@ -70,22 +93,43 @@ object UIDemo extends SimpleSwingApplication {
               case ButtonClicked(`snapTicks`) => 
                 slider.snapToTicks = snapTicks.selected
               case ButtonClicked(`live`) => 
+=======
+              case ButtonClicked(`paintLabels`) =>
+                slider.paintLabels = paintLabels.selected
+              case ButtonClicked(`paintTicks`) =>
+                slider.paintTicks = paintTicks.selected
+              case ButtonClicked(`snapTicks`) =>
+                slider.snapToTicks = snapTicks.selected
+              case ButtonClicked(`live`) =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 reactLive = live.selected
             }
           }
           contents += new Button(Action("Center Frame") { centerOnScreen() })
         }
+<<<<<<< HEAD
         pages += new Page("Buttons", buttons) 
+=======
+        pages += new Page("Buttons", buttons)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         pages += new Page("GridBag", GridBagDemo.ui)
         pages += new Page("Converter", CelsiusConverter2.ui)
         pages += new Page("Tables", TableSelection.ui)
         pages += new Page("Dialogs", Dialogs.ui)
         pages += new Page("Combo Boxes", ComboBoxes.ui)
+<<<<<<< HEAD
         pages += new Page("Split Panes", 
           new SplitPane(Orientation.Vertical, new Button("Hello"), new Button("World")) {
             continuousLayout = true
           })
         
+=======
+        pages += new Page("Split Panes",
+          new SplitPane(Orientation.Vertical, new Button("Hello"), new Button("World")) {
+            continuousLayout = true
+          })
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         val password = new FlowPanel {
           contents += new Label("Enter your secret password here ")
           val field = new PasswordField(10)
@@ -97,12 +141,20 @@ object UIDemo extends SimpleSwingApplication {
             case EditDone(`field`) => label.text = field.password.mkString
           }
         }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         pages += new Page("Password", password)
         pages += new Page("Painting", LinePainting.ui)
         //pages += new Page("Text Editor", TextEditor.ui)
       }
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       val list = new ListView(tabs.pages) {
         selectIndices(0)
         selection.intervalMode = ListView.IntervalMode.Single
@@ -111,12 +163,21 @@ object UIDemo extends SimpleSwingApplication {
       val center = new SplitPane(Orientation.Vertical, new ScrollPane(list), tabs) {
         oneTouchExpandable = true
         continuousLayout = true
+<<<<<<< HEAD
       }      
       layout(center) = Center 
       
       /*
        * This slider is used above, so we need lazy initialization semantics.
        * Objects or lazy vals are the way to go, but objects give us better 
+=======
+      }
+      layout(center) = Center
+
+      /*
+       * This slider is used above, so we need lazy initialization semantics.
+       * Objects or lazy vals are the way to go, but objects give us better
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
        * type inference at times.
        */
       object slider extends Slider {
@@ -134,9 +195,15 @@ object UIDemo extends SimpleSwingApplication {
       listenTo(tabs.selection)
       listenTo(list.selection)
       reactions += {
+<<<<<<< HEAD
         case ValueChanged(`slider`) => 
           if(!slider.adjusting || reactLive) tabs.selection.index = slider.value
         case SelectionChanged(`tabs`) => 
+=======
+        case ValueChanged(`slider`) =>
+          if(!slider.adjusting || reactLive) tabs.selection.index = slider.value
+        case SelectionChanged(`tabs`) =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           slider.value = tabs.selection.index
           list.selectIndices(tabs.selection.index)
         case SelectionChanged(`list`) =>

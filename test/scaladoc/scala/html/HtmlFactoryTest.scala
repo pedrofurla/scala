@@ -1,7 +1,11 @@
 import org.scalacheck._
 import org.scalacheck.Prop._
 
+<<<<<<< HEAD
 import java.net.URLClassLoader
+=======
+import java.net.{URLClassLoader, URLDecoder}
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 object XMLUtil {
   import scala.xml._
@@ -31,8 +35,13 @@ object Test extends Properties("HtmlFactory") {
     // this test previously relied on the assumption that the current thread's classloader is an url classloader and contains all the classpaths
     // does partest actually guarantee this? to quote Leonard Nimoy: The answer, of course, is no.
     // this test _will_ fail again some time in the future.
+<<<<<<< HEAD
     val paths = Thread.currentThread.getContextClassLoader.asInstanceOf[URLClassLoader].getURLs.map(_.getPath)
     val morepaths = Thread.currentThread.getContextClassLoader.getParent.asInstanceOf[URLClassLoader].getURLs.map(_.getPath)
+=======
+    val paths = Thread.currentThread.getContextClassLoader.asInstanceOf[URLClassLoader].getURLs.map(u => URLDecoder.decode(u.getPath))
+    val morepaths = Thread.currentThread.getContextClassLoader.getParent.asInstanceOf[URLClassLoader].getURLs.map(u => URLDecoder.decode(u.getPath))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     (paths ++ morepaths).mkString(java.io.File.pathSeparator)
   }
 
@@ -141,8 +150,13 @@ object Test extends Properties("HtmlFactory") {
     createTemplate("Trac4372.scala") match {
       case node: scala.xml.Node => {
         val html = node.toString
+<<<<<<< HEAD
         html.contains("<span class=\"name\">+:</span>\n") &&
           html.contains("<span class=\"name\">-:</span>\n") &&
+=======
+        html.contains("<span class=\"name\" title=\"gt4s: $plus$colon\">+:</span>") &&
+          html.contains("<span class=\"name\" title=\"gt4s: $minus$colon\">-:</span>") &&
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             html.contains("""<span class="params">(<span name="n">n: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>""")
       }
       case _ => false
@@ -247,11 +261,19 @@ object Test extends Properties("HtmlFactory") {
     val lines = """
         |type Bar = AnyRef { type Dingus <: T forSome { type T <: String } }
         |type Foo = AnyRef { ... /* 3 definitions in type refinement */ }
+<<<<<<< HEAD
         |def g (x: T forSome { type T <: String }): String 
         |def h (x: Float): AnyRef { def quux(x: Int,y: Int): Int }
         |def hh (x: Float): AnyRef { def quux(x: Int,y: Int): Int }
         |def j (x: Int): Bar
         |def k (): AnyRef { type Dingus <: T forSome { type T <: String } }
+=======
+        |def g(x: T forSome { type T <: String }): String
+        |def h(x: Float): AnyRef { def quux(x: Int,y: Int): Int }
+        |def hh(x: Float): AnyRef { def quux(x: Int,y: Int): Int }
+        |def j(x: Int): Bar
+        |def k(): AnyRef { type Dingus <: T forSome { type T <: String } }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       """.stripMargin.trim.lines map (_.trim)
 
     files("RefinementAndExistentials.html") match {
@@ -353,4 +375,78 @@ object Test extends Properties("HtmlFactory") {
       case _ => false
     }
   }
+<<<<<<< HEAD
+=======
+
+  property("Default arguments of synthesized constructor") = {
+    val files = createTemplates("SI_4287.scala")
+
+    files("ClassWithSugar.html") match {
+      case node: scala.xml.Node => {
+        node.toString.contains(">123<")
+      }
+      case _ => false
+    }
+  }
+
+  property("Default arguments of synthesized constructor") = {
+    createTemplate("SI_4507.scala") match {
+      case node: scala.xml.Node =>
+        ! node.toString.contains("<li>returns silently when evaluating true and true</li>")
+      case _ => false
+    }
+  }
+
+  property("Use cases and links should not crash scaladoc") = {
+    createTemplate("SI_4898.scala")
+    true
+  }
+
+  property("Use cases should override their original members - valid until signature is added to html") = {
+    createTemplate("SI_5054.scala") match {
+      case node: scala.xml.Node =>
+        node.toString.contains("A simple comment") &&
+        ! node.toString.contains("a lost parameter")
+      case _ => false
+    }
+  }
+
+  
+  {
+    val files = createTemplates("basic.scala")
+    println(files)
+
+    property("class") = files.get("com/example/p1/Clazz.html") match {
+      case Some(node: scala.xml.Node) => {
+        property("implicit convertion") =
+          node.toString contains "<span class=\"modifier\">implicit </span>"
+
+        property("gt4s") =
+          node.toString contains "title=\"gt4s: $colon$colon\""
+
+        property("gt4s of a deprecated method") =
+          node.toString contains "title=\"gt4s: $colon$colon$colon$colon. Deprecated: "
+        true
+      }
+      case _ => false
+    }
+    property("package") = files.get("com/example/p1/package.html") != None
+
+    property("package object") = files("com/example/p1/package.html") match {
+      case node: scala.xml.Node =>
+        node.toString contains "com.example.p1.package#packageObjectMethod"
+      case _ => false
+    }
+
+    property("lower bound") = files("com/example/p1/LowerBound.html") match {
+      case node: scala.xml.Node => true
+      case _ => false
+    }
+
+    property("upper bound") = files("com/example/p1/UpperBound.html") match {
+      case node: scala.xml.Node => true
+      case _ => false
+    }
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

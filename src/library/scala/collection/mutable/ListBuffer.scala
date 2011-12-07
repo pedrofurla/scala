@@ -21,9 +21,17 @@ import immutable.{List, Nil, ::}
  *  @author  Martin Odersky
  *  @version 2.8
  *  @since   1
+<<<<<<< HEAD
  *  
  *  @tparam A    the type of this list buffer's elements.
  *  
+=======
+ *  @see [[http://docs.scala-lang.org/overviews/collections/concrete-mutable-collection-classes.html#list_buffers "Scala's Collection Library overview"]]
+ *  section on `List Buffers` for more information.
+ *
+ *  @tparam A    the type of this list buffer's elements.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define Coll ListBuffer
  *  @define coll list buffer
  *  @define thatinfo the class of the returned collection. In the standard library configuration,
@@ -33,12 +41,17 @@ import immutable.{List, Nil, ::}
  *    result class `That` from the current representation type `Repr`
  *    and the new element type `B`. This is usually the `canBuildFrom` value
  *    defined in object `ListBuffer`.
+<<<<<<< HEAD
  *  @define orderDependent 
+=======
+ *  @define orderDependent
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define orderDependentFold
  *  @define mayNotTerminateInf
  *  @define willNotTerminateInf
  */
 @SerialVersionUID(3419063961353022661L)
+<<<<<<< HEAD
 final class ListBuffer[A] 
       extends Buffer[A] 
          with GenericTraversableTemplate[A, ListBuffer]
@@ -47,6 +60,17 @@ final class ListBuffer[A]
          with SeqForwarder[A]
          with Serializable
 { 
+=======
+final class ListBuffer[A]
+      extends AbstractBuffer[A]
+         with Buffer[A]
+         with GenericTraversableTemplate[A, ListBuffer]
+         with BufferLike[A, ListBuffer[A]]
+         with Builder[A, List[A]]
+         with SeqForwarder[A]
+         with Serializable
+{
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def companion: GenericCompanion[ListBuffer] = ListBuffer
 
   import scala.collection.Traversable
@@ -57,6 +81,7 @@ final class ListBuffer[A]
   private var len = 0
 
   protected def underlying: immutable.Seq[A] = start
+<<<<<<< HEAD
  
   /** The current length of the buffer.
    *  
@@ -64,6 +89,18 @@ final class ListBuffer[A]
    */
   override def length = len
   
+=======
+
+  /** The current length of the buffer.
+   *
+   *  This operation takes constant time.
+   */
+  override def length = len
+
+  // Don't use the inherited size, which forwards to a List and is O(n).
+  override def size = length
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // Implementations of abstract methods in Buffer
 
   override def apply(n: Int): A =
@@ -83,9 +120,15 @@ final class ListBuffer[A]
       if (exported) copy()
       if (n == 0) {
         val newElem = new :: (x, start.tail);
+<<<<<<< HEAD
         if (last0 eq start) { 
           last0 = newElem
         }	
+=======
+        if (last0 eq start) {
+          last0 = newElem
+        }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         start = newElem
       } else {
         var cursor = start
@@ -97,7 +140,11 @@ final class ListBuffer[A]
         val newElem = new :: (x, cursor.tail.tail)
         if (last0 eq cursor.tail) {
           last0 = newElem
+<<<<<<< HEAD
         }	
+=======
+        }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         cursor.asInstanceOf[::[A]].tl = newElem
       }
     } catch {
@@ -152,7 +199,11 @@ final class ListBuffer[A]
     len += 1
     this
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Inserts new elements at the index `n`. Opposed to method
    *  `update`, this method will not replace an element with a new
    *  one. Instead, it will insert a new element at index `n`.
@@ -231,7 +282,11 @@ final class ListBuffer[A]
 
   def result: List[A] = toList
 
+<<<<<<< HEAD
   /** Converts this buffer to a list. Takes constant time. The buffer is 
+=======
+  /** Converts this buffer to a list. Takes constant time. The buffer is
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  copied lazily, the first time it is mutated.
    */
   override def toList: List[A] = {
@@ -299,8 +354,13 @@ final class ListBuffer[A]
       len -= 1
     } else {
       var cursor = start
+<<<<<<< HEAD
       while (!cursor.tail.isEmpty && cursor.tail.head != elem) { 
         cursor = cursor.tail 
+=======
+      while (!cursor.tail.isEmpty && cursor.tail.head != elem) {
+        cursor = cursor.tail
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       }
       if (!cursor.tail.isEmpty) {
         val z = cursor.asInstanceOf[::[A]]
@@ -313,7 +373,11 @@ final class ListBuffer[A]
     this
   }
 
+<<<<<<< HEAD
   override def iterator: Iterator[A] = new Iterator[A] {
+=======
+  override def iterator: Iterator[A] = new AbstractIterator[A] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // Have to be careful iterating over mutable structures.
     // This used to have "(cursor ne last0)" as part of its hasNext
     // condition, which means it can return true even when the iterator

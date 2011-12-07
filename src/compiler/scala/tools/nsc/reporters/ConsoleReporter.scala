@@ -16,7 +16,11 @@ import scala.tools.util.StringOps.countElementsAsString
  */
 class ConsoleReporter(val settings: Settings, reader: BufferedReader, writer: PrintWriter) extends AbstractReporter {
   def this(settings: Settings) = this(settings, Console.in, new PrintWriter(Console.err, true))
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Whether a short file name should be displayed before errors */
   var shortname: Boolean = false
 
@@ -78,9 +82,15 @@ class ConsoleReporter(val settings: Settings, reader: BufferedReader, writer: Pr
    *
    *  @param pos ...
    */
+<<<<<<< HEAD
   def printColumnMarker(pos: Position) = 
     if (pos.isDefined) { printMessage(" " * (pos.column - 1) + "^") }
   
+=======
+  def printColumnMarker(pos: Position) =
+    if (pos.isDefined) { printMessage(" " * (pos.column - 1) + "^") }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Prints the number of errors and warnings if their are non-zero. */
   def printSummary() {
     if (WARNING.count > 0) printMessage(getCountString(WARNING) + " found")
@@ -93,6 +103,7 @@ class ConsoleReporter(val settings: Settings, reader: BufferedReader, writer: Pr
       print(pos, msg, severity)
   }
 
+<<<<<<< HEAD
   def displayPrompt(): Unit = try {
     var continue = true
     while (continue) {
@@ -113,6 +124,22 @@ class ConsoleReporter(val settings: Settings, reader: BufferedReader, writer: Pr
       ex.printStackTrace()
       abort("input read error")
     }
+=======
+  def displayPrompt(): Unit = {
+    writer.print("\na)bort, s)tack, r)esume: ")
+    writer.flush()
+    if (reader != null) {
+      val response = reader.read().asInstanceOf[Char].toLower
+      if (response == 'a' || response == 's') {
+        (new Exception).printStackTrace()
+        if (response == 'a')
+          sys exit 1
+
+        writer.print("\n")
+        writer.flush()
+      }
+    }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   }
 
   private def abort(msg: String) = throw new Error(msg)

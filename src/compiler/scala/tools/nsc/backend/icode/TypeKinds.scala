@@ -9,6 +9,7 @@ package icode
 
 /* A type case
 
+<<<<<<< HEAD
     case UNIT            => 
     case BOOL            => 
     case BYTE            => 
@@ -20,14 +21,31 @@ package icode
     case DOUBLE          => 
     case REFERENCE(cls)  => 
     case ARRAY(elem)     => 
+=======
+    case UNIT            =>
+    case BOOL            =>
+    case BYTE            =>
+    case SHORT           =>
+    case CHAR            =>
+    case INT             =>
+    case LONG            =>
+    case FLOAT           =>
+    case DOUBLE          =>
+    case REFERENCE(cls)  =>
+    case ARRAY(elem)     =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 */
 
 trait TypeKinds { self: ICodes =>
   import global._
   import definitions.{ ArrayClass, AnyRefClass, ObjectClass, NullClass, NothingClass, arrayType }
+<<<<<<< HEAD
   import icodes.{ checkerDebug, NothingReference, NullReference }
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A map from scala primitive Types to ICode TypeKinds */
   lazy val primitiveTypeMap: Map[Symbol, TypeKind] = {
     import definitions._
@@ -42,6 +60,7 @@ trait TypeKinds { self: ICodes =>
       FloatClass    -> FLOAT,
       DoubleClass   -> DOUBLE
     )
+<<<<<<< HEAD
   }    
   /** Reverse map for toType */
   private lazy val reversePrimitiveMap: Map[TypeKind, Symbol] = 
@@ -49,13 +68,26 @@ trait TypeKinds { self: ICodes =>
 
   /** This class represents a type kind. Type kinds
    * represent the types that the VM know (or the ICode 
+=======
+  }
+  /** Reverse map for toType */
+  private lazy val reversePrimitiveMap: Map[TypeKind, Symbol] =
+    primitiveTypeMap map (_.swap) toMap
+
+  /** This class represents a type kind. Type kinds
+   * represent the types that the VM know (or the ICode
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * view of what VMs know).
    */
   sealed abstract class TypeKind {
     def maxType(other: TypeKind): TypeKind
 
     def toType: Type = reversePrimitiveMap get this map (_.tpe) getOrElse {
+<<<<<<< HEAD
       this match {  
+=======
+      this match {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case REFERENCE(cls) => cls.tpe
         case ARRAY(elem)    => arrayType(elem.toType)
         case _              => abort("Unknown type kind.")
@@ -97,12 +129,17 @@ trait TypeKinds { self: ICodes =>
       case BOOL | BYTE | SHORT | CHAR => other == INT || other == LONG
       case _                          => this eq other
     })
+<<<<<<< HEAD
                      
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Is this type a category 2 type in JVM terms? */
     def isWideType: Boolean = this match {
       case DOUBLE | LONG  => true
       case _              => false
     }
+<<<<<<< HEAD
     
     /** The number of dimensions for array types. */
     def dimensions: Int = 0    
@@ -110,6 +147,15 @@ trait TypeKinds { self: ICodes =>
     protected def uncomparable(thisKind: String, other: TypeKind): Nothing =
       abort("Uncomparable type kinds: " + thisKind + " with " + other)
       
+=======
+
+    /** The number of dimensions for array types. */
+    def dimensions: Int = 0
+
+    protected def uncomparable(thisKind: String, other: TypeKind): Nothing =
+      abort("Uncomparable type kinds: " + thisKind + " with " + other)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     protected def uncomparable(other: TypeKind): Nothing =
       uncomparable(this.toString, other)
   }
@@ -151,19 +197,28 @@ trait TypeKinds { self: ICodes =>
       val tp = global.lub(List(tk1.toType, tk2.toType))
       val (front, rest) = tp.parents span (_.typeSymbol.hasTraitFlag)
 
+<<<<<<< HEAD
       if (front.isEmpty) tp
       else if (rest.isEmpty) front.head   // all parents are interfaces
       else rest.head match {
         case AnyRefClass | ObjectClass  => tp
         case x                          => x
       }
+=======
+      if (front.isEmpty || rest.isEmpty || rest.head.typeSymbol == ObjectClass) tp
+      else rest.head
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
 
     def isIntLub = (
       (a == INT && b.isIntSizedType) ||
       (b == INT && a.isIntSizedType)
     )
+<<<<<<< HEAD
      
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (a == b) a
     else if (a.isNothingType) b
     else if (b.isNothingType) a
@@ -181,7 +236,11 @@ trait TypeKinds { self: ICodes =>
   case object UNIT extends ValueTypeKind {
     def maxType(other: TypeKind) = other match {
       case UNIT | REFERENCE(NothingClass)   => UNIT
+<<<<<<< HEAD
       case _                                => uncomparable(other)      
+=======
+      case _                                => uncomparable(other)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
   }
 
@@ -247,7 +306,11 @@ trait TypeKinds { self: ICodes =>
 
   /** A 4-byte floating point number */
   case object FLOAT extends ValueTypeKind {
+<<<<<<< HEAD
     override def maxType(other: TypeKind): TypeKind = 
+=======
+    override def maxType(other: TypeKind): TypeKind =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (other == DOUBLE) DOUBLE
       else if (other.isNumericType || other.isNothingType) FLOAT
       else uncomparable(other)
@@ -305,7 +368,11 @@ trait TypeKinds { self: ICodes =>
       case a @ ARRAY(_) => a.elementKind
       case k            => k
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /**
      * Approximate `lub`. The common type of two references is
      * always AnyRef. For 'real' least upper bound wrt to subclassing
@@ -317,7 +384,11 @@ trait TypeKinds { self: ICodes =>
       case _                              => uncomparable("ARRAY", other)
     }
 
+<<<<<<< HEAD
     /** Array subtyping is covariant, as in Java. Necessary for checking 
+=======
+    /** Array subtyping is covariant, as in Java. Necessary for checking
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *  code that interacts with Java. */
     override def <:<(other: TypeKind) = other match {
       case ARRAY(elem2)                         => elem <:< elem2
@@ -325,7 +396,11 @@ trait TypeKinds { self: ICodes =>
       case _                                    => false
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A boxed value. */
   case class BOXED(kind: TypeKind) extends TypeKind {
     override def isBoxedType = true
@@ -351,7 +426,11 @@ trait TypeKinds { self: ICodes =>
   case object ConcatClass extends TypeKind {
     override def toString = "ConcatClass"
 
+<<<<<<< HEAD
     /** 
+=======
+    /**
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      * Approximate `lub`. The common type of two references is
      * always AnyRef. For 'real' least upper bound wrt to subclassing
      * use method 'lub'.
@@ -380,11 +459,19 @@ trait TypeKinds { self: ICodes =>
     case TypeRef(_, sym, args)           => primitiveOrClassType(sym, args)
     case ClassInfoType(_, _, ArrayClass) => abort("ClassInfoType to ArrayClass!")
     case ClassInfoType(_, _, sym)        => primitiveOrRefType(sym)
+<<<<<<< HEAD
     
     // !!! Iulian says types which make no sense after erasure should not reach here,
     // which includes the ExistentialType, AnnotatedType, RefinedType.  I don't know
     // if the first two cases exist because they do or as a defensive measure, but
     // at the time I added it, RefinedTypes were indeed reaching here.    
+=======
+
+    // !!! Iulian says types which make no sense after erasure should not reach here,
+    // which includes the ExistentialType, AnnotatedType, RefinedType.  I don't know
+    // if the first two cases exist because they do or as a defensive measure, but
+    // at the time I added it, RefinedTypes were indeed reaching here.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     case ExistentialType(_, t)           => toTypeKind(t)
     case AnnotatedType(_, t, _)          => toTypeKind(t)
     case RefinedType(parents, _)         => parents map toTypeKind reduceLeft lub
@@ -395,15 +482,25 @@ trait TypeKinds { self: ICodes =>
       "Unknown type: %s, %s [%s, %s] TypeRef? %s".format(
         t, norm, t.getClass, norm.getClass, t.isInstanceOf[TypeRef]
       )
+<<<<<<< HEAD
     )      
   }
   
+=======
+    )
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Return the type kind of a class, possibly an array type.
    */
   private def arrayOrClassType(sym: Symbol, targs: List[Type]) = sym match {
     case ArrayClass       => ARRAY(toTypeKind(targs.head))
     case _ if sym.isClass => newReference(sym)
+<<<<<<< HEAD
     case _                => 
+=======
+    case _                =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       assert(sym.isType, sym) // it must be compiling Array[a]
       ObjectReference
   }
@@ -431,7 +528,11 @@ trait TypeKinds { self: ICodes =>
 
   def msil_mgdptr(tk: TypeKind): TypeKind = (tk: @unchecked) match {
     case REFERENCE(cls)  => REFERENCE(loaders.clrTypes.mdgptrcls4clssym(cls))
+<<<<<<< HEAD
     // TODO have ready class-symbols for the by-ref versions of built-in valuetypes 
+=======
+    // TODO have ready class-symbols for the by-ref versions of built-in valuetypes
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     case _ => abort("cannot obtain a managed pointer for " + tk)
   }
 

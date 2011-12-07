@@ -8,18 +8,30 @@
 
 package scala.xml
 
+<<<<<<< HEAD
 /** This singleton object contains the apply and unapplySeq methods for
+=======
+/** This singleton object contains the `apply` and `unapplySeq` methods for
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  convenient construction and deconstruction. It is possible to deconstruct
  *  any `Node` instance (that is not a `SpecialNode` or a `Group`) using the
  *  syntax `case Elem(prefix, label, attribs, scope, child @ _*) => ...`
  *
  *  Copyright 2008 Google Inc. All Rights Reserved.
+<<<<<<< HEAD
  *
  *  @author Burak Emir <bqe@google.com>
  */
 object Elem {
   def apply(prefix: String,label: String, attributes: MetaData, scope: NamespaceBinding, child: Node*) = 
     new Elem(prefix,label,attributes,scope,child:_*)
+=======
+ *  @author Burak Emir <bqe@google.com>
+ */
+object Elem {
+  def apply(prefix: String,label: String, attributes: MetaData, scope: NamespaceBinding, child: Node*) =
+    new Elem(prefix, label, attributes, scope, child:_*)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   def unapplySeq(n: Node) = n match {
     case _: SpecialNode | _: Group  => None
@@ -36,8 +48,13 @@ object Elem {
  *  @param scope the scope containing the namespace bindings
  *  @param child the children of this node
  *
+<<<<<<< HEAD
  * Copyright 2008 Google Inc. All Rights Reserved.
  * @author Burak Emir <bqe@google.com>
+=======
+ *  Copyright 2008 Google Inc. All Rights Reserved.
+ *  @author Burak Emir <bqe@google.com>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  */
 class Elem(
   override val prefix: String,
@@ -49,13 +66,18 @@ extends Node with Serializable
 {
   final override def doCollectNamespaces = true
   final override def doTransform         = true
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   if (prefix == "")
     throw new IllegalArgumentException("prefix of zero length, use null instead")
 
   if (scope == null)
     throw new IllegalArgumentException("scope is null, use xml.TopScope for empty scope")
 
+<<<<<<< HEAD
   //@todo: copy the children, 
   //  setting namespace scope if necessary
   //  cleaning adjacent text nodes if necessary
@@ -64,12 +86,28 @@ extends Node with Serializable
 
   /** Returns a new element with updated attributes, resolving namespace uris from this element's scope.
    *  See MetaData.update for details.
+=======
+  //@todo: copy the children,
+  //  setting namespace scope if necessary
+  //  cleaning adjacent text nodes if necessary
+
+  override protected def basisForHashCode: Seq[Any] =
+    prefix :: label :: attributes :: child.toList
+
+  /** Returns a new element with updated attributes, resolving namespace uris
+   *  from this element's scope. See MetaData.update for details.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param  updates MetaData with new and updated attributes
    *  @return a new symbol with updated attributes
    */
   final def %(updates: MetaData): Elem =
     copy(attributes = MetaData.update(attributes, scope, updates))
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Returns a copy of this element with any supplied arguments replacing
    *  this element's value for that field.
    *

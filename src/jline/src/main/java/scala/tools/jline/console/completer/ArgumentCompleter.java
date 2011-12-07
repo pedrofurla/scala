@@ -215,7 +215,11 @@ public class ArgumentCompleter
         implements ArgumentDelimiter
     {
         // TODO: handle argument quoting and escape characters
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         private char[] quoteChars = {'\'', '"'};
 
         private char[] escapeChars = {'\\'};

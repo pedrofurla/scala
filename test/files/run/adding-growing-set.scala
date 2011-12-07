@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /** This will run a a loooong time if Set's builder copies a
+=======
+/** This will run a loooong time if Set's builder copies a
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  complete new Set for every element.
  */
 object Test {

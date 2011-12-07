@@ -49,7 +49,11 @@ abstract class WordBerrySethi extends BaseBerrySethi {
     case _          => super.compLast(r)
   }
 
+<<<<<<< HEAD
   /** Returns the first set of an expression, setting the follow set along 
+=======
+  /** Returns the first set of an expression, setting the follow set along
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  the way.
    *
    *  @param fol1 ...
@@ -100,7 +104,11 @@ abstract class WordBerrySethi extends BaseBerrySethi {
 
     // determine "Sethi-length" of the regexp
     subexpr foreach traverse
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     this.initials = Set(0)
   }
 
@@ -108,7 +116,11 @@ abstract class WordBerrySethi extends BaseBerrySethi {
     finals   = immutable.Map.empty[Int, Int]                    // final states
     deltaq   = new Array[mutable.HashMap[_labelT, List[Int]]](pos) // delta
     defaultq = new Array[List[Int]](pos)                        // default transitions
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     for (j <- 0 until pos) {
       deltaq(j) = mutable.HashMap[_labelT, List[Int]]()
       defaultq(j) = Nil
@@ -116,7 +128,11 @@ abstract class WordBerrySethi extends BaseBerrySethi {
   }
 
   protected def collectTransitions(): Unit =                // make transitions
+<<<<<<< HEAD
     for (j <- 0 until pos ; val fol = follow(j) ; k <- fol) {
+=======
+    for (j <- 0 until pos ; fol = follow(j) ; k <- fol) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (pos == k) finals = finals.updated(j, finalTag)
       else makeTransition(j, k, labelAt(k))
     }
@@ -137,7 +153,11 @@ abstract class WordBerrySethi extends BaseBerrySethi {
 
         if (x.isNullable) // initial state is final
           finals = finals.updated(0, finalTag)
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         val delta1      = immutable.Map(deltaq.zipWithIndex map (_.swap): _*)
         val finalsArr   = 0 until pos map (k => finals.getOrElse(k, 0)) toArray  // 0 == not final
         val initialsArr = initials.toArray

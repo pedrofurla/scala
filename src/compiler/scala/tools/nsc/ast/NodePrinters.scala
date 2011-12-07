@@ -102,7 +102,11 @@ abstract class NodePrinters {
           }
         def nodeinfo2(tree: Tree): String =
           (if (comma) "," else "") + nodeinfo(tree)
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         def applyCommon(name: String, tree: Tree, fun: Tree, args: List[Tree]) {
           println(name + "(" + nodeinfo(tree))
           traverse(fun, level + 1, true)
@@ -117,7 +121,11 @@ abstract class NodePrinters {
           }
           printcln(")")
         }
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         tree match {
           case AppliedTypeTree(tpt, args) => applyCommon("AppliedTypeTree", tree, tpt, args)
           case Apply(fun, args)           => applyCommon("Apply", tree, fun, args)
@@ -203,7 +211,11 @@ abstract class NodePrinters {
             println("  " + parents.map(p =>
                 if (p.tpe ne null) p.tpe.typeSymbol else "null-" + p
               ) + ", // parents")
+<<<<<<< HEAD
             traverse(self, level + 1, true)    
+=======
+            traverse(self, level + 1, true)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             if (body.isEmpty)
               println("  List() // no body")
             else {
@@ -257,6 +269,7 @@ abstract class NodePrinters {
                   println(p.productPrefix+"(")
                   for (elem <- (0 until p.productArity) map p.productElement) {
                     def printElem(elem: Any, level: Int): Unit = elem match {
+<<<<<<< HEAD
                       case t: Tree => 
                         traverse(t, level, false)
                       case xs: List[_] => 
@@ -264,11 +277,24 @@ abstract class NodePrinters {
                         for (x <- xs) printElem(x, level+1)
                         printcln(")")
                       case _ => 
+=======
+                      case t: Tree =>
+                        traverse(t, level, false)
+                      case xs: List[_] =>
+                        print("List(")
+                        for (x <- xs) printElem(x, level+1)
+                        printcln(")")
+                      case _ =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                         println(elem.toString)
                     }
                     printElem(elem, level+1)
                   }
+<<<<<<< HEAD
                   printcln(")")                
+=======
+                  printcln(")")
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 } else printcln(p.productPrefix)
             }
         }

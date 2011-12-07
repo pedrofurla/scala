@@ -2,7 +2,11 @@
  * Copyright 2007-2011 LAMP/EPFL
  * @author  David Bernard, Manohar Jonnalagedda
  */
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 package scala.tools.nsc
 package doc
 package html
@@ -16,6 +20,7 @@ import java.io.File
 class Source(sourceFile: File) extends HtmlPage {
 
   val path = List("source.html")
+<<<<<<< HEAD
   
   val title = "Scaladoc: page source"
   
@@ -29,11 +34,30 @@ class Source(sourceFile: File) extends HtmlPage {
     
     /*
     
+=======
+
+  val title = "Scaladoc: page source"
+
+  val headers =
+    NodeSeq.Empty
+
+  val body =
+    <body>
+      <h1>Page source is not implemented yet</h1>
+    </body>
+
+    /*
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     def readTextFromSrcDir(subPath: String) :Option[String] = {
       readTextFromFile(new File(sourceDir, subPath))
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def readTextFromFile(f : File) :Option[String] = {
       if (f.exists) {
         Some(Source.fromFile(f)(Codec.default).getLines().mkString(""))
@@ -41,7 +65,11 @@ class Source(sourceFile: File) extends HtmlPage {
         None
       }
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     def writeTextToFile(f : File, txt : String, header: Option[String], footer: Option[String]) {
       val out = new FileOutputStream(f)
@@ -58,7 +86,11 @@ class Source(sourceFile: File) extends HtmlPage {
         }
       }
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     trait SourceHtmlizer {
       def scalaToHtml(src :File) : Option[File]
     }
@@ -66,12 +98,21 @@ class Source(sourceFile: File) extends HtmlPage {
     lazy val sourceHtmlizer : SourceHtmlizer = {
       if (cfg.htmlizeSource) {
         new SourceHtmlizer {
+<<<<<<< HEAD
           
           val inDir: File = cfg.sourcedir
           val outDir: File = cfg.outputdir
           
           private def relativize(uri: URI, from: URI) = linkHelper.relativize(uri, from).getOrElse("__notFound__" + uri.getPath)
         
+=======
+
+          val inDir: File = cfg.sourcedir
+          val outDir: File = cfg.outputdir
+
+          private def relativize(uri: URI, from: URI) = linkHelper.relativize(uri, from).getOrElse("__notFound__" + uri.getPath)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           def header(dest: URI) = Some("""
           <html>
           <head>
@@ -81,7 +122,11 @@ class Source(sourceFile: File) extends HtmlPage {
           <body>
             <pre name="code" class="scala" style="width:100%">
         """)
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           def footer(dest: URI) = Some("""</pre>
             <script language='javascript'>
               dp.SyntaxHighlighter.ClipboardSwf = '""" + relativize(new URI("site:/_highlighter/clipboard.swf"), dest) + """';
@@ -90,15 +135,26 @@ class Source(sourceFile: File) extends HtmlPage {
           </body>
           </html>
         """)
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           //TODO: escape the source code
           def scalaToHtml(src :File) = {
             val dest = new File(outDir, fileHelper.relativePathUnderDir(src, inDir) + ".html")
             if (!dest.exists || dest.lastModified < src.lastModified) {
+<<<<<<< HEAD
               
               //we need to verify whether the directory we are trying to write to has already been created or not
               if(!dest.getParentFile.exists) dest.getParentFile.mkdirs
         
+=======
+
+              //we need to verify whether the directory we are trying to write to has already been created or not
+              if(!dest.getParentFile.exists) dest.getParentFile.mkdirs
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               val uri = linkHelper.uriFor(dest).get
               var txt = fileHelper.readTextFromFile(src).getOrElse("")
               txt = txt.replace("<", "&lt;")
@@ -106,7 +162,11 @@ class Source(sourceFile: File) extends HtmlPage {
             }
             Some(dest)
           }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           def copyResources() {
             val loader = this.getClass().getClassLoader()
             val buf = new Array[Byte](1024)
@@ -115,7 +175,11 @@ class Source(sourceFile: File) extends HtmlPage {
             copyResource("_highlighter/shAll.js")
             copyResource("_highlighter/SyntaxHighlighter.css")
           }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           copyResources()
         }
       } else {
@@ -125,5 +189,9 @@ class Source(sourceFile: File) extends HtmlPage {
       }
     }
     */
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

@@ -12,7 +12,11 @@ import java.util.Hashtable;
 <p>
    The basic algorithm is described in: </br>
    "An O(ND) Difference Algorithm and its Variations", Eugene Myers,
+<<<<<<< HEAD
    Algorithmica Vol. 1 No. 2, 1986, p 251.  
+=======
+   Algorithmica Vol. 1 No. 2, 1986, p 251.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 <p>
    This class outputs different results from GNU diff 1.15 on some
    inputs.  Our results are actually better (smaller change list, smaller
@@ -117,7 +121,11 @@ public class Diff {
     int bmin = bmid, bmax = bmid;	// Limits of bottom-up search.
     /* True if southeast corner is on an odd
 				     diagonal with respect to the northwest. */
+<<<<<<< HEAD
     final boolean odd = (fmid - bmid & 1) != 0;	
+=======
+    final boolean odd = (fmid - bmid & 1) != 0;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     fd[fdiagoff + fmid] = xoff;
     bd[bdiagoff + bmid] = xlim;
@@ -291,7 +299,11 @@ public class Diff {
     while (xlim > xoff && ylim > yoff && xvec[xlim - 1] == yvec[ylim - 1]) {
       --xlim; --ylim;
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /* Handle simple cases. */
     if (xoff == xlim)
       while (yoff < ylim)
@@ -352,7 +364,11 @@ public class Diff {
 
   public interface ScriptBuilder {
   /** Scan the tables of which lines are inserted and deleted,
+<<<<<<< HEAD
      producing an edit script. 
+=======
+     producing an edit script.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    @param changed0 true for lines in first file which do not match 2nd
    @param len0 number of lines in first file
    @param changed1 true for lines in 2nd file which do not match 1st
@@ -438,10 +454,17 @@ public class Diff {
     return diff(reverse ? reverseScript : forwardScript);
   }
 
+<<<<<<< HEAD
   /** Get the results of comparison as an edit script.  The script 
      is described by a list of changes.  The standard ScriptBuilder
      implementations provide for forward and reverse edit scripts.
      Alternate implementations could, for instance, list common elements 
+=======
+  /** Get the results of comparison as an edit script.  The script
+     is described by a list of changes.  The standard ScriptBuilder
+     implementations provide for forward and reverse edit scripts.
+     Alternate implementations could, for instance, list common elements
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      instead of differences.
      @param bld	an object to build the script from change flags
      @return the head of a list of changes
@@ -491,7 +514,11 @@ public class Diff {
   /** The result of comparison is an "edit script": a chain of change objects.
      Each change represents one place where some lines are deleted
      and some are inserted.
+<<<<<<< HEAD
      
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      LINE0 and LINE1 are the first affected lines in the two files (origin 0).
      DELETED is the number of lines deleted here from file 0.
      INSERTED is the number of lines inserted here in file 1.
@@ -501,6 +528,7 @@ public class Diff {
 
   public static class change {
     /** Previous or next edit command. */
+<<<<<<< HEAD
     public change link;		
     /** # lines of file 1 changed here.  */
     public final int inserted;	
@@ -510,6 +538,17 @@ public class Diff {
     public final int line0;		
     /** Line number of 1st inserted line.  */
     public final int line1;		
+=======
+    public change link;
+    /** # lines of file 1 changed here.  */
+    public final int inserted;
+    /** # lines of file 0 changed here.  */
+    public final int deleted;
+    /** Line number of 1st deleted line.  */
+    public final int line0;
+    /** Line number of 1st inserted line.  */
+    public final int line1;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     /** Cons an additional entry onto the front of an edit script OLD.
        LINE0 and LINE1 are the first affected lines in the two files (origin 0).
@@ -528,7 +567,11 @@ public class Diff {
     }
   }
 
+<<<<<<< HEAD
   /** Data on one input file being compared.  
+=======
+  /** Data on one input file being compared.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */
 
   class file_data {
@@ -563,8 +606,13 @@ public class Diff {
        that are comprehensible when the discarded lines are counted.
 <p>
        When we discard a line, we also mark it as a deletion or insertion
+<<<<<<< HEAD
        so that it will be printed in the output.  
       @param f the other file   
+=======
+       so that it will be printed in the output.
+      @param f the other file
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      */
     void discard_confusing_lines(file_data f) {
       clear();
@@ -581,7 +629,11 @@ public class Diff {
     }
 
     /** Mark to be discarded each line that matches no line of another file.
+<<<<<<< HEAD
        If a line matches many lines, mark it as provisionally discardable.  
+=======
+       If a line matches many lines, mark it as provisionally discardable.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
        @see equivCount()
        @param counts The count of each equivalence number for the other file.
        @return 0=nondiscardable, 1=discardable or 2=provisionally discardable
@@ -747,7 +799,11 @@ public class Diff {
     file_data(Object[] data,Hashtable h) {
       buffered_lines = data.length;
 
+<<<<<<< HEAD
       equivs = new int[buffered_lines]; 
+=======
+      equivs = new int[buffered_lines];
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       undiscarded = new int[buffered_lines];
       realindexes = new int[buffered_lines];
 
@@ -769,7 +825,11 @@ public class Diff {
        `compareseq' always chooses the one at the beginning,
        but usually it is cleaner to consider the following blank line
        to be the "change".  The only exception is if the preceding blank line
+<<<<<<< HEAD
        would join this change to other changes.  
+=======
+       would join this change to other changes.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       @param f the file being compared against
     */
 

@@ -12,6 +12,7 @@ package scala.xml
  *  It is used in both non-bound and bound XML representations.
  *
  *  @author Burak Emir
+<<<<<<< HEAD
  *  @param text the text contained in this node, may not be `'''null'''`.
  */
 class Atom[+A](val data: A) extends SpecialNode with Serializable {
@@ -19,10 +20,24 @@ class Atom[+A](val data: A) extends SpecialNode with Serializable {
     throw new IllegalArgumentException("cannot construct Atom(null)")
 
   override def basisForHashCode: Seq[Any] = Seq(data)
+=======
+ *  @param data the text contained in this node, may not be `'''null'''`.
+ */
+class Atom[+A](val data: A) extends SpecialNode with Serializable {
+  if (data == null)
+    throw new IllegalArgumentException("cannot construct "+getClass.getSimpleName+" with null")
+
+  override protected def basisForHashCode: Seq[Any] = Seq(data)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def strict_==(other: Equality) = other match {
     case x: Atom[_] => data == x.data
     case _          => false
   }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def canEqual(other: Any) = other match {
     case _: Atom[_] => true
     case _          => false
@@ -30,7 +45,11 @@ class Atom[+A](val data: A) extends SpecialNode with Serializable {
 
   final override def doCollectNamespaces = false
   final override def doTransform         = false
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def label = "#PCDATA"
 
   /** Returns text, with some characters escaped according to the XML
@@ -39,9 +58,16 @@ class Atom[+A](val data: A) extends SpecialNode with Serializable {
    *  @param  sb ...
    *  @return ...
    */
+<<<<<<< HEAD
   def buildString(sb: StringBuilder) =
     Utility.escape(data.toString(), sb)
 
   override def text: String = data.toString()
+=======
+  def buildString(sb: StringBuilder): StringBuilder =
+    Utility.escape(data.toString, sb)
+
+  override def text: String = data.toString
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 }

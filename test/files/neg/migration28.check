@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 migration28.scala:5: error: method ++= in class Stack is deprecated: use pushAll
   s ++= List(1,2,3)
     ^
@@ -6,3 +7,11 @@ Stack iterator and foreach now traverse in FIFO order.
   s foreach (_ => ())
     ^
 two errors found
+=======
+migration28.scala:4: error: method scanRight in trait TraversableLike has changed semantics:
+This scanRight definition has changed in 2.9.
+The previous behavior can be reproduced with scanRight.reverse.
+  List(1,2,3,4,5).scanRight(0)(_+_)
+                  ^
+one error found
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0

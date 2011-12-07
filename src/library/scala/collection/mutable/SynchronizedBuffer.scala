@@ -15,9 +15,15 @@ import script._
 
 /** This class should be used as a mixin. It synchronizes the `Buffer`
  *  methods of the class into which it is mixed in.
+<<<<<<< HEAD
  *  
  *  @tparam A    type of the elements contained in this buffer.
  *  
+=======
+ *
+ *  @tparam A    type of the elements contained in this buffer.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author  Matthias Zenger
  *  @version 1.0, 08/07/2003
  *  @since   1
@@ -40,6 +46,7 @@ trait SynchronizedBuffer[A] extends Buffer[A] {
     super.apply(n)
   }
 
+<<<<<<< HEAD
   /** Append a single element to this buffer and return
    *  the identity of the buffer.
    *
@@ -49,6 +56,8 @@ trait SynchronizedBuffer[A] extends Buffer[A] {
     super.+(elem)
   }
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Append a single element to this buffer.
    *
    *  @param elem  the element to append.

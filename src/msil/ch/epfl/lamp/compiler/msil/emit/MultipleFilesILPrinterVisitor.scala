@@ -43,12 +43,20 @@ final class MultipleFilesILPrinterVisitor(destPath: String, sourceFilesPath: Str
 	// print each module
 	var m: Array[Module] = assemblyBuilder.GetModules()
         nomembers = true
+<<<<<<< HEAD
         for(val i <- 0 until m.length) {
+=======
+        for(i <- 0 until m.length) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 	    print(m(i).asInstanceOf[ModuleBuilder])
 	}
 
         nomembers = false
+<<<<<<< HEAD
         for(val i <- 0 until m.length) {
+=======
+        for(i <- 0 until m.length) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 	    print(m(i).asInstanceOf[ModuleBuilder])
 	}
 	ILPrinterVisitor.currAssembly = null
@@ -72,7 +80,11 @@ final class MultipleFilesILPrinterVisitor(destPath: String, sourceFilesPath: Str
 
 	// "Types" contain all the classes
 	var t: Array[Type] = module.GetTypes()
+<<<<<<< HEAD
         for(val i <- 0 until t.length) {
+=======
+        for(i <- 0 until t.length) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         val tBuilder       = t(i).asInstanceOf[TypeBuilder]
         val sourceFilename = tBuilder.sourceFilename
         val sourceFilepath = new File(tBuilder.sourceFilepath).getCanonicalPath
@@ -97,20 +109,34 @@ final class MultipleFilesILPrinterVisitor(destPath: String, sourceFilesPath: Str
 		// only write assembly boilerplate and class prototypes
 		if (!append && nomembers) {
 			printAssemblyBoilerplate()
+<<<<<<< HEAD
 			
 			print(".module \'"); print(module.Name); println("\'")
 		    printAttributes(module)	
+=======
+
+			print(".module \'"); print(module.Name); println("\'")
+		    printAttributes(module)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         }
 
 	    print(t(i).asInstanceOf[TypeBuilder])
 	    out.close()
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // now write the global methods (typically contains the "main" method)
 	if(!nomembers) {
        var globalMethods: File = new File(destPath, ILPrinterVisitor.currAssembly.GetName().Name + ".msil")
        val append = assemblyBuilder.generatedFiles.contains(globalMethods.getPath)
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 		out = new PrintWriter(new BufferedWriter(new FileWriter(globalMethods, append)))
 
         // make sure we're the first in the list (ilasm uses the first file name to guess the output file name)
@@ -119,6 +145,7 @@ final class MultipleFilesILPrinterVisitor(destPath: String, sourceFilesPath: Str
 		// if this file hasn't been created by one of the classes, write boilerplate
 		if(!append) {
 			printAssemblyBoilerplate()
+<<<<<<< HEAD
 			
 			print(".module \'"); print(module.Name); println("\'")
 		    printAttributes(module)	
@@ -128,6 +155,17 @@ final class MultipleFilesILPrinterVisitor(destPath: String, sourceFilesPath: Str
 	   		print(m(i).asInstanceOf[MethodBuilder])
 		}
 	
+=======
+
+			print(".module \'"); print(module.Name); println("\'")
+		    printAttributes(module)
+		}
+
+                for(i <- 0 until m.length) {
+	   		print(m(i).asInstanceOf[MethodBuilder])
+		}
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 		out.close()
 	}
 

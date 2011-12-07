@@ -15,7 +15,11 @@ import scala.collection.parallel.ParSetLike
 import scala.collection.parallel.Combiner
 
 /** An immutable variant of `ParSet`.
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define Coll mutable.ParSet
  *  @define coll mutable parallel set
  */
@@ -28,11 +32,19 @@ extends collection/*.immutable*/.GenSet[T]
 {
 self =>
   override def empty: ParSet[T] = ParHashSet[T]()
+<<<<<<< HEAD
   
   override def companion: GenericCompanion[ParSet] with GenericParCompanion[ParSet] = ParSet
   
   override def stringPrefix = "ParSet"
   
+=======
+
+  override def companion: GenericCompanion[ParSet] with GenericParCompanion[ParSet] = ParSet
+
+  override def stringPrefix = "ParSet"
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // ok, because this could only violate `apply` and we can live with that
   override def toSet[U >: T]: ParSet[U] = this.asInstanceOf[ParSet[U]]
 }
@@ -43,6 +55,10 @@ self =>
  */
 object ParSet extends ParSetFactory[ParSet] {
   def newCombiner[T]: Combiner[T, ParSet[T]] = HashSetCombiner[T]
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   implicit def canBuildFrom[T]: CanCombineFrom[Coll, T, ParSet[T]] = new GenericCanCombineFrom[T]
 }

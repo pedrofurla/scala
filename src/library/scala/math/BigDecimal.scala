@@ -15,7 +15,11 @@ import scala.collection.immutable.NumericRange
 
 import annotation.migration
 
+<<<<<<< HEAD
 /** 
+=======
+/**
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author  Stephane Micheloud
  *  @version 1.0
  *  @since 2.7
@@ -30,7 +34,11 @@ object BigDecimal {
 
   @deprecated("Use Long.MaxValue", "2.9.0")
   val MaxLong = new BigDecimal(BigDec valueOf Long.MaxValue, defaultMathContext)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Cache ony for defaultMathContext using BigDecimals in a small range. */
   private lazy val cache = new Array[BigDecimal](maxCached - minCached + 1)
 
@@ -38,7 +46,11 @@ object BigDecimal {
     type RoundingMode = Value
     val UP, DOWN, CEILING, FLOOR, HALF_UP, HALF_DOWN, HALF_EVEN, UNNECESSARY = Value
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Constructs a `BigDecimal` using the java BigDecimal static
    *  valueOf constructor.
    *
@@ -72,8 +84,13 @@ object BigDecimal {
    */
   def apply(l: Long): BigDecimal =
     if (minCached <= l && l <= maxCached) apply(l.toInt)
+<<<<<<< HEAD
     else new BigDecimal(BigDec.valueOf(l), defaultMathContext)  
     
+=======
+    else new BigDecimal(BigDec.valueOf(l), defaultMathContext)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def apply(l: Long, mc: MathContext): BigDecimal =
     new BigDecimal(new BigDec(l, mc), mc)
 
@@ -96,7 +113,11 @@ object BigDecimal {
    *  @param d the specified `Double` value
    *  @return  the constructed `BigDecimal`
    */
+<<<<<<< HEAD
   def apply(d: Double): BigDecimal = apply(d, defaultMathContext)  
+=======
+  def apply(d: Double): BigDecimal = apply(d, defaultMathContext)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // note we don't use the static valueOf because it doesn't let us supply
   // a MathContext, but we should be duplicating its logic, modulo caching.
   def apply(d: Double, mc: MathContext): BigDecimal =
@@ -108,12 +129,20 @@ object BigDecimal {
   def apply(x: Array[Char]): BigDecimal = apply(x, defaultMathContext)
   def apply(x: Array[Char], mc: MathContext): BigDecimal =
     new BigDecimal(new BigDec(x.mkString, mc), mc)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Translates the decimal String representation of a `BigDecimal`
    *  into a `BigDecimal`.
    */
   def apply(x: String): BigDecimal = apply(x, defaultMathContext)
+<<<<<<< HEAD
   def apply(x: String, mc: MathContext): BigDecimal = 
+=======
+  def apply(x: String, mc: MathContext): BigDecimal =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     new BigDecimal(new BigDec(x, mc), mc)
 
   /** Constructs a `BigDecimal` whose value is equal to that of the
@@ -125,11 +154,16 @@ object BigDecimal {
   def apply(x: BigInt): BigDecimal = apply(x, defaultMathContext)
   def apply(x: BigInt, mc: MathContext): BigDecimal =
     new BigDecimal(new BigDec(x.bigInteger, mc), mc)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Constructs a `BigDecimal` whose unscaled value is equal to that
    *  of the specified `BigInt` value.
    *
    *  @param unscaledVal the specified `BigInt` value
+<<<<<<< HEAD
    *  @param scale       the scale 
    *  @return  the constructed `BigDecimal`
    */  
@@ -137,6 +171,15 @@ object BigDecimal {
   def apply(unscaledVal: BigInt, scale: Int, mc: MathContext): BigDecimal =
     new BigDecimal(new BigDec(unscaledVal.bigInteger, scale, mc), mc)
   
+=======
+   *  @param scale       the scale
+   *  @return  the constructed `BigDecimal`
+   */
+  def apply(unscaledVal: BigInt, scale: Int): BigDecimal = apply(unscaledVal, scale, defaultMathContext)
+  def apply(unscaledVal: BigInt, scale: Int, mc: MathContext): BigDecimal =
+    new BigDecimal(new BigDec(unscaledVal.bigInteger, scale, mc), mc)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def apply(bd: BigDec): BigDecimal = apply(bd, defaultMathContext)
   def apply(bd: BigDec, mc: MathContext): BigDecimal = new BigDecimal(bd, mc)
 
@@ -148,12 +191,20 @@ object BigDecimal {
 
   /** Implicit conversion from `Double` to `BigDecimal`. */
   implicit def double2bigDecimal(d: Double): BigDecimal = valueOf(d, defaultMathContext)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Implicit conversion from `java.math.BigDecimal` to `scala.BigDecimal`. */
   implicit def javaBigDecimal2bigDecimal(x: BigDec): BigDecimal = apply(x)
 }
 
+<<<<<<< HEAD
 /** 
+=======
+/**
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author  Stephane Micheloud
  *  @version 1.0
  */
@@ -163,7 +214,11 @@ class BigDecimal(
 extends ScalaNumber with ScalaNumericConversions with Serializable {
   def this(bigDecimal: BigDec) = this(bigDecimal, BigDecimal.defaultMathContext)
   import BigDecimal.RoundingMode._
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Cuts way down on the wrapper noise. */
   private implicit def bigdec2BigDecimal(x: BigDec): BigDecimal = new BigDecimal(x, mc)
 
@@ -180,7 +235,11 @@ extends ScalaNumber with ScalaNumericConversions with Serializable {
   /** Compares this BigDecimal with the specified value for equality.
    */
   override def equals (that: Any): Boolean = that match {
+<<<<<<< HEAD
     case that: BigDecimal     => this equals that 
+=======
+    case that: BigDecimal     => this equals that
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     case that: BigInt         => this.toBigIntExact exists (that equals _)
     case _: Float | _: Double => unifiedPrimitiveEquals(that)
     case _                    => isValidLong && unifiedPrimitiveEquals(that)
@@ -190,12 +249,20 @@ extends ScalaNumber with ScalaNumericConversions with Serializable {
   override def isValidChar  = isValidInt && toIntExact >= Char.MinValue && toIntExact <= Char.MaxValue
   override def isValidInt   = noArithmeticException(toIntExact)
   def isValidLong  = noArithmeticException(toLongExact)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def noArithmeticException(body: => Unit): Boolean = {
     try   { body ; true }
     catch { case _: ArithmeticException => false }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected[math] def isWhole = (this remainder 1) == BigDecimal(0)
   def underlying = bigDecimal
 
@@ -225,11 +292,19 @@ extends ScalaNumber with ScalaNumericConversions with Serializable {
 
   /** Addition of BigDecimals
    */
+<<<<<<< HEAD
   def +  (that: BigDecimal): BigDecimal = this.bigDecimal.add(that.bigDecimal, mc)
 
   /** Subtraction of BigDecimals
    */
   def -  (that: BigDecimal): BigDecimal = this.bigDecimal.subtract(that.bigDecimal, mc)
+=======
+  def +  (that: BigDecimal): BigDecimal = this.bigDecimal.add(that.bigDecimal)
+
+  /** Subtraction of BigDecimals
+   */
+  def -  (that: BigDecimal): BigDecimal = this.bigDecimal.subtract(that.bigDecimal)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** Multiplication of BigDecimals
    */
@@ -238,6 +313,7 @@ extends ScalaNumber with ScalaNumericConversions with Serializable {
   /** Division of BigDecimals
    */
   def /  (that: BigDecimal): BigDecimal = this.bigDecimal.divide(that.bigDecimal, mc)
+<<<<<<< HEAD
   
   /** Division and Remainder - returns tuple containing the result of 
    *  divideToIntegralValue and the remainder.
@@ -251,6 +327,21 @@ extends ScalaNumber with ScalaNumericConversions with Serializable {
    */
   def quot (that: BigDecimal): BigDecimal =
     this.bigDecimal.divideToIntegralValue(that.bigDecimal, mc)
+=======
+
+  /** Division and Remainder - returns tuple containing the result of
+   *  divideToIntegralValue and the remainder.
+   */
+  def /% (that: BigDecimal): (BigDecimal, BigDecimal) =
+    this.bigDecimal.divideAndRemainder(that.bigDecimal) match {
+      case Array(q, r)  => (q, r)
+    }
+
+  /** Divide to Integral value.
+   */
+  def quot (that: BigDecimal): BigDecimal =
+    this.bigDecimal.divideToIntegralValue(that.bigDecimal)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** Returns the minimum of this and that
    */
@@ -262,18 +353,28 @@ extends ScalaNumber with ScalaNumericConversions with Serializable {
 
   /** Remainder after dividing this by that.
    */
+<<<<<<< HEAD
   def remainder (that: BigDecimal): BigDecimal = this.bigDecimal.remainder(that.bigDecimal, mc)
   
   /** Remainder after dividing this by that.
    */
   def % (that: BigDecimal): BigDecimal = this.remainder(that)
   
+=======
+  def remainder (that: BigDecimal): BigDecimal = this.bigDecimal.remainder(that.bigDecimal)
+
+  /** Remainder after dividing this by that.
+   */
+  def % (that: BigDecimal): BigDecimal = this.remainder(that)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Returns a BigDecimal whose value is this ** n.
    */
   def pow (n: Int): BigDecimal = this.bigDecimal.pow(n, mc)
 
   /** Returns a BigDecimal whose value is the negation of this BigDecimal
    */
+<<<<<<< HEAD
   def unary_- : BigDecimal = this.bigDecimal.negate(mc)
   
   /** Returns the absolute value of this BigDecimal
@@ -282,6 +383,16 @@ extends ScalaNumber with ScalaNumericConversions with Serializable {
 
   /** Returns the sign of this BigDecimal, i.e. 
    *   -1 if it is less than 0, 
+=======
+  def unary_- : BigDecimal = this.bigDecimal.negate()
+
+  /** Returns the absolute value of this BigDecimal
+   */
+  def abs: BigDecimal = this.bigDecimal abs
+
+  /** Returns the sign of this BigDecimal, i.e.
+   *   -1 if it is less than 0,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *   +1 if it is greater than 0
    *   0  if it is equal to 0
    */
@@ -290,7 +401,11 @@ extends ScalaNumber with ScalaNumericConversions with Serializable {
   /** Returns the precision of this `BigDecimal`.
    */
   def precision: Int = this.bigDecimal.precision()
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Returns a BigDecimal rounded according to the MathContext settings.
    */
   def round(mc: MathContext): BigDecimal = this.bigDecimal round mc
@@ -298,11 +413,19 @@ extends ScalaNumber with ScalaNumericConversions with Serializable {
   /** Returns the scale of this `BigDecimal`.
    */
   def scale: Int = this.bigDecimal.scale()
+<<<<<<< HEAD
   
   /** Returns the size of an ulp, a unit in the last place, of this BigDecimal.
    */
   def ulp: BigDecimal = this.bigDecimal.ulp
   
+=======
+
+  /** Returns the size of an ulp, a unit in the last place, of this BigDecimal.
+   */
+  def ulp: BigDecimal = this.bigDecimal.ulp
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Returns a new BigDecimal based on the supplied MathContext.
    */
   def apply(mc: MathContext): BigDecimal = BigDecimal(this.bigDecimal.toString, mc)
@@ -315,28 +438,50 @@ extends ScalaNumber with ScalaNumericConversions with Serializable {
   def setScale(scale: Int, mode: RoundingMode): BigDecimal =
     this.bigDecimal.setScale(scale, mode.id)
 
+<<<<<<< HEAD
   /** Converts this BigDecimal to a Byte. 
    *  If the BigDecimal is too big to fit in a Byte, only the low-order 8 bits are returned. 
    *  Note that this conversion can lose information about the overall magnitude of the 
+=======
+  /** Converts this BigDecimal to a Byte.
+   *  If the BigDecimal is too big to fit in a Byte, only the low-order 8 bits are returned.
+   *  Note that this conversion can lose information about the overall magnitude of the
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  BigDecimal value as well as return a result with the opposite sign.
    */
   override def byteValue   = intValue.toByte
 
+<<<<<<< HEAD
   /** Converts this BigDecimal to a Short. 
    *  If the BigDecimal is too big to fit in a Byte, only the low-order 16 bits are returned. 
    *  Note that this conversion can lose information about the overall magnitude of the 
+=======
+  /** Converts this BigDecimal to a Short.
+   *  If the BigDecimal is too big to fit in a Byte, only the low-order 16 bits are returned.
+   *  Note that this conversion can lose information about the overall magnitude of the
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  BigDecimal value as well as return a result with the opposite sign.
    */
   override def shortValue  = intValue.toShort
 
+<<<<<<< HEAD
   /** Converts this BigDecimal to a Char. 
    *  If the BigDecimal is too big to fit in a char, only the low-order 16 bits are returned. 
    *  Note that this conversion can lose information about the overall magnitude of the 
+=======
+  /** Converts this BigDecimal to a Char.
+   *  If the BigDecimal is too big to fit in a char, only the low-order 16 bits are returned.
+   *  Note that this conversion can lose information about the overall magnitude of the
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  BigDecimal value and that it always returns a positive result.
    */
   def charValue   = intValue.toChar
 
+<<<<<<< HEAD
   /** Converts this BigDecimal to an Int. 
+=======
+  /** Converts this BigDecimal to an Int.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  If the BigDecimal is too big to fit in a char, only the low-order 32 bits
    *  are returned. Note that this conversion can lose information about the
    *  overall magnitude of the BigDecimal value as well as return a result with
@@ -359,6 +504,7 @@ extends ScalaNumber with ScalaNumericConversions with Serializable {
    */
   def floatValue  = this.bigDecimal.floatValue
 
+<<<<<<< HEAD
   /** Converts this BigDecimal to a Double. 
    *  if this BigDecimal has too great a magnitude to represent as a double, 
    *  it will be converted to `Double.NEGATIVE_INFINITY` or
@@ -390,6 +536,39 @@ extends ScalaNumber with ScalaNumericConversions with Serializable {
   /** Converts this `BigDecimal` to a [[scala.Long]], checking for lost information.
     * If this `BigDecimal` has a nonzero fractional part, or is out of the possible
     * range for a [[scala.Long]] result, then a `java.lang.ArithmeticException` is 
+=======
+  /** Converts this BigDecimal to a Double.
+   *  if this BigDecimal has too great a magnitude to represent as a double,
+   *  it will be converted to `Double.NEGATIVE_INFINITY` or
+   *  `Double.POSITIVE_INFINITY` as appropriate.
+   */
+  def doubleValue = this.bigDecimal.doubleValue
+
+  /** Converts this `BigDecimal` to a [[scala.Byte]], checking for lost information.
+    * If this `BigDecimal` has a nonzero fractional part, or is out of the possible
+    * range for a [[scala.Byte]] result, then a `java.lang.ArithmeticException` is
+    * thrown.
+    */
+  def toByteExact = bigDecimal.byteValueExact
+
+  /** Converts this `BigDecimal` to a [[scala.Short]], checking for lost information.
+    * If this `BigDecimal` has a nonzero fractional part, or is out of the possible
+    * range for a [[scala.Short]] result, then a `java.lang.ArithmeticException` is
+    * thrown.
+    */
+  def toShortExact = bigDecimal.shortValueExact
+
+  /** Converts this `BigDecimal` to a [[scala.Int]], checking for lost information.
+    * If this `BigDecimal` has a nonzero fractional part, or is out of the possible
+    * range for an [[scala.Int]] result, then a `java.lang.ArithmeticException` is
+    * thrown.
+    */
+  def toIntExact = bigDecimal.intValueExact
+
+  /** Converts this `BigDecimal` to a [[scala.Long]], checking for lost information.
+    * If this `BigDecimal` has a nonzero fractional part, or is out of the possible
+    * range for a [[scala.Long]] result, then a `java.lang.ArithmeticException` is
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     * thrown.
     */
   def toLongExact = bigDecimal.longValueExact
@@ -412,18 +591,30 @@ extends ScalaNumber with ScalaNumericConversions with Serializable {
 
   /** Same as the one-argument `until`, but creates the range immediately. */
   def until(end: BigDecimal, step: BigDecimal) = Range.BigDecimal(this, end, step)
+<<<<<<< HEAD
   
   /** Like `until`, but inclusive of the end value. */
   def to(end: BigDecimal): Range.Partial[BigDecimal, NumericRange.Inclusive[BigDecimal]] =
     new Range.Partial(to(end, _))
   
+=======
+
+  /** Like `until`, but inclusive of the end value. */
+  def to(end: BigDecimal): Range.Partial[BigDecimal, NumericRange.Inclusive[BigDecimal]] =
+    new Range.Partial(to(end, _))
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Like `until`, but inclusive of the end value. */
   def to(end: BigDecimal, step: BigDecimal) = Range.BigDecimal.inclusive(this, end, step)
 
   /** Converts this `BigDecimal` to a scala.BigInt.
    */
   def toBigInt(): BigInt = new BigInt(this.bigDecimal.toBigInteger())
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Converts this `BigDecimal` to a scala.BigInt if it
    *  can be done losslessly, returning Some(BigInt) or None.
    */

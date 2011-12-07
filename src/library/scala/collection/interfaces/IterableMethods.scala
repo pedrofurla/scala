@@ -19,7 +19,11 @@ import annotation.unchecked.uncheckedVariance
  */
 trait IterableMethods[+A, +This <: IterableLike[A, This] with Iterable[A]] extends TraversableMethods[A, This] {
   self: Iterable[A] =>
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // abstract
   def iterator: Iterator[A]
 
@@ -27,13 +31,22 @@ trait IterableMethods[+A, +This <: IterableLike[A, This] with Iterable[A]] exten
   def dropRight(n: Int): Iterable[A]
   def grouped(size: Int): Iterator[Iterable[A]]
   def sameElements[B >: A](that: GenIterable[B]): Boolean
+<<<<<<< HEAD
   def sliding[B >: A](size: Int): Iterator[Iterable[A]]
   def sliding[B >: A](size: Int, step: Int): Iterator[Iterable[A]]
+=======
+  def sliding(size: Int): Iterator[Iterable[A]]
+  def sliding(size: Int, step: Int): Iterator[Iterable[A]]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def takeRight(n: Int): Iterable[A]
   def zipAll[B, A1 >: A, That](that: GenIterable[B], e1: A1, e2: B)(implicit bf: CanBuildFrom[This, (A1, B), That]): That
   def zipWithIndex[A1 >: A, That](implicit bf: CanBuildFrom[This, (A1, Int), That]): That
   def zip[A1 >: A, B, That](that: GenIterable[B])(implicit bf: CanBuildFrom[This, (A1, B), That]): That
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def view: IterableView[A, This]
   override def view(from: Int, until: Int): IterableView[A, This]
 }

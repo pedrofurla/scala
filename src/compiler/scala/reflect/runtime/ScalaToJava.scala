@@ -3,6 +3,7 @@ package runtime
 
 import java.lang.{Class => jClass, Package => jPackage}
 import java.lang.reflect.{
+<<<<<<< HEAD
   Method => jMethod, Constructor => jConstructor, Modifier => jModifier, Field => jField, 
   Member => jMember, Type => jType, Array => jArray, GenericDeclaration}
 
@@ -10,22 +11,42 @@ trait ScalaToJava extends ConversionUtil { self: Universe =>
   
   import definitions._
   
+=======
+  Method => jMethod, Constructor => jConstructor, Modifier => jModifier, Field => jField,
+  Member => jMember, Type => jType, Array => jArray, GenericDeclaration}
+
+trait ScalaToJava extends ConversionUtil { self: SymbolTable =>
+
+  import definitions._
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Optionally, the Java package corresponding to a given Scala package, or None if no such Java package exists.
    *  @param   pkg The Scala package
    */
   def packageToJava(pkg: Symbol): Option[jPackage] = packageCache.toJavaOption(pkg) {
     Option(jPackage.getPackage(pkg.fullName.toString))
   }
+<<<<<<< HEAD
   
   /** The Java class corresponding to given Scala class.
    *  Note: This only works for 
    *   - top-level classes 
+=======
+
+  /** The Java class corresponding to given Scala class.
+   *  Note: This only works for
+   *   - top-level classes
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *   - Scala classes that were generated via jclassToScala
    *   - classes that have a class owner that has a corresponding Java class
    *  @throws A `ClassNotFoundException` for all Scala classes not in one of these categories.
    */
   @throws(classOf[ClassNotFoundException])
+<<<<<<< HEAD
   def classToJava(clazz: Symbol): jClass[_] = classCache.toJava(clazz) { 
+=======
+  def classToJava(clazz: Symbol): jClass[_] = classCache.toJava(clazz) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def noClass = throw new ClassNotFoundException("no Java class corresponding to "+clazz+" found")
     //println("classToJava "+clazz+" "+clazz.owner+" "+clazz.owner.isPackageClass)//debug
     if (clazz.isValueClass)
@@ -40,10 +61,17 @@ trait ScalaToJava extends ConversionUtil { self: Universe =>
         case DoubleClass => java.lang.Double.TYPE
         case BooleanClass => java.lang.Boolean.TYPE
       }
+<<<<<<< HEAD
     else if (clazz == ArrayClass) 
       noClass
     else if (clazz.owner.isPackageClass)
       jClass.forName(clazz.fullName) 
+=======
+    else if (clazz == ArrayClass)
+      noClass
+    else if (clazz.owner.isPackageClass)
+      javaClass(clazz.javaClassName)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     else if (clazz.owner.isClass)
       classToJava(clazz.owner)
         .getDeclaredClasses
@@ -52,11 +80,19 @@ trait ScalaToJava extends ConversionUtil { self: Universe =>
     else
       noClass
   }
+<<<<<<< HEAD
   
   private def expandedName(sym: Symbol): String =
     if (sym.isPrivate) nme.expandedName(sym.name, sym.owner).toString
     else sym.name.toString
   
+=======
+
+  private def expandedName(sym: Symbol): String =
+    if (sym.isPrivate) nme.expandedName(sym.name, sym.owner).toString
+    else sym.name.toString
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def fieldToJava(fld: Symbol): jField = fieldCache.toJava(fld) {
     val jclazz = classToJava(fld.owner)
     try jclazz getDeclaredField fld.name.toString
@@ -64,23 +100,39 @@ trait ScalaToJava extends ConversionUtil { self: Universe =>
       case ex: NoSuchFieldException => jclazz getDeclaredField expandedName(fld)
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def methodToJava(meth: Symbol): jMethod = methodCache.toJava(meth) {
     val jclazz = classToJava(meth.owner)
     val paramClasses = transformedType(meth).paramTypes map typeToJavaClass
     try jclazz getDeclaredMethod (meth.name.toString, paramClasses: _*)
     catch {
+<<<<<<< HEAD
       case ex: NoSuchMethodException => 
         jclazz getDeclaredMethod (expandedName(meth), paramClasses: _*)
     }
   }
   
+=======
+      case ex: NoSuchMethodException =>
+        jclazz getDeclaredMethod (expandedName(meth), paramClasses: _*)
+    }
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def constrToJava(constr: Symbol): jConstructor[_] = constructorCache.toJava(constr) {
     val jclazz = classToJava(constr.owner)
     val paramClasses = transformedType(constr).paramTypes map typeToJavaClass
     jclazz getConstructor (paramClasses: _*)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def jArrayClass(elemClazz: jClass[_]): jClass[_] = {
     jArray.newInstance(elemClazz, 0).getClass
   }

@@ -6,7 +6,11 @@
 **                          |/                                          **
 \*                                                                      */
 package scala.annotation
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 /** An annotation to be applied to a match expression.  If present,
  *  the compiler will verify that the match has been compiled to a
  *  [[http://java.sun.com/docs/books/jvms/second_edition/html/Instructions2.doc14.html tableswitch]]

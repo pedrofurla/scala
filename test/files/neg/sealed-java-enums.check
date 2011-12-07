@@ -1,5 +1,9 @@
 sealed-java-enums.scala:5: error: match is not exhaustive!
 missing combination        BLOCKED
+<<<<<<< HEAD
+=======
+missing combination          State
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 missing combination     TERMINATED
 missing combination  TIMED_WAITING
 

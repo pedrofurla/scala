@@ -7,7 +7,11 @@
 \*                                                                      */
 
 package scala.annotation
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 /**
  * An annotation that specifies the error message that is emitted when the compiler
  * cannot find an implicit value of the annotated type.

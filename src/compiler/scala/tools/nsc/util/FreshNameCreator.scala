@@ -21,7 +21,11 @@ trait FreshNameCreator {
   def newName(pos: util.Position): String = newName()
 }
 
+<<<<<<< HEAD
 object FreshNameCreator {  
+=======
+object FreshNameCreator {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class Default extends FreshNameCreator {
     protected var counter = 0
     protected val counters = mutable.HashMap[String, Int]() withDefaultValue 0
@@ -34,7 +38,11 @@ object FreshNameCreator {
     def newName(prefix: String): String = {
       val safePrefix = prefix.replaceAll("""[<>]""", """\$""")
       counters(safePrefix) += 1
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       safePrefix + counters(safePrefix)
     }
     def newName(): String = {

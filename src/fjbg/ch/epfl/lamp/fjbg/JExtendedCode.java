@@ -116,7 +116,11 @@ public class JExtendedCode extends JCode {
     public void emitPUSH(boolean value) { emitPUSH(value ? 1 : 0); }
     public void emitPUSH(Boolean value) { emitPUSH(value.booleanValue()); }
 
+<<<<<<< HEAD
     public void emitPUSH(byte value) { 
+=======
+    public void emitPUSH(byte value) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       switch (value) {
         case -1: emitICONST_M1(); break;
         case 0: emitICONST_0(); break;
@@ -126,12 +130,20 @@ public class JExtendedCode extends JCode {
         case 4: emitICONST_4(); break;
         case 5: emitICONST_5(); break;
         default:
+<<<<<<< HEAD
           emitBIPUSH(value); 
+=======
+          emitBIPUSH(value);
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       }
     }
     public void emitPUSH(Byte value) { emitPUSH(value.byteValue()); }
 
+<<<<<<< HEAD
     public void emitPUSH(short value) { 
+=======
+    public void emitPUSH(short value) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       switch (value) {
         case -1: emitICONST_M1(); break;
         case 0: emitICONST_0(); break;
@@ -174,7 +186,11 @@ public class JExtendedCode extends JCode {
     }
     public void emitPUSH(Integer value) { emitPUSH(value.intValue()); }
 
+<<<<<<< HEAD
     public void emitPUSH(long value) {      
+=======
+    public void emitPUSH(long value) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         if (value == 0L)
             emitLCONST_0();
         else if (value == 1L)

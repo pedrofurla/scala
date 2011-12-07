@@ -17,10 +17,17 @@ import annotation.unchecked.uncheckedVariance
 import annotation.bridge
 
 /** A map whose keys are sorted.
+<<<<<<< HEAD
  *  
  *  @tparam A     the type of the keys contained in this sorted map.
  *  @tparam B     the type of the values associated with the keys.
  *  
+=======
+ *
+ *  @tparam A     the type of the keys contained in this sorted map.
+ *  @tparam B     the type of the values associated with the keys.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author Sean McDirmid
  *  @author Martin Odersky
  *  @version 2.8
@@ -28,17 +35,27 @@ import annotation.bridge
  *  @define Coll immutable.SortedMap
  *  @define coll immutable sorted map
  */
+<<<<<<< HEAD
 trait SortedMap[A, +B] extends Map[A, B] 
                          with scala.collection.SortedMap[A, B] 
                          with MapLike[A, B, SortedMap[A, B]]
                          with SortedMapLike[A, B, SortedMap[A, B]] { self =>
 
   override protected[this] def newBuilder : Builder[(A, B), SortedMap[A, B]] = 
+=======
+trait SortedMap[A, +B] extends Map[A, B]
+                         with scala.collection.SortedMap[A, B]
+                         with MapLike[A, B, SortedMap[A, B]]
+                         with SortedMapLike[A, B, SortedMap[A, B]] { self =>
+
+  override protected[this] def newBuilder : Builder[(A, B), SortedMap[A, B]] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     SortedMap.newBuilder[A, B]
 
   override def empty: SortedMap[A, B] = SortedMap.empty
   override def updated [B1 >: B](key: A, value: B1): SortedMap[A, B1] = this + ((key, value))
   override def keySet: immutable.SortedSet[A] = new DefaultKeySortedSet
+<<<<<<< HEAD
   
   protected class DefaultKeySortedSet extends super.DefaultKeySortedSet with immutable.SortedSet[A] {
     override def + (elem: A): SortedSet[A] =
@@ -47,13 +64,27 @@ trait SortedMap[A, +B] extends Map[A, B]
     override def - (elem: A): SortedSet[A] = 
       if (this(elem)) SortedSet[A]() ++ this - elem
       else this      
+=======
+
+  protected class DefaultKeySortedSet extends super.DefaultKeySortedSet with immutable.SortedSet[A] {
+    override def + (elem: A): SortedSet[A] =
+      if (this(elem)) this
+      else SortedSet[A]() ++ this + elem
+    override def - (elem: A): SortedSet[A] =
+      if (this(elem)) SortedSet[A]() ++ this - elem
+      else this
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     override def rangeImpl(from : Option[A], until : Option[A]) : SortedSet[A] = {
       val map = self.rangeImpl(from, until)
       new map.DefaultKeySortedSet
     }
   }
 
+<<<<<<< HEAD
   /** Add a key/value pair to this map. 
+=======
+  /** Add a key/value pair to this map.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param    kv the key/value pair
    *  @return   A new map with the new binding added to this map
    *  @note     needs to be overridden in subclasses
@@ -75,7 +106,11 @@ trait SortedMap[A, +B] extends Map[A, B]
    *
    *  @param xs     the traversable object.
    */
+<<<<<<< HEAD
   override def ++[B1 >: B](xs: GenTraversableOnce[(A, B1)]): SortedMap[A, B1] = 
+=======
+  override def ++[B1 >: B](xs: GenTraversableOnce[(A, B1)]): SortedMap[A, B1] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     ((repr: SortedMap[A, B1]) /: xs.seq) (_ + _)
 
   @bridge def ++[B1 >: B](xs: TraversableOnce[(A, B1)]): SortedMap[A, B1] = ++(xs: GenTraversableOnce[(A, B1)])

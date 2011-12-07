@@ -22,7 +22,11 @@ trait SortedMap[A, +B] extends Map[A, B] with SortedMapLike[A, B, SortedMap[A, B
   /** Needs to be overridden in subclasses. */
   override def empty: SortedMap[A, B] = SortedMap.empty[A, B]
 
+<<<<<<< HEAD
   override protected[this] def newBuilder: Builder[(A, B), SortedMap[A, B]] = 
+=======
+  override protected[this] def newBuilder: Builder[(A, B), SortedMap[A, B]] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     immutable.SortedMap.newBuilder[A, B]
 }
 

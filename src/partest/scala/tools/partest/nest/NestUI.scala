@@ -42,7 +42,11 @@ object NestUI {
   def outline(msg: String, wr: PrintWriter) = synchronized {
     wr.print(_outline + msg + _default)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def success(msg: String) = print(_success  + msg + _default)
   def success(msg: String, wr: PrintWriter) = synchronized {
     wr.print(_success + msg + _default)
@@ -80,6 +84,10 @@ object NestUI {
     println("    --scalacheck    run ScalaCheck tests")
     println("    --script        run script runner tests")
     println("    --shootout      run shootout tests")
+<<<<<<< HEAD
+=======
+    println("    --presentation  run presentation compiler tests")
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     println("    --grep <expr>    run all tests whose source file contains <expr>")
     println
     println("  Other options:")

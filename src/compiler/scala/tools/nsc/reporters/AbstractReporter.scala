@@ -17,9 +17,15 @@ abstract class AbstractReporter extends Reporter {
   val settings: Settings
   def display(pos: Position, msg: String, severity: Severity): Unit
   def displayPrompt(): Unit
+<<<<<<< HEAD
   
   private val positions = new mutable.HashMap[Position, Severity]
   
+=======
+
+  private val positions = new mutable.HashMap[Position, Severity]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def reset() {
     super.reset
     positions.clear
@@ -30,10 +36,17 @@ abstract class AbstractReporter extends Reporter {
   private def isPromptSet = settings.prompt.value
 
   protected def info0(pos: Position, msg: String, _severity: Severity, force: Boolean) {
+<<<<<<< HEAD
     val severity = 
       if (settings.fatalWarnings.value && _severity == WARNING) ERROR
       else _severity
     
+=======
+    val severity =
+      if (settings.fatalWarnings.value && _severity == WARNING) ERROR
+      else _severity
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (severity == INFO) {
       if (isVerbose || force)
         display(pos, msg, severity)
@@ -42,8 +55,18 @@ abstract class AbstractReporter extends Reporter {
       val hidden = testAndLog(pos, severity)
       if (severity == WARNING && noWarnings) ()
       else {
+<<<<<<< HEAD
         if (!hidden || isPromptSet) display(pos, msg, severity)
         if (isPromptSet) displayPrompt
+=======
+        if (!hidden || isPromptSet)
+          display(pos, msg, severity)
+        else if (settings.debug.value)
+          display(pos, "[ suppressed ] " + msg, severity)
+
+        if (isPromptSet)
+          displayPrompt
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       }
     }
   }
@@ -52,7 +75,11 @@ abstract class AbstractReporter extends Reporter {
    *  @note  Two positions are considered identical for logging if they have the same point.
    */
   private def testAndLog(pos: Position, severity: Severity): Boolean =
+<<<<<<< HEAD
     pos != null && pos.isDefined && { 
+=======
+    pos != null && pos.isDefined && {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       val fpos = pos.focus
       (positions get fpos) match {
         case Some(level) if level >= severity => true

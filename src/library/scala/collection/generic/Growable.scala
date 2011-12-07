@@ -8,12 +8,20 @@
 
 
 package scala.collection
+<<<<<<< HEAD
 package generic 
+=======
+package generic
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 /** This trait forms part of collections that can be augmented
  *  using a `+=` operator and that can be cleared of all elements using
  *  a `clear` method.
+<<<<<<< HEAD
  *        
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author   Martin Odersky
  *  @version 2.8
  *  @since   2.8
@@ -22,7 +30,11 @@ package generic
  *  @define add  add
  *  @define Add  add
  */
+<<<<<<< HEAD
 trait Growable[-A] { 
+=======
+trait Growable[-A] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** ${Add}s a single element to this $coll.
    *
@@ -43,9 +55,15 @@ trait Growable[-A] {
   /** ${Add}s all elements produced by a TraversableOnce to this $coll.
    *
    *  @param iter  the TraversableOnce producing the elements to $add.
+<<<<<<< HEAD
    *  @return  the $coll itself. 
    */
   def ++=(xs: TraversableOnce[A]): this.type = { xs.seq foreach += ; this } 
+=======
+   *  @return  the $coll itself.
+   */
+  def ++=(xs: TraversableOnce[A]): this.type = { xs.seq foreach += ; this }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** Clears the $coll's contents. After this operation, the
    *  $coll is empty.

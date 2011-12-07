@@ -11,16 +11,21 @@ import util.ScalaClassLoader
 import java.lang.reflect.InvocationTargetException
 import util.Exceptional.unwrap
 
+<<<<<<< HEAD
 /** An object that runs another object specified by name.
  *
  *  @author  Lex Spoon
  *  @version 1.1, 2007/7/13
  */
 object ObjectRunner {
+=======
+trait CommonRunner {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Check whether a class with the specified name
    *  exists on the specified class path. */
   def classExists(urls: List[URL], objectName: String): Boolean =
     ScalaClassLoader.classExists(urls, objectName)
+<<<<<<< HEAD
   
   /** Run a given object, specified by name, using a
    *  specified classpath and argument list.
@@ -33,6 +38,20 @@ object ObjectRunner {
     (ScalaClassLoader fromURLs urls).run(objectName, arguments)    
   }
   
+=======
+
+  /** Run a given object, specified by name, using a
+   *  specified classpath and argument list.
+   *
+   *  @throws ClassNotFoundException
+   *  @throws NoSuchMethodException
+   *  @throws InvocationTargetException
+   */
+  def run(urls: List[URL], objectName: String, arguments: Seq[String]) {
+    (ScalaClassLoader fromURLs urls).run(objectName, arguments)
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Catches exceptions enumerated by run (in the case of InvocationTargetException,
    *  unwrapping it) and returns it any thrown in Left(x).
    */
@@ -41,3 +60,13 @@ object ObjectRunner {
     catch { case e => Left(unwrap(e)) }
   }
 }
+<<<<<<< HEAD
+=======
+
+/** An object that runs another object specified by name.
+ *
+ *  @author  Lex Spoon
+ *  @version 1.1, 2007/7/13
+ */
+object ObjectRunner extends CommonRunner { }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0

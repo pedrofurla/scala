@@ -66,12 +66,17 @@ m: (x: String)String @Annot(x)
 scala> 
 
 scala> val three = "three"
+<<<<<<< HEAD
 three: java.lang.String = three
+=======
+three: String = three
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 scala> val three2 = m(three:three.type)  // should change x to three
 three2: String @Annot(three) = three
 
 scala> var four = "four"
+<<<<<<< HEAD
 four: java.lang.String = four
 
 scala> val four2 = m(four) // should have an existential bound
@@ -79,6 +84,15 @@ four2: java.lang.String @Annot(x) forSome { val x: java.lang.String } = four
 
 scala> val four3 = four2   // should have the same type as four2
 four3: java.lang.String @Annot(x) forSome { val x: java.lang.String } = four
+=======
+four: String = four
+
+scala> val four2 = m(four) // should have an existential bound
+four2: String @Annot(x) forSome { val x: String } = four
+
+scala> val four3 = four2   // should have the same type as four2
+four3: String @Annot(x) forSome { val x: String } = four
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 scala> val stuff = m("stuff") // should not crash
 stuff: String @Annot("stuff") = stuff
@@ -100,7 +114,11 @@ scala> def m = {
   val y : String @Annot(x) = x
   y
 } // x should not escape the local scope with a narrow type
+<<<<<<< HEAD
 m: java.lang.String @Annot(x) forSome { val x: java.lang.String }
+=======
+m: String @Annot(x) forSome { val x: String }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 scala> 
 
@@ -113,7 +131,11 @@ scala> def n(y: String) = {
   }
   m("stuff".stripMargin)
 } // x should be existentially bound
+<<<<<<< HEAD
 n: (y: String)java.lang.String @Annot(x) forSome { val x: String }
+=======
+n: (y: String)String @Annot(x) forSome { val x: String }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 scala> 
 
@@ -130,7 +152,11 @@ Companions must be defined together; you may wish to use :paste mode for this.
 scala> 
 
 scala> val y = a.x // should drop the annotation
+<<<<<<< HEAD
 y: java.lang.String = hello
+=======
+y: String = hello
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 scala> 
 

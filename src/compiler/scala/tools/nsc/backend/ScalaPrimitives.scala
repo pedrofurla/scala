@@ -86,7 +86,11 @@ abstract class ScalaPrimitives {
   final val SYNCHRONIZED = 90                  // x.synchronized(y)
 
   // String operations
+<<<<<<< HEAD
   final val CONCAT = 100                       // String.valueOf(x)+String.valueOf(y) 
+=======
+  final val CONCAT = 100                       // String.valueOf(x)+String.valueOf(y)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   // coercions
   final val COERCE = 101
@@ -257,7 +261,11 @@ abstract class ScalaPrimitives {
     addPrimitives(ByteClass, nme.UNARY_+, POS)
     addPrimitives(ByteClass, nme.UNARY_-, NEG)
     addPrimitives(ByteClass, nme.UNARY_~, NOT)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     addPrimitives(ByteClass, nme.toFloat,  B2F)
     addPrimitives(ByteClass, nme.toDouble, B2D)
 
@@ -448,7 +456,11 @@ abstract class ScalaPrimitives {
       inform("Unknown primitive method " + cls + "." + method)
     for (s <- sym.alternatives)
       addPrimitive(
+<<<<<<< HEAD
         s, 
+=======
+        s,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         if (code == ADD && s.info.paramTypes.head == definitions.StringClass.tpe) CONCAT
         else code)
   }
@@ -465,7 +477,11 @@ abstract class ScalaPrimitives {
     (List(FARRAY_LENGTH, FARRAY_GET, FARRAY_SET) map (_ -> FLOAT)) ++
     (List(DARRAY_LENGTH, DARRAY_GET, DARRAY_SET) map (_ -> DOUBLE)) ++
     (List(OARRAY_LENGTH, OARRAY_GET, OARRAY_SET) map (_ -> REFERENCE(AnyRefClass))) : _*
+<<<<<<< HEAD
   ) 
+=======
+  )
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** Check whether the given operation code is an array operation. */
   def isArrayOp(code: Int): Boolean =
@@ -511,9 +527,15 @@ abstract class ScalaPrimitives {
 
   def isArithmeticOp(code: Int): Boolean = code match {
     case POS | NEG | NOT => true; // unary
+<<<<<<< HEAD
     case ADD | SUB | MUL | 
          DIV | MOD       => true; // binary
     case OR  | XOR | AND | 
+=======
+    case ADD | SUB | MUL |
+         DIV | MOD       => true; // binary
+    case OR  | XOR | AND |
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
          LSL | LSR | ASR => true; // bitwise
     case _ => false;
   }
@@ -543,7 +565,11 @@ abstract class ScalaPrimitives {
     case B2F | C2F | S2F | I2F | L2F | F2F | D2F => FLOAT
     case B2D | C2D | S2D | I2D | L2D | F2D | D2D => DOUBLE
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def isPrimitive(sym: Symbol): Boolean = primitives contains sym
 
   /** Return the code for the given symbol. */
@@ -552,8 +578,13 @@ abstract class ScalaPrimitives {
     primitives(sym)
   }
 
+<<<<<<< HEAD
   /** 
    * Return the primitive code of the given operation. If the 
+=======
+  /**
+   * Return the primitive code of the given operation. If the
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * operation is an array get/set, we inspect the type of the receiver
    * to demux the operation.
    *

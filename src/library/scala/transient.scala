@@ -10,7 +10,11 @@
 
 package scala
 
+<<<<<<< HEAD
 import annotation.target._
+=======
+import annotation.meta._
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 @field
 class transient extends annotation.StaticAnnotation

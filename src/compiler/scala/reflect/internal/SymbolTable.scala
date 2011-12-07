@@ -18,6 +18,10 @@ abstract class SymbolTable extends api.Universe
                               with Constants
                               with BaseTypeSeqs
                               with InfoTransformers
+<<<<<<< HEAD
+=======
+                              with transform.Transforms
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                               with StdNames
                               with AnnotationInfos
                               with AnnotationCheckers
@@ -25,22 +29,45 @@ abstract class SymbolTable extends api.Universe
                               with TreePrinters
                               with Positions
                               with TypeDebugging
+<<<<<<< HEAD
                               with Required
 {  
   def rootLoader: LazyType 
+=======
+                              with Importers
+                              with Required
+{
+  def rootLoader: LazyType
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def log(msg: => AnyRef): Unit
   def abort(msg: String): Nothing = throw new Error(msg)
   def abort(): Nothing = throw new Error()
 
   /** Override with final implementation for inlining. */
+<<<<<<< HEAD
   def debuglog(msg: => String): Unit = if (settings.debug.value) log(msg)
   
+=======
+  def debuglog(msg:  => String): Unit = if (settings.debug.value) log(msg)
+  def debugwarn(msg: => String): Unit = if (settings.debug.value) Console.err.println(msg)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Are we compiling for Java SE? */
   // def forJVM: Boolean
 
   /** Are we compiling for .NET? */
   def forMSIL: Boolean = false
+<<<<<<< HEAD
   
+=======
+
+  /** A last effort if symbol in a select <owner>.<name> is not found.
+   *  This is overridden by the reflection compiler to make up a package
+   *  when it makes sense (i.e. <owner> is a package and <name> is a term name).
+   */
+  def missingHook(owner: Symbol, name: Name): Symbol = NoSymbol
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A period is an ordinal number for a phase in a run.
    *  Phases in later runs have higher periods than phases in earlier runs.
    *  Later phases have higher periods than earlier phases in the same run.
@@ -85,19 +112,37 @@ abstract class SymbolTable extends api.Universe
   /** The phase associated with given period. */
   final def phaseOf(period: Period): Phase = phaseWithId(phaseId(period))
 
+<<<<<<< HEAD
   final def period(rid: RunId, pid: Phase#Id): Period = 
     (currentRunId << 8) + pid
 
   /** Perform given operation at given phase. */
   final def atPhase[T](ph: Phase)(op: => T): T = {
+=======
+  final def period(rid: RunId, pid: Phase#Id): Period =
+    (currentRunId << 8) + pid
+
+  /** Perform given operation at given phase. */
+  @inline final def atPhase[T](ph: Phase)(op: => T): T = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val current = phase
     phase = ph
     try op
     finally phase = current
   }
+<<<<<<< HEAD
   final def afterPhase[T](ph: Phase)(op: => T): T =
     atPhase(ph.next)(op)
   
+=======
+
+  @inline final def afterPhase[T](ph: Phase)(op: => T): T =
+    atPhase(ph.next)(op)
+
+  @inline final def atPhaseNotLaterThan[T](target: Phase)(op: => T): T =
+    if (target != NoPhase && phase.id > target.id) atPhase(target)(op) else op
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   final def isValid(period: Period): Boolean =
     period != 0 && runId(period) == currentRunId && {
       val pid = phaseId(period)
@@ -116,12 +161,83 @@ abstract class SymbolTable extends api.Universe
       else noChangeInBaseClasses(infoTransformers.nextFrom(phase.id), pid)
     }
   }
+<<<<<<< HEAD
  
   object perRunCaches {
     import java.lang.ref.WeakReference
     import scala.tools.util.Signallable
     import scala.runtime.ScalaRunTime.stringOf
     
+=======
+
+  def openPackageModule(container: Symbol, dest: Symbol) {
+    // unlink existing symbols in the package
+    for (member <- container.info.decls.iterator) {
+      if (!member.isPrivate && !member.isConstructor) {
+        // todo: handle overlapping definitions in some way: mark as errors
+        // or treat as abstractions. For now the symbol in the package module takes precedence.
+        for (existing <- dest.info.decl(member.name).alternatives)
+          dest.info.decls.unlink(existing)
+      }
+    }
+    // enter non-private decls the class
+    for (member <- container.info.decls.iterator) {
+      if (!member.isPrivate && !member.isConstructor) {
+        dest.info.decls.enter(member)
+      }
+    }
+    // enter decls of parent classes
+    for (pt <- container.info.parents; p = pt.typeSymbol) {
+      if (p != definitions.ObjectClass && p != definitions.ScalaObjectClass) {
+        openPackageModule(p, dest)
+      }
+    }
+  }
+
+  /** Convert array parameters denoting a repeated parameter of a Java method
+   *  to `JavaRepeatedParamClass` types.
+   */
+  def arrayToRepeated(tp: Type): Type = tp match {
+    case MethodType(params, rtpe) =>
+      val formals = tp.paramTypes
+      assert(formals.last.typeSymbol == definitions.ArrayClass)
+      val method = params.last.owner
+      val elemtp = formals.last.typeArgs.head match {
+        case RefinedType(List(t1, t2), _) if (t1.typeSymbol.isAbstractType && t2.typeSymbol == definitions.ObjectClass) =>
+          t1 // drop intersection with Object for abstract types in varargs. UnCurry can handle them.
+        case t =>
+          t
+      }
+      val newParams = method.newSyntheticValueParams(
+        formals.init :+ appliedType(definitions.JavaRepeatedParamClass.typeConstructor, List(elemtp)))
+      MethodType(newParams, rtpe)
+    case PolyType(tparams, rtpe) =>
+      PolyType(tparams, arrayToRepeated(rtpe))
+  }
+
+  abstract class SymLoader extends LazyType {
+    def fromSource = false
+  }
+
+  /** if there's a `package` member object in `pkgClass`, enter its members into it. */
+  def openPackageModule(pkgClass: Symbol) {
+
+    val pkgModule = pkgClass.info.decl(nme.PACKAGEkw)
+    def fromSource = pkgModule.rawInfo match {
+      case ltp: SymLoader => ltp.fromSource
+      case _ => false
+    }
+    if (pkgModule.isModule && !fromSource) {
+      // println("open "+pkgModule)//DEBUG
+      openPackageModule(pkgModule, pkgClass)
+    }
+  }
+
+  object perRunCaches {
+    import java.lang.ref.WeakReference
+    import scala.runtime.ScalaRunTime.stringOf
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // We can allow ourselves a structural type, these methods
     // amount to a few calls per run at most.  This does suggest
     // a "Clearable" trait may be useful.
@@ -143,10 +259,17 @@ abstract class SymbolTable extends api.Universe
         ))
       }
     }
+<<<<<<< HEAD
     if (settings.debug.value) {
       println(Signallable("dump compiler caches")(dumpCaches()))
     }
     
+=======
+    // if (settings.debug.value) {
+    //   println(Signallable("dump compiler caches")(dumpCaches()))
+    // }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def recordCache[T <: Clearable](cache: T): T = {
       caches += new WeakReference(cache)
       cache

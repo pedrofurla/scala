@@ -110,7 +110,11 @@ public interface Signature {
     public static final int LOCAL_SIG = 0x07;
 
     //##########################################################################
+<<<<<<< HEAD
     // extra IDs used in the serialization format of named arguments 
+=======
+    // extra IDs used in the serialization format of named arguments
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // to custom attributes. Reverse-engineered from compiled C# example
 
     /** What follows is a string with the full name of the type. */

@@ -10,6 +10,7 @@ package gen
  */
 trait AnyValReps {
   self: AnyVals =>
+<<<<<<< HEAD
   
   sealed abstract class AnyValNum(name: String) extends AnyValRep(name) {
     def isCardinal: Boolean = isIntegerType(this)
@@ -19,6 +20,117 @@ trait AnyValReps {
     def comparisonOps       = List("==", "!=", "<", "<=", ">", ">=")
     def otherOps            = List("+", "-" ,"*", "/", "%")
   
+=======
+
+  sealed abstract class AnyValNum(name: String, repr: Option[String], javaEquiv: String) extends AnyValRep(name,repr,javaEquiv) {
+
+    case class Op(val op : String, val doc : String)
+
+    def isCardinal: Boolean = isIntegerType(this)
+    def unaryOps = {
+      val ops = List(
+        Op("+", "/**\n" +
+                " * @return this value, unmodified\n" +
+                " */"),
+        Op("-", "/**\n" +
+                " * @return the negation of this value\n" +
+                " */"))
+
+      if(isCardinal)
+        Op("~", "/**\n" +
+                " * @return the bitwise negation of this value\n" +
+                " * @example {{{\n" +
+                " * ~5 == -6\n" +
+                " * // in binary: ~00000101 == \n" +
+                " * //             11111010\n" +
+                " * }}}\n" +
+                " */") :: ops
+      else ops
+    }
+
+    def bitwiseOps =
+      if (isCardinal)
+        List(
+          Op("|", "/**\n" +
+                     "  * @return the bitwise OR of this value and x\n" +
+                     "  * @example {{{\n" +
+                     "  * (0xf0 | 0xaa) == 0xfa\n" +
+                     "  * // in binary:   11110000 \n" +
+                     "  * //            | 10101010 \n" +
+                     "  * //              -------- \n" +
+                     "  * //              11111010\n" +
+                     "  * }}}\n" +
+                     "  */"),
+          Op("&", "/**\n" +
+                     "  * @return the bitwise AND of this value and x\n" +
+                     "  * @example {{{\n" +
+                     "  * (0xf0 & 0xaa) == 0xa0\n" +
+                     "  * // in binary:   11110000 \n" +
+                     "  * //            & 10101010 \n" +
+                     "  * //              -------- \n" +
+                     "  * //              10100000\n" +
+                     "  * }}}\n" +
+                     "  */"),
+          Op("^", "/**\n" +
+                     "  * @return the bitwise XOR of this value and x\n" +
+                     "  * @example {{{\n" +
+                     "  * (0xf0 ^ 0xaa) == 0x5a\n" +
+                     "  * // in binary:   11110000 \n" +
+                     "  * //            ^ 10101010 \n" +
+                     "  * //              -------- \n" +
+                     "  * //              01011010\n" +
+                     "  * }}}\n" +
+                     "  */"))
+      else Nil
+
+    def shiftOps            =
+      if (isCardinal)
+        List(
+          Op("<<",  "/**\n" +
+                       "  * @return this value bit-shifted left by the specified number of bits,\n" +
+                       "  *         filling in the new right bits with zeroes.\n" +
+                       "  * @example {{{ 6 << 3 == 48 // in binary: 0110 << 3 == 0110000 }}}\n" +
+                       "  */"),
+
+          Op(">>>", "/**\n" +
+                       "  * @return this value bit-shifted right by the specified number of bits,\n" +
+                       "  *         filling the new left bits with zeroes. \n" +
+                       "  * @example {{{ 21 >>> 3 == 2 // in binary: 010101 >>> 3 == 010 }}}\n" +
+                       "  * @example {{{\n" +
+                       "  * -21 >>> 3 == 536870909 \n" +
+                       "  * // in binary: 11111111 11111111 11111111 11101011 >>> 3 == \n" +
+                       "  * //            00011111 11111111 11111111 11111101\n" +
+                       "  * }}}\n" +
+                       "  */"),
+
+          Op(">>",  "/**\n" +
+                       "  * @return this value bit-shifted left by the specified number of bits,\n" +
+                       "  *         filling in the right bits with the same value as the left-most bit of this.\n" +
+                       "  *         The effect of this is to retain the sign of the value.\n" +
+                       "  * @example {{{\n" +
+                       "  * -21 >> 3 == -3 \n" +
+                       "  * // in binary: 11111111 11111111 11111111 11101011 >> 3 == \n" +
+                       "  * //            11111111 11111111 11111111 11111101\n" +
+                       "  * }}}\n" +
+                       "  */"))
+      else Nil
+
+    def comparisonOps       = List(
+      Op("==", "/**\n  * @return `true` if this value is equal x, `false` otherwise\n  */"),
+      Op("!=", "/**\n  * @return `true` if this value is not equal to x, `false` otherwise\n  */"),
+      Op("<",  "/**\n  * @return `true` if this value is less than x, `false` otherwise\n  */"),
+      Op("<=", "/**\n  * @return `true` if this value is less than or equal to x, `false` otherwise\n  */"),
+      Op(">",  "/**\n  * @return `true` if this value is greater than x, `false` otherwise\n  */"),
+      Op(">=", "/**\n  * @return `true` if this value is greater than or equal to x, `false` otherwise\n  */"))
+
+    def otherOps = List(
+      Op("+", "/**\n  * @return the sum of this value and x\n  */"),
+      Op("-", "/**\n  * @return the difference of this value and x\n  */"),
+      Op("*", "/**\n  * @return the product of this value and x\n  */"),
+      Op("/", "/**\n  * @return the quotient of this value and x\n  */"),
+      Op("%", "/**\n  * @return the remainder of the division of this value by x\n  */"))
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // Given two numeric value types S and T , the operation type of S and T is defined as follows:
     // If both S and T are subrange types then the operation type of S and T is Int.
     // Otherwise the operation type of S and T is the larger of the two types wrt ranking.
@@ -30,6 +142,7 @@ trait AnyValReps {
         case (-1, -1)   => I
         case (r1, r2)   => rank apply (r1 max r2)
       }
+<<<<<<< HEAD
     }  
   
     def mkCoercions = numeric map (x => "def to%s: %s".format(x, x))
@@ -40,6 +153,18 @@ trait AnyValReps {
         "def %s(x: %s): %s".format(op, arg, this opType I)
     )
     
+=======
+    }
+
+    def mkCoercions = numeric map (x => "def to%s: %s".format(x, x))
+    def mkUnaryOps  = unaryOps map (x => "%s\n  def unary_%s : %s".format(x.doc, x.op, this opType I))
+    def mkStringOps = List("def +(x: String): String")
+    def mkShiftOps  = (
+      for (op <- shiftOps ; arg <- List(I, L)) yield
+        "%s\n  def %s(x: %s): %s".format(op.doc, op.op, arg, this opType I)
+    )
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def clumps: List[List[String]] = {
       val xs1 = List(mkCoercions, mkUnaryOps, mkStringOps, mkShiftOps) map (xs => if (xs.isEmpty) xs else xs :+ "")
       val xs2 = List(
@@ -64,20 +189,35 @@ trait AnyValReps {
     }
 
     /** Makes a set of binary operations based on the given set of ops, args, and resultFn.
+<<<<<<< HEAD
      * 
+=======
+     *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *  @param    ops       list of function names e.g. List(">>", "%")
      *  @param    args      list of types which should appear as arguments
      *  @param    resultFn  function which calculates return type based on arg type
      *  @return             list of function definitions
      */
+<<<<<<< HEAD
     def mkBinOpsGroup(ops: List[String], args: List[AnyValNum], resultFn: AnyValNum => AnyValRep): List[String] = (
       ops flatMap (op =>
         args.map(arg => "def %s(x: %s): %s".format(op, arg, resultFn(arg))) :+ ""
+=======
+    def mkBinOpsGroup(ops: List[Op], args: List[AnyValNum], resultFn: AnyValNum => AnyValRep): List[String] = (
+      ops flatMap (op =>
+        args.map(arg =>
+          "%s\n  def %s(x: %s): %s".format(op.doc, op.op, arg, resultFn(arg))) :+ ""
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       )
     ).toList
   }
 
+<<<<<<< HEAD
   sealed abstract class AnyValRep(val name: String) {
+=======
+  sealed abstract class AnyValRep(val name: String, val repr: Option[String], val javaEquiv: String) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def classLines: List[String]
     def objectLines: List[String]
     def commonClassLines = List(
@@ -98,9 +238,17 @@ trait AnyValReps {
       case _ => "0"
     }
 
+<<<<<<< HEAD
     def indent(s: String)  = if (s == "") "" else "  " + s
     def indentN(s: String) = s.lines map indent mkString "\n"
   
+=======
+    def representation = repr.map(", a " + _).getOrElse("")
+
+    def indent(s: String)  = if (s == "") "" else "  " + s
+    def indentN(s: String) = s.lines map indent mkString "\n"
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def boxUnboxImpls = Map(
       "@boxImpl@"   -> "%s.valueOf(x)".format(boxedName),
       "@unboxImpl@" -> "x.asInstanceOf[%s].%sValue()".format(boxedName, lcname),
@@ -108,6 +256,11 @@ trait AnyValReps {
     )
     def interpolations = Map(
       "@name@"      -> name,
+<<<<<<< HEAD
+=======
+      "@representation@" -> representation,
+      "@javaequiv@" -> javaEquiv,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       "@boxed@"     -> boxedName,
       "@lcname@"    -> lcname,
       "@zero@"      -> zeroRep
@@ -129,11 +282,19 @@ trait AnyValReps {
       objectDoc,
       mkObject
     ) mkString ""
+<<<<<<< HEAD
   
     def assemble(what: String, parent: String, lines: List[String]): String = {
       val decl = "%s %s extends %s ".format(what, name, parent)
       val body = if (lines.isEmpty) "{ }\n\n" else lines map indent mkString ("{\n", "\n", "\n}\n")
       
+=======
+
+    def assemble(what: String, parent: String, lines: List[String]): String = {
+      val decl = "%s %s extends %s ".format(what, name, parent)
+      val body = if (lines.isEmpty) "{ }\n\n" else lines map indent mkString ("{\n", "\n", "\n}\n")
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       decl + body
     }
     override def toString = name
@@ -156,15 +317,25 @@ package scala
 """.trim.format(timestampString) + "\n\n")
 
   def classDocTemplate = ("""
+<<<<<<< HEAD
 /** `@name@` is a member of the value classes, those whose instances are
  *  not represented as objects by the underlying host system.
+=======
+/** `@name@`@representation@ (equivalent to Java's `@javaequiv@` primitive type) is a
+ *  subtype of [[scala.AnyVal]]. Instances of `@name@` are not
+ *  represented by an object in the underlying runtime system.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *
  *  There is an implicit conversion from [[scala.@name@]] => [[scala.runtime.Rich@name@]]
  *  which provides useful non-primitive operations.
  */
 """.trim + "\n")
 
+<<<<<<< HEAD
   def timestampString = "// DO NOT EDIT, CHANGES WILL BE LOST.\n"  
+=======
+  def timestampString = "// DO NOT EDIT, CHANGES WILL BE LOST.\n"
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def stub            = """sys.error("stub")"""
 
   def allCompanions = """
@@ -189,7 +360,11 @@ def unbox(x: java.lang.Object): @name@ = @unboxImpl@
  */
 override def toString = "object scala.@name@"
 """
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def cardinalCompanion = """
 /** The smallest value representable as a @name@.
  */
@@ -225,6 +400,7 @@ final val MaxValue = @boxed@.MAX_VALUE
 }
 
 class AnyVals extends AnyValReps with AnyValTemplates {
+<<<<<<< HEAD
   object B extends AnyValNum("Byte")
   object S extends AnyValNum("Short")
   object C extends AnyValNum("Char")
@@ -237,6 +413,20 @@ class AnyVals extends AnyValReps with AnyValTemplates {
 /**
  * Negates a Boolean expression.
  * 
+=======
+  object B extends AnyValNum("Byte",    Some("8-bit signed integer"),                  "byte")
+  object S extends AnyValNum("Short",   Some("16-bit signed integer"),                 "short")
+  object C extends AnyValNum("Char",    Some("16-bit unsigned integer"),               "char")
+  object I extends AnyValNum("Int",     Some("32-bit signed integer"),                 "int")
+  object L extends AnyValNum("Long",    Some("64-bit signed integer"),                 "long")
+  object F extends AnyValNum("Float",   Some("32-bit IEEE-754 floating point number"), "float")
+  object D extends AnyValNum("Double",  Some("64-bit IEEE-754 floating point number"), "double")
+  object Z extends AnyValRep("Boolean", None,                                          "boolean") {
+    def classLines = """
+/**
+ * Negates a Boolean expression.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * - `!a` results in `false` if and only if `a` evaluates to `true` and
  * - `!a` results in `true` if and only if `a` evaluates to `false`.
  *
@@ -258,11 +448,19 @@ def ==(x: Boolean): Boolean = sys.error("stub")
   *
   * `a != b` returns `true` if and only if
   *  - `a` is `true` and `b` is `false` or
+<<<<<<< HEAD
   *  - `a` is `false` and `b` is `true`. 
   */
 def !=(x: Boolean): Boolean = sys.error("stub")
 
 /** 
+=======
+  *  - `a` is `false` and `b` is `true`.
+  */
+def !=(x: Boolean): Boolean = sys.error("stub")
+
+/**
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   * Compares two Boolean expressions and returns `true` if one or both of them evaluate to true.
   *
   * `a || b` returns `true` if and only if
@@ -276,7 +474,11 @@ def !=(x: Boolean): Boolean = sys.error("stub")
   */
 def ||(x: Boolean): Boolean = sys.error("stub")
 
+<<<<<<< HEAD
 /** 
+=======
+/**
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   * Compares two Boolean expressions and returns `true` if both of them evaluate to true.
   *
   * `a && b` returns `true` if and only if
@@ -292,7 +494,11 @@ def &&(x: Boolean): Boolean = sys.error("stub")
 // def ||(x: => Boolean): Boolean = sys.error("stub")
 // def &&(x: => Boolean): Boolean = sys.error("stub")
 
+<<<<<<< HEAD
 /** 
+=======
+/**
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   * Compares two Boolean expressions and returns `true` if one or both of them evaluate to true.
   *
   * `a | b` returns `true` if and only if
@@ -304,17 +510,29 @@ def &&(x: Boolean): Boolean = sys.error("stub")
   */
 def |(x: Boolean): Boolean  = sys.error("stub")
 
+<<<<<<< HEAD
 /** 
+=======
+/**
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   * Compares two Boolean expressions and returns `true` if both of them evaluate to true.
   *
   * `a & b` returns `true` if and only if
   *  - `a` and `b` are `true`.
   *
+<<<<<<< HEAD
   * @note This method evaluates both `a` and `b`, even if the result is already determined after evaluating `a`. 
   */
 def &(x: Boolean): Boolean  = sys.error("stub")
 
 /** 
+=======
+  * @note This method evaluates both `a` and `b`, even if the result is already determined after evaluating `a`.
+  */
+def &(x: Boolean): Boolean  = sys.error("stub")
+
+/**
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   * Compares two Boolean expressions and returns `true` if they evaluate to a different value.
   *
   * `a ^ b` returns `true` if and only if
@@ -328,11 +546,20 @@ def getClass(): Class[Boolean] = sys.error("stub")
 
     def objectLines = interpolate(allCompanions).lines.toList
   }
+<<<<<<< HEAD
   object U extends AnyValRep("Unit") {
     override def classDoc = """
 /** Unit is a member of the value classes, those whose instances are
  *  not represented as objects by the underlying host system.  There is
  *  only one value of type Unit: `()`.
+=======
+  object U extends AnyValRep("Unit", None, "void") {
+    override def classDoc = """
+/** `Unit` is a subtype of [[scala.AnyVal]]. There is only one value of type
+ *  `Unit`, `()`, and it is not represented by any object in the underlying
+ *  runtime system. A method with return type `Unit` is analogous to a Java
+ *  method which is declared `void`.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  */
 """
     def classLines  = List(
@@ -354,7 +581,11 @@ def getClass(): Class[Boolean] = sys.error("stub")
 
   def cardinal = numeric filter isIntegerType
   def numeric  = List(B, S, C, I, L, F, D)
+<<<<<<< HEAD
   def values   = List(U, Z) ++ numeric  
+=======
+  def values   = List(U, Z) ++ numeric
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   def make() = values map (x => (x.name, x.make()))
 }

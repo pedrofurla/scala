@@ -26,12 +26,21 @@ import scala.collection.generic.CanCombineFrom
 
 
 /** A template trait for parallel maps.
+<<<<<<< HEAD
  *  
  *  $sideeffects
  *  
  *  @tparam K    the key type of the map
  *  @tparam V    the value type of the map
  *  
+=======
+ *
+ *  $sideeffects
+ *
+ *  @tparam K    the key type of the map
+ *  @tparam V    the value type of the map
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author Aleksandar Prokopec
  *  @since 2.9
  */
@@ -42,6 +51,7 @@ extends GenMap[K, V]
    with ParMapLike[K, V, ParMap[K, V], Map[K, V]]
 {
 self =>
+<<<<<<< HEAD
   
   def mapCompanion: GenericParMapCompanion[ParMap] = ParMap
   
@@ -53,6 +63,19 @@ self =>
   
   override def updated [U >: V](key: K, value: U): ParMap[K, U] = this + ((key, value))
   
+=======
+
+  def mapCompanion: GenericParMapCompanion[ParMap] = ParMap
+
+  //protected[this] override def newCombiner: Combiner[(K, V), ParMap[K, V]] = ParMap.newCombiner[K, V]
+
+  def empty: ParMap[K, V] = new mutable.ParHashMap[K, V]
+
+  override def stringPrefix = "ParMap"
+
+  override def updated [U >: V](key: K, value: U): ParMap[K, U] = this + ((key, value))
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def + [U >: V](kv: (K, U)): ParMap[K, U]
 }
 
@@ -60,11 +83,19 @@ self =>
 
 object ParMap extends ParMapFactory[ParMap] {
   def empty[K, V]: ParMap[K, V] = new mutable.ParHashMap[K, V]
+<<<<<<< HEAD
   
   def newCombiner[K, V]: Combiner[(K, V), ParMap[K, V]] = mutable.ParHashMapCombiner[K, V]
   
   implicit def canBuildFrom[K, V]: CanCombineFrom[Coll, (K, V), ParMap[K, V]] = new CanCombineFromMap[K, V]
   
+=======
+
+  def newCombiner[K, V]: Combiner[(K, V), ParMap[K, V]] = mutable.ParHashMapCombiner[K, V]
+
+  implicit def canBuildFrom[K, V]: CanCombineFrom[Coll, (K, V), ParMap[K, V]] = new CanCombineFromMap[K, V]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** An abstract shell used by { mutable, immutable }.Map but not by collection.Map
    *  because of variance issues.
    */

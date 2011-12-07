@@ -99,7 +99,11 @@ abstract class TailCalls extends Transform {
 
       /** Tells whether we are in a (possible) tail position */
       var tailPos = false
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       /** The reason this method could not be optimized. */
       var failReason = defaultReason
       var failPos    = method.pos
@@ -133,9 +137,15 @@ abstract class TailCalls extends Transform {
           label setInfo MethodType(thisParam :: method.tpe.params, method.tpe.finalResultType)
         }
         if (isEligible)
+<<<<<<< HEAD
           label setInfo label.tpe.substSym(method.tpe.typeParams, tparams)
       }
       
+=======
+          label substInfo (method.tpe.typeParams, tparams)
+      }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       def enclosingType    = method.enclClass.typeOfThis
       def methodTypeParams = method.tpe.typeParams
       def isEligible       = method.isEffectivelyFinal
@@ -166,7 +176,11 @@ abstract class TailCalls extends Transform {
       try transform(tree)
       finally this.ctx = saved
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def noTailTransform(tree: Tree): Tree = transform(tree, noTailContext())
     def noTailTransforms(trees: List[Tree]) = {
       val nctx = noTailContext()
@@ -193,7 +207,11 @@ abstract class TailCalls extends Transform {
          */
         def fail(reason: String) = {
           debuglog("Cannot rewrite recursive call at: " + fun.pos + " because: " + reason)
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           ctx.failReason = reason
           treeCopy.Apply(tree, target, transformArgs)
         }
@@ -202,7 +220,11 @@ abstract class TailCalls extends Transform {
         def failHere(reason: String) = {
           ctx.failPos = fun.pos
           fail(reason)
+<<<<<<< HEAD
         }        
+=======
+        }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         def rewriteTailCall(recv: Tree): Tree = {
           log("Rewriting tail recursive call:  " + fun.pos.lineContent.trim)
 
@@ -221,7 +243,11 @@ abstract class TailCalls extends Transform {
         else if (!receiverIsSame)       failHere("it changes type of 'this' on a polymorphic recursive call")
         else                            rewriteTailCall(receiver)
       }
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       tree match {
         case dd @ DefDef(mods, name, tparams, vparams, tpt, rhs) =>
           val newCtx = new Context(dd)
@@ -242,7 +268,11 @@ abstract class TailCalls extends Transform {
               }
               val newThis = newCtx.newThis(tree.pos)
               val vpSyms  = vparams.flatten map (_.symbol)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               typedPos(tree.pos)(Block(
                 List(ValDef(newThis, This(currentClass))),
                 LabelDef(newCtx.label, newThis :: vpSyms, newRHS)
@@ -251,30 +281,51 @@ abstract class TailCalls extends Transform {
             else {
               if (newCtx.isMandatory)
                 newCtx.tailrecFailure()
+<<<<<<< HEAD
             
               newRHS
             }
           })
         
+=======
+
+              newRHS
+            }
+          })
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case Block(stats, expr) =>
           treeCopy.Block(tree,
             noTailTransforms(stats),
             transform(expr)
           )
+<<<<<<< HEAD
       
         case CaseDef(pat, guard, body) =>
           treeCopy.CaseDef(tree, 
+=======
+
+        case CaseDef(pat, guard, body) =>
+          treeCopy.CaseDef(tree,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             pat,
             guard,
             transform(body)
           )
+<<<<<<< HEAD
       
         case If(cond, thenp, elsep) =>
           treeCopy.If(tree, 
+=======
+
+        case If(cond, thenp, elsep) =>
+          treeCopy.If(tree,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             cond,
             transform(thenp),
             transform(elsep)
           )
+<<<<<<< HEAD
       
         case Match(selector, cases) =>
           treeCopy.Match(tree, 
@@ -285,20 +336,43 @@ abstract class TailCalls extends Transform {
         case Try(block, catches, finalizer) => 
            // no calls inside a try are in tail position, but keep recursing for nested functions
           treeCopy.Try(tree, 
+=======
+
+        case Match(selector, cases) =>
+          treeCopy.Match(tree,
+            noTailTransform(selector),
+            transformTrees(cases).asInstanceOf[List[CaseDef]]
+          )
+
+        case Try(block, catches, finalizer) =>
+           // no calls inside a try are in tail position, but keep recursing for nested functions
+          treeCopy.Try(tree,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             noTailTransform(block),
             noTailTransforms(catches).asInstanceOf[List[CaseDef]],
             noTailTransform(finalizer)
           )
+<<<<<<< HEAD
       
         case Apply(tapply @ TypeApply(fun, targs), vargs) =>
           rewriteApply(tapply, fun, targs, vargs)
         
+=======
+
+        case Apply(tapply @ TypeApply(fun, targs), vargs) =>
+          rewriteApply(tapply, fun, targs, vargs)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case Apply(fun, args) =>
           if (fun.symbol == Boolean_or || fun.symbol == Boolean_and)
             treeCopy.Apply(tree, fun, transformTrees(args))
           else
             rewriteApply(fun, fun, Nil, args)
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case Alternative(_) | Star(_) | Bind(_, _) =>
           sys.error("We should've never gotten inside a pattern")
         case EmptyTree | Super(_, _) | This(_) | Select(_, _) | Ident(_) | Literal(_) | Function(_, _) | TypeTree() =>

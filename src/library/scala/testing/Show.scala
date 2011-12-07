@@ -19,6 +19,7 @@ package scala.testing
  *  a legible diagnostic to be printed on [[scala.Console]].
  *
  *  It is of the form
+<<<<<<< HEAD
  *  
  *    `meth(arg,,1,,, ..., arg,,n,,)`  gives  `&lt;result&gt;`
  *  
@@ -28,6 +29,17 @@ package scala.testing
 trait Show {
 
   /** The result class of wrapper `symApply`. 
+=======
+ *
+ *    `meth(arg,,1,,, ..., arg,,n,,)`  gives  `&lt;result&gt;`
+ *
+ *  where `&lt;result&gt;` is the result of evaluating the call.
+ *
+ */
+trait Show {
+
+  /** The result class of wrapper `symApply`.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  Prints out diagnostics of method applications.
    */
   class SymApply(f: Symbol) {
@@ -56,6 +68,7 @@ trait Show {
         }
       }
     getClass.getMethods.toList filter (_.getName == f.name) match {
+<<<<<<< HEAD
       case List() => 
         f.name+" is not defined"
       case List(m) => 
@@ -63,12 +76,26 @@ trait Show {
       case ms => // multiple methods, disambiguate by number of arguments
         ms filter (_.getParameterTypes.length == args.length) match {
           case List() => 
+=======
+      case List() =>
+        f.name+" is not defined"
+      case List(m) =>
+        testMethod(m)
+      case ms => // multiple methods, disambiguate by number of arguments
+        ms filter (_.getParameterTypes.length == args.length) match {
+          case List() =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             testMethod(ms.head) // go ahead anyway, to get an exception
           case List(m) =>
             testMethod(m)
           case ms =>
             "cannot disambiguate between multiple implementations of "+f.name
+<<<<<<< HEAD
         }	
     }	
+=======
+        }
+    }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   }
 }

@@ -39,13 +39,20 @@ extends Combiner[T, ParArray[T]] {
 //self: EnvironmentPassingCombiner[T, ParArray[T]] =>
   // because size is doubling, random access is O(logn)!
   val buff = new DoublingUnrolledBuffer[Any]
+<<<<<<< HEAD
   
   import collection.parallel.tasksupport._
   
+=======
+
+  import collection.parallel.tasksupport._
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def +=(elem: T) = {
     buff += elem
     this
   }
+<<<<<<< HEAD
   
   def result = {
     val arrayseq = new ArraySeq[T](size)
@@ -60,11 +67,31 @@ extends Combiner[T, ParArray[T]] {
     buff.clear
   }
   
+=======
+
+  def result = {
+    val arrayseq = new ArraySeq[T](size)
+    val array = arrayseq.array.asInstanceOf[Array[Any]]
+
+    executeAndWaitResult(new CopyUnrolledToArray(array, 0, size))
+
+    new ParArray(arrayseq)
+  }
+
+  def clear() {
+    buff.clear
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def sizeHint(sz: Int) = {
     buff.lastPtr.next = new Unrolled(0, new Array[Any](sz), null, buff)
     buff.lastPtr = buff.lastPtr.next
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def combine[N <: T, NewTo >: ParArray[T]](other: Combiner[N, NewTo]): Combiner[N, NewTo] = other match {
     case that if that eq this => this // just return this
     case that: UnrolledParArrayCombiner[t] =>
@@ -72,11 +99,19 @@ extends Combiner[T, ParArray[T]] {
       this
     case _ => unsupportedop("Cannot combine with combiner of different type.")
   }
+<<<<<<< HEAD
   
   def size = buff.size
   
   /* tasks */
   
+=======
+
+  def size = buff.size
+
+  /* tasks */
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class CopyUnrolledToArray(array: Array[Any], offset: Int, howmany: Int)
   extends Task[Unit, CopyUnrolledToArray] {
     var result = ();

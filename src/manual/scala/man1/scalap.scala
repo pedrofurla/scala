@@ -5,6 +5,13 @@
 
 package scala.man1
 
+<<<<<<< HEAD
+=======
+/**
+ *  @author Stephane Micheloud
+ *  @version 1.0
+ */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 object scalap extends Command {
   import _root_.scala.tools.docutil.ManPage._
 
@@ -89,9 +96,15 @@ object scalap extends Command {
 
   def manpage = new Document {
     title = command
+<<<<<<< HEAD
     date = "June 8, 2006"
     author = "Stephane Micheloud"
     version = "0.2"
+=======
+    date = "June 2006"
+    author = "Stephane Micheloud"
+    version = "1.0"
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     sections = List(
       name,
       synopsis,

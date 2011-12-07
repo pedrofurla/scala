@@ -1,4 +1,13 @@
 t1422.scala:1: error: private[this] not allowed for case class parameters
+<<<<<<< HEAD
 case class A(private[this] val foo:String)
                                ^
 one error found
+=======
+case class A(private[this] val foo:String) { }
+                               ^
+t1422.scala:1: error: value foo in class A cannot be accessed in A
+case class A(private[this] val foo:String) { }
+           ^
+two errors found
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0

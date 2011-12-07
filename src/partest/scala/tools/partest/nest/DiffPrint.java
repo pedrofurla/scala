@@ -97,7 +97,11 @@ public class DiffPrint {
     /** Look at a hunk of edit script and report the range of lines in each file
       that it applies to.  HUNK is the start of the hunk, which is a chain
       of `struct change'.  The first and last line numbers of file 0 are stored
+<<<<<<< HEAD
       in *FIRST0 and *LAST0, and likewise for file 1 in *FIRST1 and *LAST1. 
+=======
+      in *FIRST0 and *LAST0, and likewise for file 1 in *FIRST1 and *LAST1.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       Note that these are internal line numbers that count from 0.
 
       If no lines from file 0 are deleted, then FIRST0 is LAST0+1.
@@ -151,7 +155,11 @@ public class DiffPrint {
     protected void print_header(String filea, String fileb) { }
 
     protected abstract void print_hunk(Diff.change hunk);
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     protected void print_1_line(String pre,Object linbuf) {
       outfile.println(pre + linbuf.toString());
     }

@@ -36,7 +36,11 @@ object Pretty {
     def /(s2: String) = if(s2 == "") s1 else s1+"\n"+s2
   }
 
+<<<<<<< HEAD
   def pad(s: String, c: Char, length: Int) = 
+=======
+  def pad(s: String, c: Char, length: Int) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if(s.length >= length) s
     else s + List.fill(length-s.length)(c).mkString
 
@@ -49,8 +53,13 @@ object Pretty {
 
   implicit def prettyAny(t: Any) = Pretty { p => t.toString }
 
+<<<<<<< HEAD
   implicit def prettyList(l: List[Any]) = Pretty { p => 
     l.map("\""+_+"\"").mkString("List(", ", ", ")") 
+=======
+  implicit def prettyList(l: List[Any]) = Pretty { p =>
+    l.map("\""+_+"\"").mkString("List(", ", ", ")")
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   }
 
   implicit def prettyThrowable(e: Throwable) = Pretty { prms =>
@@ -58,12 +67,21 @@ object Pretty {
       import st._
       getClassName+"."+getMethodName + "("+getFileName+":"+getLineNumber+")"
     }
+<<<<<<< HEAD
     
     val strs2 = 
       if(prms.verbosity <= 0) Array[String]()
       else if(prms.verbosity <= 1) strs.take(5)
       else strs
     
+=======
+
+    val strs2 =
+      if(prms.verbosity <= 0) Array[String]()
+      else if(prms.verbosity <= 1) strs.take(5)
+      else strs
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     e.getClass.getName + ": " + e.getMessage / strs2.mkString("\n")
   }
 
@@ -71,8 +89,13 @@ object Pretty {
     if(args.isEmpty) "" else {
       for((a,i) <- args.zipWithIndex) yield {
         val l = if(a.label == "") "ARG_"+i else a.label
+<<<<<<< HEAD
         val s = 
           if(a.shrinks == 0 || prms.verbosity <= 1) "" 
+=======
+        val s =
+          if(a.shrinks == 0 || prms.verbosity <= 1) ""
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           else " (orig arg: "+a.prettyOrigArg(prms)+")"
 
         "> "+l+": "+a.prettyArg(prms)+""+s
@@ -81,7 +104,11 @@ object Pretty {
   }
 
   implicit def prettyFreqMap(fm: Prop.FM) = Pretty { prms =>
+<<<<<<< HEAD
     if(fm.total == 0) "" 
+=======
+    if(fm.total == 0) ""
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     else {
       "> Collected test data: " / {
         for {
@@ -94,8 +121,13 @@ object Pretty {
   }
 
   implicit def prettyTestRes(res: Test.Result) = Pretty { prms =>
+<<<<<<< HEAD
     def labels(ls: collection.immutable.Set[String]) = 
       if(ls.isEmpty) "" 
+=======
+    def labels(ls: collection.immutable.Set[String]) =
+      if(ls.isEmpty) ""
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       else "> Labels of failing property: " / ls.mkString("\n")
     val s = res.status match {
       case Test.Proved(args) => "OK, proved property."/pretty(args,prms)

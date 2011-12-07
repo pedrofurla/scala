@@ -20,7 +20,11 @@ trait Name {
 }
 
 /** A factory for rules.
+<<<<<<< HEAD
   * 
+=======
+  *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   * @author Andrew Foggin
   *
   * Inspired by the Scala parser combinator.
@@ -30,15 +34,24 @@ trait Rules {
 
   implicit def inRule[In, Out, A, X](rule : Rule[In, Out, A, X]) : InRule[In, Out, A, X] = new InRule(rule)
   implicit def seqRule[In, A, X](rule : Rule[In, In, A, X]) : SeqRule[In, A, X] = new SeqRule(rule)
+<<<<<<< HEAD
   
   def from[In] = new {
     def apply[Out, A, X](f : In => Result[Out, A, X]) = rule(f)
   }
   
+=======
+
+  def from[In] = new {
+    def apply[Out, A, X](f : In => Result[Out, A, X]) = rule(f)
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def state[s] = new StateRules {
     type S = s
     val factory = Rules.this
   }
+<<<<<<< HEAD
   
   def success[Out, A](out : Out, a : A) = rule { in : Any => Success(out, a) }
   
@@ -47,12 +60,27 @@ trait Rules {
   def error[In] = rule { in : In => Error(in) }
   def error[X](err : X) = rule { in : Any => Error(err) }
       
+=======
+
+  def success[Out, A](out : Out, a : A) = rule { in : Any => Success(out, a) }
+
+  def failure = rule { in : Any => Failure }
+
+  def error[In] = rule { in : In => Error(in) }
+  def error[X](err : X) = rule { in : Any => Error(err) }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def oneOf[In, Out, A, X](rules : Rule[In, Out, A, X] *) : Rule[In, Out, A, X] = new Choice[In, Out, A, X] {
     val factory = Rules.this
     val choices = rules.toList
   }
+<<<<<<< HEAD
     
   def ruleWithName[In, Out, A, X](_name : String, f : In => Result[Out, A, X]) : Rule[In, Out, A, X] with Name = 
+=======
+
+  def ruleWithName[In, Out, A, X](_name : String, f : In => Result[Out, A, X]) : Rule[In, Out, A, X] with Name =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     new DefaultRule(f) with Name {
       val name = _name
     }
@@ -61,7 +89,11 @@ trait Rules {
     val factory = Rules.this
     def apply(in : In) = f(in)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  /** Converts a rule into a function that throws an Exception on failure. */
   def expect[In, Out, A, Any](rule : Rule[In, Out, A, Any]) : In => A = (in) => rule(in) match {
     case Success(_, a) => a
@@ -81,23 +113,41 @@ trait Rules {
 trait StateRules {
   type S
   type Rule[+A, +X] = rules.Rule[S, S, A, X]
+<<<<<<< HEAD
   
   val factory : Rules
   import factory._
   
+=======
+
+  val factory : Rules
+  import factory._
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def apply[A, X](f : S => Result[S, A, X]) = rule(f)
 
   def unit[A](a : => A) = apply { s => Success(s, a) }
   def read[A](f : S => A) = apply { s => Success(s, f(s)) }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def get = apply { s => Success(s, s) }
   def set(s : => S) = apply { oldS => Success(s, oldS) }
 
   def update(f : S => S) = apply { s => Success(s, f(s)) }
+<<<<<<< HEAD
   
   def nil = unit(Nil)
   def none = unit(None)
   
+=======
+
+  def nil = unit(Nil)
+  def none = unit(None)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Create a rule that identities if f(in) is true. */
   def cond(f : S => Boolean) = get filter f
 
@@ -123,12 +173,21 @@ trait StateRules {
       @param rules the rules to apply in sequence.
   */
   def anyOf[A, X](rules : Seq[Rule[A, X]]) = allOf(rules.map(_ ?)) ^^ { opts => opts.flatMap(x => x) }
+<<<<<<< HEAD
   
   /** Repeatedly apply a rule from initial value until finished condition is met. */
   def repeatUntil[T, X](rule : Rule[T => T, X])(finished : T => Boolean)(initial : T) = apply { 
     // more compact using HoF but written this way so it's tail-recursive
     def rep(in : S, t : T) : Result[S, T, X] = {
       if (finished(t)) Success(in, t) 
+=======
+
+  /** Repeatedly apply a rule from initial value until finished condition is met. */
+  def repeatUntil[T, X](rule : Rule[T => T, X])(finished : T => Boolean)(initial : T) = apply {
+    // more compact using HoF but written this way so it's tail-recursive
+    def rep(in : S, t : T) : Result[S, T, X] = {
+      if (finished(t)) Success(in, t)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       else rule(in) match {
         case Success(out, f) => rep(out, f(t))
         case Failure => Failure
@@ -137,7 +196,11 @@ trait StateRules {
     }
     in => rep(in, initial)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 }
 

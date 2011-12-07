@@ -10,7 +10,11 @@ package scala.annotation
 
 /** A marker for annotations that, when applied to a type, should be treated
  *  as a constraint on the annotated type.
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  A proper constraint should restrict the type based only on information
  *  mentioned within the type.  A Scala compiler can use this assumption to
  *  rewrite the contents of the constraint as necessary.  To contrast, a type

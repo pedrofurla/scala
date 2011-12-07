@@ -14,6 +14,7 @@ object ANSIWriter {
   val SOME = 1
   val MANY = 2
 
+<<<<<<< HEAD
   def apply(isAnsi: Boolean) = if (isAnsi) MANY else NONE  
 }
 import ANSIWriter._
@@ -22,6 +23,16 @@ class ANSIWriter(writer: Writer) extends PrintWriter(writer, true) {
   def this(out: OutputStream) = this(new OutputStreamWriter(out))
   def colorful: Int = NONE
   
+=======
+  def apply(isAnsi: Boolean) = if (isAnsi) MANY else NONE
+}
+import ANSIWriter._
+
+class ANSIWriter(writer: Writer) extends PrintWriter(writer, true) {
+  def this(out: OutputStream) = this(new OutputStreamWriter(out))
+  def colorful: Int = NONE
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected val manyColors = List(
     Console.BOLD + Console.BLACK,
     Console.BOLD + Console.GREEN,
@@ -37,14 +48,22 @@ class ANSIWriter(writer: Writer) extends PrintWriter(writer, true) {
     Console.RESET
   )
   protected val noColors = List("", "", "", "", "")
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   lazy val List(_outline, _success, _failure, _warning, _default) = colorful match {
     case NONE => noColors
     case SOME => someColors
     case MANY => manyColors
     case _    => noColors
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def wrprint(msg: String): Unit = synchronized {
     print(msg)
     flush()

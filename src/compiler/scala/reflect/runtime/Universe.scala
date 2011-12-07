@@ -8,6 +8,7 @@ import internal.{SomePhase, NoPhase, Phase, TreeGen}
  *  It also provides methods to go from Java members to Scala members,
  *  using the code in JavaConversions.
  */
+<<<<<<< HEAD
 class Universe extends internal.SymbolTable with JavaToScala with ScalaToJava with Loaders {
   
   type AbstractFileType = AbstractFile
@@ -37,6 +38,37 @@ class Universe extends internal.SymbolTable with JavaToScala with ScalaToJava wi
   type Position = String // source file?
   val NoPosition = ""
   
+=======
+class Universe extends SymbolTable {
+
+  type AbstractFileType = AbstractFile
+
+  def picklerPhase = SomePhase
+
+  val gen = new TreeGen { val global: Universe.this.type = Universe.this }
+
+  def settings = new Settings
+  def forInteractive = false
+  def forScaladoc = false
+
+  val phaseWithId: Array[Phase] = Array(NoPhase, SomePhase)
+  val currentRunId = 1 // fake a run id so that it is different from NoRunId
+  phase = SomePhase // set to a phase different from NoPhase
+
+  def log(msg: => AnyRef): Unit = println(" [] "+msg)
+
+  type TreeCopier = TreeCopierOps
+  def newStrictTreeCopier: TreeCopier = new StrictTreeCopier
+  def newLazyTreeCopier: TreeCopier = new LazyTreeCopier
+
+  def focusPos(pos: Position) = pos
+  def isRangePos(pos: Position) = false
+  def showPos(pos: Position) = "<unknown position>"
+
+  type Position = String // source file?
+  val NoPosition = ""
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // establish root association to avoid cyclic dependency errors later
   classToScala(classOf[java.lang.Object]).initialize
 }

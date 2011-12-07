@@ -196,7 +196,11 @@ import java.math.BigInteger;
       };
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   abstract class StatementField extends StatementExpression {
     def fieldName: String;
     def tableName: Option[String] = None;
@@ -214,8 +218,15 @@ import java.math.BigInteger;
   implicit def stringToStatementField (ef:String): StatementField = new StatementField {
     val fieldName = ef;
   }
+<<<<<<< HEAD
   
   
   
   
+=======
+
+
+
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

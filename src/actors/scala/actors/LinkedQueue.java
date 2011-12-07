@@ -19,8 +19,13 @@ package scala.actors;
 /**
  * A linked list based channel implementation.
  * The algorithm avoids contention between puts
+<<<<<<< HEAD
  * and takes when the queue is not empty. 
  * Normally a put and a take can proceed simultaneously. 
+=======
+ * and takes when the queue is not empty.
+ * Normally a put and a take can proceed simultaneously.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * (Although it does not allow multiple concurrent puts or takes.)
  * This class tends to perform more efficently than
  * other Channel implementations in producer/consumer
@@ -31,21 +36,38 @@ package scala.actors;
 public class LinkedQueue {
 
 
+<<<<<<< HEAD
   /** 
    * Dummy header node of list. The first actual node, if it exists, is always 
    * at head_.next. After each take, the old first node becomes the head.
    **/
   protected LinkedNode head_;         
+=======
+  /**
+   * Dummy header node of list. The first actual node, if it exists, is always
+   * at head_.next. After each take, the old first node becomes the head.
+   **/
+  protected LinkedNode head_;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /**
    * Helper monitor for managing access to last node.
    **/
+<<<<<<< HEAD
   protected final Object putLock_ = new Object(); 
 
   /** 
    * The last node of list. Put() appends to list, so modifies last_
    **/
   protected LinkedNode last_;         
+=======
+  protected final Object putLock_ = new Object();
+
+  /**
+   * The last node of list. Put() appends to list, so modifies last_
+   **/
+  protected LinkedNode last_;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /**
    * The number of threads waiting for a take.
@@ -54,15 +76,26 @@ public class LinkedQueue {
    * usages, the notifications will hardly ever be necessary, so
    * the call overhead to notify can be eliminated.
    **/
+<<<<<<< HEAD
   protected int waitingForTake_ = 0;  
 
   public LinkedQueue() {
     head_ = new LinkedNode(null); 
+=======
+  protected int waitingForTake_ = 0;
+
+  public LinkedQueue() {
+    head_ = new LinkedNode(null);
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     last_ = head_;
   }
 
   /** Main mechanics for put/offer **/
+<<<<<<< HEAD
   protected void insert(Object x) { 
+=======
+  protected void insert(Object x) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     synchronized(putLock_) {
       LinkedNode p = new LinkedNode(x);
       synchronized(last_) {
@@ -82,7 +115,11 @@ public class LinkedQueue {
       if (first != null) {
         x = first.value;
         first.value = null;
+<<<<<<< HEAD
         head_ = first; 
+=======
+        head_ = first;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       }
       return x;
     }
@@ -92,6 +129,7 @@ public class LinkedQueue {
   public void put(Object x) throws InterruptedException {
     if (x == null) throw new IllegalArgumentException();
     if (Thread.interrupted()) throw new InterruptedException();
+<<<<<<< HEAD
     insert(x); 
   }
 
@@ -99,6 +137,15 @@ public class LinkedQueue {
     if (x == null) throw new IllegalArgumentException();
     if (Thread.interrupted()) throw new InterruptedException();
     insert(x); 
+=======
+    insert(x);
+  }
+
+  public boolean offer(Object x, long msecs) throws InterruptedException {
+    if (x == null) throw new IllegalArgumentException();
+    if (Thread.interrupted()) throw new InterruptedException();
+    insert(x);
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     return true;
   }
 
@@ -108,7 +155,11 @@ public class LinkedQueue {
     Object x = extract();
     if (x != null)
       return x;
+<<<<<<< HEAD
     else { 
+=======
+    else {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       synchronized(putLock_) {
         try {
           ++waitingForTake_;
@@ -119,6 +170,7 @@ public class LinkedQueue {
               return x;
             }
             else {
+<<<<<<< HEAD
               putLock_.wait(); 
             }
           }
@@ -127,6 +179,16 @@ public class LinkedQueue {
           --waitingForTake_; 
           putLock_.notify();
           throw ex; 
+=======
+              putLock_.wait();
+            }
+          }
+        }
+        catch(InterruptedException ex) {
+          --waitingForTake_;
+          putLock_.notify();
+          throw ex;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         }
       }
     }
@@ -135,24 +197,41 @@ public class LinkedQueue {
   public Object peek() {
     synchronized(head_) {
       LinkedNode first = head_.next;
+<<<<<<< HEAD
       if (first != null) 
         return first.value;
       else 
         return null;
     }
   }    
+=======
+      if (first != null)
+        return first.value;
+      else
+        return null;
+    }
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 
   public boolean isEmpty() {
     synchronized(head_) {
       return head_.next == null;
     }
+<<<<<<< HEAD
   }    
+=======
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   public Object poll(long msecs) throws InterruptedException {
     if (Thread.interrupted()) throw new InterruptedException();
     Object x = extract();
+<<<<<<< HEAD
     if (x != null) 
+=======
+    if (x != null)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       return x;
     else {
       synchronized(putLock_) {
@@ -167,15 +246,26 @@ public class LinkedQueue {
               return x;
             }
             else {
+<<<<<<< HEAD
               putLock_.wait(waitTime); 
+=======
+              putLock_.wait(waitTime);
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               waitTime = msecs - (System.currentTimeMillis() - start);
             }
           }
         }
+<<<<<<< HEAD
         catch(InterruptedException ex) { 
           --waitingForTake_; 
           putLock_.notify();
           throw ex; 
+=======
+        catch(InterruptedException ex) {
+          --waitingForTake_;
+          putLock_.notify();
+          throw ex;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         }
       }
     }

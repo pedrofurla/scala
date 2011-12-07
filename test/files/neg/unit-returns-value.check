@@ -1,4 +1,14 @@
+<<<<<<< HEAD
 unit-returns-value.scala:4: error: enclosing method f has result type Unit: return value discarded
     if (b) return 5
            ^
 one error found
+=======
+unit-returns-value.scala:4: error: a pure expression does nothing in statement position; you may be omitting necessary parentheses
+    if (b) return 5
+                  ^
+unit-returns-value.scala:4: error: enclosing method f has result type Unit: return value discarded
+    if (b) return 5
+           ^
+two errors found
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0

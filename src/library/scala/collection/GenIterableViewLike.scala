@@ -15,12 +15,21 @@ import TraversableView.NoBuilder
 
 
 
+<<<<<<< HEAD
 trait GenIterableViewLike[+A, 
                           +Coll, 
                           +This <: GenIterableView[A, Coll] with GenIterableViewLike[A, Coll, This]]
 extends GenIterable[A] with GenIterableLike[A, This] with GenTraversableView[A, Coll] with GenTraversableViewLike[A, Coll, This] {
 self =>
   
+=======
+trait GenIterableViewLike[+A,
+                          +Coll,
+                          +This <: GenIterableView[A, Coll] with GenIterableViewLike[A, Coll, This]]
+extends GenIterable[A] with GenIterableLike[A, This] with GenTraversableView[A, Coll] with GenTraversableViewLike[A, Coll, This] {
+self =>
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait Transformed[+B] extends GenIterableView[B, Coll] with super.Transformed[B] {
     def iterator: Iterator[B]
     override def foreach[U](f: B => U): Unit = iterator foreach f
@@ -46,7 +55,11 @@ self =>
   trait FlatMapped[B] extends super.FlatMapped[B] with Transformed[B] {
     def iterator: Iterator[B] = self.iterator flatMap mapping
   }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait Appended[B >: A] extends super.Appended[B] with Transformed[B] {
     def iterator = self.iterator ++ rest
   }
@@ -54,7 +67,11 @@ self =>
   trait Filtered extends super.Filtered with Transformed[A] {
     def iterator = self.iterator filter pred
   }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait TakenWhile extends super.TakenWhile with Transformed[A] {
     def iterator = self.iterator takeWhile pred
   }
@@ -68,13 +85,21 @@ self =>
     def iterator: Iterator[(A, B)] = self.iterator zip other.iterator
     final override protected[this] def viewIdentifier = "Z"
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait ZippedAll[A1 >: A, B] extends Transformed[(A1, B)] {
     protected[this] val other: GenIterable[B]
     protected[this] val thisElem: A1
     protected[this] val thatElem: B
     final override protected[this] def viewIdentifier = "Z"
+<<<<<<< HEAD
     def iterator: Iterator[(A1, B)] = 
+=======
+    def iterator: Iterator[(A1, B)] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       self.iterator.zipAll(other.iterator, thisElem, thatElem)
   }
 

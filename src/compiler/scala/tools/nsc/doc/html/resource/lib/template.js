@@ -34,9 +34,18 @@ $(document).ready(function(){
         $("#textfilter input").attr("value", "");
         filter();
     });
+<<<<<<< HEAD
     $(document).keydown(function() {
         if (document.activeElement != $("#textfilter input")[0])
             $("#textfilter input").focus();
+=======
+    $(document).keydown(function(event) {
+        if(!event.altKey && !event.ctrlKey &&
+           (event.keyCode == 27 || (event.keyCode >= 48 && event.keyCode <= 90)) &&
+           document.activeElement != $("#textfilter input")[0]) {
+               $("#textfilter input").focus();
+        }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     });
     $("#textfilter input").focus();
 

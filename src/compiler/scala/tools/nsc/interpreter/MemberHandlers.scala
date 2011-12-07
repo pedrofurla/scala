@@ -8,7 +8,10 @@ package interpreter
 
 import scala.collection.{ mutable, immutable }
 import scala.PartialFunction.cond
+<<<<<<< HEAD
 import scala.reflect.NameTransformer
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 import scala.reflect.internal.Chars
 
 trait MemberHandlers {
@@ -27,7 +30,11 @@ trait MemberHandlers {
     front + (xs map string2codeQuoted mkString " + ")
   }
   private implicit def name2string(name: Name) = name.toString
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A traverser that finds all mentioned identifiers, i.e. things
    *  that need to be imported.  It might return extra names.
    */
@@ -62,13 +69,22 @@ trait MemberHandlers {
     case DocDef(_, documented) => chooseHandler(documented)
     case member                => new GenericHandler(member)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   sealed abstract class MemberDefHandler(override val member: MemberDef) extends MemberHandler(member) {
     def name: Name      = member.name
     def mods: Modifiers = member.mods
     def keyword         = member.keyword
+<<<<<<< HEAD
     def prettyName      = NameTransformer.decode(name)
     
+=======
+    def prettyName      = name.decode
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     override def definesImplicit = member.mods.isImplicit
     override def definesTerm: Option[TermName] = Some(name.toTermName) filter (_ => name.isTermName)
     override def definesType: Option[TypeName] = Some(name.toTypeName) filter (_ => name.isTypeName)
@@ -81,7 +97,11 @@ trait MemberHandlers {
     def definesImplicit = false
     def definesValue    = false
     def isLegalTopLevel = false
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def definesTerm     = Option.empty[TermName]
     def definesType     = Option.empty[TypeName]
 
@@ -98,11 +118,19 @@ trait MemberHandlers {
   }
 
   class GenericHandler(member: Tree) extends MemberHandler(member)
+<<<<<<< HEAD
   
   class ValHandler(member: ValDef) extends MemberDefHandler(member) {
     val maxStringElements = 1000  // no need to mkString billions of elements    
     override def definesValue = true
     
+=======
+
+  class ValHandler(member: ValDef) extends MemberDefHandler(member) {
+    val maxStringElements = 1000  // no need to mkString billions of elements
+    override def definesValue = true
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     override def resultExtractionCode(req: Request): String = {
       val isInternal = isUserVarName(name) && req.lookupTypeOf(name) == "Unit"
       if (!mods.isPublic || isInternal) ""
@@ -111,7 +139,11 @@ trait MemberHandlers {
         val resultString =
           if (mods.isLazy) codegenln(false, "<lazy>")
           else any2stringOf(req fullPath name, maxStringElements)
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         """ + "%s: %s = " + %s""".format(prettyName, string2code(req typeOf name), resultString)
       }
     }
@@ -138,7 +170,11 @@ trait MemberHandlers {
     override def resultExtractionCode(req: Request) = {
       val lhsType = string2code(req lookupTypeOf name)
       val res     = string2code(req fullPath name)
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       """ + "%s: %s = " + %s + "\n" """.format(lhs, lhsType, res) + "\n"
     }
   }
@@ -155,7 +191,11 @@ trait MemberHandlers {
     override def definesType = Some(name.toTypeName)
     override def definesTerm = Some(name.toTermName) filter (_ => mods.isCase)
     override def isLegalTopLevel = true
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     override def resultExtractionCode(req: Request) =
       codegenln("defined %s %s".format(keyword, name))
   }
@@ -172,7 +212,11 @@ trait MemberHandlers {
     val Import(expr, selectors) = imp
     def targetType = intp.typeOfExpression("" + expr)
     override def isLegalTopLevel = true
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def createImportForName(name: Name): String = {
       selectors foreach {
         case sel @ ImportSelector(old, _, `name`, _)  => return "import %s.{ %s }".format(expr, sel)
@@ -184,11 +228,16 @@ trait MemberHandlers {
     // because they must be the leading imports in the code generated for each
     // line.  We can use the same machinery as Contexts now, anyway.
     def isPredefImport = treeInfo.isPredefExpr(expr)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // wildcard imports, e.g. import foo._
     private def selectorWild    = selectors filter (_.name == nme.USCOREkw)
     // renamed imports, e.g. import foo.{ bar => baz }
     private def selectorRenames = selectors map (_.rename) filterNot (_ == null)
+<<<<<<< HEAD
     
     /** Whether this import includes a wildcard import */
     val importsWildcard = selectorWild.nonEmpty
@@ -199,13 +248,29 @@ trait MemberHandlers {
     def implicitSymbols = importedSymbols filter (_.isImplicit)
     def importedSymbols = individualSymbols ++ wildcardSymbols
     
+=======
+
+    /** Whether this import includes a wildcard import */
+    val importsWildcard = selectorWild.nonEmpty
+
+    /** Whether anything imported is implicit .*/
+    def importsImplicit = implicitSymbols.nonEmpty
+
+    def implicitSymbols = importedSymbols filter (_.isImplicit)
+    def importedSymbols = individualSymbols ++ wildcardSymbols
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     lazy val individualSymbols: List[Symbol] =
       atPickler(targetType.toList flatMap (tp => individualNames map (tp nonPrivateMember _)))
 
     lazy val wildcardSymbols: List[Symbol] =
       if (importsWildcard) atPickler(targetType.toList flatMap (_.nonPrivateMembers))
       else Nil
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Complete list of names imported by a wildcard */
     lazy val wildcardNames: List[Name]   = wildcardSymbols map (_.name)
     lazy val individualNames: List[Name] = selectorRenames filterNot (_ == nme.USCOREkw) flatMap (_.bothNames)
@@ -213,7 +278,11 @@ trait MemberHandlers {
     /** The names imported by this statement */
     override lazy val importedNames: List[Name] = wildcardNames ++ individualNames
     lazy val importsSymbolNamed: Set[String] = importedNames map (_.toString) toSet
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def importString = imp.toString
     override def resultExtractionCode(req: Request) = codegenln(importString) + "\n"
   }

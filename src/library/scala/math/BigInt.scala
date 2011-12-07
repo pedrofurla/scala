@@ -10,7 +10,11 @@ package scala.math
 
 import java.math.BigInteger
 
+<<<<<<< HEAD
 /** 
+=======
+/**
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author  Martin Odersky
  *  @version 1.0, 15/07/2003
  *  @since 2.1
@@ -20,7 +24,11 @@ object BigInt {
   private val minCached = -1024
   private val maxCached = 1024
   private val cache = new Array[BigInt](maxCached - minCached + 1)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   @deprecated("Use Long.MinValue", "2.9.0")
   val MinLong = BigInt(Long.MinValue)
 
@@ -51,18 +59,30 @@ object BigInt {
     if (minCached <= l && l <= maxCached) apply(l.toInt)
     else new BigInt(BigInteger.valueOf(l))
 
+<<<<<<< HEAD
   /** Translates a byte array containing the two's-complement binary 
    *  representation of a BigInt into a BigInt.
    */
   def apply(x: Array[Byte]): BigInt = 
+=======
+  /** Translates a byte array containing the two's-complement binary
+   *  representation of a BigInt into a BigInt.
+   */
+  def apply(x: Array[Byte]): BigInt =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     new BigInt(new BigInteger(x))
 
   /** Translates the sign-magnitude representation of a BigInt into a BigInt.
    */
   def apply(signum: Int, magnitude: Array[Byte]): BigInt =
     new BigInt(new BigInteger(signum, magnitude))
+<<<<<<< HEAD
   
   /** Constructs a randomly generated positive BigInt that is probably prime, 
+=======
+
+  /** Constructs a randomly generated positive BigInt that is probably prime,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  with the specified bitLength.
    */
   def apply(bitlength: Int, certainty: Int, rnd: scala.util.Random): BigInt =
@@ -80,7 +100,11 @@ object BigInt {
 
   /** Translates the decimal String representation of a BigInt into a BigInt.
    */
+<<<<<<< HEAD
   def apply(x: String): BigInt = 
+=======
+  def apply(x: String): BigInt =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     new BigInt(new BigInteger(x))
 
   /** Translates the string representation of a `BigInt` in the
@@ -107,7 +131,11 @@ object BigInt {
   implicit def long2bigInt(l: Long): BigInt = apply(l)
 }
 
+<<<<<<< HEAD
 /** 
+=======
+/**
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author  Martin Odersky
  *  @version 1.0, 15/07/2003
  */
@@ -128,8 +156,13 @@ class BigInt(val bigInteger: BigInteger) extends ScalaNumber with ScalaNumericCo
   override def isValidShort = this >= Short.MinValue && this <= Short.MaxValue
   override def isValidChar  = this >= Char.MinValue && this <= Char.MaxValue
   override def isValidInt   = this >= Int.MinValue && this <= Int.MaxValue
+<<<<<<< HEAD
            def isValidLong  = this >= Long.MinValue && this <= Long.MaxValue 
   
+=======
+           def isValidLong  = this >= Long.MinValue && this <= Long.MaxValue
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected[math] def isWhole = true
   def underlying = bigInteger
 
@@ -224,7 +257,11 @@ class BigInt(val bigInteger: BigInteger) extends ScalaNumber with ScalaNumericCo
   /** Returns the maximum of this and that
    */
   def max (that: BigInt): BigInt = new BigInt(this.bigInteger.max(that.bigInteger))
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Returns a BigInt whose value is (<tt>this</tt> raised to the power of <tt>exp</tt>).
    */
   def pow (exp: Int): BigInt = new BigInt(this.bigInteger.pow(exp))
@@ -242,13 +279,22 @@ class BigInt(val bigInteger: BigInteger) extends ScalaNumber with ScalaNumericCo
   /** Returns a BigInt whose value is the negation of this BigInt
    */
   def unary_- : BigInt   = new BigInt(this.bigInteger.negate())
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Returns the absolute value of this BigInt
    */
   def abs: BigInt = new BigInt(this.bigInteger.abs())
 
+<<<<<<< HEAD
   /** Returns the sign of this BigInt, i.e. 
    *   -1 if it is less than 0, 
+=======
+  /** Returns the sign of this BigInt, i.e.
+   *   -1 if it is less than 0,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *   +1 if it is greater than 0
    *   0  if it is equal to 0
    */
@@ -256,7 +302,11 @@ class BigInt(val bigInteger: BigInteger) extends ScalaNumber with ScalaNumericCo
 
   @deprecated("Use ~bigInt (the unary_~ method) instead", "2.10.0")
   def ~ : BigInt = ~this
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Returns the bitwise complement of this BigInt
    */
   def unary_~ : BigInt = new BigInt(this.bigInteger.not())
@@ -282,17 +332,27 @@ class BigInt(val bigInteger: BigInteger) extends ScalaNumber with ScalaNumericCo
    */
   def lowestSetBit: Int         = this.bigInteger.getLowestSetBit()
 
+<<<<<<< HEAD
   /** Returns the number of bits in the minimal two's-complement representation of this BigInt, 
    *  excluding a sign bit.
    */
   def bitLength: Int            = this.bigInteger.bitLength()
   
   /** Returns the number of bits in the two's complement representation of this BigInt 
+=======
+  /** Returns the number of bits in the minimal two's-complement representation of this BigInt,
+   *  excluding a sign bit.
+   */
+  def bitLength: Int            = this.bigInteger.bitLength()
+
+  /** Returns the number of bits in the two's complement representation of this BigInt
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  that differ from its sign bit.
    */
   def bitCount: Int             = this.bigInteger.bitCount()
 
   /** Returns true if this BigInt is probably prime, false if it's definitely composite.
+<<<<<<< HEAD
    *  @param certainty  a measure of the uncertainty that the caller is willing to tolerate: 
    *                    if the call returns true the probability that this BigInt is prime 
    *                    exceeds (1 - 1/2 ^ certainty). 
@@ -304,25 +364,54 @@ class BigInt(val bigInteger: BigInteger) extends ScalaNumber with ScalaNumericCo
   /** Converts this BigInt to a <tt>byte</tt>. 
    *  If the BigInt is too big to fit in a byte, only the low-order 8 bits are returned. 
    *  Note that this conversion can lose information about the overall magnitude of the 
+=======
+   *  @param certainty  a measure of the uncertainty that the caller is willing to tolerate:
+   *                    if the call returns true the probability that this BigInt is prime
+   *                    exceeds (1 - 1/2 ^ certainty).
+   *                    The execution time of this method is proportional to the value of
+   *                    this parameter.
+   */
+  def isProbablePrime(certainty: Int) = this.bigInteger.isProbablePrime(certainty)
+
+  /** Converts this BigInt to a <tt>byte</tt>.
+   *  If the BigInt is too big to fit in a byte, only the low-order 8 bits are returned.
+   *  Note that this conversion can lose information about the overall magnitude of the
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  BigInt value as well as return a result with the opposite sign.
    */
   override def byteValue   = intValue.toByte
 
+<<<<<<< HEAD
   /** Converts this BigInt to a <tt>short</tt>. 
    *  If the BigInt is too big to fit in a byte, only the low-order 16 bits are returned. 
    *  Note that this conversion can lose information about the overall magnitude of the 
+=======
+  /** Converts this BigInt to a <tt>short</tt>.
+   *  If the BigInt is too big to fit in a byte, only the low-order 16 bits are returned.
+   *  Note that this conversion can lose information about the overall magnitude of the
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  BigInt value as well as return a result with the opposite sign.
    */
   override def shortValue  = intValue.toShort
 
+<<<<<<< HEAD
   /** Converts this BigInt to a <tt>char</tt>. 
    *  If the BigInt is too big to fit in a char, only the low-order 16 bits are returned. 
    *  Note that this conversion can lose information about the overall magnitude of the 
+=======
+  /** Converts this BigInt to a <tt>char</tt>.
+   *  If the BigInt is too big to fit in a char, only the low-order 16 bits are returned.
+   *  Note that this conversion can lose information about the overall magnitude of the
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  BigInt value and that it always returns a positive result.
    */
   def charValue   = intValue.toChar
 
+<<<<<<< HEAD
   /** Converts this BigInt to an <tt>int</tt>. 
+=======
+  /** Converts this BigInt to an <tt>int</tt>.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  If the BigInt is too big to fit in a char, only the low-order 32 bits
    *  are returned. Note that this conversion can lose information about the
    *  overall magnitude of the BigInt value as well as return a result with
@@ -345,10 +434,17 @@ class BigInt(val bigInteger: BigInteger) extends ScalaNumber with ScalaNumericCo
    */
   def floatValue  = this.bigInteger.floatValue
 
+<<<<<<< HEAD
   /** Converts this `BigInt` to a `double`. 
    *  if this `BigInt` has too great a magnitude to represent as a double, 
    *  it will be converted to `Double.NEGATIVE_INFINITY` or
    *  `Double.POSITIVE_INFINITY` as appropriate. 
+=======
+  /** Converts this `BigInt` to a `double`.
+   *  if this `BigInt` has too great a magnitude to represent as a double,
+   *  it will be converted to `Double.NEGATIVE_INFINITY` or
+   *  `Double.POSITIVE_INFINITY` as appropriate.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */
   def doubleValue = this.bigInteger.doubleValue
 
@@ -360,7 +456,11 @@ class BigInt(val bigInteger: BigInteger) extends ScalaNumber with ScalaNumericCo
    *  @return       the range
    */
   def until(end: BigInt, step: BigInt = BigInt(1)) = Range.BigInt(this, end, step)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Like until, but inclusive of the end value.
    */
   def to(end: BigInt, step: BigInt = BigInt(1)) = Range.BigInt.inclusive(this, end, step)

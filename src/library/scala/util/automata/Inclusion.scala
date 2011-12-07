@@ -27,6 +27,7 @@ trait Inclusion[A <: AnyRef] {
    *  @param dfa2 ...
    */
   def inclusion(dfa1: DetWordAutom[A], dfa2: DetWordAutom[A]) = {
+<<<<<<< HEAD
     
     def encode(q1: Int, q2: Int) = 1 + q1 + q2 * dfa1.nstates
     def decode2(c: Int) = (c-1) / (dfa1.nstates) //integer division
@@ -38,6 +39,19 @@ trait Inclusion[A <: AnyRef] {
     val max = 1 + dfa1.nstates * dfa2.nstates
     val mark = new Array[Int](max)
     
+=======
+
+    def encode(q1: Int, q2: Int) = 1 + q1 + q2 * dfa1.nstates
+    def decode2(c: Int) = (c-1) / (dfa1.nstates) //integer division
+    def decode1(c: Int) = (c-1) % (dfa1.nstates)
+
+    var q1 = 0 //dfa1.initstate; // == 0
+    var q2 = 0 //dfa2.initstate; // == 0
+
+    val max = 1 + dfa1.nstates * dfa2.nstates
+    val mark = new Array[Int](max)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     var result = true
     var current = encode(q1, q2)
     var last = current

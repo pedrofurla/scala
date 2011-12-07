@@ -8,7 +8,11 @@
 package scala.annotation.unchecked
 
 /** An annotation for values that are assumed to be stable even though their
+<<<<<<< HEAD
  *  types are volatile.  
+=======
+ *  types are volatile.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *
  *  @since 2.7
  */

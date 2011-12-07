@@ -14,7 +14,11 @@ package scala.ref
  */
 class WeakReference[+T <: AnyRef](value: T, queue: ReferenceQueue[T]) extends ReferenceWrapper[T] {
   def this(value: T) = this(value, null)
+<<<<<<< HEAD
   val underlying: java.lang.ref.WeakReference[_ <: T] = 
+=======
+  val underlying: java.lang.ref.WeakReference[_ <: T] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     new WeakReferenceWithWrapper[T](value, queue, this)
 }
 

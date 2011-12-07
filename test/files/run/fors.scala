@@ -76,10 +76,17 @@ object Test extends App {
     for {x <- it
          if x % 2 == 0} print(x + " "); println
     for (x <- it;
+<<<<<<< HEAD
          val y = 2
          if x % y == 0) print(x + " "); println
     for {x <- it
          val y = 2
+=======
+         y = 2
+         if x % y == 0) print(x + " "); println
+    for {x <- it
+         y = 2
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
          if x % y == 0} print(x + " "); println
 
     // arrays

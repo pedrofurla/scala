@@ -11,10 +11,17 @@ package settings
  */
 trait Warnings {
   self: MutableSettings =>
+<<<<<<< HEAD
   
   // Warning semantics.
   val fatalWarnings = BooleanSetting("-Xfatal-warnings", "Fail the compilation if there are any warnings.")
   
+=======
+
+  // Warning semantics.
+  val fatalWarnings = BooleanSetting("-Xfatal-warnings", "Fail the compilation if there are any warnings.")
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // These warnings are all so noisy as to be useless in their
   // present form, but have the potential to offer useful info.
   protected def allWarnings = lintWarnings ++ List(
@@ -50,9 +57,15 @@ trait Warnings {
   val warnNumericWiden     = BooleanSetting   ("-Ywarn-numeric-widen", "Warn when numerics are widened.")
   val warnNullaryUnit      = BooleanSetting   ("-Ywarn-nullary-unit", "Warn when nullary methods return Unit.")
   val warnInaccessible     = BooleanSetting   ("-Ywarn-inaccessible", "Warn about inaccessible types in method signatures.")
+<<<<<<< HEAD
   val warnNullaryOverride  = BooleanSetting   ("-Ywarn-nullary-override", 
     "Warn when non-nullary overrides nullary, e.g. `def foo()` over `def foo`.")  
   
+=======
+  val warnNullaryOverride  = BooleanSetting   ("-Ywarn-nullary-override",
+    "Warn when non-nullary overrides nullary, e.g. `def foo()` over `def foo`.")
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // Backward compatibility.
   def Xwarnfatal    = fatalWarnings
   def Xchecknull    = warnSelectNullable

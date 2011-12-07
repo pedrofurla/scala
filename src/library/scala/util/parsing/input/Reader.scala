@@ -23,7 +23,11 @@ abstract class Reader[+T] {
    *
    *  @throws [[java.lang.NoSuchMethodError]] if this not a char sequence reader.
    */
+<<<<<<< HEAD
   def source: java.lang.CharSequence = 
+=======
+  def source: java.lang.CharSequence =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     throw new NoSuchMethodError("not a char sequence reader")
 
   def offset: Int =
@@ -33,15 +37,26 @@ abstract class Reader[+T] {
     */
   def first: T
 
+<<<<<<< HEAD
   /** Returns an abstract reader consisting of all elements except the first 
    * 
+=======
+  /** Returns an abstract reader consisting of all elements except the first
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * @return If `atEnd` is `true`, the result will be `this';
    *         otherwise, it's a `Reader` containing more elements.
    */
   def rest: Reader[T]
+<<<<<<< HEAD
   
   /** Returns an abstract reader consisting of all elements except the first `n` elements.
    */ 
+=======
+
+  /** Returns an abstract reader consisting of all elements except the first `n` elements.
+   */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def drop(n: Int): Reader[T] = {
     var r: Reader[T] = this
     var cnt = n

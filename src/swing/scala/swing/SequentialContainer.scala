@@ -23,12 +23,20 @@ object SequentialContainer {
 }
 
 /**
+<<<<<<< HEAD
  * A container for which a sequential order of children makes sense, such as 
+=======
+ * A container for which a sequential order of children makes sense, such as
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * flow panels, or menus. Its contents are mutable.
  */
 trait SequentialContainer extends Container {
   /**
+<<<<<<< HEAD
    * The mutable child components of this container. The order matters and 
+=======
+   * The mutable child components of this container. The order matters and
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * usually indicates the layout of the children.
    */
   override def contents: Buffer[Component]

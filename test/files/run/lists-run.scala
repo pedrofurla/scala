@@ -25,7 +25,11 @@ object Test_multiset {
     assert(List(1, 2) == (ys intersect xs), "ys_intersect_xs")
     assert(List(1) == (xs diff ys), "xs_diff_ys")
     assert(List(2, 3) == (ys diff xs), "ys_diff_xs")
+<<<<<<< HEAD
     assert(isSubListOf(xs -- ys, xs diff ys), "xs_subset_ys")
+=======
+    assert(isSubListOf(xs filterNot (ys contains), xs diff ys), "xs_subset_ys")
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     val zs = List(0, 1, 1, 2, 2, 2)
     assert(List(0, 1, 1, 2, 2, 2, 1, 2, 2, 3) == (zs union ys), "zs_union_ys")
@@ -34,7 +38,11 @@ object Test_multiset {
     assert(List(1, 2, 2) == (ys intersect zs), "ys_intersect_zs")
     assert(List(0, 1, 2) == (zs diff ys), "zs_diff_ys")
     assert(List(3) == (ys diff zs), "ys_diff_zs")
+<<<<<<< HEAD
     assert(isSubListOf(zs -- ys, zs diff ys), "xs_subset_ys")
+=======
+    assert(isSubListOf(zs filterNot (ys contains), zs diff ys), "xs_subset_ys")
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     val ws = List(2)
     assert(List(2, 1, 2, 2, 3) == (ws union ys), "ws_union_ys")
@@ -43,7 +51,11 @@ object Test_multiset {
     assert(List(2) == (ys intersect ws), "ys_intersect_ws")
     assert(List() == (ws diff ys), "ws_diff_ys")
     assert(List(1, 2, 3) == (ys diff ws), "ys_diff_ws")
+<<<<<<< HEAD
     assert(isSubListOf(ws -- ys, ws diff ys), "ws_subset_ys")
+=======
+    assert(isSubListOf(ws filterNot (ys contains), ws diff ys), "ws_subset_ys")
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     val vs = List(3, 2, 2, 1)
     assert(List(1, 1, 2, 3, 2, 2, 1) == (xs union vs), "xs_union_vs")
@@ -52,11 +64,19 @@ object Test_multiset {
     assert(List(2, 1) == (vs intersect xs), "vs_intersect_xs")
     assert(List(1) == (xs diff vs), "xs_diff_vs")
     assert(List(3, 2) == (vs diff xs), "vs_diff_xs")
+<<<<<<< HEAD
     assert(isSubListOf(xs -- vs, xs diff vs), "xs_subset_vs")
 
     // tests adapted from Thomas Jung 
     assert({
         def sort(zs: List[Int]) = zs sort ( _ > _ )
+=======
+    assert(isSubListOf(xs filterNot (vs contains), xs diff vs), "xs_subset_vs")
+
+    // tests adapted from Thomas Jung 
+    assert({
+        def sort(zs: List[Int]) = zs sortWith ( _ > _ )
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         sort(xs intersect ys) == sort(ys intersect xs)
       }, "be symmetric after sorting")
     assert({
@@ -137,12 +157,20 @@ object Test2 {
     val ys1 = xs1 ::: List(4)
     assert(List(1, 2, 3, 4) == ys1, "check_:::")
 
+<<<<<<< HEAD
     val ys2 = ys1 - 4
+=======
+    val ys2 = ys1 filterNot (_ == 4)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     assert(xs1 == ys2, "check_-")
 
     val n2 = (xs1 ++ ys1).length
     val n3 = (xs1 ++ Nil).length
+<<<<<<< HEAD
     val n4 = (xs1 ++ ((new collection.mutable.ArrayBuffer[Int]) + 0)).length
+=======
+    val n4 = (xs1 ++ ((new collection.mutable.ArrayBuffer[Int]) += 0)).length
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     assert(14 == n2 + n3 + n4, "check_++")
   }
 }

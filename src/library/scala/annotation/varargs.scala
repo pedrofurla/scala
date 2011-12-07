@@ -7,7 +7,11 @@
 \*                                                                      */
 
 package scala.annotation
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 /** A method annotation which instructs the compiler to generate a
  *  Java varargs-style forwarder method for interop. This annotation can
  *  only be applied to methods with repeated parameters.

@@ -10,10 +10,17 @@ package scala.math
 
 import java.util.Comparator
 
+<<<<<<< HEAD
 /** A trait for representing equivalence relations.  It is important to 
  *  distinguish between a type that can be compared for equality or 
  *  equivalence and a representation of equivalence on some type. This 
  *  trait is for representing the latter.  
+=======
+/** A trait for representing equivalence relations.  It is important to
+ *  distinguish between a type that can be compared for equality or
+ *  equivalence and a representation of equivalence on some type. This
+ *  trait is for representing the latter.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *
  *  An [[http://en.wikipedia.org/wiki/Equivalence_relation equivalence relation]]
  *  is a binary relation on a type. This relation is exposed as

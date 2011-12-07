@@ -13,14 +13,22 @@ import scala.concurrent.SyncVar
 /**
  * Used to pattern match on values that were sent to some channel `Chan,,n,,`
  * by the current actor `self`.
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @example {{{
  *  receive {
  *    case Chan1 ! msg1 => ...
  *    case Chan2 ! msg2 => ...
  *  }
  *  }}}
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * @author Philipp Haller
  */
 case class ! [a](ch: Channel[a], msg: a)

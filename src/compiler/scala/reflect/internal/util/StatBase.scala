@@ -17,6 +17,7 @@ class StatBase {
       val total2 = System.nanoTime() - start
       println("Enabling statistics, measuring overhead = "+
               total/10000.0+"ns to "+total2/10000.0+"ns per timer")
+<<<<<<< HEAD
       _enabled = true 
     }
   }
@@ -25,6 +26,16 @@ class StatBase {
     if (_enabled) System.nanoTime() else 0L
 
   def showPercent(x: Double, base: Double) = 
+=======
+      _enabled = true
+    }
+  }
+
+  def currentTime() =
+    if (_enabled) System.nanoTime() else 0L
+
+  def showPercent(x: Double, base: Double) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (base == 0) "" else " ("+"%2.1f".format(x / base * 100)+"%)"
 
   def incCounter(c: Counter) {
@@ -32,7 +43,11 @@ class StatBase {
   }
 
   def incCounter(c: Counter, delta: Int) {
+<<<<<<< HEAD
     if (_enabled) c.value += delta 
+=======
+    if (_enabled) c.value += delta
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   }
 
   def startCounter(sc: SubCounter): IntPair =
@@ -42,7 +57,11 @@ class StatBase {
     if (_enabled) sc.stop(start)
   }
 
+<<<<<<< HEAD
   def startTimer(tm: Timer): LongPair = 
+=======
+  def startTimer(tm: Timer): LongPair =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (_enabled) tm.start() else null
 
   def stopTimer(tm: Timer, start: LongPair) {
@@ -67,17 +86,28 @@ class StatBase {
         value = value0 + c.value - cvalue0
       }
     }
+<<<<<<< HEAD
     override def toString = 
+=======
+    override def toString =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       value+showPercent(value, c.value)
   }
 
   class Timer {
     var nanos: Long = 0
     var timings = 0
+<<<<<<< HEAD
     def start(): LongPair = 
       if (_enabled) {
         timings += 1
         LongPair(nanos, System.nanoTime()) 
+=======
+    def start(): LongPair =
+      if (_enabled) {
+        timings += 1
+        LongPair(nanos, System.nanoTime())
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       } else null
     def stop(prev: LongPair) {
       if (_enabled) {
@@ -88,7 +118,11 @@ class StatBase {
     }
     override def toString = (timings/2)+" spans, "+nanos.toString+"ns"
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   import Predef.Class
 
   class ClassCounts extends scala.collection.mutable.HashMap[Class[_], Int] {

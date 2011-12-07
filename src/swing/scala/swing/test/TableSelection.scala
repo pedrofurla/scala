@@ -10,20 +10,34 @@ object TableSelection extends SimpleSwingApplication {
                     List("Kathy", "Walrath", "Knitting", 5, false).toArray,
                     List("Sharon", "Zakhour", "Speed reading", 5, false).toArray,
                     List("Philip", "Milne", "Pool", 5, false).toArray)
+<<<<<<< HEAD
   /*val model = Array.tabulate(10000) { i => 
     List("Mary", "Campione", "Snowboarding", i, false).toArray                
   }*/
   
+=======
+  /*val model = Array.tabulate(10000) { i =>
+    List("Mary", "Campione", "Snowboarding", i, false).toArray
+  }*/
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   lazy val ui = new BoxPanel(Orientation.Vertical) {
     val table = new Table(model, Array("First Name", "Last Name", "Sport", "# of Years", "Vegetarian")) {
       preferredViewportSize = new Dimension(500, 70)
     }
     //1.6:table.fillsViewportHeight = true
     listenTo(table.selection)
+<<<<<<< HEAD
       
     contents += new ScrollPane(table)
     contents += new Label("Selection Mode")
       
+=======
+
+    contents += new ScrollPane(table)
+    contents += new Label("Selection Mode")
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def radio(mutex: ButtonGroup, text: String): RadioButton = {
       val b = new RadioButton(text)
       listenTo(b)
@@ -31,25 +45,42 @@ object TableSelection extends SimpleSwingApplication {
       contents += b
       b
     }
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val intervalMutex = new ButtonGroup
     val multiInterval = radio(intervalMutex, "Multiple Interval Selection")
     val elementInterval = radio(intervalMutex, "Single Selection")
     val singleInterval = radio(intervalMutex, "Single Interval Selection")
     intervalMutex.select(multiInterval)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     contents += new Label("Selection Options")
     val elemMutex = new ButtonGroup
     val rowSelection = radio(elemMutex, "Row Selection")
     val columnSelection = radio(elemMutex, "Column Selection")
     val cellSelection = radio(elemMutex, "Cell Selection")
     elemMutex.select(rowSelection)
+<<<<<<< HEAD
             
     val output = new TextArea(5, 40) { editable = false }
     contents += new ScrollPane(output)
       
     def outputSelection() {
       output.append("Lead: " + table.selection.rows.leadIndex + "," + 
+=======
+
+    val output = new TextArea(5, 40) { editable = false }
+    contents += new ScrollPane(output)
+
+    def outputSelection() {
+      output.append("Lead: " + table.selection.rows.leadIndex + "," +
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           table.selection.columns.leadIndex + ". ")
       output.append("Rows:")
       for (c <- table.selection.rows) output.append(" " + c)
@@ -57,9 +88,15 @@ object TableSelection extends SimpleSwingApplication {
       for (c <- table.selection.columns) output.append(" " + c)
       output.append(".\n")
     }
+<<<<<<< HEAD
       
     reactions += {
       case ButtonClicked(`multiInterval`) => 
+=======
+
+    reactions += {
+      case ButtonClicked(`multiInterval`) =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         table.selection.intervalMode = Table.IntervalMode.MultiInterval
         if (cellSelection.selected) {
           elemMutex.select(rowSelection)
@@ -72,6 +109,7 @@ object TableSelection extends SimpleSwingApplication {
       case ButtonClicked(`singleInterval`) =>
         table.selection.intervalMode = Table.IntervalMode.SingleInterval
         cellSelection.enabled = true
+<<<<<<< HEAD
       case ButtonClicked(`rowSelection`) => 
         if (rowSelection.selected) 
           table.selection.elementMode = Table.ElementMode.Row
@@ -85,11 +123,30 @@ object TableSelection extends SimpleSwingApplication {
         output.append("Rows selected, changes: " + range + "\n")
         outputSelection()
       case TableColumnsSelected(_, range, false) => 
+=======
+      case ButtonClicked(`rowSelection`) =>
+        if (rowSelection.selected)
+          table.selection.elementMode = Table.ElementMode.Row
+      case ButtonClicked(`columnSelection`) =>
+        if (columnSelection.selected)
+          table.selection.elementMode = Table.ElementMode.Column
+      case ButtonClicked(`cellSelection`) =>
+        if (cellSelection.selected)
+          table.selection.elementMode = Table.ElementMode.Cell
+      case TableRowsSelected(_, range, false) =>
+        output.append("Rows selected, changes: " + range + "\n")
+        outputSelection()
+      case TableColumnsSelected(_, range, false) =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         output.append("Columns selected, changes " + range + "\n")
         outputSelection()
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def top = new MainFrame {
     title = "Table Selection"
     contents = ui

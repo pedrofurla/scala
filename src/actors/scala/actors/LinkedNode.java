@@ -16,7 +16,11 @@
 package scala.actors;
 
 /** A standard linked list node used in various queue classes **/
+<<<<<<< HEAD
 public class LinkedNode { 
+=======
+public class LinkedNode {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   public Object value;
   public LinkedNode next;
   public LinkedNode() {}

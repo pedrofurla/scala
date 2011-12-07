@@ -80,8 +80,13 @@ class Main {
     syms foreach (printer printSymbol _)
     baos.toString
   }
+<<<<<<< HEAD
   
   def decompileScala(bytes: Array[Byte], isPackageObject: Boolean): String = {    
+=======
+
+  def decompileScala(bytes: Array[Byte], isPackageObject: Boolean): String = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val byteCode = ByteCode(bytes)
     val classFile = ClassFileParser.parse(byteCode)
 
@@ -171,17 +176,29 @@ object Main extends Main {
       Console.println(versionMsg)
     if (arguments contains "-help")
       usage()
+<<<<<<< HEAD
       
     verbose       = arguments contains "-verbose"
     printPrivates = arguments contains "-private"
     // construct a custom class path
     val cparg = List("-classpath", "-cp") map (arguments getArgument _) reduceLeft (_ orElse _) 
+=======
+
+    verbose       = arguments contains "-verbose"
+    printPrivates = arguments contains "-private"
+    // construct a custom class path
+    val cparg = List("-classpath", "-cp") map (arguments getArgument _) reduceLeft (_ orElse _)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val path = cparg match {
       case Some(cp) => new JavaClassPath(DefaultJavaContext.classesInExpandedPath(cp), DefaultJavaContext)
       case _        => PathResolver.fromPathString("")
     }
     // print the classpath if output is verbose
+<<<<<<< HEAD
     if (verbose) 
+=======
+    if (verbose)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       Console.println(Console.BOLD + "CLASSPATH" + Console.RESET + " = " + path)
 
     // process all given classes

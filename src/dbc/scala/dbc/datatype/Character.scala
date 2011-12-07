@@ -16,7 +16,11 @@ package datatype;
  *  arbitrary character set.
  */
 @deprecated(DbcIsDeprecated, "2.9.0") abstract class Character extends CharacterString {
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def isEquivalent(datatype: DataType) = datatype match {
     case dt: Character =>
       length == dt.length && encoding == dt.encoding

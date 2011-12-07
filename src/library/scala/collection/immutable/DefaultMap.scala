@@ -18,11 +18,16 @@ import generic._
  *  maps defined in the `Map` object.
  *  Instances that inherit from `DefaultMap[A, B]` still have to
  *  define:
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  {{{
  *    def get(key: A): Option[B]
  *    def iterator: Iterator[(A, B)]
  *  }}}
+<<<<<<< HEAD
  *  
  *  It refers back to the original map.
  *  
@@ -32,6 +37,17 @@ import generic._
  *  @tparam A    the type of the keys contained in this map.
  *  @tparam B    the type of the values associated with the keys.
  *  
+=======
+ *
+ *  It refers back to the original map.
+ *
+ *  It might also be advisable to override `foreach` or
+ *  `size` if efficient implementations can be found.
+ *
+ *  @tparam A    the type of the keys contained in this map.
+ *  @tparam B    the type of the values associated with the keys.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @since 2.8
  */
 trait DefaultMap[A, +B] extends Map[A, B] { self =>

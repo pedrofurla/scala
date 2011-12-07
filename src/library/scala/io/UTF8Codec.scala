@@ -13,11 +13,18 @@ package scala.io
  *  @author  Martin Odersky
  *  @version 1.0, 04/10/2004
  */
+<<<<<<< HEAD
 object UTF8Codec
 {
   final val UNI_REPLACEMENT_CHAR: Int = 0x0000FFFD
   final val UNI_REPLACEMENT_BYTES = Array[Byte](-17, -65, -67)
   
+=======
+object UTF8Codec {
+  final val UNI_REPLACEMENT_CHAR: Int = 0x0000FFFD
+  final val UNI_REPLACEMENT_BYTES = Array[Byte](-17, -65, -67)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // Note, from http://unicode.org/faq/utf_bom.html#utf8-5
   //
   // A different issue arises if an unpaired surrogate is encountered when converting
@@ -29,6 +36,7 @@ object UTF8Codec
   //
   // Some useful locations:
   //    http://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-test.txt
+<<<<<<< HEAD
 
   @deprecated("""Use new String(Array(ch), 0, 1).getBytes("UTF-8") instead""", "2.8.0")
   def encode(ch: Int): Array[Byte] =
@@ -61,4 +69,6 @@ object UTF8Codec
   @deprecated("Use Codec.fromUTF8 instead", "2.8.0")
   def decode(src: Array[Byte], from: Int, len: Int): String =
     Codec fromUTF8 src.slice(from, from + len) mkString
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

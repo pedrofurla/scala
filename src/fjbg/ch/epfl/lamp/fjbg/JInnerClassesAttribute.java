@@ -19,7 +19,11 @@ import java.util.Map;
  * InnerClasses attribute in its attributes table if the constant pool of C
  * contains a CONSTANT_Class_info entry which represents a class or interface
  * that is not a member of a package. See section 4.8.5 of the JVM Specification.
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * @author Iulian Dragos, Stephane Micheloud
  * @version 1.1
  */
@@ -140,13 +144,18 @@ public class JInnerClassesAttribute extends JAttribute {
 
         /** Short int for modifier flags. */
         int innerFlags;
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         public Entry(int iI, int oI, int oN, int f) {
             this.innerInfo = iI;
             this.outerInfo = oI;
             this.originalName = oN;
             this.innerFlags = f;
         }
+<<<<<<< HEAD
         
         public Entry(String innerClass, String outerClass, String name, int flags) {
             this(pool.addClass(innerClass), pool.addClass(outerClass), pool.addUtf8(name), flags);
@@ -154,6 +163,15 @@ public class JInnerClassesAttribute extends JAttribute {
         
         /** Two entries are equal if they refer to the same inner class.
          *  innerInfo represents a unique name (mangled). 
+=======
+
+        public Entry(String innerClass, String outerClass, String name, int flags) {
+            this(pool.addClass(innerClass), pool.addClass(outerClass), pool.addUtf8(name), flags);
+        }
+
+        /** Two entries are equal if they refer to the same inner class.
+         *  innerInfo represents a unique name (mangled).
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
          */
         public boolean equals(Object other) {
             if (other instanceof Entry) {

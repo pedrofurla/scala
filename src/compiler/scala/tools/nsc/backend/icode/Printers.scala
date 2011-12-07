@@ -3,13 +3,19 @@
  * @author  Martin Odersky
  */
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 package scala.tools.nsc
 package backend
 package icode
 
 import java.io.PrintWriter
+<<<<<<< HEAD
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 import scala.tools.nsc.symtab.Flags
 import scala.tools.nsc.util.Position
 
@@ -23,7 +29,11 @@ trait Printers { self: ICodes =>
     private var out = writer
 
     final val TAB = 2
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def setWriter(w: PrintWriter) { out = w }
 
     def indent() { margin += TAB }
@@ -72,12 +82,20 @@ trait Printers { self: ICodes =>
 
     def printField(f: IField) {
       print(f.symbol.keyString); print(" ");
+<<<<<<< HEAD
       print(f.symbol.nameString); print(": "); 
+=======
+      print(f.symbol.nameString); print(": ");
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       println(f.symbol.info.toString());
     }
 
     def printMethod(m: IMethod) {
+<<<<<<< HEAD
       print("def "); print(m.symbol.name); 
+=======
+      print("def "); print(m.symbol.name);
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       print("("); printList(printParam)(m.params, ", "); print(")");
       print(": "); print(m.symbol.info.resultType)
 
@@ -89,7 +107,11 @@ trait Printers { self: ICodes =>
         println
         lin.linearize(m) foreach printBlock
         println("}")
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         indent; println("Exception handlers: ")
         m.exh foreach printExceptionHandler
 
@@ -105,7 +127,11 @@ trait Printers { self: ICodes =>
 
     def printExceptionHandler(e: ExceptionHandler) {
       indent;
+<<<<<<< HEAD
       println("catch (" + e.cls.simpleName + ") in " + e.covered + " starting at: " + e.startBlock);
+=======
+      println("catch (" + e.cls.simpleName + ") in " + e.covered.toSeq.sortBy(_.label) + " starting at: " + e.startBlock);
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       println("consisting of blocks: " + e.blocks);
       undent;
       println("with finalizer: " + e.finalizer);

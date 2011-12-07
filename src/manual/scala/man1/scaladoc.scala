@@ -1,11 +1,23 @@
 /* NSC -- new Scala compiler
+<<<<<<< HEAD
  * Copyright LAMP/EPFL
  * @author Stephane Micheloud
  * @author Gilles Dubochet
+=======
+ * Copyright 2005-2011 LAMP/EPFL
+ * @author Stephane Micheloud
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  */
 
 package scala.man1
 
+<<<<<<< HEAD
+=======
+/**
+ *  @author Gilles Dubochet
+ *  @version 1.0
+ */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 object scaladoc extends Command {
   import _root_.scala.tools.docutil.ManPage._
 
@@ -126,7 +138,11 @@ object scaladoc extends Command {
     "the specified input files. Non zero is returned in case of failure.")
 
   override val authors = Section("AUTHORS",
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     "This version of Scaladoc was written by Gilles Dubochet with contributions by Pedro Furlanetto and Johannes Rudolph. " &
     "It is based on the original Scaladoc (Sean McDirmid, Geoffrey Washburn, Vincent Cremet and Stéphane Micheloud), " &
     "on vScaladoc (David Bernard), as well as on an unreleased version of Scaladoc 2 (Manohar Jonnalagedda).")
@@ -141,7 +157,11 @@ object scaladoc extends Command {
 
   def manpage = new Document {
     title = command
+<<<<<<< HEAD
     date = "2 June 2010"
+=======
+    date = "June 2010"
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     author = "Gilles Dubochet"
     version = "2.0"
     sections = List(

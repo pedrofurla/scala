@@ -23,6 +23,7 @@ object UIElement {
   }
 
   /**
+<<<<<<< HEAD
    * Looks up the internal component cache for a wrapper of the given 
    * Java Swing peer. If this method finds one of the given type `C`, 
    * it will return that wrapper. Otherwise it returns `null`. This 
@@ -31,6 +32,16 @@ object UIElement {
    * Clients should be extremely careful with type parameter `C` and 
    * its interaction with type inference. Better err on the side of caution 
    * and explicitly specify `C`.  
+=======
+   * Looks up the internal component cache for a wrapper of the given
+   * Java Swing peer. If this method finds one of the given type `C`,
+   * it will return that wrapper. Otherwise it returns `null`. This
+   * method never throws an exception.
+   *
+   * Clients should be extremely careful with type parameter `C` and
+   * its interaction with type inference. Better err on the side of caution
+   * and explicitly specify `C`.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */
   private[swing] def cachedWrapper[C>:Null<:UIElement](c: java.awt.Component): C = {
     val w = c match {
@@ -41,20 +52,31 @@ object UIElement {
   }
 
   /**
+<<<<<<< HEAD
    * Returns a wrapper for a given Java Swing peer. If there is a 
    * compatible wrapper in use, this method will return it.
    * 
+=======
+   * Returns a wrapper for a given Java Swing peer. If there is a
+   * compatible wrapper in use, this method will return it.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * `wrap` methods in companion objects of subclasses of `UIElement` have
    * the  same behavior, except that they return more specific wrappers.
    */
   def wrap(c: java.awt.Component): UIElement = {
     val w = cachedWrapper[UIElement](c)
+<<<<<<< HEAD
     if (w != null) w 
+=======
+    if (w != null) w
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     else new UIElement { def peer = c }
   }
 }
 
 /**
+<<<<<<< HEAD
  * The base trait of all user interface elements. Subclasses belong to one 
  * of two groups: top-level elements such as windows and dialogs, or 
  * `Component`s.
@@ -66,6 +88,19 @@ object UIElement {
  * @note [Implementation] A UIElement automatically adds itself to the 
  * component cache on creation.
  * 
+=======
+ * The base trait of all user interface elements. Subclasses belong to one
+ * of two groups: top-level elements such as windows and dialogs, or
+ * `Component`s.
+ *
+ * @note [Java Swing] This trait does not have an exact counterpart in
+ * Java Swing. The peer is of type java.awt.Component since this is the
+ * least common upper bound of possible underlying peers.
+ *
+ * @note [Implementation] A UIElement automatically adds itself to the
+ * component cache on creation.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * @see java.awt.Component
  */
 trait UIElement extends Proxy with LazyPublisher {
@@ -96,9 +131,12 @@ trait UIElement extends Proxy with LazyPublisher {
   def location = peer.getLocation
   def bounds = peer.getBounds
   def size = peer.getSize
+<<<<<<< HEAD
   @deprecated("Explicit size assignment for UIElements is not supported anymore. " +
   		"Use a layout manager or subclass Window.", "2.8.0")
   def size_=(dim: Dimension) = peer.setSize(dim)
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   def locale = peer.getLocale
   def toolkit = peer.getToolkit
@@ -118,6 +156,7 @@ trait UIElement extends Proxy with LazyPublisher {
 
   protected def onFirstSubscribe() {
     peer.addComponentListener(new java.awt.event.ComponentListener {
+<<<<<<< HEAD
       def componentHidden(e: java.awt.event.ComponentEvent) { 
         publish(UIElementHidden(UIElement.this)) 
       }
@@ -129,6 +168,19 @@ trait UIElement extends Proxy with LazyPublisher {
       }
       def componentResized(e: java.awt.event.ComponentEvent) { 
         publish(UIElementResized(UIElement.this)) 
+=======
+      def componentHidden(e: java.awt.event.ComponentEvent) {
+        publish(UIElementHidden(UIElement.this))
+      }
+      def componentShown(e: java.awt.event.ComponentEvent) {
+        publish(UIElementShown(UIElement.this))
+      }
+      def componentMoved(e: java.awt.event.ComponentEvent) {
+        publish(UIElementMoved(UIElement.this))
+      }
+      def componentResized(e: java.awt.event.ComponentEvent) {
+        publish(UIElementResized(UIElement.this))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       }
     })
   }

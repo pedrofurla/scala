@@ -15,10 +15,17 @@ import annotation.migration
 
 /** This class should be used as a mixin. It synchronizes the `Map`
  *  functions of the class into which it is mixed in.
+<<<<<<< HEAD
  *  
  *  @tparam A     type of the keys contained in this map.
  *  @tparam B     type of the values associated with keys.
  *  
+=======
+ *
+ *  @tparam A     type of the keys contained in this map.
+ *  @tparam B     type of the values associated with keys.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author  Matthias Zenger, Martin Odersky
  *  @version 2.0, 31/12/2006
  *  @since   1
@@ -58,6 +65,10 @@ trait SynchronizedMap[A, B] extends Map[A, B] {
   // can't override -, -- same type!
   // @deprecated override def -(key: A): Self = synchronized { super.-(key) }
 
+<<<<<<< HEAD
   // !!! todo: also add all other methods 
+=======
+  // !!! todo: also add all other methods
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 

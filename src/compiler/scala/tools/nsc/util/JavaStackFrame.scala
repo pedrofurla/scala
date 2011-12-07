@@ -15,7 +15,11 @@ class FrameContext(frame: JavaStackFrame, codeSources: Sources) {
 
   def windowWidth = 3
   def windowSize = windowWidth * 2 + 1
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   lazy val context = sourceFile collect {
     case f if line > 0 =>
       val start = math.max(0, line - windowWidth)
@@ -23,7 +27,11 @@ class FrameContext(frame: JavaStackFrame, codeSources: Sources) {
   } getOrElse Nil
 
   protected def fallbackContext = "%s (%s:%s)".format(tag, fileName, line)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def linestr(index: Int) = {
     val current = line - windowWidth + index
     val marker  = if (current == line) "*" else " "
@@ -47,20 +55,35 @@ class JavaStackFrame(val elem: StackTraceElement) {
   def methodName: String = elem.getMethodName()
   def fileName: String   = elem.getFileName()
   def line: Int          = elem.getLineNumber()
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def segs = className takeWhile (ch => ch != '$' && ch != '(') split '.' toList ;
   lazy val pkgName      = segs.init mkString "."
   lazy val shortName    = segs.last
   lazy val shortestName = if (fileName startsWith (shortName + ".")) "<--" else shortName
+<<<<<<< HEAD
   
   private def standardString(which: String) =
     "%s.%s(%s:%s)".format(which, methodName, fileName, line)
   
+=======
+
+  private def standardString(which: String) =
+    "%s.%s(%s:%s)".format(which, methodName, fileName, line)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def locationString  = fileName + ":" + line
   def javaString      = standardString(className)
   def shortNameString = standardString(shortName)
   def tag             = "[%s.%s]".format(shortName, methodName)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def toString = shortNameString
 }
 

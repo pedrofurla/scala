@@ -6,8 +6,11 @@
 package scala.tools.nsc
 package plugins
 
+<<<<<<< HEAD
 import java.io.File
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 import scala.xml.{Node,NodeSeq}
 
 /** A description of a compiler plugin, suitable for serialization
@@ -29,7 +32,11 @@ abstract class PluginDescription {
 
   /** An XML representation of this description.  It can be
    *  read back using <code>PluginDescription.fromXML</code>.
+<<<<<<< HEAD
    *  It should be stored inside the jar.
+=======
+   *  It should be stored inside the jar archive file.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */
   def toXML: Node = {
     <plugin>
@@ -39,21 +46,32 @@ abstract class PluginDescription {
   }
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 /** Utilities for the PluginDescription class.
  *
  *  @author Lex Spoon
  *  @version 1.0, 2007-5-21
  */
 object PluginDescription {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def fromXML(xml: Node): Option[PluginDescription] = {
     // check the top-level tag
     xml match {
       case <plugin>{_*}</plugin>  => ()
       case _ => return None
     }
+<<<<<<< HEAD
 
     /** Extract one field */
+=======
+    // extract one field
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def getField(field: String): Option[String] = {
       val text = (xml \\ field).text.trim
       if (text == "") None else Some(text)
@@ -74,4 +92,8 @@ object PluginDescription {
       val classname = classname1
     })
   }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

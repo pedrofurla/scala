@@ -11,7 +11,11 @@ package util
  *  the compiler without creating a dependency on any particular
  *  profiler.  You can specify a profiler class (which must be an
  *  instance of this class) like so:
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *    // or -Yprofile:phase to profile individual phases
  *    scalac -Yprofile-class your.profiler.Class -Yprofile:all <files>
  *
@@ -20,12 +24,20 @@ abstract class Profiling {
   def isActive: Boolean
   def startProfiling(): Unit
   def stopProfiling(): Unit
+<<<<<<< HEAD
   def captureSnapshot(): Unit  
+=======
+  def captureSnapshot(): Unit
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   def allocationFreq: Option[Int] // record every Nth allocation
   def startRecordingAllocations(): Unit
   def stopRecordingAllocations(): Unit
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def profile[T](body: => T): T = profileCPU(body)
 
   def profileCPU[T](body: => T): T = {
@@ -35,16 +47,26 @@ abstract class Profiling {
     captureSnapshot()
     result
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def profileMem[T](body: => T): T = {
     startRecordingAllocations()
     val result = body
     stopRecordingAllocations()
     result
   }
+<<<<<<< HEAD
   
   /** Advance the current object generation.
    * 
+=======
+
+  /** Advance the current object generation.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  Each object on the heap is associated to a generation number. Generations
    *  start at 1, and are automatically advanced on each snapshot capture.
    */

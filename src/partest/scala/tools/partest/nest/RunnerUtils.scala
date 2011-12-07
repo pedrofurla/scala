@@ -10,7 +10,11 @@ package nest
 
 object RunnerUtils {
   def splitArgs(str: String) = str split "\\s" filterNot (_ == "") toList
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def searchPath(option: String, as: List[String]): Option[String] = as match {
     case `option` :: r :: _ => Some(r)
     case _ :: rest          => searchPath(option, rest)

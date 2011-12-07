@@ -29,10 +29,17 @@ trait BuildManager {
 
   /** Notification that the supplied set of files is being built */
   def buildingFiles(included: Set[AbstractFile]) {}
+<<<<<<< HEAD
   
   /** Load saved dependency information. */
   def loadFrom(file: AbstractFile, toFile: String => AbstractFile) : Boolean
   
+=======
+
+  /** Load saved dependency information. */
+  def loadFrom(file: AbstractFile, toFile: String => AbstractFile) : Boolean
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Save dependency information to `file`. */
   def saveTo(file: AbstractFile, fromFile: AbstractFile => String)
 

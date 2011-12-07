@@ -28,7 +28,11 @@ class SourceReader(decoder: CharsetDecoder, reporter: Reporter) {
   private var chars: CharBuffer = CharBuffer.allocate(0x4000)
 
   private def reportEncodingError(filename:String) = {
+<<<<<<< HEAD
     reporter.error(util.NoPosition, 
+=======
+    reporter.error(util.NoPosition,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                    "IO error while decoding "+filename+" with "+decoder.charset()+"\n"+
                    "Please try specifying another one using the -encoding option")
   }
@@ -64,7 +68,11 @@ class SourceReader(decoder: CharsetDecoder, reporter: Reporter) {
     val bytes: ByteBuffer       = this.bytes; bytes.clear()
     var chars: CharBuffer       = this.chars; chars.clear()
     var endOfInput              = false
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     while (!endOfInput ) {
       endOfInput = input.read(bytes) < 0
       bytes.flip()

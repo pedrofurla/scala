@@ -17,7 +17,11 @@ private[actors] class MQueue[Msg >: Null](protected val label: String) {
   protected var first: MQueueElement[Msg] = null
   protected var last: MQueueElement[Msg] = null  // last eq null iff list is empty
   private var _size = 0
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def size = _size
   final def isEmpty = last eq null
 
@@ -31,7 +35,11 @@ private[actors] class MQueue[Msg >: Null](protected val label: String) {
 
     if (isEmpty) first = el
     else last.next = el
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     last = el
   }
 
@@ -40,7 +48,11 @@ private[actors] class MQueue[Msg >: Null](protected val label: String) {
 
     if (isEmpty) first = el
     else last.next = el
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     last = el
   }
 
@@ -86,10 +98,17 @@ private[actors] class MQueue[Msg >: Null](protected val label: String) {
    */
   def get(n: Int)(p: Msg => Boolean): Option[Msg] = {
     var pos = 0
+<<<<<<< HEAD
     
     def test(msg: Msg): Boolean =
       p(msg) && (pos == n || { pos += 1; false })
       
+=======
+
+    def test(msg: Msg): Boolean =
+      p(msg) && (pos == n || { pos += 1; false })
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     var curr = first
     while (curr != null)
       if (test(curr.msg)) return Some(curr.msg) // early return
@@ -102,7 +121,11 @@ private[actors] class MQueue[Msg >: Null](protected val label: String) {
    */
   def remove(n: Int)(p: (Msg, OutputChannel[Any]) => Boolean): Option[(Msg, OutputChannel[Any])] =
     removeInternal(n)(p) map (x => (x.msg, x.session))
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Extracts the first message that satisfies the predicate `p`
    *  or `'''null'''` if `p` fails for all of them.
    */
@@ -112,21 +135,33 @@ private[actors] class MQueue[Msg >: Null](protected val label: String) {
   def extractFirst(pf: PartialFunction[Msg, Any]): MQueueElement[Msg] = {
     if (isEmpty)    // early return
       return null
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // special handling if returning the head
     if (pf.isDefinedAt(first.msg)) {
       val res = first
       first = first.next
       if (res eq last)
         last = null
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       changeSize(-1)
       res
     }
     else {
       var curr = first.next   // init to element #2
       var prev = first
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       while (curr != null) {
         if (pf.isDefinedAt(curr.msg)) {
           prev.next = curr.next
@@ -149,7 +184,11 @@ private[actors] class MQueue[Msg >: Null](protected val label: String) {
   private def removeInternal(n: Int)(p: (Msg, OutputChannel[Any]) => Boolean): Option[MQueueElement[Msg]] = {
     var pos = 0
 
+<<<<<<< HEAD
     def foundMsg(x: MQueueElement[Msg]) = {        
+=======
+    def foundMsg(x: MQueueElement[Msg]) = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       changeSize(-1)
       Some(x)
     }
@@ -158,26 +197,42 @@ private[actors] class MQueue[Msg >: Null](protected val label: String) {
 
     if (isEmpty)    // early return
       return None
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // special handling if returning the head
     if (test(first.msg, first.session)) {
       val res = first
       first = first.next
       if (res eq last)
         last = null
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       foundMsg(res)
     }
     else {
       var curr = first.next   // init to element #2
       var prev = first
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       while (curr != null) {
         if (test(curr.msg, curr.session)) {
           prev.next = curr.next
           if (curr eq last)
             last = prev
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           return foundMsg(curr) // early return
         }
         else {
@@ -216,7 +271,11 @@ private[actors] trait MessageQueueTracer extends MQueue[Any]
     printQueue("EXTRACT_FIRST %s" format res)
     res
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def printQueue(msg: String) = {
     def firstMsg = if (first eq null) "null" else first.msg
     def lastMsg = if (last eq null) "null" else last.msg

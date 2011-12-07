@@ -37,6 +37,7 @@ object Scheduler extends DelegatingScheduler {
     Debug.info(this+": starting new "+sched+" ["+sched.getClass+"]")
     sched
   }
+<<<<<<< HEAD
 
   /* Only `ForkJoinScheduler` implements this method.
    */
@@ -58,4 +59,6 @@ object Scheduler extends DelegatingScheduler {
       sys.error("scheduler does not implement restart")
   }
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

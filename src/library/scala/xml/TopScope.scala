@@ -10,6 +10,7 @@
 package scala.xml
 
 /** top level namespace scope. only contains the predefined binding
+<<<<<<< HEAD
  *  for the &quot;xml&quot; prefix which is bound to 
  *  &quot;http://www.w3.org/XML/1998/namespace&quot;
  */
@@ -17,6 +18,15 @@ object TopScope extends NamespaceBinding(null, null, null)
 {
   import XML.{ xml, namespace }
   
+=======
+ *  for the &quot;xml&quot; prefix which is bound to
+ *  &quot;http://www.w3.org/XML/1998/namespace&quot;
+ */
+object TopScope extends NamespaceBinding(null, null, null) {
+
+  import XML.{ xml, namespace }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def getURI(prefix1: String): String =
     if (prefix1 == xml) namespace else null
 
@@ -24,6 +34,10 @@ object TopScope extends NamespaceBinding(null, null, null)
     if (uri1 == namespace) xml else null
 
   override def toString() = ""
+<<<<<<< HEAD
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def buildString(stop: NamespaceBinding) = ""
   override def buildString(sb: StringBuilder, ignore: NamespaceBinding) = {}
 }

@@ -39,6 +39,10 @@ trait ProcessLogger {
   def buffer[T](f: => T): T
 }
 
+<<<<<<< HEAD
+=======
+/** A [[scala.sys.process.ProcessLogger]] that writes output to a file. */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 class FileProcessLogger(file: File) extends ProcessLogger with Closeable with Flushable {
   private val writer = (
     new PrintWriter(
@@ -56,9 +60,32 @@ class FileProcessLogger(file: File) extends ProcessLogger with Closeable with Fl
   def flush(): Unit = writer.flush()
 }
 
+<<<<<<< HEAD
 object ProcessLogger {  
   def apply(file: File): FileProcessLogger = new FileProcessLogger(file)
   def apply(fn: String => Unit): ProcessLogger = apply(fn, fn)
+=======
+/** Provides factories to create [[scala.sys.process.ProcessLogger]], which
+ *  are used to capture output of [[scala.sys.process.ProcessBuilder]] commands
+ *  when run.
+ */
+object ProcessLogger {
+  /** Creates a [[scala.sys.process.ProcessLogger]] that redirects output to a `java.io.File`. */
+  def apply(file: File): FileProcessLogger = new FileProcessLogger(file)
+
+  /** Creates a [[scala.sys.process.ProcessLogger]] that sends all output, standard and error,
+   *  to the passed function.
+   */
+  def apply(fn: String => Unit): ProcessLogger = apply(fn, fn)
+
+  /** Creates a [[scala.sys.process.ProcessLogger]] that sends all output to the corresponding
+   *  function.
+   *
+   *  @param fout  This function will receive standard outpout.
+   *
+   *  @param ferr  This function will receive standard error.
+   */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def apply(fout: String => Unit, ferr: String => Unit): ProcessLogger =
     new ProcessLogger {
       def out(s: => String): Unit = fout(s)

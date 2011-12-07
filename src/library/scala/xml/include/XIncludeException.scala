@@ -12,7 +12,11 @@ package include
 /**
  * `XIncludeException` is the generic superclass for all checked exceptions
  * that may be thrown as a result of a violation of XInclude's rules.
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * Constructs an `XIncludeException` with the specified detail message.
  * The error message string `message` can later be retrieved by the
  * `{@link java.lang.Throwable#getMessage}`
@@ -32,10 +36,17 @@ class XIncludeException(message: String) extends Exception(message) {
   /**
    * When an `IOException`, `MalformedURLException` or other generic
    * exception is thrown while processing an XML document for XIncludes,
+<<<<<<< HEAD
    * it is customarily replaced by some form of `XIncludeException`.  
    * This method allows you to store the original exception.
    *
    * @param   nestedException   the underlying exception which 
+=======
+   * it is customarily replaced by some form of `XIncludeException`.
+   * This method allows you to store the original exception.
+   *
+   * @param   nestedException   the underlying exception which
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * caused the XIncludeException to be thrown
    */
   def setRootCause(nestedException: Throwable ) {
@@ -45,7 +56,11 @@ class XIncludeException(message: String) extends Exception(message) {
   /**
    * When an `IOException`, `MalformedURLException` or other generic
    * exception is thrown while processing an XML document for XIncludes,
+<<<<<<< HEAD
    * it is customarily replaced by some form of `XIncludeException`.  
+=======
+   * it is customarily replaced by some form of `XIncludeException`.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * This method allows you to retrieve the original exception.
    * It returns null if no such exception caused this `XIncludeException`.
    *
@@ -53,5 +68,9 @@ class XIncludeException(message: String) extends Exception(message) {
    *                     `XIncludeException` to be thrown
    */
   def getRootCause(): Throwable = this.rootCause
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

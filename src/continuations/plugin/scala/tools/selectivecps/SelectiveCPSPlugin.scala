@@ -14,6 +14,7 @@ class SelectiveCPSPlugin(val global: Global) extends Plugin {
 
   val name = "continuations"
   val description = "applies selective cps conversion"
+<<<<<<< HEAD
   
   val anfPhase = new SelectiveANFTransform() { 
     val global = SelectiveCPSPlugin.this.global
@@ -26,6 +27,20 @@ class SelectiveCPSPlugin(val global: Global) extends Plugin {
   }
   
   
+=======
+
+  val anfPhase = new SelectiveANFTransform() {
+    val global = SelectiveCPSPlugin.this.global
+    val runsAfter = List("pickler")
+  }
+
+  val cpsPhase = new SelectiveCPSTransform() {
+    val global = SelectiveCPSPlugin.this.global
+    val runsAfter = List("selectiveanf")
+    override val runsBefore = List("uncurry")
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   val components = List[PluginComponent](anfPhase, cpsPhase)
 
   val checker = new CPSAnnotationChecker {
@@ -42,6 +57,7 @@ class SelectiveCPSPlugin(val global: Global) extends Plugin {
   }
 
   // TODO: require -enabled command-line flag
+<<<<<<< HEAD
   
   override def processOptions(options: List[String], error: String => Unit) = {
     var enabled = false
@@ -51,10 +67,24 @@ class SelectiveCPSPlugin(val global: Global) extends Plugin {
       } else {
         error("Option not understood: "+option)
       }
+=======
+  override def processOptions(options: List[String], error: String => Unit) = {
+    var enabled = true
+    options foreach {
+      case "enable"    => enabled = true
+      case "disable"   => enabled = false
+      case option      => error("Option not understood: "+option)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
     setEnabled(enabled)
   }
 
+<<<<<<< HEAD
   override val optionsHelp: Option[String] =
     Some("  -P:continuations:enable        Enable continuations")
+=======
+  override val optionsHelp: Option[String] = {
+    Some("  -P:continuations:disable        Disable continuations plugin")
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

@@ -1,7 +1,17 @@
+<<<<<<< HEAD
+=======
+t2918.scala:2: error: illegal cyclic reference involving type A
+  def g[X, A[X] <: A[X]](x: A[X]) = x 
+                                    ^
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 t2918.scala:2: error: cyclic aliasing or subtyping involving type A
   def g[X, A[X] <: A[X]](x: A[X]) = x 
            ^
 t2918.scala:2: error: A does not take type parameters
   def g[X, A[X] <: A[X]](x: A[X]) = x 
                             ^
+<<<<<<< HEAD
 two errors found
+=======
+three errors found
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0

@@ -9,10 +9,15 @@
 package scala.collection
 package generic
 
+<<<<<<< HEAD
 
 import mutable.{Builder, MapBuilder}
 
 
+=======
+import mutable.{Builder, MapBuilder}
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 /** A template for companion objects of `Map` and subclasses thereof.
  *
  *  @define coll map

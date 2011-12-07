@@ -32,14 +32,22 @@ object ContentModel extends WordExp {
   def containsText(cm: ContentModel) = (cm == PCDATA) || isMixed(cm)
   def parse(s: String): ContentModel = ContentModelParser.parse(s)
 
+<<<<<<< HEAD
   def getLabels(r: RegExp): Set[String] = {    
+=======
+  def getLabels(r: RegExp): Set[String] = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def traverse(r: RegExp): Set[String] = r match { // !!! check for match translation problem
       case Letter(ElemName(name)) => Set(name)
       case Star(  x @ _  ) => traverse( x ) // bug if x@_*
       case Sequ( xs @ _* ) => Set(xs map traverse flatten: _*)
       case Alt(  xs @ _* ) => Set(xs map traverse flatten: _*)
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     traverse(r)
   }
 
@@ -52,7 +60,10 @@ object ContentModel extends WordExp {
       sb append sep
       buildString(z, sb)
     }
+<<<<<<< HEAD
     sb
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   }
 
   def buildString(c: ContentModel, sb: StringBuilder): StringBuilder = c match {
@@ -64,6 +75,7 @@ object ContentModel extends WordExp {
 
   def buildString(r: RegExp, sb: StringBuilder): StringBuilder =
     r match {  // !!! check for match translation problem
+<<<<<<< HEAD
       case Eps => 
         sb
       case Sequ(rs @ _*) => 
@@ -71,6 +83,15 @@ object ContentModel extends WordExp {
       case Alt(rs @ _*) =>
         sb.append( '(' ); buildString(rs, sb, '|');  sb.append( ')' )
       case Star(r: RegExp) => 
+=======
+      case Eps =>
+        sb
+      case Sequ(rs @ _*) =>
+        sb.append( '(' ); buildString(rs, sb, ','); sb.append( ')' )
+      case Alt(rs @ _*) =>
+        sb.append( '(' ); buildString(rs, sb, '|');  sb.append( ')' )
+      case Star(r: RegExp) =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         sb.append( '(' ); buildString(r, sb); sb.append( ")*" )
       case Letter(ElemName(name)) =>
         sb.append(name)
@@ -96,7 +117,11 @@ case object ANY extends ContentModel {
 sealed abstract class DFAContentModel extends ContentModel {
   import ContentModel.{ ElemName, Translator }
   def r: ContentModel.RegExp
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   lazy val dfa: DetWordAutom[ElemName] = {
     val nfa = Translator.automatonFrom(r, 1)
     new SubsetConstruction(nfa).determinize
@@ -116,6 +141,10 @@ case class MIXED(r: ContentModel.RegExp) extends DFAContentModel {
 }
 
 case class ELEMENTS(r: ContentModel.RegExp) extends DFAContentModel {
+<<<<<<< HEAD
   override def buildString(sb: StringBuilder): StringBuilder =  
+=======
+  override def buildString(sb: StringBuilder): StringBuilder =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     ContentModel.buildString(r, sb)
 }

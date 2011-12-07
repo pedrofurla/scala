@@ -10,7 +10,10 @@ import scala.collection.mutable.{HashMap, HashSet}
 import scala.tools.nsc.{Global => Compiler}
 import scala.tools.nsc.symtab.{Flags, Names}
 import scala.tools.nsc.util.{ Position, SourceFile }
+<<<<<<< HEAD
 import scala.reflect.NameTransformer
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 /** This class ...
  *
@@ -45,9 +48,15 @@ class Signatures(val compiler: Compiler) {
    */
   def signature(tree0: Tree, rest: List[Signature]): List[Signature] = tree0 match {
     case tree: MemberDef => if (!tree.mods.isPrivate) {
+<<<<<<< HEAD
       val name = "" + tree.name + "::" + 
         (tree.mods &~ Flags.SYNTHETIC)
       
+=======
+      val name = "" + tree.name + "::" +
+        (tree.mods &~ Flags.SYNTHETIC)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       val children: List[Signature] = tree match {
           case impl: ImplDef
             //if (!impl.name.toString.contains("$anonfun$")) =>

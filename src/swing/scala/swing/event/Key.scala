@@ -24,9 +24,15 @@ object Key extends Enumeration {
     val Standard = Value(java.awt.event.KeyEvent.KEY_LOCATION_STANDARD)
     val Unknown = Value(java.awt.event.KeyEvent.KEY_LOCATION_UNKNOWN)
   }
+<<<<<<< HEAD
   
   type Modifiers = Int
   
+=======
+
+  type Modifiers = Int
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   object Modifier {
     import java.awt.event.InputEvent._
     val Shift = SHIFT_DOWN_MASK
@@ -36,21 +42,35 @@ object Key extends Enumeration {
     val Meta = META_DOWN_MASK
     def text(mods: Int) = java.awt.event.KeyEvent.getKeyModifiersText(mods)
   }
+<<<<<<< HEAD
   
   //def text(k: Value) = java.awt.event.KeyEvent.getKeyText(k.id)
   
+=======
+
+  //def text(k: Value) = java.awt.event.KeyEvent.getKeyText(k.id)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   val Shift = Value(VK_SHIFT, getKeyText(VK_SHIFT))
   val Control = Value(VK_CONTROL, getKeyText(VK_CONTROL))
   val Alt = Value(VK_ALT, getKeyText(VK_ALT))
   val AltGraph = Value(VK_ALT_GRAPH, getKeyText(VK_ALT_GRAPH))
   val Meta = Value(VK_META, getKeyText(VK_META))
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   val Enter = Value(VK_ENTER, getKeyText(VK_ENTER))
   val BackSpace = Value(VK_BACK_SPACE, getKeyText(VK_BACK_SPACE))
   val Tab = Value(VK_TAB, getKeyText(VK_TAB))
   val Cancel = Value(VK_CANCEL, getKeyText(VK_CANCEL))
   val Clear = Value(VK_CLEAR, getKeyText(VK_CLEAR))
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   val Pause = Value(VK_PAUSE, getKeyText(VK_PAUSE))
   val CapsLock = Value(VK_CAPS_LOCK, getKeyText(VK_CAPS_LOCK))
   val Escape = Value(VK_ESCAPE, getKeyText(VK_ESCAPE))

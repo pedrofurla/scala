@@ -21,7 +21,11 @@ import scala.collection.mutable
  *  exceptions are created but not thrown.
  */
 class ElementValidator() extends Function1[Node,Boolean] {
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private var exc: List[ValidationException] = Nil
 
   protected var contentModel: ContentModel           = _
@@ -47,7 +51,11 @@ class ElementValidator() extends Function1[Node,Boolean] {
 
   def getIterable(nodes: Seq[Node], skipPCDATA: Boolean): Iterable[ElemName] = {
     def isAllWhitespace(a: Atom[_]) = cond(a.data) { case s: String if s.trim == "" => true }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     nodes.filter {
       case y: SpecialNode => y match {
         case a: Atom[_] if isAllWhitespace(a) => false  // always skip all-whitespace nodes
@@ -55,14 +63,22 @@ class ElementValidator() extends Function1[Node,Boolean] {
       }
       case x                                  => x.namespace eq null
     } . map (x => ElemName(x.label))
+<<<<<<< HEAD
   }  
+=======
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** check attributes, return true if md corresponds to attribute declarations in adecls.
    */
   def check(md: MetaData): Boolean = {
     val len: Int = exc.length
     var ok = new mutable.BitSet(adecls.length)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     for (attr <- md) {
       def attrStr = attr.value.toString
       def find(Key: String): Option[AttrDecl] = {
@@ -77,13 +93,21 @@ class ElementValidator() extends Function1[Node,Boolean] {
         case None =>
           exc ::= fromUndefinedAttribute(attr.key)
 
+<<<<<<< HEAD
         case Some(AttrDecl(_, tpe, DEFAULT(true, fixedValue))) if attrStr != fixedValue => 
+=======
+        case Some(AttrDecl(_, tpe, DEFAULT(true, fixedValue))) if attrStr != fixedValue =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           exc ::= fromFixedAttribute(attr.key, fixedValue, attrStr)
 
         case _ =>
       }
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     adecls.zipWithIndex foreach {
       case (AttrDecl(key, tpe, REQUIRED), j) if !ok(j) => exc ::= fromMissingAttribute(key, tpe)
       case _ =>
@@ -103,7 +127,11 @@ class ElementValidator() extends Function1[Node,Boolean] {
       val j = exc.length
       def find(Key: String): Boolean =
         branches exists { case ContentModel.Letter(ElemName(Key)) => true ; case _ => false }
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       getIterable(nodes, true) map (_.name) filterNot find foreach {
         exc ::= MakeValidationException fromUndefinedElement _
       }

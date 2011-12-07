@@ -18,7 +18,11 @@ object CharArrayReader {
   final val EofCh = '\032'
 }
 
+<<<<<<< HEAD
 /** A character array reader reads a stream of characters (keeping track of their positions) 
+=======
+/** A character array reader reads a stream of characters (keeping track of their positions)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * from an array.
  *
  * @param source an array of characters

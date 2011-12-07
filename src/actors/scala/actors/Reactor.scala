@@ -38,11 +38,18 @@ private[actors] object Reactor {
     }
   }
 
+<<<<<<< HEAD
   val waitingForNone = new PartialFunction[Any, Unit] {
     def isDefinedAt(x: Any) = false
     def apply(x: Any) {}
   }
 
+=======
+  val waitingForNone: PartialFunction[Any, Unit] = new scala.runtime.AbstractPartialFunction[Any, Unit] {
+    def _isDefinedAt(x: Any) = false
+    def apply(x: Any) {}
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 /**
@@ -244,7 +251,11 @@ trait Reactor[Msg >: Null] extends OutputChannel[Msg] with Combinators {
   }
 
   /** Returns the execution state of this $actor.
+<<<<<<< HEAD
    *  
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @return the execution state
    */
   def getState: Actor.State.Value = synchronized {

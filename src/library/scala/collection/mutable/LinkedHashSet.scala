@@ -23,7 +23,11 @@ import generic._
  *  @since   1
  *
  *  @tparam A     the type of the elements contained in this set.
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define Coll LinkedHashSet
  *  @define coll linked hash set
  *  @define thatinfo the class of the returned collection. In the standard library configuration,
@@ -39,9 +43,16 @@ import generic._
  *  @define orderDependentFold
  */
 @SerialVersionUID(1L)
+<<<<<<< HEAD
 class LinkedHashSet[A] extends Set[A] 
                           with GenericSetTemplate[A, LinkedHashSet]
                           with SetLike[A, LinkedHashSet[A]] 
+=======
+class LinkedHashSet[A] extends AbstractSet[A]
+                          with Set[A]
+                          with GenericSetTemplate[A, LinkedHashSet]
+                          with SetLike[A, LinkedHashSet[A]]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                           with FlatHashTable[A]
                           with Serializable
 {
@@ -59,13 +70,22 @@ class LinkedHashSet[A] extends Set[A]
   override def add(elem: A): Boolean =
     if (addEntry(elem)) { ordered += elem; true }
     else false
+<<<<<<< HEAD
   
   override def remove(elem: A): Boolean = 
+=======
+
+  override def remove(elem: A): Boolean =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     removeEntry(elem) match {
       case None => false
       case _ => ordered -= elem; true
     }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def clear() {
     ordered.clear()
     clearTable()
@@ -74,11 +94,19 @@ class LinkedHashSet[A] extends Set[A]
   override def iterator: Iterator[A] = ordered.iterator
 
   override def foreach[U](f: A => U) = ordered foreach f
+<<<<<<< HEAD
   
   private def writeObject(s: java.io.ObjectOutputStream) {
     serializeTo(s)
   }
   
+=======
+
+  private def writeObject(s: java.io.ObjectOutputStream) {
+    serializeTo(s)
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def readObject(in: java.io.ObjectInputStream) {
     ordered = new ListBuffer[A]
     init(in, ordered += )

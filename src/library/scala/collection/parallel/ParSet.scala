@@ -26,11 +26,19 @@ import scala.collection.generic._
 
 
 /** A template trait for parallel sets.
+<<<<<<< HEAD
  *  
  *  $sideeffects
  *  
  *  @tparam T    the element type of the set
  *  
+=======
+ *
+ *  $sideeffects
+ *
+ *  @tparam T    the element type of the set
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author Aleksandar Prokopec
  *  @since 2.9
  */
@@ -42,11 +50,19 @@ extends GenSet[T]
 {
 self =>
   override def empty: ParSet[T] = mutable.ParHashSet[T]()
+<<<<<<< HEAD
   
   //protected[this] override def newCombiner: Combiner[T, ParSet[T]] = ParSet.newCombiner[T]
   
   override def companion: GenericCompanion[ParSet] with GenericParCompanion[ParSet] = ParSet
   
+=======
+
+  //protected[this] override def newCombiner: Combiner[T, ParSet[T]] = ParSet.newCombiner[T]
+
+  override def companion: GenericCompanion[ParSet] with GenericParCompanion[ParSet] = ParSet
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def stringPrefix = "ParSet"
 }
 
@@ -54,7 +70,11 @@ self =>
 
 object ParSet extends ParSetFactory[ParSet] {
   def newCombiner[T]: Combiner[T, ParSet[T]] = mutable.ParHashSetCombiner[T]
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   implicit def canBuildFrom[T]: CanCombineFrom[Coll, T, ParSet[T]] = new GenericCanCombineFrom[T]
 }
 

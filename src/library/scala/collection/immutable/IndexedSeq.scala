@@ -17,12 +17,22 @@ import mutable.{ArrayBuffer, Builder}
  *  that are guaranteed immutable.
  *  $indexedSeqInfo
  */
+<<<<<<< HEAD
 trait IndexedSeq[+A] extends Seq[A] 
                     with scala.collection.IndexedSeq[A] 
                     with GenericTraversableTemplate[A, IndexedSeq]
                     with IndexedSeqLike[A, IndexedSeq[A]] { 
   override def companion: GenericCompanion[IndexedSeq] = IndexedSeq
   override def toIndexedSeq[B >: A]: IndexedSeq[B] = this
+=======
+trait IndexedSeq[+A] extends Seq[A]
+                    with scala.collection.IndexedSeq[A]
+                    with GenericTraversableTemplate[A, IndexedSeq]
+                    with IndexedSeqLike[A, IndexedSeq[A]] {
+  override def companion: GenericCompanion[IndexedSeq] = IndexedSeq
+  override def toIndexedSeq[B >: A]: IndexedSeq[B] = this
+  override def seq: IndexedSeq[A] = this
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 /** $factoryInfo
@@ -31,7 +41,11 @@ trait IndexedSeq[+A] extends Seq[A]
  *  @define Coll IndexedSeq
  */
 object IndexedSeq extends SeqFactory[IndexedSeq] {
+<<<<<<< HEAD
   class Impl[A](buf: ArrayBuffer[A]) extends IndexedSeq[A] with Serializable {
+=======
+  class Impl[A](buf: ArrayBuffer[A]) extends AbstractSeq[A] with IndexedSeq[A] with Serializable {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def length = buf.length
     def apply(idx: Int) = buf.apply(idx)
   }

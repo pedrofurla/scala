@@ -17,7 +17,11 @@ import collection.Iterator
 import annotation.migration
 
 /** Factory object for the `mutable.Stack` class.
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  $factoryInfo
  *  @define coll mutable stack
  *  @define Coll mutable.Stack
@@ -26,6 +30,7 @@ object Stack extends SeqFactory[Stack] {
   class StackBuilder[A] extends Builder[A, Stack[A]] {
     val lbuff = new ListBuffer[A]
     def +=(elem: A) = { lbuff += elem; this }
+<<<<<<< HEAD
     def clear = lbuff.clear
     def result = {
       val lst = lbuff.result
@@ -33,6 +38,12 @@ object Stack extends SeqFactory[Stack] {
     }
   }
   
+=======
+    def clear() = lbuff.clear()
+    def result = new Stack(lbuff.result)
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   implicit def canBuildFrom[A]: CanBuildFrom[Coll, A, Stack[A]] = ReusableCBF.asInstanceOf[GenericCanBuildFrom[A]]
   def newBuilder[A]: Builder[A, Stack[A]] = new StackBuilder[A]
   val empty: Stack[Nothing] = new Stack(Nil)
@@ -40,13 +51,24 @@ object Stack extends SeqFactory[Stack] {
 
 /** A stack implements a data structure which allows to store and retrieve
  *  objects in a last-in-first-out (LIFO) fashion.
+<<<<<<< HEAD
  *  
  *  @tparam A    type of the elements contained in this stack.
  *  
+=======
+ *
+ *  @tparam A    type of the elements contained in this stack.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author  Matthias Zenger
  *  @author  Martin Odersky
  *  @version 2.8
  *  @since   1
+<<<<<<< HEAD
+=======
+ *  @see [[http://docs.scala-lang.org/overviews/collections/concrete-mutable-collection-classes.html#stacks"Scala's Collection Library overview"]]
+ *  section on `Stacks` for more information.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define Coll Stack
  *  @define coll stack
  *  @define orderDependent
@@ -56,14 +78,23 @@ object Stack extends SeqFactory[Stack] {
  */
 @cloneable
 class Stack[A] private (var elems: List[A])
+<<<<<<< HEAD
 extends Seq[A]
+=======
+extends AbstractSeq[A]
+   with Seq[A]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    with SeqLike[A, Stack[A]]
    with GenericTraversableTemplate[A, Stack]
    with Cloneable[Stack[A]]
    with Serializable
 {
   def this() = this(Nil)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def companion = Stack
 
   /** Checks if the stack is empty.
@@ -84,7 +115,11 @@ extends Seq[A]
    *  @throws IndexOutOfBoundsException if the index is out of bounds
    */
   override def apply(index: Int) = elems(index)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Replace element at index `n` with the new element `newelem`.
    *
    *  This is a linear time operation.
@@ -93,7 +128,11 @@ extends Seq[A]
    *  @param newelem the new element.
    *  @throws   IndexOutOfBoundsException if the index is not valid
    */
+<<<<<<< HEAD
   def update(n: Int, newelem: A) = 
+=======
+  def update(n: Int, newelem: A) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if(n < 0 || n >= length) throw new IndexOutOfBoundsException(n.toString)
     else elems = elems.take(n) ++ (newelem :: elems.drop(n+1))
 
@@ -121,10 +160,13 @@ extends Seq[A]
    */
   def pushAll(xs: TraversableOnce[A]): this.type = { xs.seq foreach push ; this }
 
+<<<<<<< HEAD
   @deprecated("use pushAll", "2.8.0")
   @migration(2, 8, "Stack ++= now pushes arguments on the stack from left to right.")
   def ++=(xs: TraversableOnce[A]): this.type = pushAll(xs)
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Returns the top element of the stack. This method will not remove
    *  the element from the stack. An error is signaled if there is no
    *  element on the stack.

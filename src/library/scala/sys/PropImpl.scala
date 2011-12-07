@@ -33,7 +33,11 @@ private[sys] class PropImpl[+T](val key: String, valueFn: String => T) extends P
   def clear(): Unit = underlying -= key
   def option: Option[T] = if (isSet) Some(value) else None
   def or[T1 >: T](alt: => T1): T1 = if (isSet) value else alt
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** The underlying property map, in our case always sys.props */
   protected def underlying: mutable.Map[String, String] = scala.sys.props
   protected def zero: T = null.asInstanceOf[T]

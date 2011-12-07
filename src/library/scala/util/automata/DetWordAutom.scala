@@ -30,14 +30,22 @@ abstract class DetWordAutom[T <: AnyRef] {
   def isSink(q: Int)         = delta(q).isEmpty && default(q) == q
   def next(q: Int, label: T) = delta(q).getOrElse(label, default(q))
 
+<<<<<<< HEAD
   override def toString() = {    
+=======
+  override def toString() = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val sb = new StringBuilder("[DetWordAutom  nstates=")
     sb.append(nstates)
     sb.append(" finals=")
     val map = Map(finals.zipWithIndex map (_.swap): _*)
     sb.append(map.toString())
     sb.append(" delta=\n")
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     for (i <- 0 until nstates) {
       sb append "%d->%s\n".format(i, delta(i))
       if (i < default.length)

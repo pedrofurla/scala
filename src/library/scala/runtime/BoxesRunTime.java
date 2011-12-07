@@ -28,9 +28,15 @@ import scala.math.ScalaNumber;
   * @contributor Stepan Koltsov
   * @version 2.0 */
 public final class BoxesRunTime
+<<<<<<< HEAD
 {    
     private static final int CHAR = 0, BYTE = 1, SHORT = 2, INT = 3, LONG = 4, FLOAT = 5, DOUBLE = 6, OTHER = 7;
     
+=======
+{
+    private static final int CHAR = 0, BYTE = 1, SHORT = 2, INT = 3, LONG = 4, FLOAT = 5, DOUBLE = 6, OTHER = 7;
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private static int typeCode(Object a) {
         if (a instanceof java.lang.Integer) return INT;
         if (a instanceof java.lang.Byte) return BYTE;
@@ -41,16 +47,25 @@ public final class BoxesRunTime
         if (a instanceof java.lang.Float) return FLOAT;
         return OTHER;
     }
+<<<<<<< HEAD
     
     private static String boxDescription(Object a) {
       return "" + a.getClass().getSimpleName() + "(" + a + ")";
     }
         
+=======
+
+    private static String boxDescription(Object a) {
+      return "" + a.getClass().getSimpleName() + "(" + a + ")";
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 /* BOXING ... BOXING ... BOXING ... BOXING ... BOXING ... BOXING ... BOXING ... BOXING */
 
     public static java.lang.Boolean boxToBoolean(boolean b) {
         return java.lang.Boolean.valueOf(b);
     }
+<<<<<<< HEAD
     
     public static java.lang.Character boxToCharacter(char c) {
         return java.lang.Character.valueOf(c);
@@ -76,11 +91,39 @@ public final class BoxesRunTime
         return java.lang.Float.valueOf(f);
     }
     
+=======
+
+    public static java.lang.Character boxToCharacter(char c) {
+        return java.lang.Character.valueOf(c);
+    }
+
+    public static java.lang.Byte boxToByte(byte b) {
+        return java.lang.Byte.valueOf(b);
+    }
+
+    public static java.lang.Short boxToShort(short s) {
+        return java.lang.Short.valueOf(s);
+    }
+
+    public static java.lang.Integer boxToInteger(int i) {
+        return java.lang.Integer.valueOf(i);
+    }
+
+    public static java.lang.Long boxToLong(long l) {
+        return java.lang.Long.valueOf(l);
+    }
+
+    public static java.lang.Float boxToFloat(float f) {
+        return java.lang.Float.valueOf(f);
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     public static java.lang.Double boxToDouble(double d) {
         // System.out.println("box " + d);
         // (new Throwable()).printStackTrace();
         return java.lang.Double.valueOf(d);
     }
+<<<<<<< HEAD
         
 /* UNBOXING ... UNBOXING ... UNBOXING ... UNBOXING ... UNBOXING ... UNBOXING ... UNBOXING */
     
@@ -96,6 +139,23 @@ public final class BoxesRunTime
         return b == null ? 0 : ((java.lang.Byte)b).byteValue();
     }
     
+=======
+
+/* UNBOXING ... UNBOXING ... UNBOXING ... UNBOXING ... UNBOXING ... UNBOXING ... UNBOXING */
+
+    public static boolean unboxToBoolean(Object b) {
+        return b == null ? false : ((java.lang.Boolean)b).booleanValue();
+    }
+
+    public static char unboxToChar(Object c) {
+        return c == null ? 0 : ((java.lang.Character)c).charValue();
+    }
+
+    public static byte unboxToByte(Object b) {
+        return b == null ? 0 : ((java.lang.Byte)b).byteValue();
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     public static short unboxToShort(Object s) {
         return s == null ? 0 : ((java.lang.Short)s).shortValue();
     }
@@ -103,6 +163,7 @@ public final class BoxesRunTime
     public static int unboxToInt(Object i) {
         return i == null ? 0 : ((java.lang.Integer)i).intValue();
     }
+<<<<<<< HEAD
     
     public static long unboxToLong(Object l) {
         return l == null ? 0 : ((java.lang.Long)l).longValue();
@@ -112,13 +173,28 @@ public final class BoxesRunTime
         return f == null ? 0.0f : ((java.lang.Float)f).floatValue();
     }
     
+=======
+
+    public static long unboxToLong(Object l) {
+        return l == null ? 0 : ((java.lang.Long)l).longValue();
+    }
+
+    public static float unboxToFloat(Object f) {
+        return f == null ? 0.0f : ((java.lang.Float)f).floatValue();
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     public static double unboxToDouble(Object d) {
         //        System.out.println("unbox " + d);
         return d == null ? 0.0d : ((java.lang.Double)d).doubleValue();
     }
 
     /* COMPARISON ... COMPARISON ... COMPARISON ... COMPARISON ... COMPARISON ... COMPARISON */
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private static int eqTypeCode(Number a) {
         if ((a instanceof java.lang.Integer) || (a instanceof java.lang.Byte)) return INT;
         if (a instanceof java.lang.Long) return LONG;
@@ -127,8 +203,13 @@ public final class BoxesRunTime
         if (a instanceof java.lang.Float) return FLOAT;
         return OTHER;
     }
+<<<<<<< HEAD
     
     public static boolean equals(Object x, Object y) {      
+=======
+
+    public static boolean equals(Object x, Object y) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         if (x == y) return true;
         return equals2(x, y);
     }
@@ -143,10 +224,17 @@ public final class BoxesRunTime
             return equalsCharObject((java.lang.Character)x, y);
         if (x == null)
             return y == null;
+<<<<<<< HEAD
           
         return x.equals(y);
     }
     
+=======
+
+        return x.equals(y);
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     public static boolean equalsNumObject(java.lang.Number xn, Object y) {
         if (y instanceof java.lang.Number)
             return equalsNumNum(xn, (java.lang.Number)y);
@@ -154,10 +242,17 @@ public final class BoxesRunTime
             return equalsNumChar(xn, (java.lang.Character)y);
         if (xn == null)
             return y == null;
+<<<<<<< HEAD
           
         return xn.equals(y);
     }
     
+=======
+
+        return xn.equals(y);
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     public static boolean equalsNumNum(java.lang.Number xn, java.lang.Number yn) {
         int xcode = eqTypeCode(xn);
         int ycode = eqTypeCode(yn);
@@ -176,10 +271,17 @@ public final class BoxesRunTime
         }
         if (xn == null)
             return yn == null;
+<<<<<<< HEAD
             
         return xn.equals(yn);
     }
     
+=======
+
+        return xn.equals(yn);
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     public static boolean equalsCharObject(java.lang.Character xc, Object y) {
         if (y instanceof java.lang.Character)
             return xc.charValue() == ((java.lang.Character)y).charValue();
@@ -187,7 +289,11 @@ public final class BoxesRunTime
             return equalsNumChar((java.lang.Number)y, xc);
         if (xc == null)
             return y == null;
+<<<<<<< HEAD
              
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         return xc.equals(y);
     }
 
@@ -205,11 +311,19 @@ public final class BoxesRunTime
         default:
             if (xn == null)
                 return yc == null;
+<<<<<<< HEAD
                 
             return xn.equals(yc);
         }
     }
     
+=======
+
+            return xn.equals(yc);
+        }
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Hashcode algorithm is driven by the requirements imposed
      *  by primitive equality semantics, namely that equal objects
      *  have equal hashCodes.  The first priority are the integral/char
@@ -243,16 +357,27 @@ public final class BoxesRunTime
         else return n.hashCode();
     }
     public static int hashFromDouble(java.lang.Double n) {
+<<<<<<< HEAD
         int iv = n.intValue();    
         double dv = n.doubleValue();
         if (iv == dv) return iv;
   
+=======
+        int iv = n.intValue();
+        double dv = n.doubleValue();
+        if (iv == dv) return iv;
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         long lv = n.longValue();
         if (lv == dv) return java.lang.Long.valueOf(lv).hashCode();
         else return n.hashCode();
     }
     public static int hashFromFloat(java.lang.Float n) {
+<<<<<<< HEAD
         int iv = n.intValue();    
+=======
+        int iv = n.intValue();
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         float fv = n.floatValue();
         if (iv == fv) return iv;
 
@@ -270,9 +395,15 @@ public final class BoxesRunTime
       if (a instanceof Number) return hashFromNumber((Number)a);
       else return a.hashCode();
     }
+<<<<<<< HEAD
     
 /* OPERATORS ... OPERATORS ... OPERATORS ... OPERATORS ... OPERATORS ... OPERATORS ... OPERATORS ... OPERATORS */
         
+=======
+
+/* OPERATORS ... OPERATORS ... OPERATORS ... OPERATORS ... OPERATORS ... OPERATORS ... OPERATORS ... OPERATORS */
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** arg1 + arg2 */
     public static Object add(Object arg1, Object arg2) throws NoSuchMethodException {
         int code1 = typeCode(arg1);
@@ -499,7 +630,11 @@ public final class BoxesRunTime
         }
         throw new NoSuchMethodException();
     }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** -arg */
     public static Object negate(Object arg) throws NoSuchMethodException {
         int code = typeCode(arg);
@@ -521,7 +656,11 @@ public final class BoxesRunTime
         }
         throw new NoSuchMethodException();
     }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** +arg */
     public static Object positive(Object arg) throws NoSuchMethodException {
         int code = typeCode(arg);
@@ -631,7 +770,11 @@ public final class BoxesRunTime
         }
         throw new NoSuchMethodException();
     }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** ~arg */
     public static Object complement(Object arg) throws NoSuchMethodException {
         int code = typeCode(arg);
@@ -645,7 +788,11 @@ public final class BoxesRunTime
         }
         throw new NoSuchMethodException();
     }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** !arg */
     public static Object takeNot(Object arg) throws NoSuchMethodException {
         if (arg instanceof Boolean) {
@@ -653,6 +800,7 @@ public final class BoxesRunTime
         }
         throw new NoSuchMethodException();
     }
+<<<<<<< HEAD
     
     public static Object testEqual(Object arg1, Object arg2) throws NoSuchMethodException {
         return boxToBoolean(arg1 == arg2);
@@ -662,6 +810,17 @@ public final class BoxesRunTime
         return boxToBoolean(arg1 != arg2);
     }
     
+=======
+
+    public static Object testEqual(Object arg1, Object arg2) throws NoSuchMethodException {
+        return boxToBoolean(arg1 == arg2);
+    }
+
+    public static Object testNotEqual(Object arg1, Object arg2) throws NoSuchMethodException {
+        return boxToBoolean(arg1 != arg2);
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     public static Object testLessThan(Object arg1, Object arg2) throws NoSuchMethodException {
         int code1 = typeCode(arg1);
         int code2 = typeCode(arg2);
@@ -688,7 +847,11 @@ public final class BoxesRunTime
         }
         throw new NoSuchMethodException();
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     public static Object testLessOrEqualThan(Object arg1, Object arg2) throws NoSuchMethodException {
         int code1 = typeCode(arg1);
         int code2 = typeCode(arg2);
@@ -715,7 +878,11 @@ public final class BoxesRunTime
         }
         throw new NoSuchMethodException();
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     public static Object testGreaterOrEqualThan(Object arg1, Object arg2) throws NoSuchMethodException {
         int code1 = typeCode(arg1);
         int code2 = typeCode(arg2);
@@ -742,7 +909,11 @@ public final class BoxesRunTime
         }
         throw new NoSuchMethodException();
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     public static Object testGreaterThan(Object arg1, Object arg2) throws NoSuchMethodException {
         int code1 = typeCode(arg1);
         int code2 = typeCode(arg2);
@@ -769,7 +940,11 @@ public final class BoxesRunTime
         }
         throw new NoSuchMethodException();
     }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** arg.toChar */
     public static java.lang.Character toCharacter(Object arg) throws NoSuchMethodException {
         if (arg instanceof java.lang.Integer) return boxToCharacter((char)unboxToInt(arg));
@@ -853,5 +1028,9 @@ public final class BoxesRunTime
         if (arg instanceof java.lang.Short) return boxToDouble((double)unboxToShort(arg));
         throw new NoSuchMethodException();
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

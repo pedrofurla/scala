@@ -18,7 +18,11 @@ package mutable
  *  subscriber. Subscribers may suspend their subscription, or reactivate a
  *  suspended subscription. Class `Publisher` is typically used
  *  as a mixin. The abstract type `Pub` models the type of the publisher itself.
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @tparam Evt      type of the published event.
  *
  *  @author  Matthias Zenger
@@ -26,7 +30,11 @@ package mutable
  *  @version 2.8
  *  @since   1
  */
+<<<<<<< HEAD
 trait Publisher[Evt] { 
+=======
+trait Publisher[Evt] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   type Pub <: Publisher[Evt]
   type Sub = Subscriber[Evt, Pub]
@@ -36,7 +44,11 @@ trait Publisher[Evt] {
    *  Needs to be overridden if the actual publisher is different from `this`.
    */
   protected val self: Pub = this.asInstanceOf[Pub]
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private val filters = new HashMap[Sub, Set[Filter]] with MultiMap[Sub, Filter]
   private val suspended = new HashSet[Sub]
 

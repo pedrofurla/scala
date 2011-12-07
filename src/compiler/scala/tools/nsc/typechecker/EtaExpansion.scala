@@ -23,9 +23,15 @@ trait EtaExpansion { self: Analyzer =>
       case Ident(name)  => vparam.name == name
       case _            => false
     }
+<<<<<<< HEAD
       
     def unapply(tree: Tree): Option[(List[ValDef], Tree, List[Tree])] = tree match {
       case Function(vparams, Apply(fn, args)) if (vparams corresponds args)(isMatch) => 
+=======
+
+    def unapply(tree: Tree): Option[(List[ValDef], Tree, List[Tree])] = tree match {
+      case Function(vparams, Apply(fn, args)) if (vparams corresponds args)(isMatch) =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         Some((vparams, fn, args))
       case _ =>
         None
@@ -64,10 +70,17 @@ trait EtaExpansion { self: Analyzer =>
      */
     def liftoutPrefix(tree: Tree): Tree = {
       def liftout(tree: Tree): Tree =
+<<<<<<< HEAD
         if (treeInfo.isPureExpr(tree)) tree
         else {
           val vname: Name = freshName()
           // Problem with ticket #2351 here 
+=======
+        if (treeInfo.isExprSafeToInline(tree)) tree
+        else {
+          val vname: Name = freshName()
+          // Problem with ticket #2351 here
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           defs += atPos(tree.pos) {
             ValDef(Modifiers(SYNTHETIC), vname.toTermName, TypeTree(), tree)
           }
@@ -94,7 +107,11 @@ trait EtaExpansion { self: Analyzer =>
           tree
       }
       if (tree1 ne tree) tree1 setPos tree1.pos.makeTransparent
+<<<<<<< HEAD
       tree1 
+=======
+      tree1
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
 
     /** Eta-expand lifted tree.
@@ -102,7 +119,11 @@ trait EtaExpansion { self: Analyzer =>
     def expand(tree: Tree, tpe: Type): Tree = tpe match {
       case mt @ MethodType(paramSyms, restpe) if !mt.isImplicit =>
         val params = paramSyms map (sym =>
+<<<<<<< HEAD
           ValDef(Modifiers(SYNTHETIC | PARAM), 
+=======
+          ValDef(Modifiers(SYNTHETIC | PARAM),
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                  sym.name.toTermName, TypeTree(sym.tpe) , EmptyTree))
         atPos(tree.pos.makeTransparent) {
           Function(params, expand(Apply(tree, params map gen.paramToArg), restpe))

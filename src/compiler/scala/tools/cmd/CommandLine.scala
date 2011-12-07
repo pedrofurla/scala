@@ -18,21 +18,35 @@ trait CommandLineConfig {
 class CommandLine(val spec: Reference, val originalArgs: List[String]) extends CommandLineConfig {
   def this(spec: Reference, line: String) = this(spec, Parser tokenize line)
   def this(spec: Reference, args: Array[String]) = this(spec, args.toList)
+<<<<<<< HEAD
     
   import spec.{ isAnyOption, isUnaryOption, isBinaryOption, isExpandOption }
   
+=======
+
+  import spec.{ isAnyOption, isUnaryOption, isBinaryOption, isExpandOption }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   val Terminator = "--"
   val ValueForUnaryOption = "true"  // so if --opt is given, x(--opt) = true
 
   def mapForUnary(opt: String) = Map(opt -> ValueForUnaryOption)
   def errorFn(msg: String) = println(msg)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** argMap is option -> argument (or "" if it is a unary argument)
    *  residualArgs are what is left after removing the options and their args.
    */
   lazy val (argMap, residualArgs) = {
     val residualBuffer = new ListBuffer[String]
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def loop(args: List[String]): Map[String, String] = {
       def residual(xs: List[String]) = { residualBuffer ++= xs ; Map[String, String]() }
 
@@ -47,7 +61,11 @@ class CommandLine(val spec: Reference, val originalArgs: List[String]) extends C
         }
         else None
       }
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       /** Assumes known options have all been ruled out already. */
       def isUnknown(opt: String) =
         onlyKnownOptions && (opt startsWith "-") && {
@@ -62,6 +80,7 @@ class CommandLine(val spec: Reference, val originalArgs: List[String]) extends C
           expand(x) foreach (exp => return loop(exp))
           if (isBinaryOption(x) && enforceArity)
             errorFn("Option '%s' requires argument, found EOF instead.".format(x))
+<<<<<<< HEAD
       
           if (isUnaryOption(x)) mapForUnary(x)
           else if (isUnknown(x)) Map()
@@ -70,6 +89,16 @@ class CommandLine(val spec: Reference, val originalArgs: List[String]) extends C
         case x1 :: x2 :: xs   =>
           expand(x1) foreach (exp => return loop(exp ++ args.tail))
           
+=======
+
+          if (isUnaryOption(x)) mapForUnary(x)
+          else if (isUnknown(x)) Map()
+          else residual(args)
+
+        case x1 :: x2 :: xs   =>
+          expand(x1) foreach (exp => return loop(exp ++ args.tail))
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           if (x2 == Terminator)         mapForUnary(x1) ++ residual(xs)
           else if (isUnaryOption(x1))   mapForUnary(x1) ++ loop(args.tail)
           else if (isBinaryOption(x1))  Map(x1 -> x2) ++ loop(xs)
@@ -77,10 +106,17 @@ class CommandLine(val spec: Reference, val originalArgs: List[String]) extends C
           else                          residual(List(x1)) ++ loop(args.tail)
       }
     }
+<<<<<<< HEAD
     
     (loop(originalArgs), residualBuffer map stripQuotes toList)
   }
   
+=======
+
+    (loop(originalArgs), residualBuffer map stripQuotes toList)
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def apply(arg: String)  = argMap(arg)
   def get(arg: String)    = argMap get arg
   def isSet(arg: String)  = argMap contains arg

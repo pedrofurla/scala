@@ -23,7 +23,11 @@ import scala.collection.GenSeq
 
 
 /** An immutable variant of `ParSeq`.
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define Coll mutable.ParSeq
  *  @define coll mutable parallel sequence
  */
@@ -45,9 +49,15 @@ extends collection/*.immutable*/.GenSeq[T]
  */
 object ParSeq extends ParFactory[ParSeq] {
   implicit def canBuildFrom[T]: CanCombineFrom[Coll, T, ParSeq[T]] = new GenericCanCombineFrom[T]
+<<<<<<< HEAD
   
   def newBuilder[T]: Combiner[T, ParSeq[T]] = ParVector.newBuilder[T]
   
+=======
+
+  def newBuilder[T]: Combiner[T, ParSeq[T]] = ParVector.newBuilder[T]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def newCombiner[T]: Combiner[T, ParSeq[T]] = ParVector.newCombiner[T]
 }
 

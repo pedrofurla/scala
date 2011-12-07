@@ -7,6 +7,7 @@ package scala.reflect
 package internal
 
 import scala.collection.immutable
+<<<<<<< HEAD
 
 trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: SymbolTable =>
     
@@ -14,6 +15,16 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
   
   implicit def stringToTermName(s: String): TermName = newTermName(s)
   
+=======
+import NameTransformer.MODULE_SUFFIX_STRING
+
+trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: SymbolTable =>
+
+  def encode(str: String): TermName = newTermName(NameTransformer.encode(str))
+
+  implicit def stringToTermName(s: String): TermName = newTermName(s)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** This should be the first trait in the linearization. */
   trait Keywords {
     private var kws: Set[TermName] = Set()
@@ -73,29 +84,51 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
     final val SUPERTYPEkw: TermName = kw(">:")
     final val HASHkw: TermName      = kw("#")
     final val ATkw: TermName        = kw("@")
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     final val keywords = {
       val result = kws.toSet
       kws = null
       result
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     final val javaKeywords = new JavaKeywords()
   }
 
   trait CommonNames /*extends LibraryCommonNames*/ {
+<<<<<<< HEAD
     
     type NameType <: Name
     implicit def createNameType(name: String): NameType
     
+=======
+
+    type NameType <: Name
+    implicit def createNameType(name: String): NameType
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val EMPTY: NameType              = ""
     val ANON_FUN_NAME: NameType      = "$anonfun"
     val EMPTY_PACKAGE_NAME: NameType = "<empty>"
     val IMPORT: NameType             = "<import>"
     val MODULE_VAR_SUFFIX: NameType  = "$module"
     val ROOT: NameType               = "<root>"
+<<<<<<< HEAD
       
     // value types are all used as terms as well
+=======
+    val PACKAGE: NameType            = "package"
+
+    // value types (and AnyRef) are all used as terms as well
+    // as (at least) arguments to the @specialize annotation.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     final val Boolean: NameType = "Boolean"
     final val Byte: NameType    = "Byte"
     final val Char: NameType    = "Char"
@@ -105,11 +138,20 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
     final val Long: NameType    = "Long"
     final val Short: NameType   = "Short"
     final val Unit: NameType    = "Unit"
+<<<<<<< HEAD
     
     final val ScalaValueNames: scala.List[NameType] =
       scala.List(Byte, Char, Short, Int, Long, Float, Double, Boolean, Unit)
     
     // types whose companions we utilize
+=======
+
+    final val ScalaValueNames: scala.List[NameType] =
+      scala.List(Byte, Char, Short, Int, Long, Float, Double, Boolean, Unit)
+
+    // some types whose companions we utilize
+    final val AnyRef: NameType = "AnyRef"
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     final val Array: NameType  = "Array"
     final val List: NameType   = "List"
     final val Seq: NameType    = "Seq"
@@ -120,7 +162,11 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
     final val NO_NAME: NameType  = "<none>"  // formerly NOSYMBOL
     final val WILDCARD: NameType = "_"
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait TypeNames extends CommonNames {
     final val BYNAME_PARAM_CLASS_NAME: NameType        = "<byname>"
     final val EQUALS_PATTERN_NAME: NameType            = "<equals>"
@@ -128,9 +174,14 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
     final val LOCAL_CHILD: NameType                    = "<local child>"
     final val REPEATED_PARAM_CLASS_NAME: NameType      = "<repeated>"
     final val WILDCARD_STAR: NameType                  = "_*"
+<<<<<<< HEAD
     
     final val Any: NameType             = "Any"
     final val AnyRef: NameType          = "AnyRef"
+=======
+
+    final val Any: NameType             = "Any"
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     final val AnyVal: NameType          = "AnyVal"
     final val Nothing: NameType         = "Nothing"
     final val Null: NameType            = "Null"
@@ -143,7 +194,16 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
     final val String: NameType          = "String"
     final val Throwable: NameType       = "Throwable"
 
+<<<<<<< HEAD
     // Annotation types
+=======
+    // Annotation simple names, used in Namer
+    final val BeanPropertyAnnot: NameType = "BeanProperty"
+    final val BooleanBeanPropertyAnnot: NameType = "BooleanBeanProperty"
+    final val bridgeAnnot: NameType = "bridge"
+
+    // Classfile Attributes
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     final val AnnotationDefaultATTR: NameType      = "AnnotationDefault"
     final val BridgeATTR: NameType                 = "Bridge"
     final val ClassfileAnnotationATTR: NameType    = "RuntimeInvisibleAnnotations" // RetentionPolicy.CLASS. Currently not used (Apr 2009).
@@ -163,8 +223,13 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
     final val SourceFileATTR: NameType             = "SourceFile"
     final val SyntheticATTR: NameType              = "Synthetic"
   }
+<<<<<<< HEAD
   
   
+=======
+
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait TermNames extends Keywords with CommonNames {
     // Compiler internal names
     val ANYNAME: NameType               = "<anyname>"
@@ -175,21 +240,38 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
     val MODULE_INSTANCE_FIELD: NameType = NameTransformer.MODULE_INSTANCE_NAME  // "MODULE$"
     val OUTER: NameType                 = "$outer"
     val OUTER_LOCAL: NameType           = "$outer " // note the space
+<<<<<<< HEAD
+=======
+    val OUTER_SYNTH: NameType           = "<outer>" // emitted by virtual pattern matcher, replaced by outer accessor in explicitouter
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val SELF: NameType                  = "$this"
     val SPECIALIZED_INSTANCE: NameType  = "specInstance$"
     val STAR: NameType                  = "*"
     val THIS: NameType                  = "_$this"
+<<<<<<< HEAD
     
+=======
+    val SELECTOR_DUMMY: NameType        = "<unapply-selector>"
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     final val Nil: NameType             = "Nil"
     final val Predef: NameType          = "Predef"
     final val ScalaRunTime: NameType    = "ScalaRunTime"
     final val Some: NameType            = "Some"
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // Compiler utilized names
     // val productElementName: NameType = "productElementName"
     val TYPE_ : NameType           = "TYPE"
     val add_ : NameType            = "add"
     val anyValClass: NameType      = "anyValClass"
+<<<<<<< HEAD
+=======
+    val append: NameType           = "append"
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val apply: NameType            = "apply"
     val arrayValue: NameType       = "arrayValue"
     val arraycopy: NameType        = "arraycopy"
@@ -214,10 +296,18 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
     val ex: NameType               = "ex"
     val false_ : NameType          = "false"
     val filter: NameType           = "filter"
+<<<<<<< HEAD
     val finalize_ : NameType       = if (forMSIL) "Finalize" else "finalize" 
     val find_ : NameType           = "find"
     val flatMap: NameType          = "flatMap"
     val foreach: NameType          = "foreach"
+=======
+    val finalize_ : NameType       = if (forMSIL) "Finalize" else "finalize"
+    val find_ : NameType           = "find"
+    val flatMap: NameType          = "flatMap"
+    val foreach: NameType          = "foreach"
+    val formatted: NameType        = "formatted"
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val genericArrayOps: NameType  = "genericArrayOps"
     val get: NameType              = "get"
     val hasNext: NameType          = "hasNext"
@@ -229,6 +319,10 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
     val applyDynamic: NameType     = "applyDynamic"
     val isArray: NameType          = "isArray"
     val isDefinedAt: NameType      = "isDefinedAt"
+<<<<<<< HEAD
+=======
+    val _isDefinedAt: NameType     = "_isDefinedAt"
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val isEmpty: NameType          = "isEmpty"
     val isInstanceOf_ : NameType   = "isInstanceOf"
     val java: NameType             = "java"
@@ -236,8 +330,15 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
     val length: NameType           = "length"
     val lengthCompare: NameType    = "lengthCompare"
     val lift_ : NameType           = "lift"
+<<<<<<< HEAD
     val main: NameType             = "main"
     val map: NameType              = "map"
+=======
+    val macro_ : NameType          = "macro"
+    val main: NameType             = "main"
+    val map: NameType              = "map"
+    val missingCase: NameType      = "missingCase"
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val ne: NameType               = "ne"
     val newArray: NameType         = "newArray"
     val next: NameType             = "next"
@@ -250,6 +351,10 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
     val productIterator: NameType  = "productIterator"
     val productPrefix: NameType    = "productPrefix"
     val readResolve: NameType      = "readResolve"
+<<<<<<< HEAD
+=======
+    val runOrElse: NameType        = "runOrElse"
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val sameElements: NameType     = "sameElements"
     val scala_ : NameType          = "scala"
     val self: NameType             = "self"
@@ -288,7 +393,11 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
       final val SLASH: NameType  = "/"
       final val STAR : NameType  = "*"
       final val TILDE: NameType  = "~"
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       final val isUnary: Set[Name] = Set(MINUS, PLUS, TILDE, BANG)
     }
 
@@ -301,7 +410,11 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
     val toFloat: NameType  = "toFloat"
     val toDouble: NameType = "toDouble"
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   object tpnme extends TypeNames /*with LibraryTypeNames*/ with TypeNameMangling {
     type NameType = TypeName
     implicit def createNameType(name: String): TypeName = newTypeName(name)
@@ -315,12 +428,20 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
   object nme extends TermNames /*with LibraryTermNames*/ with TermNameMangling {
     type NameType = TermName
     def createNameType(name: String): TermName = newTermName(name)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Translate a String into a list of simple TypeNames and TermNames.
      *  In all segments before the last, type/term is determined by whether
      *  the following separator char is '.' or '#'.  In the last segment,
      *  the argument "assumeTerm" determines it.  Examples:
+<<<<<<< HEAD
      *  
+=======
+     *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *  package foo {
      *    object Lorax { object Wog ; class Wog }
      *    class Lorax  { object Zax ; class Zax }
@@ -351,6 +472,7 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
           mkName(simple, div == '.') :: segments(rest, assumeTerm)
       }
     }
+<<<<<<< HEAD
     private def bitmapName(n: Int, suffix: String): TermName =
       newTermName(BITMAP_PREFIX + suffix + n)
     
@@ -382,6 +504,30 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
     
     /** Base strings from which synthetic names are derived. */
     val BITMAP_PREFIX               = "bitmap$"
+=======
+
+    def newBitmapName(bitmapPrefix: Name, n: Int) = bitmapPrefix append ("" + n)
+
+    val BITMAP_PREFIX: String                = "bitmap$"
+    val BITMAP_NORMAL: NameType              = BITMAP_PREFIX + ""           // initialization bitmap for public/protected lazy vals
+    val BITMAP_TRANSIENT: NameType           = BITMAP_PREFIX + "trans$"     // initialization bitmap for transient lazy vals
+    val BITMAP_PRIVATE: NameType             = BITMAP_PREFIX + "priv$"      // initialization bitmap for private lazy vals
+    val BITMAP_CHECKINIT: NameType           = BITMAP_PREFIX + "init$"      // initialization bitmap for checkinit values
+    val BITMAP_CHECKINIT_TRANSIENT: NameType = BITMAP_PREFIX + "inittrans$" // initialization bitmap for transient checkinit values
+
+    /** The expanded name of `name` relative to this class `base` with given `separator`
+     */
+    def expandedName(name: TermName, base: Symbol, separator: String = EXPAND_SEPARATOR_STRING): TermName =
+      newTermName(base.fullName('$') + separator + name)
+
+    def moduleVarName(name: TermName): TermName = newTermName("" + name + MODULE_VAR_SUFFIX)
+
+    val EXPAND_SEPARATOR_STRING = "$$"
+    val LOCAL_SUFFIX_STRING     = " "
+    val ROOTPKG: TermName       = "_root_"
+
+    /** Base strings from which synthetic names are derived. */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val CHECK_IF_REFUTABLE_STRING   = "check$ifrefutable$"
     val DEFAULT_GETTER_STRING       = "$default$"
     val DO_WHILE_PREFIX             = "doWhile$"
@@ -393,7 +539,11 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
     val INTERPRETER_VAR_PREFIX      = "res"
     val INTERPRETER_WRAPPER_SUFFIX  = "$object"
     val WHILE_PREFIX                = "while$"
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def getCause   = sn.GetCause
     def getClass_  = sn.GetClass
     def getMethod_ = sn.GetMethod
@@ -422,7 +572,11 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
     val XOR      = encode("^")
     val ZAND     = encode("&&")
     val ZOR      = encode("||")
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // unary operators
     val UNARY_~ = encode("unary_~")
     val UNARY_+ = encode("unary_+")
@@ -444,13 +598,21 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
     val IOOBException       : TypeName // IndexOutOfBoundsException
     val InvTargetException  : TypeName // InvocationTargetException
     val JavaSerializable    : TypeName
+<<<<<<< HEAD
     val MethodAsObject      : TypeName  
+=======
+    val MethodAsObject      : TypeName
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val NPException         : TypeName // NullPointerException
     val Object              : TypeName
     val String              : TypeName
     val Throwable           : TypeName
     val ValueType           : TypeName
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val ForName             : TermName
     val GetCause            : TermName
     val GetClass            : TermName
@@ -519,7 +681,11 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
     final val VOIDkw: TermName         = kw("void")
     final val VOLATILEkw: TermName     = kw("volatile")
     final val WHILEkw: TermName        = kw("while")
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     final val keywords = {
       val result = kws.toSet
       kws = null
@@ -527,11 +693,19 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
     }
   }
 
+<<<<<<< HEAD
   private abstract class JavaNames extends SymbolNames {    
     final val BoxedBoolean: TypeName       = "java.lang.Boolean"
     final val BoxedByte: TypeName          = "java.lang.Byte"
     final val BoxedCharacter: TypeName     = "java.lang.Character"
     final val BoxedDouble: TypeName        = "java.lang.Double"    
+=======
+  private abstract class JavaNames extends SymbolNames {
+    final val BoxedBoolean: TypeName       = "java.lang.Boolean"
+    final val BoxedByte: TypeName          = "java.lang.Byte"
+    final val BoxedCharacter: TypeName     = "java.lang.Character"
+    final val BoxedDouble: TypeName        = "java.lang.Double"
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     final val BoxedFloat: TypeName         = "java.lang.Float"
     final val BoxedInteger: TypeName       = "java.lang.Integer"
     final val BoxedLong: TypeName          = "java.lang.Long"
@@ -547,14 +721,23 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
     final val String: TypeName             = "java.lang.String"
     final val Throwable: TypeName          = "java.lang.Throwable"
     final val ValueType: TypeName          = tpnme.NO_NAME
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     final val ForName: TermName   = "forName"
     final val GetCause: TermName  = "getCause"
     final val GetClass: TermName  = "getClass"
     final val GetMethod: TermName = "getMethod"
     final val Invoke: TermName    = "invoke"
+<<<<<<< HEAD
     final val JavaLang: TermName  = "java.lang"    
     
+=======
+    final val JavaLang: TermName  = "java.lang"
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val Boxed = immutable.Map[TypeName, TypeName](
       tpnme.Boolean -> BoxedBoolean,
       tpnme.Byte    -> BoxedByte,
@@ -606,13 +789,22 @@ trait StdNames extends /*reflect.generic.StdNames with*/ NameManglers { self: Sy
   }
 
   private class J2SENames extends JavaNames {
+<<<<<<< HEAD
     final val BeanProperty: TypeName        = "scala.reflect.BeanProperty"
     final val BooleanBeanProperty: TypeName = "scala.reflect.BooleanBeanProperty"
+=======
+    final val BeanProperty: TypeName        = "scala.beans.BeanProperty"
+    final val BooleanBeanProperty: TypeName = "scala.beans.BooleanBeanProperty"
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     final val Code: TypeName                = "scala.reflect.Code"
     final val JavaSerializable: TypeName    = "java.io.Serializable"
   }
 
+<<<<<<< HEAD
   lazy val sn: SymbolNames = 
+=======
+  lazy val sn: SymbolNames =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (forMSIL) new MSILNames
     else new J2SENames
 }

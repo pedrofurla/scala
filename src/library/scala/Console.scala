@@ -10,7 +10,11 @@
 
 package scala
 
+<<<<<<< HEAD
 import java.io.{BufferedReader, InputStream, InputStreamReader, 
+=======
+import java.io.{BufferedReader, InputStream, InputStreamReader,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 IOException, OutputStream, PrintStream, Reader}
 import java.text.MessageFormat
 import scala.util.DynamicVariable
@@ -114,7 +118,11 @@ object Console {
     setOut(new PrintStream(out))
 
   /** Sets the default output stream for the duration
+<<<<<<< HEAD
    *  of execution of one thunk. 
+=======
+   *  of execution of one thunk.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *
    *  @param out the new output stream.
    *  @param thunk the code to execute with
@@ -180,6 +188,7 @@ object Console {
    *
    *  @example {{{
    *  val someFile:Reader = openFile("file.txt")
+<<<<<<< HEAD
    *  withIn(someFile) { 
    *    // Reads a line from file.txt instead of default input
    *    println(readLine) 
@@ -187,6 +196,15 @@ object Console {
    *  }}}
    *
    *  @param in the new input stream.     
+=======
+   *  withIn(someFile) {
+   *    // Reads a line from file.txt instead of default input
+   *    println(readLine)
+   *  }
+   *  }}}
+   *
+   *  @param in the new input stream.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param thunk the code to execute with
    *               the new input stream active
    *
@@ -198,7 +216,11 @@ object Console {
 
   /** Sets the default input stream.
    *
+<<<<<<< HEAD
    *  @param in the new input stream.     
+=======
+   *  @param in the new input stream.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */
   def setIn(in: InputStream) {
     setIn(new InputStreamReader(in))
@@ -207,7 +229,11 @@ object Console {
   /** Sets the default input stream for the duration
    *  of execution of one thunk.
    *
+<<<<<<< HEAD
    *  @param in the new input stream.     
+=======
+   *  @param in the new input stream.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param thunk the code to execute with
    *               the new input stream active
    * @return the results of `thunk`
@@ -242,7 +268,11 @@ object Console {
 
   /** Prints its arguments as a formatted string to the default output,
    *  based on a string pattern (in a fashion similar to printf in C).
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  The interpretation of the formatting patterns is described in
    *  <a href="" target="contentFrame" class="java/util/Formatter">
    *  `java.util.Formatter`</a>.
@@ -253,14 +283,22 @@ object Console {
    */
   def printf(text: String, args: Any*) { out.print(text format (args : _*)) }
 
+<<<<<<< HEAD
   /** Read a full line from the default input.  Returns `null` if the end of the 
+=======
+  /** Read a full line from the default input.  Returns `null` if the end of the
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * input stream has been reached.
    *
    * @return the string read from the terminal or null if the end of stream was reached.
    */
   def readLine(): String = in.readLine()
 
+<<<<<<< HEAD
   /** Print formatted text to the default output and read a full line from the default input.  
+=======
+  /** Print formatted text to the default output and read a full line from the default input.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  Returns `null` if the end of the input stream has been reached.
    *
    *  @param text the format of the text to print out, as in `printf`.
@@ -272,7 +310,11 @@ object Console {
     readLine()
   }
 
+<<<<<<< HEAD
   /** Reads a boolean value from an entire line of the default input. 
+=======
+  /** Reads a boolean value from an entire line of the default input.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  Has a fairly liberal interpretation of the input.
    *
    *  @return the boolean value read, or false if it couldn't be converted to a boolean
@@ -280,7 +322,11 @@ object Console {
    */
   def readBoolean(): Boolean = {
     val s = readLine()
+<<<<<<< HEAD
     if (s == null) 
+=======
+    if (s == null)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       throw new java.io.EOFException("Console has reached end of input")
     else
       s.toLowerCase() match {
@@ -297,11 +343,19 @@ object Console {
    *  @return the Byte that was read
    *  @throws java.io.EOFException if the end of the
    *  input stream has been reached.
+<<<<<<< HEAD
    *  @throws java.lang.NumberFormatException if the value couldn't be converted to a Byte 
    */
   def readByte(): Byte = {
     val s = readLine()
     if (s == null) 
+=======
+   *  @throws java.lang.NumberFormatException if the value couldn't be converted to a Byte
+   */
+  def readByte(): Byte = {
+    val s = readLine()
+    if (s == null)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       throw new java.io.EOFException("Console has reached end of input")
     else
       s.toByte
@@ -316,7 +370,11 @@ object Console {
    */
   def readShort(): Short = {
     val s = readLine()
+<<<<<<< HEAD
     if (s == null) 
+=======
+    if (s == null)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       throw new java.io.EOFException("Console has reached end of input")
     else
       s.toShort
@@ -331,7 +389,11 @@ object Console {
    */
   def readChar(): Char = {
     val s = readLine()
+<<<<<<< HEAD
     if (s == null) 
+=======
+    if (s == null)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       throw new java.io.EOFException("Console has reached end of input")
     else
       s charAt 0
@@ -346,7 +408,11 @@ object Console {
    */
   def readInt(): Int = {
     val s = readLine()
+<<<<<<< HEAD
     if (s == null) 
+=======
+    if (s == null)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       throw new java.io.EOFException("Console has reached end of input")
     else
       s.toInt
@@ -361,7 +427,11 @@ object Console {
    */
   def readLong(): Long = {
     val s = readLine()
+<<<<<<< HEAD
     if (s == null) 
+=======
+    if (s == null)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       throw new java.io.EOFException("Console has reached end of input")
     else
       s.toLong
@@ -376,7 +446,11 @@ object Console {
    */
   def readFloat(): Float = {
     val s = readLine()
+<<<<<<< HEAD
     if (s == null) 
+=======
+    if (s == null)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       throw new java.io.EOFException("Console has reached end of input")
     else
       s.toFloat
@@ -391,7 +465,11 @@ object Console {
    */
   def readDouble(): Double = {
     val s = readLine()
+<<<<<<< HEAD
     if (s == null) 
+=======
+    if (s == null)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       throw new java.io.EOFException("Console has reached end of input")
     else
       s.toDouble
@@ -408,7 +486,11 @@ object Console {
    */
   def readf(format: String): List[Any] = {
     val s = readLine()
+<<<<<<< HEAD
     if (s == null) 
+=======
+    if (s == null)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       throw new java.io.EOFException("Console has reached end of input")
     else
       textComponents(new MessageFormat(format).parse(s))

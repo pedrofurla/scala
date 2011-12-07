@@ -93,7 +93,11 @@ abstract class Detach extends PluginComponent
           case MethodType(params, rt) => (params map (_.tpe)) ::: List(rt)
           case t => List(t)
         }
+<<<<<<< HEAD
         val hashes = sym1.nameString.hashCode :: 
+=======
+        val hashes = sym1.nameString.hashCode ::
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           (ts map (_.typeSymbol.nameString.hashCode))
         (0L /: hashes)((acc, h) => acc ^ h)
       }
@@ -130,7 +134,11 @@ abstract class Detach extends PluginComponent
     ]
     def toInterface(clazz: Symbol) = proxies(clazz)._1
     private val classdefs = new mutable.HashMap[Symbol/*clazz*/, ClassDef]
+<<<<<<< HEAD
     // detachedClosure gathers class definitions containing a "detach" apply 
+=======
+    // detachedClosure gathers class definitions containing a "detach" apply
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private val detachedClosure = new mutable.HashMap[Symbol/*clazz*/, ClassDef]
 
     /** <p>
@@ -266,7 +274,11 @@ abstract class Detach extends PluginComponent
               tree.symbol updateInfo to.head.tpe
             }
             else tree.symbol.tpe match {
+<<<<<<< HEAD
               case MethodType(params, restp) => 
+=======
+              case MethodType(params, restp) =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 for (p <- params if p.tpe == from.head.tpe) {
                   p updateInfo to.head.tpe
                 }
@@ -526,7 +538,11 @@ abstract class Detach extends PluginComponent
         if qual.hasSymbol && (objs contains qual.symbol) =>
           if (DEBUG)
             println("\nTreeAccessorSubstituter: Select4\n\tqual="+qual+
+<<<<<<< HEAD
                     ", qual.tpe="+qual.tpe+", name="+name)//debug                      
+=======
+                    ", qual.tpe="+qual.tpe+", name="+name)//debug
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           val sym = qual.symbol
           val proxy = proxySyms(objs indexOf sym)
           // substitute the accessor of a member of the enclosing class

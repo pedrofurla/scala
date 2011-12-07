@@ -6,7 +6,10 @@
 **                          |/                                          **
 \*                                                                      */
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 package scala.tools.ant.sabbus
 
 import java.io.File
@@ -14,6 +17,7 @@ import java.io.File
 import org.apache.tools.ant.types.{Path, Reference}
 
 class Settings {
+<<<<<<< HEAD
   
   private var gBf: Option[String] = None
   def g = gBf.get
@@ -63,6 +67,57 @@ class Settings {
   def more = moreBf.get
   def more_=(s: String): this.type = { moreBf = Some(s); this }
   
+=======
+
+  private var gBf: Option[String] = None
+  def g = gBf.get
+  def g_=(s: String): this.type = { gBf = Some(s); this }
+
+  private var uncheckedBf: Boolean = false
+  def unchecked = uncheckedBf
+  def unchecked_=(b: Boolean): this.type = { uncheckedBf = b; this }
+
+  private var classpathBf: Option[Path] = None
+  def classpath = classpathBf.get
+  def classpath_=(p: Path): this.type = { classpathBf = Some(p); this }
+
+  private var sourcepathBf: Option[Path] = None
+  def sourcepath = sourcepathBf.get
+  def sourcepath_=(p: Path): this.type = { sourcepathBf = Some(p); this }
+
+  private var sourcedirBf: Option[File] = None
+  def sourcedir = sourcedirBf.get
+  def sourcedir_=(p: File): this.type = { sourcedirBf = Some(p); this }
+
+  private var bootclasspathBf: Option[Path] = None
+  def bootclasspath = bootclasspathBf.get
+  def bootclasspath_=(p: Path): this.type = { bootclasspathBf = Some(p); this }
+
+  private var extdirsBf: Option[Path] = None
+  def extdirs = extdirsBf.get
+  def extdirs_=(p: Path): this.type = { extdirsBf = Some(p); this }
+
+  private var dBf: Option[File] = None
+  def d = dBf.get
+  def d_=(f: File): this.type = { dBf = Some(f); this }
+
+  private var encodingBf: Option[String] = None
+  def encoding = encodingBf.get
+  def encoding_=(s: String): this.type = { encodingBf = Some(s); this }
+
+  private var targetBf: Option[String] = None
+  def target = targetBf.get
+  def target_=(s: String): this.type = { targetBf = Some(s); this }
+
+  private var optimiseBf: Boolean = false
+  def optimise = optimiseBf
+  def optimise_=(b: Boolean) { optimiseBf = b }
+
+  private var extraParamsBf: Seq[String] = Seq()
+  def extraParams = extraParamsBf
+  def extraParams_=(s: Seq[String]): this.type = { extraParamsBf = s; this }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def toArgs: List[String] =
     (if (!gBf.isEmpty) "-g:"+g :: Nil else Nil) :::
     (if (uncheckedBf) "-unchecked" :: Nil else Nil) :::
@@ -75,8 +130,13 @@ class Settings {
     (if (!encodingBf.isEmpty) "-encoding" :: encoding :: Nil else Nil) :::
     (if (!targetBf.isEmpty) "-target:"+target :: Nil else Nil) :::
     (if (optimiseBf) "-optimise" :: Nil else Nil) :::
+<<<<<<< HEAD
     (if (!moreBf.isEmpty) (more split ' ').toList else Nil)
   
+=======
+    extraParamsBf.toList
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def equals(that: Any): Boolean = that match {
     case cs: Settings =>
       this.gBf == cs.gBf &&
@@ -90,8 +150,15 @@ class Settings {
       this.encodingBf == cs.encodingBf &&
       this.targetBf == cs.targetBf &&
       this.optimiseBf == cs.optimiseBf &&
+<<<<<<< HEAD
       this.moreBf == cs.moreBf
     case _ => false
   }
   
+=======
+      this.extraParamsBf == cs.extraParamsBf
+    case _ => false
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

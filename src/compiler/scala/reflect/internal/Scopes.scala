@@ -33,6 +33,13 @@ trait Scopes extends api.Scopes { self: SymbolTable =>
     e
   }
 
+<<<<<<< HEAD
+=======
+  object Scope {
+    def unapplySeq(decls: Scope): Some[Seq[Symbol]] = Some(decls.toList)
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class Scope(initElems: ScopeEntry) extends Iterable[Symbol] {
 
     var elems: ScopeEntry = initElems
@@ -74,11 +81,15 @@ trait Scopes extends api.Scopes { self: SymbolTable =>
     }
 
     /** Returns a new scope with the same content as this one. */
+<<<<<<< HEAD
     def cloneScope: Scope = {
       val clone = new Scope()
       this.toList foreach (clone enter _)
       clone
     }
+=======
+    def cloneScope: Scope = new Scope(this.toList)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     /** is the scope empty? */
     override def isEmpty: Boolean = elems eq null
@@ -98,6 +109,7 @@ trait Scopes extends api.Scopes { self: SymbolTable =>
      *
      *  @param e ...
      */
+<<<<<<< HEAD
     def enter(e: ScopeEntry) {
       elemsCache = null
       if (hashtable ne null) {
@@ -107,6 +119,20 @@ trait Scopes extends api.Scopes { self: SymbolTable =>
       } else if (size >= MIN_HASH) {
         createHash()
       }
+=======
+    protected def enter(e: ScopeEntry) {
+      elemsCache = null
+      if (hashtable ne null)
+        enterInHash(e)
+      else if (size >= MIN_HASH)
+        createHash()
+    }
+
+    private def enterInHash(e: ScopeEntry): Unit = {
+      val i = e.sym.name.start & HASHMASK
+      e.tail = hashtable(i)
+      hashtable(i) = e
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
 
     /** enter a symbol
@@ -126,6 +152,7 @@ trait Scopes extends api.Scopes { self: SymbolTable =>
 
     private def createHash() {
       hashtable = new Array[ScopeEntry](HASHSIZE)
+<<<<<<< HEAD
       enterInHash(elems)
     }
 
@@ -135,6 +162,25 @@ trait Scopes extends api.Scopes { self: SymbolTable =>
         val i = e.sym.name.start & HASHMASK
         e.tail = hashtable(i)
         hashtable(i) = e
+=======
+      enterAllInHash(elems)
+    }
+
+    private def enterAllInHash(e: ScopeEntry, n: Int = 0) {
+      if (e ne null) {
+        if (n < maxRecursions) {
+          enterAllInHash(e.next, n + 1)
+          enterInHash(e)
+        } else {
+          var entries: List[ScopeEntry] = List()
+          var ee = e
+          while (ee ne null) {
+            entries = ee :: entries
+            ee = ee.next
+          }
+          entries foreach enterInHash
+        }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       }
     }
 
@@ -212,7 +258,11 @@ trait Scopes extends api.Scopes { self: SymbolTable =>
     def lookupAll(name: Name): Iterator[Symbol] = new Iterator[Symbol] {
       var e = lookupEntry(name)
       def hasNext: Boolean = e ne null
+<<<<<<< HEAD
       def next: Symbol = { val r = e.sym; e = lookupNextEntry(e); r }
+=======
+      def next(): Symbol = { val r = e.sym; e = lookupNextEntry(e); r }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
 
     /** lookup a symbol entry matching given name.
@@ -236,12 +286,20 @@ trait Scopes extends api.Scopes { self: SymbolTable =>
       e
     }
 
+<<<<<<< HEAD
     /** lookup next entry with same name as this one 
+=======
+    /** lookup next entry with same name as this one
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *  @note from Martin: I believe this is a hotspot or will be one
      *  in future versions of the type system. I have reverted the previous
      *  change to use iterators as too costly.
      */
+<<<<<<< HEAD
     def lookupNextEntry(entry: ScopeEntry): ScopeEntry = {      
+=======
+    def lookupNextEntry(entry: ScopeEntry): ScopeEntry = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       var e = entry
       if (hashtable ne null)
         do { e = e.tail } while ((e ne null) && e.sym.name != entry.sym.name)
@@ -271,7 +329,11 @@ trait Scopes extends api.Scopes { self: SymbolTable =>
     /** Return all symbols as an iterator in the order they were entered in this scope.
      */
     def iterator: Iterator[Symbol] = toList.iterator
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 /*
     /** Does this scope contain an entry for `sym`?
      */
@@ -280,7 +342,11 @@ trait Scopes extends api.Scopes { self: SymbolTable =>
     /** A scope that contains all symbols of this scope and that also contains `sym`.
      */
     def +(sym: Symbol): Scope =
+<<<<<<< HEAD
       if (contains(sym)) this 
+=======
+      if (contains(sym)) this
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       else {
         val result = cloneScope
         result enter sym
@@ -290,7 +356,11 @@ trait Scopes extends api.Scopes { self: SymbolTable =>
     /** A scope that contains all symbols of this scope except `sym`.
      */
     def -(sym: Symbol): Scope =
+<<<<<<< HEAD
       if (!contains(sym)) this 
+=======
+      if (!contains(sym)) this
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       else {
         val result = cloneScope
         result unlink sym
@@ -309,8 +379,28 @@ trait Scopes extends api.Scopes { self: SymbolTable =>
 
   }
 
+<<<<<<< HEAD
   def newScope: Scope = new Scope
 
+=======
+  /** Create a new scope */
+  def newScope: Scope = new Scope
+
+  /** Create new scope for the members of package `pkg` */
+  def newPackageScope(pkgClass: Symbol): Scope = new Scope
+
+  /** Transform scope of members of `owner` using operation `op`
+   *  This is overridden by the reflective compiler to avoid creating new scopes for packages
+   */
+  def scopeTransform(owner: Symbol)(op: => Scope): Scope = op
+
+  def newScopeWith(elems: Symbol*): Scope = {
+    val scope = newScope
+    elems foreach scope.enter
+    scope
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** The empty scope (immutable).
    */
   object EmptyScope extends Scope {
@@ -322,5 +412,11 @@ trait Scopes extends api.Scopes { self: SymbolTable =>
   /** The error scope.
    */
   class ErrorScope(owner: Symbol) extends Scope(null: ScopeEntry)
+<<<<<<< HEAD
+=======
+
+  private final val maxRecursions = 1000
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 

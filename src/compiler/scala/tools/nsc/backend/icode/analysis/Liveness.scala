@@ -24,7 +24,11 @@ abstract class Liveness {
   /** The lattice for this analysis.   */
   object livenessLattice extends SemiLattice {
     type Elem = Set[Local]
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     object top extends ListSet[Local] with ReferenceEquality
     object bottom extends ListSet[Local] with ReferenceEquality
 
@@ -34,7 +38,10 @@ abstract class Liveness {
   final class LivenessAnalysis extends DataFlowAnalysis[livenessLattice.type] {
     type P = BasicBlock
     val lattice = livenessLattice
+<<<<<<< HEAD
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     var method: IMethod = _
 
     val gen: mutable.Map[BasicBlock, Set[Local]] = perRunCaches.newMap()
@@ -42,11 +49,18 @@ abstract class Liveness {
 
     def init(m: IMethod) {
       this.method = m
+<<<<<<< HEAD
       gen.clear
       kill.clear
 
       for (b <- m.code.blocks;
            (g, k) = genAndKill(b)) {
+=======
+      gen.clear()
+      kill.clear()
+
+      for (b <- m.code.blocks; (g, k) = genAndKill(b)) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         gen  += (b -> g)
         kill += (b -> k)
       }

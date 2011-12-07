@@ -22,7 +22,11 @@ import generic._
 trait MapProxyLike[A, +B, +This <: MapLike[A, B, This] with Map[A, B]]
       extends MapLike[A, B, This]
       with IterableProxyLike[(A, B), This]
+<<<<<<< HEAD
 {  
+=======
+{
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def get(key: A): Option[B] = self.get(key)
   override def iterator: Iterator[(A, B)] = self.iterator
   override def + [B1 >: B] (kv: (A, B1)): Map[A, B1] = self.+(kv)
@@ -39,12 +43,20 @@ trait MapProxyLike[A, +B, +This <: MapLike[A, B, This] with Map[A, B]]
   override def valuesIterator: Iterator[B] = self.valuesIterator
   override def default(key: A): B = self.default(key)
   override def filterKeys(p: A => Boolean) = self.filterKeys(p)
+<<<<<<< HEAD
   override def mapValues[C](f: B => C) = self.mapValues(f) 
+=======
+  override def mapValues[C](f: B => C) = self.mapValues(f)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def updated [B1 >: B](key: A, value: B1): Map[A, B1] = self.updated(key, value)
   override def + [B1 >: B] (kv1: (A, B1), kv2: (A, B1), kvs: (A, B1) *): Map[A, B1] = self.+(kv1, kv2, kvs: _*)
   override def ++[B1 >: B](xs: GenTraversableOnce[(A, B1)]): Map[A, B1] =  self.++(xs)
   override def filterNot(p: ((A, B)) => Boolean) = self filterNot p
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def addString(b: StringBuilder, start: String, sep: String, end: String): StringBuilder =
     self.addString(b, start, sep, end)
 }

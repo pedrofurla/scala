@@ -27,14 +27,22 @@ class PlainDirectory(givenPath: Directory) extends PlainFile(givenPath) {
   override def delete(): Unit = givenPath.deleteRecursively()
 }
 
+<<<<<<< HEAD
 /** This class implements an abstract file backed by a File. 
+=======
+/** This class implements an abstract file backed by a File.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  */
 class PlainFile(val givenPath: Path) extends AbstractFile {
   assert(path ne null)
 
   val file = givenPath.jfile
   override def underlyingSource = Some(this)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private val fpath = givenPath.toAbsolute
 
   /** Returns the name of this abstract file. */
@@ -45,12 +53,20 @@ class PlainFile(val givenPath: Path) extends AbstractFile {
 
   /** The absolute file. */
   def absolute = new PlainFile(givenPath.toAbsolute)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def container: AbstractFile = new PlainFile(givenPath.parent)
   override def input = givenPath.toFile.inputStream()
   override def output = givenPath.toFile.outputStream()
   override def sizeOption = Some(givenPath.length.toInt)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def hashCode(): Int = fpath.hashCode
   override def equals(that: Any): Boolean = that match {
     case x: PlainFile => fpath == x.fpath

@@ -20,9 +20,18 @@ import generic._
  *  @author Martin Odersky
  *  @version 2.8
  *  @since   1
+<<<<<<< HEAD
  *  
  *  @tparam A     the type of the elements contained in this double linked list.
  *  
+=======
+ *  @see [[http://docs.scala-lang.org/overviews/collections/concrete-mutable-collection-classes.html#double_linked_lists "Scala's Collection Library overview"]]
+ *  section on `Double Linked Lists` for more information.
+
+ *
+ *  @tparam A     the type of the elements contained in this double linked list.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define Coll DoubleLinkedList
  *  @define coll double linked list
  *  @define thatinfo the class of the returned collection. In the standard library configuration,
@@ -32,20 +41,33 @@ import generic._
  *    result class `That` from the current representation type `Repr`
  *    and the new element type `B`. This is usually the `canBuildFrom` value
  *    defined in object `DoubleLinkedList`.
+<<<<<<< HEAD
  *  @define orderDependent 
+=======
+ *  @define orderDependent
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define orderDependentFold
  *  @define mayNotTerminateInf
  *  @define willNotTerminateInf
  */
 @SerialVersionUID(-8144992287952814767L)
+<<<<<<< HEAD
 class DoubleLinkedList[A]() extends LinearSeq[A]
+=======
+class DoubleLinkedList[A]() extends AbstractSeq[A]
+                            with LinearSeq[A]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                             with GenericTraversableTemplate[A, DoubleLinkedList]
                             with DoubleLinkedListLike[A, DoubleLinkedList[A]]
                             with Serializable {
   next = this
 
   /** Creates a node for the double linked list.
+<<<<<<< HEAD
    *  
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param elem    the element this node contains.
    *  @param next    the next node in the double linked list.
    */

@@ -20,7 +20,11 @@ import Utility.Escapes.{ pairs => unescape }
  * whatever the markup handler returns. Use `ConstructingParser` if you just
  * want to parse XML to construct instances of `scala.xml.Node`.
  *
+<<<<<<< HEAD
  * While XML elements are returned, DTD declarations - if handled - are 
+=======
+ * While XML elements are returned, DTD declarations - if handled - are
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * collected using side-effects.
  *
  * @author  Burak Emir
@@ -52,7 +56,11 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
   // variables, values
   //
 
+<<<<<<< HEAD
   var curInput: Source = input
+=======
+  protected var curInput: Source = input
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   // See ticket #3720 for motivations.
   private class WithLookAhead(underlying: Source) extends Source {
@@ -78,7 +86,11 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
       curInput = newInput
       newInput.lookahead()
   }
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** the handler of the markup, returns this */
   private val handle: MarkupHandler = this
@@ -107,7 +119,11 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
       } else {
         val ilen = inpStack.length;
         //Console.println("  ilen = "+ilen+ " extIndex = "+extIndex);
+<<<<<<< HEAD
         if ((ilen != extIndex) && (ilen > 0)) { 
+=======
+        if ((ilen != extIndex) && (ilen > 0)) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           /** for external source, inpStack == Nil ! need notify of eof! */
           pop()
         } else {
@@ -249,7 +265,11 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
       case _:EntityRef => // todo: fix entities, shouldn't be "special"
         reportSyntaxError("no entity references allowed here");
       case s:SpecialNode =>
+<<<<<<< HEAD
         if (s.toString().trim().length > 0) //non-empty text nodes not allowed
+=======
+        if (s.toString.trim().length > 0) //non-empty text nodes not allowed
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           elemCount += 2
       case m:Node =>
         elemCount += 1
@@ -266,7 +286,11 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
   }
 
   /** append Unicode character to name buffer*/
+<<<<<<< HEAD
   protected def putChar(c: Char) = cbuf.append(c)
+=======
+  protected def putChar(c: Char) = cbuf append c
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** As the current code requires you to call nextch once manually
    *  after construction, this method formalizes that suboptimal reality.
@@ -276,6 +300,7 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
     this
   }
 
+<<<<<<< HEAD
   def ch_returning_nextch = { val res = ch ; nextch ; res }
   def mkProcInstr(position: Int, name: String, text: String): NodeSeq =
     handle.procInstr(position, name, text)
@@ -284,6 +309,17 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
     if (isNameStart (ch)) xAttributes(pscope)
     else (Null, pscope)
 
+=======
+  protected def ch_returning_nextch: Char = { val res = ch; nextch(); res }
+
+  def mkAttributes(name: String, pscope: NamespaceBinding): AttributesType =
+    if (isNameStart (ch)) xAttributes(pscope)
+    else (Null, pscope)
+
+  def mkProcInstr(position: Int, name: String, text: String): ElementType =
+    handle.procInstr(position, name, text)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** this method tells ch to get the next character when next called */
   def nextch() {
     // Read current ch if needed
@@ -318,7 +354,11 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
           aMap = new PrefixedAttribute(prefix, key, Text(value), aMap)
 
         case _ =>
+<<<<<<< HEAD
           if( qname == "xmlns" ) 
+=======
+          if( qname == "xmlns" )
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             scope = new NamespaceBinding(null, value, scope)
           else
             aMap = new UnprefixedAttribute(qname, Text(value), aMap)
@@ -375,7 +415,11 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
   def xComment: NodeSeq = {
     val sb: StringBuilder = new StringBuilder()
     xToken("--")
+<<<<<<< HEAD
     while (true) { 
+=======
+    while (true) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (ch == '-'  && { sb.append(ch); nextch; ch == '-' }) {
         sb.length = sb.length - 1
         nextch
@@ -404,7 +448,11 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
     ch match {
       case '!' =>
         nextch
+<<<<<<< HEAD
       if ('[' == ch)                 // CDATA 
+=======
+      if ('[' == ch)                 // CDATA
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         ts &+ xCharData
       else if ('D' == ch) // doctypedecl, parse DTD // @todo REMOVE HACK
         parseDTD()
@@ -413,11 +461,19 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
       case '?' =>                    // PI
         nextch
         ts &+ xProcInstr
+<<<<<<< HEAD
       case _   => 
         ts &+ element1(pscope)      // child
     }
   }
    
+=======
+      case _   =>
+        ts &+ element1(pscope)      // child
+    }
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** {{{
    *  content1 ::=  '&lt;' content1 | '&amp;' charref ...
    *  }}} */
@@ -442,7 +498,11 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
           }
 
         // postcond: xEmbeddedBlock == false!
+<<<<<<< HEAD
         case '&' => // EntityRef or CharRef 
+=======
+        case '&' => // EntityRef or CharRef
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           nextch; ch match {
             case '#'  =>  // CharacterRef
               nextch
@@ -490,7 +550,11 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
    *  dtd.
    *  {{{
    *  &lt;! parseDTD ::= DOCTYPE name ... >
+<<<<<<< HEAD
    *  }}} */ 
+=======
+   *  }}} */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def parseDTD() { // dirty but fast
     var extID: ExternalID = null
     if (this.dtd ne null)
@@ -505,7 +569,11 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
       xSpaceOpt
     }
 
+<<<<<<< HEAD
     /* parse external subset of DTD 
+=======
+    /* parse external subset of DTD
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      */
 
     if ((null != extID) && isValidating) {
@@ -577,6 +645,7 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
    *
    *  precondition: `xEmbeddedBlock == false` (we are not in a scala block)
    */
+<<<<<<< HEAD
   def xText: String = {
     var exit = false;
     while (! exit) {
@@ -588,6 +657,19 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
     }
     val str = cbuf.toString();
     cbuf.length = 0;
+=======
+  private def xText: String = {
+    var exit = false
+    while (! exit) {
+      putChar(ch)
+      val opos = pos
+      nextch
+
+      exit = eof || ( ch == '<' ) || ( ch == '&' )
+    }
+    val str = cbuf.toString
+    cbuf.length = 0
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     str
   }
 
@@ -627,7 +709,11 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
       nextch
     }
     nextch
+<<<<<<< HEAD
     val str = cbuf.toString()
+=======
+    val str = cbuf.toString
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     cbuf.length = 0
     str
   }
@@ -671,7 +757,11 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
           if ('L' == ch) {
             nextch
             elementDecl()
+<<<<<<< HEAD
           } else 
+=======
+          } else
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             entityDecl()
 
         case 'A' =>
@@ -733,7 +823,11 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
       val ent = xName
       xToken(';')
       if (!isValidating)
+<<<<<<< HEAD
         handle.peReference(ent)  //  n-v: just create PE-reference 
+=======
+        handle.peReference(ent)  //  n-v: just create PE-reference
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       else
         push(ent)                //    v: parse replacementText
 
@@ -748,7 +842,11 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
       nextch
   }
 
+<<<<<<< HEAD
   /**  "rec-xml/#ExtSubset" pe references may not occur within markup declarations 
+=======
+  /**  "rec-xml/#ExtSubset" pe references may not occur within markup declarations
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */
   def intSubset() {
     //Console.println("(DEBUG) intSubset()")
@@ -796,7 +894,11 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
           cbuf.append(ch)
         nextch
       }
+<<<<<<< HEAD
       val atpe = cbuf.toString()
+=======
+      val atpe = cbuf.toString
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       cbuf.length = 0
 
       val defdecl: DefaultDecl = ch match {
@@ -880,7 +982,11 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
     val notat = xName
     xSpace
     val extID = if (ch == 'S') {
+<<<<<<< HEAD
       externalID();
+=======
+      externalID()
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
     else if (ch == 'P') {
       /** PublicID (without system, only used in NOTATION) */
@@ -893,7 +999,11 @@ trait MarkupParser extends MarkupParserCommon with TokenTests
         systemLiteral()
       else
         null;
+<<<<<<< HEAD
       new PublicID(pubID, sysID);
+=======
+      new PublicID(pubID, sysID)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     } else {
       reportSyntaxError("PUBLIC or SYSTEM expected");
       sys.error("died parsing notationdecl")

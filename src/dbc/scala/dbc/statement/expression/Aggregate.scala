@@ -14,6 +14,7 @@ package expression
 
 
 @deprecated(DbcIsDeprecated, "2.9.0") abstract class Aggregate extends Expression {
+<<<<<<< HEAD
   
   def aggregateName: String;
   
@@ -21,6 +22,15 @@ package expression
   
   def filterClause: Option[Expression];
   
+=======
+
+  def aggregateName: String;
+
+  def setFunction: SetFunction;
+
+  def filterClause: Option[Expression];
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A SQL-99 compliant string representation of the relation sub-
    * statement. This only has a meaning inside another statement. */
   def sqlInnerString: String = (
@@ -31,5 +41,9 @@ package expression
       case Some(fc) => " FILTER (WHERE " + fc.sqlString + ")"
     })
   )
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

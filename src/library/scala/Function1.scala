@@ -11,12 +11,20 @@ package scala
 
 
 /** A function of 1 parameter.
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  In the following example, the definition of succ is a
  *  shorthand for the anonymous class definition anonfun1:
  *
  *  {{{
+<<<<<<< HEAD
  *  object Main extends Application { 
+=======
+ *  object Main extends Application {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *    val succ = (x: Int) => x + 1
  *    val anonfun1 = new Function1[Int, Int] {
  *      def apply(x: Int): Int = x + 1
@@ -31,7 +39,11 @@ trait Function1[@specialized(scala.Int, scala.Long, scala.Float, scala.Double) -
    *  @return   the result of function application.
    */
   def apply(v1: T1): R
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Composes two instances of Function1 in a new Function1, with this function applied last.
    *
    *  @tparam   A   the type to which function `g` can be applied

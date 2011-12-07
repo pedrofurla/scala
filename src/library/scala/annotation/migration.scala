@@ -7,7 +7,11 @@
 \*                                                                      */
 
 package scala.annotation
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 /**
  * An annotation that marks a member as having changed semantics
  * between versions.  This is intended for methods which for one

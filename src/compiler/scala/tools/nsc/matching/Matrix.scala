@@ -45,6 +45,7 @@ trait Matrix extends MatrixAdditions {
 
   /** "The Mixture Rule"
 
+<<<<<<< HEAD
         {v=pat1, pats1 .. } {q1} 
   match {..               } {..} 
         {v=patn, patsn .. } {qn} 
@@ -79,6 +80,42 @@ trait Matrix extends MatrixAdditions {
   states. Otherwise,the error state is used after its reference count has been incremented. 
   **/
   
+=======
+        {v=pat1, pats1 .. } {q1}
+  match {..               } {..}
+        {v=patn, patsn .. } {qn}
+
+  The is the real work-horse of the algorithm. There is some column whose top-most pattern is a
+  constructor. (Forsimplicity, itisdepicted above asthe left-most column, but anycolumn will do.)
+  The goal is to build a test state with the variablevand some outgoing arcs (one for each construc-
+  tor and possibly a default arc). Foreach constructor in the selected column, its arc is deﬁned as
+  follows:
+
+  Let {i1,...,ij} be the rows-indices of the patterns in the column that match c. Since the pat-
+  terns are viewed as regular expressions, this will be the indices of the patterns that either
+  have the same constructor c, or are wildcards.
+
+  Let {pat1,...,patj} be the patterns in the column corresponding to the indices computed
+  above, and let nbe the arity of the constructor c, i.e. the number of sub-patterns it has. For
+  eachpati, its n sub-patterns are extracted; if pat i is a wildcard, nwildcards are produced
+  instead, each tagged with the right path variable. This results in a pattern matrix with n
+  columns and j rows. This matrix is then appended to the result of selecting, from each col-
+  umn in the rest of the original matrix, those rows whose indices are in {i1,...,ij}. Finally
+  the indices are used to select the corresponding ﬁnal states that go with these rows. Note
+  that the order of the indices is signiﬁcant; selected rows do not change their relative orders.
+  The arc for the constructor c is now deﬁned as (c’,state), where c’ is cwith any
+  immediate sub-patterns replaced by their path variables (thus c’ is a simple pattern), and
+  state is the result of recursively applying match to the new matrix and the new sequence
+  of ﬁnal states.
+
+  Finally, the possibility for matching failure is considered. If the set of constructors is exhaustive,
+  then no more arcs are computed. Otherwise, a default arc(_,state)is the last arc. If there are
+  any wildcard patterns in the selected column, then their rows are selected from the rest of the
+  matrix and the ﬁnal states, and the state is the result of applying match to the new matrix and
+  states. Otherwise,the error state is used after its reference count has been incremented.
+  **/
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Handles all translation of pattern matching.
    */
   def handlePattern(
@@ -89,7 +126,11 @@ trait Matrix extends MatrixAdditions {
   {
     import context._
     TRACE("handlePattern", "(%s: %s) match { %s cases }", selector, selector.tpe, cases.size)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val matrixInit: MatrixInit = {
       val v = copyVar(selector, isChecked, selector.tpe, "temp")
       MatrixInit(List(v), cases, atPos(selector.pos)(MATCHERROR(v.ident)))
@@ -113,10 +154,17 @@ trait Matrix extends MatrixAdditions {
       extends Squeezer
   {
     private def ifNull[T](x: T, alt: T) = if (x == null) alt else x
+<<<<<<< HEAD
     
     // NO_EXHAUSTIVE communicates there should be no exhaustiveness checking
     private def flags(checked: Boolean) = if (checked) Nil else List(NO_EXHAUSTIVE)
     
+=======
+
+    // NO_EXHAUSTIVE communicates there should be no exhaustiveness checking
+    private def flags(checked: Boolean) = if (checked) Nil else List(NO_EXHAUSTIVE)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // Recording the symbols of the synthetics we create so we don't go clearing
     // anyone else's mutable flags.
     private val _syntheticSyms = mutable.HashSet[Symbol]()
@@ -143,6 +191,7 @@ trait Matrix extends MatrixAdditions {
       def valDefs = roots map (_.valDef)
       override def toString() = "MatrixInit(roots = %s, %d cases)".format(pp(roots), cases.size)
     }
+<<<<<<< HEAD
     
     implicit def pvlist2pvgroup(xs: List[PatternVar]): PatternVarGroup =
       PatternVarGroup(xs)
@@ -166,30 +215,72 @@ trait Matrix extends MatrixAdditions {
       }
     }
       
+=======
+
+    implicit def pvlist2pvgroup(xs: List[PatternVar]): PatternVarGroup =
+      PatternVarGroup(xs)
+
+    object PatternVarGroup {
+      def apply(xs: PatternVar*) = new PatternVarGroup(xs.toList)
+      def apply(xs: List[PatternVar]) = new PatternVarGroup(xs)
+
+      // XXX - transitional
+      def fromBindings(vlist: List[Binding], freeVars: List[Symbol] = Nil) = {
+        def vmap(v: Symbol): Option[Binding] = vlist find (_.pvar eq v)
+        val info =
+          if (freeVars.isEmpty) vlist
+          else (freeVars map vmap).flatten
+
+        val xs =
+          for (Binding(lhs, rhs) <- info) yield
+            new PatternVar(lhs, Ident(rhs) setType lhs.tpe, !(rhs hasFlag NO_EXHAUSTIVE))
+
+        new PatternVarGroup(xs)
+      }
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val emptyPatternVarGroup = PatternVarGroup()
     class PatternVarGroup(val pvs: List[PatternVar]) {
       def syms    = pvs map (_.sym)
       def valDefs = pvs map (_.valDef)
       def idents  = pvs map (_.ident)
+<<<<<<< HEAD
       
       def extractIndex(index: Int): (PatternVar, PatternVarGroup) = {
         val (t, ts) = self.extractIndex(pvs, index)
         (t, PatternVarGroup(ts))
       } 
       
+=======
+
+      def extractIndex(index: Int): (PatternVar, PatternVarGroup) = {
+        val (t, ts) = self.extractIndex(pvs, index)
+        (t, PatternVarGroup(ts))
+      }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       def isEmpty = pvs.isEmpty
       def size = pvs.size
       def head = pvs.head
       def ::(t: PatternVar) = PatternVarGroup(t :: pvs)
       def :::(ts: List[PatternVar]) = PatternVarGroup(ts ::: pvs)
       def ++(other: PatternVarGroup) = PatternVarGroup(pvs ::: other.pvs)
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       def apply(i: Int) = pvs(i)
       def zipWithIndex = pvs.zipWithIndex
       def indices = pvs.indices
       def map[T](f: PatternVar => T) = pvs map f
       def filter(p: PatternVar => Boolean) = PatternVarGroup(pvs filter p)
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       override def toString() = pp(pvs)
     }
 
@@ -206,12 +297,20 @@ trait Matrix extends MatrixAdditions {
 
       override def toString() = "%s: %s = %s".format(lhs, tpe, rhs)
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Sets the rhs to EmptyTree, which makes the valDef ignored in Scrutinee.
      */
     def specialVar(lhs: Symbol, checked: Boolean) =
       new PatternVar(lhs, EmptyTree, checked)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Given a tree, creates a new synthetic variable of the same type
      *  and assigns the tree to it.
      */
@@ -227,13 +326,18 @@ trait Matrix extends MatrixAdditions {
 
       tracing("copy")(new PatternVar(sym, root, checked))
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** Creates a new synthetic variable of the specified type and
      *  assigns the result of f(symbol) to it.
      */
     def createVar(tpe: Type, f: Symbol => Tree, checked: Boolean) = {
       val lhs = newVar(owner.pos, tpe, flags(checked))
       val rhs = f(lhs)
+<<<<<<< HEAD
       
       tracing("create")(new PatternVar(lhs, rhs, checked))
     }      
@@ -241,6 +345,15 @@ trait Matrix extends MatrixAdditions {
       val lhs = newVar(owner.pos, tpe, Flags.LAZY :: flags(checked))
       val rhs = f(lhs)
       
+=======
+
+      tracing("create")(new PatternVar(lhs, rhs, checked))
+    }
+    def createLazy(tpe: Type, f: Symbol => Tree, checked: Boolean) = {
+      val lhs = newVar(owner.pos, tpe, Flags.LAZY :: flags(checked))
+      val rhs = f(lhs)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       tracing("createLazy")(new PatternVar(lhs, rhs, checked))
     }
 
@@ -251,7 +364,11 @@ trait Matrix extends MatrixAdditions {
       name: TermName = null): Symbol =
     {
       val n = if (name == null) cunit.freshTermName("temp") else name
+<<<<<<< HEAD
       // careful: pos has special meaning 
+=======
+      // careful: pos has special meaning
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       recordSyntheticSym(owner.newVariable(pos, n) setInfo tpe setFlag (SYNTHETIC.toLong /: flags)(_|_))
     }
   }

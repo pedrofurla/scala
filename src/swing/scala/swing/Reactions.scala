@@ -15,7 +15,11 @@ import scala.collection.mutable.{Buffer, ListBuffer}
 
 object Reactions {
   import scala.ref._
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class Impl extends Reactions {
     private val parts: Buffer[Reaction] = new ListBuffer[Reaction]
     def isDefinedAt(e: Event) = parts.exists(_ isDefinedAt e)
@@ -25,14 +29,24 @@ object Reactions {
       for (p <- parts) if (p isDefinedAt e) p(e)
     }
   }
+<<<<<<< HEAD
   
   type Reaction = PartialFunction[Event, Unit]
   
+=======
+
+  type Reaction = PartialFunction[Event, Unit]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /**
    * A Reaction implementing this trait is strongly referenced in the reaction list
    */
   trait StronglyReferenced
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class Wrapper(listener: Any)(r: Reaction) extends Reaction with StronglyReferenced with Proxy {
     def self = listener
     def isDefinedAt(e: Event) = r.isDefinedAt(e)

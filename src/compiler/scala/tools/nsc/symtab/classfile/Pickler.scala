@@ -29,7 +29,11 @@ abstract class Pickler extends SubComponent {
   private final val showSig = false
 
   val phaseName = "pickler"
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   currentRun
 
   def newPhase(prev: Phase): StdPhase = new PicklePhase(prev)
@@ -79,7 +83,11 @@ abstract class Pickler extends SubComponent {
     private val index     = new LinkedHashMap[AnyRef, Int]
     private lazy val nonClassRoot = root.ownersIterator.find(! _.isClass) getOrElse NoSymbol
 
+<<<<<<< HEAD
     private def isRootSym(sym: Symbol) = 
+=======
+    private def isRootSym(sym: Symbol) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       sym.name.toTermName == rootName && sym.owner == rootOwner
 
     /** Returns usually symbol's owner, but picks classfile root instead
@@ -106,10 +114,13 @@ abstract class Pickler extends SubComponent {
        sym.isParameter ||
        isLocal(sym.owner))
 
+<<<<<<< HEAD
     private def staticAnnotations(annots: List[AnnotationInfo]) =
       annots filter(ann =>
         ann.atp.typeSymbol isNonBottomSubClass definitions.StaticAnnotationClass)
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // Phase 1 methods: Populate entries/index ------------------------------------
 
     /** Store entry e in index at next available position unless
@@ -147,7 +158,11 @@ abstract class Pickler extends SubComponent {
           putSymbol(sym.alias)
           if (!sym.children.isEmpty) {
             val (locals, globals) = sym.children partition (_.isLocalClass)
+<<<<<<< HEAD
             val children = 
+=======
+            val children =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
               if (locals.isEmpty) globals
               else {
                 val localChildDummy = sym.newClass(sym.pos, tpnme.LOCAL_CHILD)
@@ -156,9 +171,16 @@ abstract class Pickler extends SubComponent {
               }
             putChildren(sym, children.toList sortBy (_.sealedSortName))
           }
+<<<<<<< HEAD
           for (annot <- staticAnnotations(sym.annotations.reverse))
             putAnnotation(sym, annot)
         } else if (sym != NoSymbol) {
+=======
+          for (annot <- sym.annotations filter (ann => ann.isStatic && !ann.isErroneous) reverse)
+            putAnnotation(sym, annot)
+        }
+        else if (sym != NoSymbol) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           putEntry(if (sym.isModuleClass) sym.name.toTermName else sym.name)
           if (!sym.owner.isRoot) putSymbol(sym.owner)
         }
@@ -202,8 +224,13 @@ abstract class Pickler extends SubComponent {
         case NullaryMethodType(restpe) =>
           putType(restpe)
         case PolyType(tparams, restpe) =>
+<<<<<<< HEAD
           /** no longer needed since all params are now local 
           tparams foreach { tparam => 
+=======
+          /** no longer needed since all params are now local
+          tparams foreach { tparam =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             if (!isLocal(tparam)) locals += tparam // similar to existential types, these tparams are local
           }
           */
@@ -212,7 +239,11 @@ abstract class Pickler extends SubComponent {
 //          val savedBoundSyms = boundSyms // boundSyms are known to be local based on the EXISTENTIAL flag  (see isLocal)
 //          boundSyms = tparams ::: boundSyms
 //          try {
+<<<<<<< HEAD
             putType(restpe); 
+=======
+            putType(restpe);
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 //          } finally {
 //            boundSyms = savedBoundSyms
 //          }
@@ -220,7 +251,11 @@ abstract class Pickler extends SubComponent {
         case AnnotatedType(annotations, underlying, selfsym) =>
           putType(underlying)
           if (settings.selfInAnnots.value) putSymbol(selfsym)
+<<<<<<< HEAD
           putAnnotations(staticAnnotations(annotations))
+=======
+          putAnnotations(annotations filter (_.isStatic))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case _ =>
           throw new FatalError("bad type: " + tp + "(" + tp.getClass + ")")
       }
@@ -492,7 +527,11 @@ abstract class Pickler extends SubComponent {
      */
     private def writeRef(ref: AnyRef) { writeNat(index(ref)) }
     private def writeRefs(refs: List[AnyRef]) { refs foreach writeRef }
+<<<<<<< HEAD
     private def writeRefsWithLength(refs: List[AnyRef]) { 
+=======
+    private def writeRefsWithLength(refs: List[AnyRef]) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       writeNat(refs.length)
       writeRefs(refs)
     }
@@ -616,6 +655,7 @@ abstract class Pickler extends SubComponent {
           else if (c.tag == EnumTag) writeRef(c.symbolValue)
           LITERAL + c.tag // also treats UnitTag, NullTag; no value required
         case AnnotatedType(annotations, tp, selfsym) =>
+<<<<<<< HEAD
           val staticAnnots = staticAnnotations(annotations)
           if (staticAnnots isEmpty) {
             writeBody(tp) // write the underlying type if there are no annotations
@@ -627,6 +667,17 @@ abstract class Pickler extends SubComponent {
             ANNOTATEDtpe
           }
 
+=======
+          annotations filter (_.isStatic) match {
+            case Nil          => writeBody(tp) // write the underlying type if there are no annotations
+            case staticAnnots =>
+              if (settings.selfInAnnots.value && selfsym != NoSymbol)
+                writeRef(selfsym)
+              writeRef(tp)
+              writeRefs(staticAnnots)
+              ANNOTATEDtpe
+          }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         // annotations attached to a symbol (i.e. annots on terms)
         case (target: Symbol, annot@AnnotationInfo(_, _, _)) =>
           writeRef(target)
@@ -993,7 +1044,11 @@ abstract class Pickler extends SubComponent {
     /** Print entry for diagnostics */
     def printEntryAtIndex(idx: Int) = printEntry(entries(idx))
     def printEntry(entry: AnyRef) {
+<<<<<<< HEAD
       def printRef(ref: AnyRef) { 
+=======
+      def printRef(ref: AnyRef) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         print(index(ref)+
               (if (ref.isInstanceOf[Name]) "("+ref+") " else " "))
       }
@@ -1036,6 +1091,7 @@ abstract class Pickler extends SubComponent {
         case ThisType(sym) =>
           print("THIStpe "); printRef(sym)
         case SingleType(pre, sym) =>
+<<<<<<< HEAD
           print("SINGLEtpe "); printRef(pre); printRef(sym); 
         case ConstantType(value) =>
           print("CONSTANTtpe "); printRef(value); 
@@ -1053,6 +1109,25 @@ abstract class Pickler extends SubComponent {
           print("POLYtpe "); printRef(restpe); printRefs(tparams); 
         case ExistentialType(tparams, restpe) =>
           print("EXISTENTIALtpe "); printRef(restpe); printRefs(tparams); 
+=======
+          print("SINGLEtpe "); printRef(pre); printRef(sym);
+        case ConstantType(value) =>
+          print("CONSTANTtpe "); printRef(value);
+        case TypeRef(pre, sym, args) =>
+          print("TYPEREFtpe "); printRef(pre); printRef(sym); printRefs(args);
+        case TypeBounds(lo, hi) =>
+          print("TYPEBOUNDStpe "); printRef(lo); printRef(hi);
+        case tp @ RefinedType(parents, decls) =>
+          print("REFINEDtpe "); printRef(tp.typeSymbol); printRefs(parents);
+        case ClassInfoType(parents, decls, clazz) =>
+          print("CLASSINFOtpe "); printRef(clazz); printRefs(parents);
+        case mt @ MethodType(formals, restpe) =>
+          print("METHODtpe"); printRef(restpe); printRefs(formals)
+        case PolyType(tparams, restpe) =>
+          print("POLYtpe "); printRef(restpe); printRefs(tparams);
+        case ExistentialType(tparams, restpe) =>
+          print("EXISTENTIALtpe "); printRef(restpe); printRefs(tparams);
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           print("||| "+entry)
         // case DeBruijnIndex(l, i) =>
         //   print("DEBRUIJNINDEXtpe "); print(l+" "+i)
@@ -1069,7 +1144,11 @@ abstract class Pickler extends SubComponent {
           else if (c.tag == StringTag) { print("String "); printRef(newTermName(c.stringValue)) }
           else if (c.tag == ClassTag) { print("Class "); printRef(c.typeValue) }
           else if (c.tag == EnumTag) { print("Enum "); printRef(c.symbolValue) }
+<<<<<<< HEAD
         case AnnotatedType(annots, tp, selfsym) => 
+=======
+        case AnnotatedType(annots, tp, selfsym) =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           if (settings.selfInAnnots.value) {
             print("ANNOTATEDWSELFtpe ")
             printRef(tp)

@@ -19,7 +19,11 @@ object DocStrings {
     if (start < str.length && isWhitespace(str charAt start)) skipWhitespace(str, start + 1)
     else start
 
+<<<<<<< HEAD
   /** Returns index of string `str` following `start` skipping 
+=======
+  /** Returns index of string `str` following `start` skipping
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  sequence of identifier characters.
    */
   def skipIdent(str: String, start: Int): Int =
@@ -80,7 +84,11 @@ object DocStrings {
 
   /** Does interval `iv` start with given `tag`?
    */
+<<<<<<< HEAD
   def startsWithTag(str: String, section: (Int, Int), tag: String): Boolean = 
+=======
+  def startsWithTag(str: String, section: (Int, Int), tag: String): Boolean =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     startsWithTag(str, section._1, tag)
 
   def startsWithTag(str: String, start: Int, tag: String): Boolean =
@@ -109,11 +117,19 @@ object DocStrings {
   /** Optionally start and end index of return section in `str`, or `None`
    *  if `str` does not have a @return.
    */
+<<<<<<< HEAD
   def returnDoc(str: String, sections: List[(Int, Int)]): Option[(Int, Int)] = 
     sections find (startsWithTag(str, _, "@return"))
     
   /** Extracts variable name from a string, stripping any pair of surrounding braces */
   def variableName(str: String): String = 
+=======
+  def returnDoc(str: String, sections: List[(Int, Int)]): Option[(Int, Int)] =
+    sections find (startsWithTag(str, _, "@return"))
+
+  /** Extracts variable name from a string, stripping any pair of surrounding braces */
+  def variableName(str: String): String =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (str.length >= 2 && (str charAt 0) == '{' && (str charAt (str.length - 1)) == '}')
       str.substring(1, str.length - 1)
     else

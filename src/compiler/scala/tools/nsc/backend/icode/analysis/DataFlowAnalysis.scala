@@ -23,17 +23,28 @@ trait DataFlowAnalysis[L <: SemiLattice] {
 
   /** collect statistics? */
   var stat = true
+<<<<<<< HEAD
   
   /** the number of times we iterated before reaching a fixpoint. */
   var iterations = 0
   
+=======
+
+  /** the number of times we iterated before reaching a fixpoint. */
+  var iterations = 0
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /* Implement this function to initialize the worklist.  */
   def init(f: => Unit): Unit = {
     iterations = 0
     in.clear; out.clear; worklist.clear; visited.clear;
     f
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Reinitialize, but keep the old solutions. Should be used when reanalyzing the
    *  same method, after some code transformation.
    */
@@ -45,8 +56,13 @@ trait DataFlowAnalysis[L <: SemiLattice] {
 
   def run(): Unit
 
+<<<<<<< HEAD
   /** Implements forward dataflow analysis: the transfer function is 
    *  applied when inputs to a Program point change, to obtain the new 
+=======
+  /** Implements forward dataflow analysis: the transfer function is
+   *  applied when inputs to a Program point change, to obtain the new
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  output value.
    *
    *  @param f the transfer function.
@@ -60,8 +76,13 @@ trait DataFlowAnalysis[L <: SemiLattice] {
       val output = f(point, in(point))
 
       if ((lattice.bottom == out(point)) || output != out(point)) {
+<<<<<<< HEAD
 //        Console.println("Output changed at " + point 
 //                        + " from: " + out(point) + " to: " + output 
+=======
+//        Console.println("Output changed at " + point
+//                        + " from: " + out(point) + " to: " + output
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 //                        + " for input: " + in(point) + " and they are different: " + (output != out(point)))
         out(point) = output
         val succs = point.successors
@@ -78,7 +99,11 @@ trait DataFlowAnalysis[L <: SemiLattice] {
       }
     }
   } catch {
+<<<<<<< HEAD
     case e: NoSuchElementException => 
+=======
+    case e: NoSuchElementException =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       Console.println("in: " + in.mkString("", "\n", ""))
       Console.println("out: " + out.mkString("", "\n", ""))
       e.printStackTrace

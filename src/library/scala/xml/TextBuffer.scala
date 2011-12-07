@@ -30,7 +30,11 @@ class TextBuffer
    *  @return ...
    */
   def append(cs: Seq[Char]): this.type = {
+<<<<<<< HEAD
     cs foreach { c => 
+=======
+    cs foreach { c =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (!isSpace(c)) sb append c
       else if (sb.isEmpty || !isSpace(sb.last)) sb append ' '
     }

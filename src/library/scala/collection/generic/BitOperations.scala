@@ -17,7 +17,11 @@ package generic
 private[collection] object BitOperations {
   trait Int {
     type Int = scala.Int
+<<<<<<< HEAD
     def zero(i: Int, mask: Int)                 = (i & mask) == 0    
+=======
+    def zero(i: Int, mask: Int)                 = (i & mask) == 0
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def mask(i: Int, mask: Int)                 = i & (complement(mask - 1) ^ mask)
     def hasMatch(key: Int, prefix: Int, m: Int) = mask(key, m) == prefix
     def unsignedCompare(i: Int, j: Int)         = (i < j) ^ (i < 0) ^ (j < 0)
@@ -25,7 +29,11 @@ private[collection] object BitOperations {
     def complement(i: Int)                      = (-1) ^ i
     def bits(num: Int)                          = 31 to 0 by -1 map (i => (num >>> i & 1) != 0)
     def bitString(num: Int, sep: String = "")   = bits(num) map (b => if (b) "1" else "0") mkString sep
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def highestOneBit(j: Int) = {
       var i = j
       i |= (i >>  1)
@@ -37,7 +45,11 @@ private[collection] object BitOperations {
     }
   }
   object Int extends Int
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait Long {
     type Long = scala.Long
     def zero(i: Long, mask: Long)                  = (i & mask) == 0L
@@ -48,7 +60,11 @@ private[collection] object BitOperations {
     def complement(i: Long)                        = (-1L) ^ i
     def bits(num: Long)                            = 63L to 0L by -1L map (i => (num >>> i & 1L) != 0L)
     def bitString(num: Long, sep: String = "")     = bits(num) map (b => if (b) "1" else "0") mkString sep
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def highestOneBit(j: Long) = {
       var i = j
       i |= (i >>  1)

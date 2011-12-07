@@ -8,11 +8,19 @@
 
 package scala.xml
 
+<<<<<<< HEAD
 /**
  * This object provides methods ...
  *
  * @author  Burak Emir
  * @version 1.0
+=======
+/** This singleton object contains the `unapplySeq` method for
+ *  convenient deconstruction.
+ *
+ *  @author  Burak Emir
+ *  @version 1.0
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  */
 object Node {
   /** the constant empty attribute sequence */
@@ -40,9 +48,15 @@ abstract class Node extends NodeSeq {
   def label: String
 
   /** used internally. Atom/Molecule = -1 PI = -2 Comment = -3 EntityRef = -5
+<<<<<<< HEAD
    */ 
   def isAtom = this.isInstanceOf[Atom[_]]
   
+=======
+   */
+  def isAtom = this.isInstanceOf[Atom[_]]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** The logic formerly found in typeTag$, as best I could infer it. */
   def doCollectNamespaces = true  // if (tag >= 0) DO collect namespaces
   def doTransform         = true  // if (tag < 0) DO NOT transform
@@ -106,30 +120,53 @@ abstract class Node extends NodeSeq {
    * @return all children of this node
    */
   def child: Seq[Node]
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Children which do not stringify to "" (needed for equality)
    */
   def nonEmptyChildren: Seq[Node] = child filterNot (_.toString == "")
 
   /**
+<<<<<<< HEAD
    * Descendant axis (all descendants of this node, not including node itself) 
+=======
+   * Descendant axis (all descendants of this node, not including node itself)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * includes all text nodes, element nodes, comments and processing instructions.
    */
   def descendant: List[Node] =
     child.toList.flatMap { x => x::x.descendant }
 
   /**
+<<<<<<< HEAD
    * Descendant axis (all descendants of this node, including thisa node) 
    * includes all text nodes, element nodes, comments and processing instructions.
    */
   def descendant_or_self: List[Node] = this :: descendant
   
+=======
+   * Descendant axis (all descendants of this node, including thisa node)
+   * includes all text nodes, element nodes, comments and processing instructions.
+   */
+  def descendant_or_self: List[Node] = this :: descendant
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def canEqual(other: Any) = other match {
     case x: Group   => false
     case x: Node    => true
     case _          => false
   }
+<<<<<<< HEAD
   override def basisForHashCode: Seq[Any] = prefix :: label :: attributes :: nonEmptyChildren.toList
+=======
+
+  override protected def basisForHashCode: Seq[Any] =
+    prefix :: label :: attributes :: nonEmptyChildren.toList
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def strict_==(other: Equality) = other match {
     case _: Group => false
     case x: Node  =>

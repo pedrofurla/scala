@@ -18,6 +18,7 @@ import scala.collection.generic.VolatileAbort
 
 /** A template trait for sequences of type `ParSeq[T]`, representing
  *  parallel sequences with element type `T`.
+<<<<<<< HEAD
  *  
  *  $parallelseqinfo
  *  
@@ -25,6 +26,15 @@ import scala.collection.generic.VolatileAbort
  *  @tparam Repr        the type of the actual collection containing the elements
  *  @tparam Sequential  the type of the sequential version of this parallel collection
  *  
+=======
+ *
+ *  $parallelseqinfo
+ *
+ *  @tparam T           the type of the elements contained in this collection
+ *  @tparam Repr        the type of the actual collection containing the elements
+ *  @tparam Sequential  the type of the sequential version of this parallel collection
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define parallelseqinfo
  *  Parallel sequences inherit the `Seq` trait. Their indexing and length computations
  *  are defined to be efficient. Like their sequential counterparts
@@ -33,10 +43,17 @@ import scala.collection.generic.VolatileAbort
  *  in which they perform bulk operations on elements to produce results is not defined and is generally
  *  nondeterministic. If the higher-order functions given to them produce no sideeffects,
  *  then this won't be noticeable.
+<<<<<<< HEAD
  *  
  *  This trait defines a new, more general `split` operation and reimplements the `split`
  *  operation of `ParallelIterable` trait using the new `split` operation.
  *  
+=======
+ *
+ *  This trait defines a new, more general `split` operation and reimplements the `split`
+ *  operation of `ParallelIterable` trait using the new `split` operation.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author Aleksandar Prokopec
  *  @since 2.9
  */
@@ -45,6 +62,7 @@ extends scala.collection.GenSeqLike[T, Repr]
    with ParIterableLike[T, Repr, Sequential] {
 self =>
   import tasksupport._
+<<<<<<< HEAD
   
   type SuperParIterator = IterableSplitter[T]
   
@@ -52,6 +70,15 @@ self =>
    *  The self-type requirement ensures that the signal context passing behaviour gets mixed in
    *  the concrete iterator instance in some concrete collection.
    *  
+=======
+
+  type SuperParIterator = IterableSplitter[T]
+
+  /** An iterator that can be split into arbitrary subsets of iterators.
+   *  The self-type requirement ensures that the signal context passing behaviour gets mixed in
+   *  the concrete iterator instance in some concrete collection.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  '''Note:''' In concrete collection classes, collection implementers might want to override the iterator
    *  `reverse2builder` method to ensure higher efficiency.
    */
@@ -60,7 +87,11 @@ self =>
     def split: Seq[ParIterator]
     def psplit(sizes: Int*): Seq[ParIterator]
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A stackable modification that ensures signal contexts get passed along the iterators.
    *  A self-type requirement in `ParIterator` ensures that this trait gets mixed into
    *  concrete iterators.
@@ -76,6 +107,7 @@ self =>
       pits.asInstanceOf[Seq[IterRepr]]
     }
   }
+<<<<<<< HEAD
   
   /** A more refined version of the iterator found in the `ParallelIterable` trait,
    *  this iterator can be split into arbitrary subsets of iterators.
@@ -97,10 +129,34 @@ self =>
     def hasNext = i < end
     
     def next: T = if (i < end) {
+=======
+
+  /** A more refined version of the iterator found in the `ParallelIterable` trait,
+   *  this iterator can be split into arbitrary subsets of iterators.
+   *
+   *  @return       an iterator that can be split into subsets of precise size
+   */
+  protected[parallel] def splitter: SeqSplitter[T]
+
+  override def iterator: PreciseSplitter[T] = splitter
+
+  override def size = length
+
+  /** Used to iterate elements using indices */
+  protected abstract class Elements(start: Int, val end: Int) extends ParIterator with BufferedIterator[T] {
+    me: SignalContextPassingIterator[ParIterator] =>
+
+    private var i = start
+
+    def hasNext = i < end
+
+    def next(): T = if (i < end) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       val x = self(i)
       i += 1
       x
     } else Iterator.empty.next
+<<<<<<< HEAD
     
     def head = self(i)
     
@@ -110,12 +166,24 @@ self =>
     
     def split = psplit(remaining / 2, remaining - remaining / 2)
     
+=======
+
+    def head = self(i)
+
+    final def remaining = end - i
+
+    def dup = new Elements(i, end) with SignalContextPassingIterator[ParIterator]
+
+    def split = psplit(remaining / 2, remaining - remaining / 2)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def psplit(sizes: Int*) = {
       val incr = sizes.scanLeft(0)(_ + _)
       for ((from, until) <- incr.init zip incr.tail) yield {
         new Elements(start + from, (start + until) min end) with SignalContextPassingIterator[ParIterator]
       }
     }
+<<<<<<< HEAD
     
     override def toString = "Elements(" + start + ", " + end + ")"
   }
@@ -129,6 +197,21 @@ self =>
    *  
    *  The index flag is initially set to maximum integer value.
    *  
+=======
+
+    override def toString = "Elements(" + start + ", " + end + ")"
+  }
+
+  /* ParallelSeq methods */
+
+  /** Returns the length of the longest segment of elements starting at
+   *  a given position satisfying some predicate.
+   *
+   *  $indexsignalling
+   *
+   *  The index flag is initially set to maximum integer value.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param p     the predicate used to test the elements
    *  @param from  the starting offset for the search
    *  @return      the length of the longest segment of elements starting at `from` and
@@ -140,6 +223,7 @@ self =>
     ctx.setIndexFlag(Int.MaxValue)
     executeAndWaitResult(new SegmentLength(p, 0, splitter.psplit(realfrom, length - realfrom)(1) assign ctx))._1
   }
+<<<<<<< HEAD
   
   /** Finds the first element satisfying some predicate.
    *  
@@ -147,6 +231,15 @@ self =>
    *  
    *  The index flag is initially set to maximum integer value.
    *  
+=======
+
+  /** Finds the first element satisfying some predicate.
+   *
+   *  $indexsignalling
+   *
+   *  The index flag is initially set to maximum integer value.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param p     the predicate used to test the elements
    *  @param from  the starting offset for the search
    *  @return      the index `>= from` of the first element of this $coll that satisfies the predicate `p`,
@@ -158,6 +251,7 @@ self =>
     ctx.setIndexFlag(Int.MaxValue)
     executeAndWaitResult(new IndexWhere(p, realfrom, splitter.psplit(realfrom, length - realfrom)(1) assign ctx))
   }
+<<<<<<< HEAD
   
   /** Finds the last element satisfying some predicate.
    *  
@@ -165,6 +259,15 @@ self =>
    *  
    *  The index flag is initially set to minimum integer value.
    *  
+=======
+
+  /** Finds the last element satisfying some predicate.
+   *
+   *  $indexsignalling
+   *
+   *  The index flag is initially set to minimum integer value.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param p     the predicate used to test the elements
    *  @param end   the maximum offset for the search
    *  @return      the index `<= end` of the first element of this $coll that satisfies the predicate `p`,
@@ -176,22 +279,38 @@ self =>
     ctx.setIndexFlag(Int.MinValue)
     executeAndWaitResult(new LastIndexWhere(p, 0, splitter.psplit(until, length - until)(0) assign ctx))
   }
+<<<<<<< HEAD
   
   def reverse: Repr = {
     executeAndWaitResult(new Reverse(() => newCombiner, splitter) mapResult { _.result })
   }
   
+=======
+
+  def reverse: Repr = {
+    executeAndWaitResult(new Reverse(() => newCombiner, splitter) mapResult { _.result })
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def reverseMap[S, That](f: T => S)(implicit bf: CanBuildFrom[Repr, S, That]): That = if (bf(repr).isCombiner) {
     executeAndWaitResult(new ReverseMap[S, That](f, () => bf(repr).asCombiner, splitter) mapResult { _.result })
   } else seq.reverseMap(f)(bf2seq(bf))
   /*bf ifParallel { pbf =>
     executeAndWaitResult(new ReverseMap[S, That](f, pbf, splitter) mapResult { _.result })
   } otherwise seq.reverseMap(f)(bf2seq(bf))*/
+<<<<<<< HEAD
   
   /** Tests whether this $coll contains the given sequence at a given index.
    *  
    *  $abortsignalling
    *  
+=======
+
+  /** Tests whether this $coll contains the given sequence at a given index.
+   *
+   *  $abortsignalling
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @tparam U      the element type of `that` parallel sequence
    *  @param that    the parallel sequence this sequence is being searched for
    *  @param offset  the starting offset for the search
@@ -206,16 +325,28 @@ self =>
       executeAndWaitResult(new SameElements(splitter.psplit(offset, pthat.length)(1) assign ctx, pthat.splitter))
     }
   } otherwise seq.startsWith(that, offset)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def sameElements[U >: T](that: GenIterable[U]): Boolean = that ifParSeq { pthat =>
     val ctx = new DefaultSignalling with VolatileAbort
     length == pthat.length && executeAndWaitResult(new SameElements(splitter assign ctx, pthat.splitter))
   } otherwise seq.sameElements(that)
+<<<<<<< HEAD
   
   /** Tests whether this $coll ends with the given parallel sequence.
    *  
    *  $abortsignalling
    *  
+=======
+
+  /** Tests whether this $coll ends with the given parallel sequence.
+   *
+   *  $abortsignalling
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @tparam S       the type of the elements of `that` sequence
    *  @param that     the sequence to test
    *  @return         `true` if this $coll has `that` as a suffix, `false` otherwise
@@ -229,7 +360,11 @@ self =>
       executeAndWaitResult(new SameElements(splitter.psplit(length - tlen, tlen)(1) assign ctx, pthat.splitter))
     }
   } otherwise seq.endsWith(that)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def patch[U >: T, That](from: Int, patch: GenSeq[U], replaced: Int)(implicit bf: CanBuildFrom[Repr, U, That]): That = {
     val realreplaced = replaced min (length - from)
     if (patch.isParSeq && bf.isParallel && (size - realreplaced + patch.size) > MIN_FOR_COPY) {
@@ -247,7 +382,11 @@ self =>
       })
     } else patch_sequential(from, patch.seq, replaced)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def patch_sequential[U >: T, That](fromarg: Int, patch: Seq[U], r: Int)(implicit bf: CanBuildFrom[Repr, U, That]): That = {
     val from = 0 max fromarg
     val b = bf(repr)
@@ -258,13 +397,18 @@ self =>
     b ++= pits(2)
     b.result
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def updated[U >: T, That](index: Int, elem: U)(implicit bf: CanBuildFrom[Repr, U, That]): That = if (bf(repr).isCombiner) {
     executeAndWaitResult(new Updated(index, elem, () => bf(repr).asCombiner, splitter) mapResult { _.result })
   } else seq.updated(index, elem)(bf2seq(bf))
   /*bf ifParallel { pbf =>
     executeAndWaitResult(new Updated(index, elem, pbf, splitter) mapResult { _.result })
   } otherwise seq.updated(index, elem)(bf2seq(bf))*/
+<<<<<<< HEAD
   
   def +:[U >: T, That](elem: U)(implicit bf: CanBuildFrom[Repr, U, That]): That = {
     patch(0, mutable.ParArray(elem), 0)
@@ -278,17 +422,41 @@ self =>
     patch(length, new immutable.Repetition(elem, len - length), 0)
   } else patch(length, Nil, 0);
   
+=======
+
+  def +:[U >: T, That](elem: U)(implicit bf: CanBuildFrom[Repr, U, That]): That = {
+    patch(0, mutable.ParArray(elem), 0)
+  }
+
+  def :+[U >: T, That](elem: U)(implicit bf: CanBuildFrom[Repr, U, That]): That = {
+    patch(length, mutable.ParArray(elem), 0)
+  }
+
+  def padTo[U >: T, That](len: Int, elem: U)(implicit bf: CanBuildFrom[Repr, U, That]): That = if (length < len) {
+    patch(length, new immutable.Repetition(elem, len - length), 0)
+  } else patch(length, Nil, 0);
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def zip[U >: T, S, That](that: GenIterable[S])(implicit bf: CanBuildFrom[Repr, (U, S), That]): That = if (bf.isParallel && that.isParSeq) {
     val pbf = bf.asParallel
     val thatseq = that.asParSeq
     executeAndWaitResult(new Zip(length min thatseq.length, pbf, splitter, thatseq.splitter) mapResult { _.result });
   } else super.zip(that)(bf)
+<<<<<<< HEAD
   
   /** Tests whether every element of this $coll relates to the
    *  corresponding element of another parallel sequence by satisfying a test predicate.
    *  
    *  $abortsignalling
    *  
+=======
+
+  /** Tests whether every element of this $coll relates to the
+   *  corresponding element of another parallel sequence by satisfying a test predicate.
+   *
+   *  $abortsignalling
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param   that    the other parallel sequence
    *  @param   p       the test predicate, which relates elements from both sequences
    *  @tparam  S       the type of the elements of `that`
@@ -300,11 +468,19 @@ self =>
     val ctx = new DefaultSignalling with VolatileAbort
     length == pthat.length && executeAndWaitResult(new Corresponds(p, splitter assign ctx, pthat.splitter))
   } otherwise seq.corresponds(that)(p)
+<<<<<<< HEAD
   
   def diff[U >: T](that: GenSeq[U]): Repr = sequentially {
     _ diff that
   }
   
+=======
+
+  def diff[U >: T](that: GenSeq[U]): Repr = sequentially {
+    _ diff that
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Computes the multiset intersection between this $coll and another sequence.
    *  $mayNotTerminateInf
    *
@@ -327,7 +503,11 @@ self =>
   def intersect[U >: T](that: GenSeq[U]) = sequentially {
     _ intersect that
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Builds a new $coll from this $coll without any duplicate elements.
    *  $willNotTerminateInf
    *
@@ -336,11 +516,19 @@ self =>
   def distinct: Repr = sequentially {
     _.distinct
   }
+<<<<<<< HEAD
   
   override def toString = seq.mkString(stringPrefix + "(", ", ", ")")
   
   override def toSeq = this.asInstanceOf[ParSeq[T]]
   
+=======
+
+  override def toString = seq.mkString(stringPrefix + "(", ", ", ")")
+
+  override def toSeq = this.asInstanceOf[ParSeq[T]]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def view = new ParSeqView[T, Repr, Sequential] {
     protected lazy val underlying = self.repr
     protected[this] def viewIdentifier = ""
@@ -350,6 +538,7 @@ self =>
     override def seq = self.seq.view
     def splitter = self.splitter
   }
+<<<<<<< HEAD
   
   /* tasks */
   
@@ -361,6 +550,19 @@ self =>
   
   protected trait Transformer[R, Tp] extends Accessor[R, Tp] with super.Transformer[R, Tp]
   
+=======
+
+  /* tasks */
+
+  protected[this] def down(p: IterableSplitter[_]) = p.asInstanceOf[SeqSplitter[T]]
+
+  protected trait Accessor[R, Tp] extends super.Accessor[R, Tp] {
+    protected[this] val pit: SeqSplitter[T]
+  }
+
+  protected trait Transformer[R, Tp] extends Accessor[R, Tp] with super.Transformer[R, Tp]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected[this] class SegmentLength(pred: T => Boolean, from: Int, protected[this] val pit: SeqSplitter[T])
   extends Accessor[(Int, Boolean), SegmentLength] {
     @volatile var result: (Int, Boolean) = null
@@ -378,7 +580,11 @@ self =>
     override def merge(that: SegmentLength) = if (result._2) result = (result._1 + that.result._1, that.result._2)
     override def requiresStrictSplitters = true
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected[this] class IndexWhere(pred: T => Boolean, from: Int, protected[this] val pit: SeqSplitter[T])
   extends Accessor[Int, IndexWhere] {
     @volatile var result: Int = -1
@@ -399,7 +605,11 @@ self =>
     }
     override def requiresStrictSplitters = true
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected[this] class LastIndexWhere(pred: T => Boolean, pos: Int, protected[this] val pit: SeqSplitter[T])
   extends Accessor[Int, LastIndexWhere] {
     @volatile var result: Int = -1
@@ -420,7 +630,11 @@ self =>
     }
     override def requiresStrictSplitters = true
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected[this] class Reverse[U >: T, This >: Repr](cbf: () => Combiner[U, This], protected[this] val pit: SeqSplitter[T])
   extends Transformer[Combiner[U, This], Reverse[U, This]] {
     @volatile var result: Combiner[U, This] = null
@@ -428,7 +642,11 @@ self =>
     protected[this] def newSubtask(p: SuperParIterator) = new Reverse(cbf, down(p))
     override def merge(that: Reverse[U, This]) = result = that.result combine result
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected[this] class ReverseMap[S, That](f: T => S, pbf: () => Combiner[S, That], protected[this] val pit: SeqSplitter[T])
   extends Transformer[Combiner[S, That], ReverseMap[S, That]] {
     @volatile var result: Combiner[S, That] = null
@@ -436,7 +654,11 @@ self =>
     protected[this] def newSubtask(p: SuperParIterator) = new ReverseMap(f, pbf, down(p))
     override def merge(that: ReverseMap[S, That]) = result = that.result combine result
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected[this] class SameElements[U >: T](protected[this] val pit: SeqSplitter[T], val otherpit: PreciseSplitter[U])
   extends Accessor[Boolean, SameElements[U]] {
     @volatile var result: Boolean = true
@@ -453,7 +675,11 @@ self =>
     override def merge(that: SameElements[U]) = result = result && that.result
     override def requiresStrictSplitters = true
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected[this] class Updated[U >: T, That](pos: Int, elem: U, pbf: () => Combiner[U, That], protected[this] val pit: SeqSplitter[T])
   extends Transformer[Combiner[U, That], Updated[U, That]] {
     @volatile var result: Combiner[U, That] = null
@@ -466,7 +692,11 @@ self =>
     override def merge(that: Updated[U, That]) = result = result combine that.result
     override def requiresStrictSplitters = true
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected[this] class Zip[U >: T, S, That](len: Int, pbf: CanCombineFrom[Repr, (U, S), That], protected[this] val pit: SeqSplitter[T], val otherpit: SeqSplitter[S])
   extends Transformer[Combiner[(U, S), That], Zip[U, S, That]] {
     @volatile var result: Result = null
@@ -484,7 +714,11 @@ self =>
     }
     override def merge(that: Zip[U, S, That]) = result = result combine that.result
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected[this] class Corresponds[S](corr: (T, S) => Boolean, protected[this] val pit: SeqSplitter[T], val otherpit: PreciseSplitter[S])
   extends Accessor[Boolean, Corresponds[S]] {
     @volatile var result: Boolean = true
@@ -500,5 +734,9 @@ self =>
     }
     override def merge(that: Corresponds[S]) = result = result && that.result
     override def requiresStrictSplitters = true
+<<<<<<< HEAD
   }  
+=======
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

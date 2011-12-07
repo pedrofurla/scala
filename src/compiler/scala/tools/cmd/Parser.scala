@@ -23,7 +23,11 @@ trait ParserUtil extends Parsers {
 
 object Parser extends RegexParsers with ParserUtil {
   override def skipWhitespace = false
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def elemExcept(xs: Elem*): Parser[Elem] = elem("elemExcept", x => x != EofCh && !(xs contains x))
   def elemOf(xs: Elem*): Parser[Elem]     = elem("elemOf", xs contains _)
   def escaped(ch: Char): Parser[String] = "\\" + ch
@@ -31,7 +35,11 @@ object Parser extends RegexParsers with ParserUtil {
       elem(ch) !~> rep(escaped(ch) | elemExcept(ch)) <~ ch ^^ (_.mkString)
     | failure("Unmatched %s in input." format ch)
   )
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Apparently windows can't deal with the quotes sticking around. */
   lazy val squoted: Parser[String] = mkQuoted('\'')   // ^^ (x => "'%s'" format x)
   lazy val dquoted: Parser[String] = mkQuoted('"')    // ^^ (x => "\"" + x + "\"")
@@ -39,9 +47,15 @@ object Parser extends RegexParsers with ParserUtil {
 
   lazy val argument: Parser[String] = squoted | dquoted | token
   lazy val commandLine: Parser[List[String]] = phrase(repsep(argument, whiteSpace))
+<<<<<<< HEAD
   
   class ParseException(msg: String) extends RuntimeException(msg)
   
+=======
+
+  class ParseException(msg: String) extends RuntimeException(msg)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def tokenize(line: String): List[String] = tokenize(line, x => throw new ParseException(x))
   def tokenize(line: String, errorFn: String => Unit): List[String] = {
     parse(commandLine, line.trim) match {

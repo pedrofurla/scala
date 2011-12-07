@@ -16,6 +16,7 @@ import java.math.BigInteger;
 import java.math.BigDecimal;
 
 @deprecated(DbcIsDeprecated, "2.9.0") abstract class ExactNumeric [Type] extends Value {
+<<<<<<< HEAD
   
   val dataType: datatype.ExactNumeric[Type];
   
@@ -25,11 +26,26 @@ import java.math.BigDecimal;
 
 @deprecated(DbcIsDeprecated, "2.9.0") object ExactNumeric {
   
+=======
+
+  val dataType: datatype.ExactNumeric[Type];
+
+  def sqlString = nativeValue.toString();
+
+}
+
+@deprecated(DbcIsDeprecated, "2.9.0") object ExactNumeric {
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   implicit def exactNumericToByte (obj:value.ExactNumeric[Byte]): Byte = obj.nativeValue;
   implicit def exactNumericToShort (obj:value.ExactNumeric[Short]): Short = obj.nativeValue;
   implicit def exactNumericToInt (obj:value.ExactNumeric[Int]): Int = obj.nativeValue;
   implicit def exactNumericToLong (obj:value.ExactNumeric[Long]): Long = obj.nativeValue;
   implicit def exactNumericToBigInteger (obj:value.ExactNumeric[BigInteger]): BigInteger = obj.nativeValue;
   implicit def exactNumericToBigDecimal (obj:value.ExactNumeric[BigDecimal]): BigDecimal = obj.nativeValue;
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

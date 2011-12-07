@@ -13,6 +13,7 @@ object ClassfileConstants {
   final val JAVA_MINOR_VERSION = 3
 
   /** (see http://java.sun.com/docs/books/jvms/second_edition/jvms-clarify.html)
+<<<<<<< HEAD
    *  
    *  If the `ACC_INTERFACE` flag is set, the `ACC_ABSTRACT` flag must also
    *  be set (ch. 2.13.1).
@@ -32,6 +33,32 @@ object ClassfileConstants {
    *  
    *  All interface methods must have their `ACC_ABSTRACT` and
    *  `ACC_PUBLIC` flags set.
+=======
+   *
+   *  If the `ACC_INTERFACE` flag is set, the `ACC_ABSTRACT` flag must also
+   *  be set (ch. 2.13.1).
+   *
+   *  A class file cannot have both its `ACC_FINAL` and `ACC_ABSTRACT` flags
+   *  set (ch. 2.8.2).
+   *
+   *  A field may have at most one of its `ACC_PRIVATE`, `ACC_PROTECTED`,
+   *  `ACC_PUBLIC` flags set (ch. 2.7.4).
+   *
+   *  A field may not have both its `ACC_FINAL` and `ACC_VOLATILE` flags set
+   *  (ch. 2.9.1).
+   *
+   *  If a method has its `ACC_ABSTRACT` flag set it must not have any of its
+   *  `ACC_FINAL`, `ACC_NATIVE`, `ACC_PRIVATE`, `ACC_STATIC`, `ACC_STRICT`,
+   *  or `ACC_SYNCHRONIZED` flags set (ch. 2.13.3.2).
+   *
+   *  All interface methods must have their `ACC_ABSTRACT` and
+   *  `ACC_PUBLIC` flags set.
+   *
+   *  Note for future reference: see this thread on ACC_SUPER and
+   *  how its enforcement differs on the android vm.
+   *    https://groups.google.com/forum/?hl=en#!topic/jvm-languages/jVhzvq8-ZIk
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */                                        // Class   Field   Method
   final val JAVA_ACC_PUBLIC       = 0x0001   //   X       X        X
   final val JAVA_ACC_PRIVATE      = 0x0002   //           X        X
@@ -85,7 +112,11 @@ object ClassfileConstants {
   final val SCALA_NOTHING = "scala.runtime.Nothing$"
   final val SCALA_NULL = "scala.runtime.Null$"
 
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // tags describing the type of newarray
   final val T_BOOLEAN = 4
   final val T_CHAR    = 5
@@ -306,7 +337,11 @@ object ClassfileConstants {
   final val arraylength   = 0xbe
   final val athrow        = 0xbf
   final val checkcast     = 0xc0
+<<<<<<< HEAD
   final val instanceof    = 0xc1    
+=======
+  final val instanceof    = 0xc1
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   final val monitorenter  = 0xc2
   final val monitorexit   = 0xc3
   final val wide          = 0xc4
@@ -319,9 +354,15 @@ object ClassfileConstants {
   // reserved opcodes
   final val breakpoint    = 0xca
   final val impdep1       = 0xfe
+<<<<<<< HEAD
   final val impdep2       = 0xff  
 
   def toScalaFlags(flags: Int, isClass: Boolean): Long = {
+=======
+  final val impdep2       = 0xff
+
+  def toScalaFlags(flags: Int, isClass: Boolean = false, isField: Boolean = false): Long = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     import Flags._
     var res = 0l
     if ((flags & JAVA_ACC_PRIVATE) != 0)
@@ -340,8 +381,14 @@ object ClassfileConstants {
     if ((flags & JAVA_ACC_STATIC) != 0)
       res = res | STATIC
     if (isClass && ((res & DEFERRED) != 0L))
+<<<<<<< HEAD
         res = res & ~DEFERRED | ABSTRACT
 
+=======
+      res = res & ~DEFERRED | ABSTRACT
+    if (isField && (res & FINAL) == 0L)
+      res = res | MUTABLE
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     res | JAVA
   }
 }

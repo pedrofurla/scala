@@ -13,14 +13,22 @@ package generic
 import mutable.Builder
 import scala.annotation.implicitNotFound
 
+<<<<<<< HEAD
 /** A base trait for builder factories.      
+=======
+/** A base trait for builder factories.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *
  *  @tparam From  the type of the underlying collection that requests
  *                a builder to be created.
  *  @tparam Elem  the element type of the collection to be created.
  *  @tparam To    the type of the collection to be created.
  *
+<<<<<<< HEAD
  *  @see Builder 
+=======
+ *  @see Builder
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author Martin Odersky
  *  @author Adriaan Moors
  *  @since 2.8

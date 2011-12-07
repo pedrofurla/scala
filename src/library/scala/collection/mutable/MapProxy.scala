@@ -9,9 +9,15 @@
 package scala.collection
 package mutable
 
+<<<<<<< HEAD
 /** 
  *  This trait implements a proxy for [[scala.collection.mutable.Map]].
  *  
+=======
+/**
+ *  This trait implements a proxy for [[scala.collection.mutable.Map]].
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  It is most useful for assembling customized map abstractions
  *  dynamically using object composition and forwarding.
  *
@@ -19,7 +25,11 @@ package mutable
  *  @version 2.0, 31/12/2006
  *  @since   1
  */
+<<<<<<< HEAD
 trait MapProxy[A, B] extends Map[A, B] with MapProxyLike[A, B, Map[A, B]] {  
+=======
+trait MapProxy[A, B] extends Map[A, B] with MapProxyLike[A, B, Map[A, B]] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def newProxy[B1 >: B](newSelf: Map[A, B1]): MapProxy[A, B1] =
     new MapProxy[A, B1] { val self = newSelf }
 

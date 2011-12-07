@@ -2,6 +2,7 @@ package scala.reflect
 package internal
 package transform
 
+<<<<<<< HEAD
 trait Erasure { 
   
   val global: SymbolTable
@@ -13,13 +14,32 @@ trait Erasure {
     
     /** Is `tp` an unbounded generic type (i.e. which could be instantiated
      *  with primitive as well as class types)?. 
+=======
+trait Erasure {
+
+  val global: SymbolTable
+  import global._
+  import definitions._
+
+  /** An extractor object for generic arrays */
+  object GenericArray {
+
+    /** Is `tp` an unbounded generic type (i.e. which could be instantiated
+     *  with primitive as well as class types)?.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      */
     private def genericCore(tp: Type): Type = tp.normalize match {
       case TypeRef(_, sym, _) if sym.isAbstractType && !sym.owner.isJavaDefined =>
         tp
+<<<<<<< HEAD
       case ExistentialType(tparams, restp) => 
         genericCore(restp)
       case _ => 
+=======
+      case ExistentialType(tparams, restp) =>
+        genericCore(restp)
+      case _ =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         NoType
     }
 
@@ -30,12 +50,20 @@ trait Erasure {
     def unapply(tp: Type): Option[(Int, Type)] = tp.normalize match {
       case TypeRef(_, ArrayClass, List(arg)) =>
         genericCore(arg) match {
+<<<<<<< HEAD
           case NoType => 
+=======
+          case NoType =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             unapply(arg) match {
               case Some((level, core)) => Some((level + 1, core))
               case None => None
             }
+<<<<<<< HEAD
           case core => 
+=======
+          case core =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             Some((1, core))
         }
       case ExistentialType(tparams, restp) =>
@@ -44,7 +72,11 @@ trait Erasure {
         None
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected def unboundedGenericArrayLevel(tp: Type): Int = tp match {
     case GenericArray(level, core) if !(core <:< AnyRefClass.tpe) => level
     case _ => 0
@@ -65,17 +97,29 @@ trait Erasure {
 
   abstract class ErasureMap extends TypeMap {
     def mergeParents(parents: List[Type]): Type
+<<<<<<< HEAD
     
     def apply(tp: Type): Type = {
       tp match {
         case ConstantType(_) =>
           tp 
+=======
+
+    def apply(tp: Type): Type = {
+      tp match {
+        case ConstantType(_) =>
+          tp
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case st: SubType =>
           apply(st.supertype)
         case TypeRef(pre, sym, args) =>
           if (sym == ArrayClass)
             if (unboundedGenericArrayLevel(tp) == 1) ObjectClass.tpe
+<<<<<<< HEAD
             else if (args.head.typeSymbol == NothingClass || args.head.typeSymbol == NullClass) arrayType(ObjectClass.tpe)
+=======
+            else if (args.head.typeSymbol.isBottomClass) arrayType(ObjectClass.tpe)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
             else typeRef(apply(pre), sym, args map this)
           else if (sym == AnyClass || sym == AnyValClass || sym == SingletonClass || sym == NotNullClass) erasedTypeRef(ObjectClass)
           else if (sym == UnitClass) erasedTypeRef(BoxedUnitClass)
@@ -88,6 +132,7 @@ trait Erasure {
           apply(restpe)
         case mt @ MethodType(params, restpe) =>
           MethodType(
+<<<<<<< HEAD
             cloneSymbols(params) map (p => p.setInfo(apply(p.tpe))),
             if (restpe.typeSymbol == UnitClass)
               erasedTypeRef(UnitClass) 
@@ -97,6 +142,13 @@ trait Erasure {
               apply(mt.resultType(params map (_.tpe)))
             else
               apply(restpe))
+=======
+            cloneSymbolsAndModify(params, ErasureMap.this),
+            if (restpe.typeSymbol == UnitClass) erasedTypeRef(UnitClass)
+            // this replaces each typeref that refers to an argument
+            // by the type `p.tpe` of the actual argument p (p in params)
+            else apply(mt.resultType(params map (_.tpe))))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         case RefinedType(parents, decls) =>
           apply(mergeParents(parents))
         case AnnotatedType(_, atp, _) =>
@@ -112,7 +164,11 @@ trait Erasure {
       }
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   protected def verifyJavaErasure = false
 
   /**   The erasure |T| of a type T. This is:
@@ -154,9 +210,15 @@ trait Erasure {
     }
     else scalaErasure(tp)
   }
+<<<<<<< HEAD
   
   /** Scala's more precise erasure than java's is problematic as follows:
    * 
+=======
+
+  /** Scala's more precise erasure than java's is problematic as follows:
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  - Symbols are read from classfiles and populated with types
    *  - The textual signature read from the bytecode is forgotten
    *  - Bytecode generation must know the precise signature of a method
@@ -174,9 +236,15 @@ trait Erasure {
     def mergeParents(parents: List[Type]): Type =
       intersectionDominator(parents)
   }
+<<<<<<< HEAD
   
   /** The intersection dominator (SLS 3.7) of a list of types is computed as follows.
    * 
+=======
+
+  /** The intersection dominator (SLS 3.7) of a list of types is computed as follows.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  - If the list contains one or more occurrences of scala.Array with
    *    type parameters El1, El2, ... then the dominator is scala.Array with
    *    type parameter of intersectionDominator(List(El1, El2, ...)).           <--- @PP: not yet in spec.
@@ -226,7 +294,11 @@ trait Erasure {
   /** Remove duplicate references to class Object in a list of parent classes */
   private def removeDoubleObject(tps: List[Type]): List[Type] = tps match {
     case List() => List()
+<<<<<<< HEAD
     case tp :: tps1 => 
+=======
+    case tp :: tps1 =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (tp.typeSymbol == ObjectClass) tp :: tps1.filter(_.typeSymbol != ObjectClass)
       else tp :: removeDoubleObject(tps1)
   }
@@ -242,18 +314,31 @@ trait Erasure {
   def transformInfo(sym: Symbol, tp: Type): Type = {
     if (sym == Object_asInstanceOf)
       sym.info
+<<<<<<< HEAD
     else if (sym == Object_isInstanceOf || sym == ArrayClass) 
       PolyType(sym.info.typeParams, erasure(sym, sym.info.resultType))
     else if (sym.isAbstractType) 
+=======
+    else if (sym == Object_isInstanceOf || sym == ArrayClass)
+      PolyType(sym.info.typeParams, erasure(sym, sym.info.resultType))
+    else if (sym.isAbstractType)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       TypeBounds(WildcardType, WildcardType)
     else if (sym.isTerm && sym.owner == ArrayClass) {
       if (sym.isClassConstructor)
         tp match {
           case MethodType(params, TypeRef(pre, sym1, args)) =>
+<<<<<<< HEAD
             MethodType(cloneSymbols(params) map (p => p.setInfo(erasure(sym, p.tpe))),
                        typeRef(erasure(sym, pre), sym1, args))
         }
       else if (sym.name == nme.apply) 
+=======
+            MethodType(cloneSymbolsAndModify(params, erasure(sym, _)),
+                       typeRef(erasure(sym, pre), sym1, args))
+        }
+      else if (sym.name == nme.apply)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         tp
       else if (sym.name == nme.update)
         (tp: @unchecked) match {
@@ -274,4 +359,8 @@ trait Erasure {
       erasure(sym, tp)
     }
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0

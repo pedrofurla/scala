@@ -36,6 +36,7 @@ abstract class Tokens {
   def isLiteral(code: Int): Boolean
   def isKeyword(code: Int): Boolean
   def isSymbol(code: Int): Boolean
+<<<<<<< HEAD
   
   final def isSpace(at: Char)         = at == ' ' || at == '\t'  
   final def isNewLine(at: Char)       = at == CR || at == LF || at == FF
@@ -47,22 +48,50 @@ abstract class Tokens {
 object Tokens extends Tokens {
   final val SYMBOLLIT = 7
   def isLiteral(code : Int) =
+=======
+
+  final def isSpace(at: Char)       = at == ' ' || at == '\t'
+  final def isNewLine(at: Char)     = at == CR || at == LF || at == FF
+  final def isBrace(code: Int)      = code >= LPAREN && code <= RBRACE
+  final def isOpenBrace(code: Int)  = isBrace(code) && (code % 2 == 0)
+  final def isCloseBrace(code: Int) = isBrace(code) && (code % 2 == 1)
+}
+
+object Tokens extends Tokens {
+  final val STRINGPART = 7
+  final val SYMBOLLIT = 8
+  final val STRINGFMT = 9
+  def isLiteral(code: Int) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     code >= CHARLIT && code <= SYMBOLLIT
 
   /** identifiers */
   final val IDENTIFIER = 10
   final val BACKQUOTED_IDENT = 11
+<<<<<<< HEAD
   def isIdentifier(code : Int) =
     code >= IDENTIFIER && code <= BACKQUOTED_IDENT
 
   @switch def canBeginExpression(code : Int) = code match {
     case IDENTIFIER|BACKQUOTED_IDENT|USCORE       => true
     case LBRACE|LPAREN|LBRACKET|COMMENT|STRINGLIT => true
+=======
+  def isIdentifier(code: Int) =
+    code >= IDENTIFIER && code <= BACKQUOTED_IDENT
+
+  @switch def canBeginExpression(code: Int) = code match {
+    case IDENTIFIER|BACKQUOTED_IDENT|USCORE       => true
+    case LBRACE|LPAREN|LBRACKET|COMMENT           => true
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     case IF|DO|WHILE|FOR|NEW|TRY|THROW            => true
     case NULL|THIS|TRUE|FALSE                     => true
     case code                                     => isLiteral(code)
   }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** keywords */
   final val IF = 20
   final val FOR = 21
@@ -107,10 +136,17 @@ object Tokens extends Tokens {
   final val FORSOME = 59
   final val LAZY = 61
 
+<<<<<<< HEAD
   def isKeyword(code : Int) =
     code >= IF && code <= LAZY
   
   @switch def isDefinition(code : Int) = code match {
+=======
+  def isKeyword(code: Int) =
+    code >= IF && code <= LAZY
+
+  @switch def isDefinition(code: Int) = code match {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     case CLASS|TRAIT|OBJECT => true
     case CASECLASS|CASEOBJECT => true
     case DEF|VAL|VAR => true
@@ -134,8 +170,13 @@ object Tokens extends Tokens {
   final val HASH = 82
   final val AT = 83
   final val VIEWBOUND = 84
+<<<<<<< HEAD
   
   def isSymbol(code : Int) =
+=======
+
+  def isSymbol(code: Int) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     code >= COMMA && code <= VIEWBOUND
 
   /** parenthesis */
@@ -148,10 +189,17 @@ object Tokens extends Tokens {
 
   /** XML mode */
   final val XMLSTART = 96
+<<<<<<< HEAD
   
   /** for IDE only */
   final val COMMENT = 97
   
+=======
+
+  /** for IDE only */
+  final val COMMENT = 97
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   final val WHITESPACE = 105
   final val IGNORE = 106
   final val ESCAPE = 109

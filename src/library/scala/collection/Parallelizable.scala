@@ -18,15 +18,24 @@ import parallel.Combiner
  *  @tparam ParRepr      the actual type of the collection, which has to be parallel
  */
 trait Parallelizable[+A, +ParRepr <: Parallel] {
+<<<<<<< HEAD
   
   def seq: TraversableOnce[A]
   
   /** Returns a parallel implementation of this collection.
    *  
+=======
+
+  def seq: TraversableOnce[A]
+
+  /** Returns a parallel implementation of this collection.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  For most collection types, this method creates a new parallel collection by copying
    *  all the elements. For these collection, `par` takes linear time. Mutable collections
    *  in this category do not produce a mutable parallel collection that has the same
    *  underlying dataset, so changes in one collection will not be reflected in the other one.
+<<<<<<< HEAD
    *  
    *  Specific collections (e.g. `ParArray` or `mutable.ParHashMap`) override this default
    *  behaviour by creating a parallel collection which shares the same underlying dataset.
@@ -34,6 +43,15 @@ trait Parallelizable[+A, +ParRepr <: Parallel] {
    *  
    *  All parallel collections return a reference to themselves.
    *  
+=======
+   *
+   *  Specific collections (e.g. `ParArray` or `mutable.ParHashMap`) override this default
+   *  behaviour by creating a parallel collection which shares the same underlying dataset.
+   *  For these collections, `par` takes constant or sublinear time.
+   *
+   *  All parallel collections return a reference to themselves.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @return  a parallel implementation of this collection
    */
   def par: ParRepr = {
@@ -41,7 +59,11 @@ trait Parallelizable[+A, +ParRepr <: Parallel] {
     for (x <- seq) cb += x
     cb.result
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** The default `par` implementation uses the combiner provided by this method
    *  to create a new parallel collection.
    *

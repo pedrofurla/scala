@@ -32,7 +32,10 @@ object ShutdownHookThread {
     val t = new ShutdownHookThread(hookName()) {
       override def run() = body
     }
+<<<<<<< HEAD
     t setDaemon true
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     runtime addShutdownHook t
     t
   }

@@ -26,14 +26,22 @@ abstract class ExternalID extends parsing.TokenTests
   override def toString(): String = {
     lazy val quotedSystemLiteral = quoted(systemId)
     lazy val quotedPublicLiteral = quoted(publicId)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     if (publicId == null) "SYSTEM " + quotedSystemLiteral
     else "PUBLIC " + quotedPublicLiteral +
       (if (systemId == null) "" else " " + quotedSystemLiteral)
   }
   def buildString(sb: StringBuilder): StringBuilder =
     sb.append(this.toString())
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def systemId: String
   def publicId: String
 }

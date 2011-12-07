@@ -12,9 +12,14 @@ import java.io.File
 import java.net.URL
 import java.util.StringTokenizer
 import scala.util.Sorting
+<<<<<<< HEAD
 
 import scala.collection.mutable
 import scala.tools.nsc.io.AbstractFile
+=======
+import scala.collection.mutable
+import scala.tools.nsc.io.{ AbstractFile, MsilFile }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 import ch.epfl.lamp.compiler.msil.{ Type => MSILType, Assembly }
 import ClassPath.{ ClassPathContext, isTraitImplementation }
 
@@ -33,7 +38,11 @@ object MsilClassPath {
     }
     res
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** On the java side this logic is in PathResolver, but as I'm not really
    *  up to folding MSIL into that, I am encapsulating it here.
    */
@@ -41,6 +50,7 @@ object MsilClassPath {
     val context =
       if (settings.inline.value) new MsilContext
       else new MsilContext { override def isValidName(name: String) = !isTraitImplementation(name) }
+<<<<<<< HEAD
     
     import settings._
     new MsilClassPath(assemextdirs.value, assemrefs.value, sourcepath.value, context)
@@ -54,6 +64,21 @@ object MsilClassPath {
   private def assembleEntries(ext: String, user: String, source: String, context: MsilContext): List[ClassPath[MSILType]] = {
     import ClassPath._
     val etr = new mutable.ListBuffer[ClassPath[MSILType]]
+=======
+
+    import settings._
+    new MsilClassPath(assemextdirs.value, assemrefs.value, sourcepath.value, context)
+  }
+
+  class MsilContext extends ClassPathContext[MsilFile] {
+    def toBinaryName(rep: MsilFile) = rep.msilType.Name
+    def newClassPath(assemFile: AbstractFile) = new AssemblyClassPath(MsilClassPath collectTypes assemFile, "", this)
+  }
+
+  private def assembleEntries(ext: String, user: String, source: String, context: MsilContext): List[ClassPath[MsilFile]] = {
+    import ClassPath._
+    val etr = new mutable.ListBuffer[ClassPath[MsilFile]]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val names = new mutable.HashSet[String]
 
     // 1. Assemblies from -Xassem-extdirs
@@ -93,7 +118,11 @@ object MsilClassPath {
     // 3. Source path
     for (dirName <- expandPath(source, expandStar = false)) {
       val file = AbstractFile.getDirectory(dirName)
+<<<<<<< HEAD
       if (file ne null) etr += new SourcePath[MSILType](file, context)
+=======
+      if (file ne null) etr += new SourcePath[MsilFile](file, context)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
 
     etr.toList
@@ -104,7 +133,11 @@ import MsilClassPath._
 /**
  * A assembly file (dll / exe) containing classes and namespaces
  */
+<<<<<<< HEAD
 class AssemblyClassPath(types: Array[MSILType], namespace: String, val context: MsilContext) extends ClassPath[MSILType] {
+=======
+class AssemblyClassPath(types: Array[MSILType], namespace: String, val context: MsilContext) extends ClassPath[MsilFile] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def name = {
     val i = namespace.lastIndexOf('.')
     if (i < 0) namespace
@@ -131,7 +164,11 @@ class AssemblyClassPath(types: Array[MSILType], namespace: String, val context: 
     while (i < types.length && types(i).Namespace.startsWith(namespace)) {
       // CLRTypes used to exclude java.lang.Object and java.lang.String (no idea why..)
       if (types(i).Namespace == namespace)
+<<<<<<< HEAD
         cls += ClassRep(Some(types(i)), None)
+=======
+        cls += ClassRep(Some(new MsilFile(types(i))), None)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       i += 1
     }
     cls.toIndexedSeq
@@ -153,12 +190,20 @@ class AssemblyClassPath(types: Array[MSILType], namespace: String, val context: 
     }
     val xs = for (ns <- nsSet.toList)
       yield new AssemblyClassPath(types, ns, context)
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     xs.toIndexedSeq
   }
 
   val sourcepaths: IndexedSeq[AbstractFile] = IndexedSeq()
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def toString() = "assembly classpath "+ namespace
 }
 
@@ -167,4 +212,8 @@ class AssemblyClassPath(types: Array[MSILType], namespace: String, val context: 
  * MSILType values.
  */
 class MsilClassPath(ext: String, user: String, source: String, context: MsilContext)
+<<<<<<< HEAD
 extends MergedClassPath[MSILType](MsilClassPath.assembleEntries(ext, user, source, context), context) { }
+=======
+extends MergedClassPath[MsilFile](MsilClassPath.assembleEntries(ext, user, source, context), context) { }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0

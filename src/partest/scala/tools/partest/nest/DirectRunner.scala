@@ -8,10 +8,15 @@
 package scala.tools.partest
 package nest
 
+<<<<<<< HEAD
 import java.io.{ File }
 import java.util.StringTokenizer
 import scala.util.Properties.{ setProp }
 import scala.tools.util.Signallable
+=======
+import java.io.File
+import scala.util.Properties.setProp
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 import scala.tools.nsc.util.ScalaClassLoader
 import scala.tools.nsc.io.Path
 import scala.collection.{ mutable, immutable }
@@ -23,6 +28,7 @@ case class TestRunParams(val scalaCheckParentClassLoader: ScalaClassLoader)
 trait DirectRunner {
 
   def fileManager: FileManager
+<<<<<<< HEAD
   
   import PartestDefaults.numActors
   
@@ -30,6 +36,15 @@ trait DirectRunner {
   def denotesTestDir(arg: String)  = Path(arg).ifDirectory(_.files.nonEmpty) exists (x => x)
   def denotesTestPath(arg: String) = denotesTestDir(arg) || denotesTestFile(arg)
   
+=======
+
+  import PartestDefaults.numActors
+
+  def denotesTestFile(arg: String) = Path(arg).hasExtension("scala", "res", "xml")
+  def denotesTestDir(arg: String)  = Path(arg).ifDirectory(_.files.nonEmpty) exists (x => x)
+  def denotesTestPath(arg: String) = denotesTestDir(arg) || denotesTestFile(arg)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** No duplicate, no empty directories, don't mess with this unless
    *  you like partest hangs.
    */
@@ -61,14 +76,22 @@ trait DirectRunner {
       List(scalacheckURL, latestCompFile.toURI.toURL, latestLibFile.toURI.toURL, latestPartestFile.toURI.toURL)
     )
     Output.init()
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val workers = kindFiles.grouped(groupSize).toList map { toTest =>
       val worker = new Worker(fileManager, TestRunParams(scalaCheckParentClassLoader))
       worker.start()
       worker ! RunTests(kind, toTest)
       worker
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     workers map { w =>
       receiveWithin(3600 * 1000) {
         case Results(testResults) => testResults

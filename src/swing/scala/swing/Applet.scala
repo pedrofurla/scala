@@ -19,18 +19,30 @@ import javax.swing.JApplet
  *  <p>
  *    <b>Note</b>: <code>Applet</code> extends <code>javax.swing.JApplet</code>
  *    to satisfy Java's applet loading mechanism. The usual component wrapping
+<<<<<<< HEAD
  *    scheme doesn't  work here. 
+=======
+ *    scheme doesn't  work here.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  </p>
  *
  *  @see javax.swing.JApplet
  */
 abstract class Applet extends JApplet { outer =>
   val ui: UI
+<<<<<<< HEAD
   
   override def init() { ui.init() }
   override def start() { ui.start() }
   override def stop() { ui.stop() }
   
+=======
+
+  override def init() { ui.init() }
+  override def start() { ui.start() }
+  override def stop() { ui.stop() }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   abstract class UI extends RootPanel {
     def peer = outer
     override def contents_=(c: Component) {

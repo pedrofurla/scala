@@ -12,20 +12,35 @@ class GenericRunnerCommand(
   args: List[String],
   override val settings: GenericRunnerSettings)
 extends CompilerCommand(args, settings) {
+<<<<<<< HEAD
   
   def this(args: List[String], error: String => Unit) =
     this(args, new GenericRunnerSettings(error))
 
   def this(args: List[String]) = 
+=======
+
+  def this(args: List[String], error: String => Unit) =
+    this(args, new GenericRunnerSettings(error))
+
+  def this(args: List[String]) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     this(args, str => Console.println("Error: " + str))
 
   /** name of the associated compiler command */
   override def cmdName = "scala"
   def compCmdName = "scalac"
+<<<<<<< HEAD
   
   // change CompilerCommand behavior
   override def shouldProcessArguments: Boolean = false
   
+=======
+
+  // change CompilerCommand behavior
+  override def shouldProcessArguments: Boolean = false
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private lazy val (_ok, targetAndArguments) = settings.processArguments(args, false)
   override def ok = _ok
   private def guessHowToRun(target: String): GenericRunnerCommand.HowToRun = {
@@ -35,7 +50,14 @@ extends CompilerCommand(args, settings) {
     else {
       val f = io.File(target)
       if (!f.hasExtension("class", "jar", "zip") && f.canRead) AsScript
+<<<<<<< HEAD
       else sys.error("Cannot figure out how to run target: " + target)
+=======
+      else {
+        Console.err.println("No such file or class on classpath: " + target)
+        Error
+      }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
   }
   /** String with either the jar file, class name, or script file name. */
@@ -87,7 +109,11 @@ scala source.
   """) + "\n"
 }
 
+<<<<<<< HEAD
 object GenericRunnerCommand {  
+=======
+object GenericRunnerCommand {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   sealed abstract class HowToRun(val name: String) { }
   case object AsJar extends HowToRun("jar")
   case object AsObject extends HowToRun("object")

@@ -67,7 +67,11 @@ class Random(val self: java.util.Random) {
    *  from this random number generator's sequence.
    */
   def nextLong(): Long = self.nextLong()
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Returns a pseudorandomly generated String.  This routine does
    *  not take any measures to preserve the randomness of the distribution
    *  in the face of factors like unicode's variable-length encoding,
@@ -83,10 +87,17 @@ class Random(val self: java.util.Random) {
       val res = nextInt(surrogateStart - 1) + 1
       res.toChar
     }
+<<<<<<< HEAD
     
     List.fill(length)(safeChar()).mkString
   }
   
+=======
+
+    List.fill(length)(safeChar()).mkString
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Returns the next pseudorandom, uniformly distributed value
    *  from the ASCII range 33-126.
    */
@@ -97,26 +108,44 @@ class Random(val self: java.util.Random) {
   }
 
   def setSeed(seed: Long) { self.setSeed(seed) }
+<<<<<<< HEAD
     
   /** Returns a new collection of the same type in a randomly chosen order.
    * 
+=======
+
+  /** Returns a new collection of the same type in a randomly chosen order.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param  coll    the [[scala.collection.TraversableOnce]] to shuffle
    *  @return         the shuffled [[scala.collection.TraversableOnce]]
    */
   def shuffle[T, CC[X] <: TraversableOnce[X]](xs: CC[T])(implicit bf: CanBuildFrom[CC[T], T, CC[T]]): CC[T] = {
     val buf = new ArrayBuffer[T] ++= xs
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def swap(i1: Int, i2: Int) {
       val tmp = buf(i1)
       buf(i1) = buf(i2)
       buf(i2) = tmp
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     for (n <- buf.length to 2 by -1) {
       val k = nextInt(n)
       swap(n - 1, k)
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     bf(xs) ++= buf result
   }
 
@@ -128,10 +157,17 @@ class Random(val self: java.util.Random) {
  *  @since 2.8
  */
 object Random extends Random {
+<<<<<<< HEAD
   
   /** Returns a Stream of pseudorandomly chosen alphanumeric characters,
    *  equally chosen from A-Z, a-z, and 0-9.
    * 
+=======
+
+  /** Returns a Stream of pseudorandomly chosen alphanumeric characters,
+   *  equally chosen from A-Z, a-z, and 0-9.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @since 2.8
    */
   def alphanumeric: Stream[Char] = {

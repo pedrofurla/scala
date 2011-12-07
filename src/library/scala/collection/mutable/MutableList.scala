@@ -15,33 +15,60 @@ import generic._
 import immutable.{List, Nil}
 
 // !!! todo: convert to LinkedListBuffer?
+<<<<<<< HEAD
 /** 
  *  This class is used internally to represent mutable lists. It is the
  *  basis for the implementation of the class `Queue`.
  *  
+=======
+/**
+ *  This class is used internally to represent mutable lists. It is the
+ *  basis for the implementation of the class `Queue`.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author  Matthias Zenger
  *  @author  Martin Odersky
  *  @version 2.8
  *  @since   1
+<<<<<<< HEAD
  */
 @SerialVersionUID(5938451523372603072L)
 class MutableList[A]
 extends LinearSeq[A]
+=======
+ *  @see [[http://docs.scala-lang.org/overviews/collections/concrete-mutable-collection-classes.html#mutable_lists "Scala's Collection Library overview"]]
+ *  section on `Mutable Lists` for more information.
+ */
+@SerialVersionUID(5938451523372603072L)
+class MutableList[A]
+extends AbstractSeq[A]
+   with LinearSeq[A]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    with LinearSeqOptimized[A, MutableList[A]]
    with GenericTraversableTemplate[A, MutableList]
    with Builder[A, MutableList[A]]
    with Serializable
 {
   override def companion: GenericCompanion[MutableList] = MutableList
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override protected[this] def newBuilder: Builder[A, MutableList[A]] = new MutableList[A]
 
   protected var first0: LinkedList[A] = new LinkedList[A]
   protected var last0: LinkedList[A] = first0
   protected var len: Int = 0
+<<<<<<< HEAD
   
   def toQueue = new Queue(first0, last0, len)
   
+=======
+
+  def toQueue = new Queue(first0, last0, len)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Is the list empty?
    */
   override def isEmpty = len == 0
@@ -105,9 +132,12 @@ extends LinearSeq[A]
     }
   }
 
+<<<<<<< HEAD
   @deprecated("use clear() instead", "2.8.0")
   def reset() { clear() }
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Returns an iterator over all elements of this list.
    */
   override def iterator: Iterator[A] = first0.iterator

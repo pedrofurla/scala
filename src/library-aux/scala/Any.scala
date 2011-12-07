@@ -8,13 +8,21 @@
 
 package scala
 
+<<<<<<< HEAD
 /** Class `Any` is the root of the Scala class hierarchy.  Every class in a Scala 
+=======
+/** Class `Any` is the root of the Scala class hierarchy.  Every class in a Scala
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  execution environment inherits directly or indirectly from this class.
  */
 abstract class Any {
   /** Compares the receiver object (`this`) with the argument object (`that`) for equivalence.
    *
+<<<<<<< HEAD
    *  The default implementations of this method is an [[http://en.wikipedia.org/wiki/Equivalence_relation equivalence relation]]:
+=======
+   *  Any implementation of this method should be an [[http://en.wikipedia.org/wiki/Equivalence_relation equivalence relation]]:
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *
    *  - It is reflexive: for any instance `x` of type `Any`, `x.equals(x)` should return `true`.
    *  - It is symmetric: for any instances `x` and `y` of type `Any`, `x.equals(y)` should return `true` if and
@@ -44,14 +52,21 @@ abstract class Any {
    *
    *  @return   the hash code value for this object.
    */
+<<<<<<< HEAD
   def hashCode: Int
   
   /** Returns a string representation of the object.  
+=======
+  def hashCode(): Int
+
+  /** Returns a string representation of the object.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *
    *  The default representation is platform dependent.
    *
    *  @return a string representation of the object.
    */
+<<<<<<< HEAD
   def toString: String
   
   /** Returns the runtime class representation of the object.
@@ -61,6 +76,18 @@ abstract class Any {
   def getClass(): Class[_]
   
   /** Test two objects for equality.
+=======
+  def toString(): String
+
+  /** Returns the runtime class representation of the object.
+   *
+   *  @return a class object corresponding to the runtime type of the receiver.
+   */
+  def getClass(): Class[_]
+
+  /** Test two objects for equality.
+   *  The expression `x == that` is equivalent to `if (x eq null) that eq null else x.equals(that)`.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *
    *  @param  that  the object to compare against this object for equality.
    *  @return       `true` if the receiver object is equivalent to the argument; `false` otherwise.
@@ -73,7 +100,11 @@ abstract class Any {
    *  @return       `true` if !(this == that), false otherwise.
    */
   final def != (that: Any): Boolean = !(this == that)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Equivalent to `x.hashCode` except for boxed numeric types and `null`.
    *  For numerics, it returns a hash value which is consistent
    *  with value equality: if two value type instances compare
@@ -84,8 +115,13 @@ abstract class Any {
    *
    *  @return   a hash value consistent with ==
    */
+<<<<<<< HEAD
   final def ## : Int = sys.error("##")
   
+=======
+  final def ##(): Int = sys.error("##")
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Test whether the dynamic type of the receiver object is `T0`.
    *
    *  Note that the result of the test is modulo Scala's erasure semantics.

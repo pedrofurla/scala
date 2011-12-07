@@ -2,7 +2,11 @@
  * Copyright 2005-2011 LAMP/EPFL
  * @author Paul Phillips
  */
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 package scala.tools
 package reflect
 
@@ -13,16 +17,28 @@ import java.lang.reflect.{ Method, Proxy, InvocationHandler }
  */
 trait Mock extends (Invoked => AnyRef) {
   mock =>
+<<<<<<< HEAD
   
   def interfaces: List[Class[_]]
   def classLoader: ClassLoader
   def apply(invoked: Invoked): AnyRef
   
+=======
+
+  def interfaces: List[Class[_]]
+  def classLoader: ClassLoader
+  def apply(invoked: Invoked): AnyRef
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def newProxyInstance(handler: InvocationHandler): AnyRef =
     Proxy.newProxyInstance(classLoader, interfaces.toArray, handler)
   def newProxyInstance(): AnyRef =
     newProxyInstance(newInvocationHandler())
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def newInvocationHandler() = new InvocationHandler {
     def invoke(proxy: AnyRef, method: Method, args: Array[AnyRef]) =
       mock(Invoked(proxy, method, args))
@@ -39,7 +55,11 @@ object Mock {
   def fromInterfaces(clazz: Class[_], clazzes: Class[_]*)(pf: PartialFunction[Invoked, AnyRef]): AnyRef = {
     val ints = clazz :: clazzes.toList
     require(ints forall (_.isInterface), "All class objects must represent interfaces")
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val mock = new Mock {
       val interfaces  = ints
       def classLoader = clazz.getClassLoader

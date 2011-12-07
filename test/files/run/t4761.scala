@@ -1,7 +1,10 @@
+<<<<<<< HEAD
 
 
 
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 object Test {
   def main(args: Array[String]) {
     val gs = for (x <- (1 to 5)) yield { if (x % 2 == 0) List(1).seq else List(1).par }

@@ -17,12 +17,21 @@ import category.AllCategories
 class Partest(args: List[String]) extends {
   val parsed = PartestSpec(args: _*)
 } with Universe with PartestSpec with cmd.Instance with AllCategories {
+<<<<<<< HEAD
   
   if (parsed.propertyArgs.nonEmpty)
     debug("Partest property args: " + fromArgs(parsed.propertyArgs))
     
   debug("Partest created with args: " + fromArgs(args))
   
+=======
+
+  if (parsed.propertyArgs.nonEmpty)
+    debug("Partest property args: " + fromArgs(parsed.propertyArgs))
+
+  debug("Partest created with args: " + fromArgs(args))
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def helpMsg     = PartestSpec.helpMsg
 
   // The abstract values from Universe.
@@ -35,13 +44,18 @@ class Partest(args: List[String]) extends {
   def specifiedKinds  = testKinds filter (x => isSet(x) || (runSets contains x))
   def specifiedCats   = specifiedKinds flatMap (x => allCategories find (_.kind == x))
   def isAllImplied    = isAll || (specifiedTests.isEmpty && specifiedKinds.isEmpty)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Assembles a filter based on command line options which restrict the test set
    *  --grep limits to only matching tests
    *  --failed limits to only recently failed tests (log file is present)
    *  --<category> limits to only the given tests and categories (but --all overrides)
    *  path/to/Test limits to only the given tests and categories
    */
+<<<<<<< HEAD
   lazy val filter = {    
     def indivFilter(test: TestEntity)     = specifiedTests contains test.location.normalize
     def categoryFilter(test: TestEntity)  = specifiedCats contains test.category
@@ -54,22 +68,47 @@ class Partest(args: List[String]) extends {
     combinedFilter _
   }
     
+=======
+  lazy val filter = {
+    def indivFilter(test: TestEntity)     = specifiedTests contains test.location.normalize
+    def categoryFilter(test: TestEntity)  = specifiedCats contains test.category
+    def indivOrCat(test: TestEntity)      = isAllImplied || indivFilter(test) || categoryFilter(test)  // combines previous two
+
+    def failedFilter(test: TestEntity)    = !isFailed || (test.logFile exists)
+    def grepFilter(test: TestEntity)      = grepExpr.isEmpty || (test containsString grepExpr.get)
+    def combinedFilter(x: TestEntity)     = indivOrCat(x) && failedFilter(x) && grepFilter(x)   // combines previous three
+
+    combinedFilter _
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def launchTestSuite() = {
     def onTimeout() = {
       warning("Partest test run timed out after " + timeout + " seconds.\n")
       System.exit(-1)
     }
     val alarm = new Alarmer(AlarmerAction(timeout, () => onTimeout()))
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     try runSelection(selectedCategories, filter)
     finally alarm.cancelAll()
   }
 }
 
+<<<<<<< HEAD
 object Partest {  
   def fromBuild(dir: String, args: String*): Partest      = apply("--builddir" +: dir +: args: _*)
   def apply(args: String*): Partest                       = new Partest(args.toList)
   
+=======
+object Partest {
+  def fromBuild(dir: String, args: String*): Partest      = apply("--builddir" +: dir +: args: _*)
+  def apply(args: String*): Partest                       = new Partest(args.toList)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // builds without partest jars won't actually work
   def starr()   = fromBuild("")
   def locker()  = fromBuild("build/locker")

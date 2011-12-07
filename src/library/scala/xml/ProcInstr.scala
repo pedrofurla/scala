@@ -16,13 +16,18 @@ package scala.xml
  * @param  text   text contained in this node, may not contain "?>"
  */
 case class ProcInstr(target: String, proctext: String) extends SpecialNode
+<<<<<<< HEAD
 {  
+=======
+{
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   if (!Utility.isName(target))
     throw new IllegalArgumentException(target+" must be an XML Name")
   if (proctext contains "?>")
     throw new IllegalArgumentException(proctext+" may not contain \"?>\"")
   if (target.toLowerCase == "xml")
     throw new IllegalArgumentException(target+" is reserved")
+<<<<<<< HEAD
   
   final override def doCollectNamespaces = false
   final override def doTransform         = false
@@ -31,6 +36,16 @@ case class ProcInstr(target: String, proctext: String) extends SpecialNode
   override def text = ""
 
   /** appends &quot;&lt;?&quot; target (&quot; &quot;+text)?+&quot;?&gt;&quot; 
+=======
+
+  final override def doCollectNamespaces = false
+  final override def doTransform         = false
+
+  final def label   = "#PI"
+  override def text = ""
+
+  /** appends &quot;&lt;?&quot; target (&quot; &quot;+text)?+&quot;?&gt;&quot;
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  to this stringbuffer.
    */
   override def buildString(sb: StringBuilder) =

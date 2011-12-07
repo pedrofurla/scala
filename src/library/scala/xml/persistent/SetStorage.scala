@@ -13,7 +13,11 @@ package persistent
 import scala.collection.mutable
 import java.io.File
 
+<<<<<<< HEAD
 /** A persistent store with set semantics. This class allows to add and remove 
+=======
+/** A persistent store with set semantics. This class allows to add and remove
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  trees, but never contains two structurally equal trees.
  *
  *  @author Burak Emir

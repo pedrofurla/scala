@@ -7,7 +7,11 @@ import scala.collection.immutable.Queue
 object iq {
   def main {
     /* Create an empty queue. */
+<<<<<<< HEAD
     val q: Queue[Int] = Queue.Empty
+=======
+    val q: Queue[Int] = Queue.empty
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     /* Test isEmpty. 
      * Expected: Empty 
@@ -45,7 +49,11 @@ object iq {
      */
     Console.println("q5[5]: " + q5(5))
 
+<<<<<<< HEAD
     val q5c: Queue[Int] = Queue.Empty.enqueue(List(0, 1, 2, 3, 4, 5, 6, 7, 8, 9))
+=======
+    val q5c: Queue[Int] = Queue.empty.enqueue(List(0, 1, 2, 3, 4, 5, 6, 7, 8, 9))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     /* Testing ==
      *  Expected: q5 == q9: true

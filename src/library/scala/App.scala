@@ -21,7 +21,11 @@ import scala.collection.mutable.ListBuffer
  *  Here, object `Main` inherits the `main` method of `App`.
  *
  *  `args` returns the current command line arguments as an array.
+<<<<<<< HEAD
  *    
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author  Martin Odersky
  *  @version 2.1, 15/02/2011
  */

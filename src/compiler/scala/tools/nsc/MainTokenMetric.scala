@@ -13,7 +13,11 @@ import scala.tools.nsc.reporters.ConsoleReporter
 object MainTokenMetric {
 
   private var reporter: ConsoleReporter = _
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def tokenMetric(compiler: Global, fnames: List[String]) {
     import compiler.CompilationUnit
     import compiler.syntaxAnalyzer.UnitScanner

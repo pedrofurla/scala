@@ -56,7 +56,11 @@ import java.rmi.server.UnicastRemoteObject
  *
  *       <b>val</b> registry = LocateRegistry.createRegistry(REGISTRY_PORT)
  *       registry.bind(DELEGATE_NAME, <b>new</b> RegistryDelegate());
+<<<<<<< HEAD
  *    
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *       do {
  *         <b>try</b> {
  *           Thread.sleep(Long.MAX_VALUE)
@@ -86,7 +90,11 @@ import java.rmi.server.UnicastRemoteObject
  *
  * @author Genady Beryozkin, rmi-info@genady.net
  */
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 object RMIDelegate {
   /** The name under which the delegate appears in the registry. */
   val DELEGATE_NAME = "foo"
@@ -120,7 +128,11 @@ object RMIDelegate {
       try {
         port = args(0).toInt
       } catch {
+<<<<<<< HEAD
         case e: NumberFormatException => 
+=======
+        case e: NumberFormatException =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           println("Usage: rmidelegate <options> <port>")
           sys.exit(1)
       }
@@ -129,7 +141,11 @@ object RMIDelegate {
         val x = opt.substring(4) split "="
         if (x.length == 2) System.setProperty(x(0), x(1))
         else System.setProperty(x(0), "")
+<<<<<<< HEAD
       } 
+=======
+      }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
 
     if (System.getSecurityManager() == null)

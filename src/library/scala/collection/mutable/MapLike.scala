@@ -21,7 +21,11 @@ import parallel.mutable.ParMap
  */
 trait MapLike[A, B, +This <: MapLike[A, B, This] with Map[A, B]]
   extends scala.collection.MapLike[A, B, This]
+<<<<<<< HEAD
      with Builder[(A, B), This] 
+=======
+     with Builder[(A, B), This]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      with Growable[(A, B)]
      with Shrinkable[A]
      with Cloneable[This]
@@ -32,7 +36,11 @@ trait MapLike[A, B, +This <: MapLike[A, B, This] with Map[A, B]]
 
   /** A common implementation of `newBuilder` for all mutable maps
    *    in terms of `empty`.
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *    Overrides `MapLike` implementation for better efficiency.
    */
   override protected[this] def newBuilder: Builder[(A, B), This] = empty
@@ -61,7 +69,11 @@ trait MapLike[A, B, +This <: MapLike[A, B, This] with Map[A, B]]
    *
    *  @param key    The key to update
    *  @param value  The new value
+<<<<<<< HEAD
    */    
+=======
+   */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def update(key: A, value: B) { this += ((key, value)) }
 
   /** Adds a new key/value pair to this map.
@@ -98,9 +110,15 @@ trait MapLike[A, B, +This <: MapLike[A, B, This] with Map[A, B]]
 
   /** Creates a new map containing two or more key/value mappings and all the key/value
    *  mappings of this map.
+<<<<<<< HEAD
    *  
    *  Specified mappings will override existing mappings from this map with the same keys.
    *  
+=======
+   *
+   *  Specified mappings will override existing mappings from this map with the same keys.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param elem1 the first element to add.
    *  @param elem2 the second element to add.
    *  @param elems the remaining elements to add.
@@ -115,9 +133,15 @@ trait MapLike[A, B, +This <: MapLike[A, B, This] with Map[A, B]]
 
   /** Creates a new map containing the key/value mappings provided by the specified traversable object
    *  and all the key/value mappings of this map.
+<<<<<<< HEAD
    *  
    *  Note that existing mappings from this map with the same key as those in `xs` will be overriden.
    *  
+=======
+   *
+   *  Note that existing mappings from this map with the same key as those in `xs` will be overriden.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param xs     the traversable object.
    *  @return       a new map containing mappings of this map and those provided by `xs`.
    */
@@ -150,7 +174,11 @@ trait MapLike[A, B, +This <: MapLike[A, B, This] with Map[A, B]]
 
   /** Creates a new map with all the key/value mappings of this map except the key/value mapping
    *  with the specified key.
+<<<<<<< HEAD
    *  
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param    key the key to be removed
    *  @return   a new map with all the mappings of this map except that with a key `key`.
    */
@@ -160,6 +188,7 @@ trait MapLike[A, B, +This <: MapLike[A, B, This] with Map[A, B]]
   )
   override def -(key: A): This = clone() -= key
 
+<<<<<<< HEAD
   /** If given key is defined in this map, remove it and return associated value as an Option.
    *  If key is not present return None.
    *  @param    key the key to be removed
@@ -167,13 +196,21 @@ trait MapLike[A, B, +This <: MapLike[A, B, This] with Map[A, B]]
   @deprecated("Use `remove` instead", "2.8.0")
   def removeKey(key: A): Option[B] = remove(key)
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Removes all bindings from the map. After this operation has completed,
    *  the map will be empty.
    */
   def clear() { keysIterator foreach -= }
+<<<<<<< HEAD
   
   /** If given key is already in this map, returns associated value.
    *  
+=======
+
+  /** If given key is already in this map, returns associated value.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  Otherwise, computes value from given expression `op`, stores with key
    *  in map and returns that value.
    *  @param  key the key to test
@@ -181,7 +218,11 @@ trait MapLike[A, B, +This <: MapLike[A, B, This] with Map[A, B]]
    *              `key` is previously unbound.
    *  @return     the value associated with key (either previously or as a result
    *              of executing the method).
+<<<<<<< HEAD
    */  
+=======
+   */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def getOrElseUpdate(key: A, op: => B): B =
     get(key) match {
       case Some(v) => v
@@ -191,7 +232,11 @@ trait MapLike[A, B, +This <: MapLike[A, B, This] with Map[A, B]]
   /** Applies a transformation function to all values contained in this map.
    *  The transformation function produces new values from existing keys
    *  associated values.
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * @param f  the transformation to apply
    * @return   the map itself.
    */
@@ -205,7 +250,11 @@ trait MapLike[A, B, +This <: MapLike[A, B, This] with Map[A, B]]
   /** Retains only those mappings for which the predicate
    *  `p` returns `true`.
    *
+<<<<<<< HEAD
    * @param p  The test predicate  
+=======
+   * @param p  The test predicate
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */
   def retain(p: (A, B) => Boolean): this.type = {
     for ((k, v) <- this.seq ; if !p(k, v))
@@ -239,7 +288,11 @@ trait MapLike[A, B, +This <: MapLike[A, B, This] with Map[A, B]]
 
   /** Creates a new map with all the key/value mappings of this map except mappings with keys
    *  equal to any of those provided by the specified traversable object.
+<<<<<<< HEAD
    *  
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param xs       the traversable object.
    *  @return         a new map with all the key/value mappings of this map except mappings
    *                  with a key equal to a key from `xs`.
@@ -247,7 +300,11 @@ trait MapLike[A, B, +This <: MapLike[A, B, This] with Map[A, B]]
   @migration(2, 8,
     "As of 2.8, this operation creates a new map.  To remove the elements as a\n"+
     "side effect to an existing map and return that map itself, use --=."
+<<<<<<< HEAD
   )  
+=======
+  )
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def --(xs: GenTraversableOnce[A]): This = clone() --= xs.seq
 
   @bridge def --(xs: TraversableOnce[A]): This =  --(xs: GenTraversableOnce[A])

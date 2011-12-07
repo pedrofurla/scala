@@ -17,6 +17,7 @@ sealed abstract class KeyEvent extends InputEvent {
   def peer: java.awt.event.KeyEvent
 }
 
+<<<<<<< HEAD
 case class KeyTyped(val source: Component, char: Char, val modifiers: Key.Modifiers, 
                     location: Key.Location.Value)
                    (val peer: java.awt.event.KeyEvent) extends KeyEvent {
@@ -40,4 +41,29 @@ case class KeyReleased(val source: Component, key: Key.Value, val modifiers: Key
   def this(e: java.awt.event.KeyEvent) = 
     this(UIElement.cachedWrapper[Component](e.getSource.asInstanceOf[JComponent]), 
         Key(e.getKeyCode), e.getModifiersEx, Key.Location(e.getKeyLocation))(e) 
+=======
+case class KeyTyped(val source: Component, char: Char, val modifiers: Key.Modifiers,
+                    location: Key.Location.Value)
+                   (val peer: java.awt.event.KeyEvent) extends KeyEvent {
+  def this(e: java.awt.event.KeyEvent) =
+    this(UIElement.cachedWrapper[Component](e.getSource.asInstanceOf[JComponent]),
+        e.getKeyChar, e.getModifiersEx,
+        Key.Location(e.getKeyLocation))(e)
+}
+
+case class KeyPressed(val source: Component, key: Key.Value, val modifiers: Key.Modifiers,
+                    location: Key.Location.Value)
+                   (val peer: java.awt.event.KeyEvent) extends KeyEvent {
+  def this(e: java.awt.event.KeyEvent) =
+    this(UIElement.cachedWrapper[Component](e.getSource.asInstanceOf[JComponent]),
+        Key(e.getKeyCode), e.getModifiersEx, Key.Location(e.getKeyLocation))(e)
+}
+
+case class KeyReleased(val source: Component, key: Key.Value, val modifiers: Key.Modifiers,
+                    location: Key.Location.Value)
+                   (val peer: java.awt.event.KeyEvent) extends KeyEvent {
+  def this(e: java.awt.event.KeyEvent) =
+    this(UIElement.cachedWrapper[Component](e.getSource.asInstanceOf[JComponent]),
+        Key(e.getKeyCode), e.getModifiersEx, Key.Location(e.getKeyLocation))(e)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

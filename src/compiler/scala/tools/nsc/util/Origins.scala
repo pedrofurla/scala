@@ -11,7 +11,11 @@ import scala.reflect.NameTransformer._
 /** A debugging class for logging from whence a method is being called.
  *  Say you wanted to discover who was calling phase_= in SymbolTable.
  *  You could do this:
+<<<<<<< HEAD
  *  
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  {{{
  *    private lazy val origins = Origins[SymbolTable]("phase_=")
  *    // Commented out original enclosed for contrast
@@ -42,14 +46,22 @@ abstract class Origins {
   def newRep(xs: StackSlice): Rep
   def repString(rep: Rep): String
   def originClass: String
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private var _tag: String = null
   def tag: String = _tag
   def setTag(tag: String): this.type = {
     _tag = tag
     this
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private val origins      = new mutable.HashMap[Rep, Int] withDefaultValue 0
   private def add(xs: Rep) = origins(xs) += 1
   private def total        = origins.values.foldLeft(0L)(_ + _)
@@ -68,7 +80,11 @@ abstract class Origins {
     body
   }
   def clear() = origins.clear()
+<<<<<<< HEAD
   def show()  = {    
+=======
+  def show()  = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     println("\n>> Origins %s.%s logged %s calls from %s distinguished sources.\n".format(originClass, tag, total, origins.keys.size))
     origins.toList sortBy (-_._2) foreach {
       case (k, v) => println("%7s %s".format(v, repString(k)))
@@ -89,8 +105,13 @@ object Origins {
     // Console.println("\nOrigins loaded: registering shutdown hook to display results.")
     sys.addShutdownHook(counters foreach (_.purge()))
   }
+<<<<<<< HEAD
   
   def apply[T: Manifest](tag: String): Origins = apply(tag, manifest[T].erasure)  
+=======
+
+  def apply[T: Manifest](tag: String): Origins = apply(tag, manifest[T].erasure)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def apply(tag: String, clazz: Class[_]): Origins = apply(tag, new OneLine(clazz))
   def apply(tag: String, orElse: => Origins): Origins = {
     counters find (_.tag == tag) getOrElse {

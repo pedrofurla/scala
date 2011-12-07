@@ -22,9 +22,15 @@ import script._
  *  @author  Matthias Zenger
  *  @version 1.0, 16/04/2004
  *  @since   1
+<<<<<<< HEAD
  *  
  *  @tparam A     type of the elements the buffer proxy contains.
  *  
+=======
+ *
+ *  @tparam A     type of the elements the buffer proxy contains.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define Coll BufferProxy
  *  @define coll buffer proxy
  */
@@ -38,6 +44,7 @@ trait BufferProxy[A] extends Buffer[A] with Proxy {
 
   def apply(n: Int): A = self.apply(n)
 
+<<<<<<< HEAD
   /** Append a single element to this buffer and return
    *  the identity of the buffer.
    *
@@ -48,6 +55,8 @@ trait BufferProxy[A] extends Buffer[A] with Proxy {
               "Use `clone() ++=` if you intend to create a new collection.", "2.8.0")
   override def +(elem: A): Buffer[A] = self.+(elem)
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Append a single element to this buffer.
    *
    *  @param elem  the element to append.
@@ -56,6 +65,7 @@ trait BufferProxy[A] extends Buffer[A] with Proxy {
 
   override def readOnly = self.readOnly
 
+<<<<<<< HEAD
   /** Appends a number of elements provided by a traversable object via its
    *  `foreach` method. The identity of the buffer is returned.
    *
@@ -66,6 +76,8 @@ trait BufferProxy[A] extends Buffer[A] with Proxy {
               "Use `clone() ++=` if you intend to create a new collection.", "2.8.0")
   override def ++(xs: GenTraversableOnce[A]): Buffer[A] = self.++(xs)
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Appends a number of elements provided by a traversable object.
    *
    *  @param xs   the traversable object.

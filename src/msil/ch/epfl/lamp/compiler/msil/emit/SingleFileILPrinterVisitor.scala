@@ -29,7 +29,11 @@ final class SingleFileILPrinterVisitor(_fileName: String) extends ILPrinterVisit
     var fileName: String = _fileName
 
     out = new PrintWriter(new BufferedWriter(new FileWriter(fileName)))
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    /**
      * Visit an AssemblyBuilder
      */
@@ -50,12 +54,20 @@ final class SingleFileILPrinterVisitor(_fileName: String) extends ILPrinterVisit
 	// print each module
         var m: Array[Module] = assemblyBuilder.GetModules()
         nomembers = true
+<<<<<<< HEAD
         for(val i <- 0 until m.length) {
+=======
+        for(i <- 0 until m.length) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 	    print(m(i).asInstanceOf[ModuleBuilder])
 	}
 
         nomembers = false
+<<<<<<< HEAD
         for(val i <- 0 until m.length) {
+=======
+        for(i <- 0 until m.length) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 	    print(m(i).asInstanceOf[ModuleBuilder])
 	}
 	// close out file
@@ -79,12 +91,20 @@ final class SingleFileILPrinterVisitor(_fileName: String) extends ILPrinterVisit
 	    module.CreateGlobalFunctions()
 
 	var m: Array[MethodInfo] = module.GetMethods()
+<<<<<<< HEAD
         for(val i <- 0 until m.length) {
+=======
+        for(i <- 0 until m.length) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 	    print(m(i).asInstanceOf[MethodBuilder])
 	}
 
 	var t: Array[Type] = module.GetTypes()
+<<<<<<< HEAD
         for(val i <- 0 until t.length) {
+=======
+        for(i <- 0 until t.length) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 	    print(t(i).asInstanceOf[TypeBuilder])
 	}
 	currentModule = null

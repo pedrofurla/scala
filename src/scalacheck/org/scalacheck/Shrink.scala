@@ -78,7 +78,11 @@ object Shrink {
   /** Shrink instance of integer */
   implicit lazy val shrinkInt: Shrink[Int] = Shrink { n =>
 
+<<<<<<< HEAD
     def halfs(n: Int): Stream[Int] = 
+=======
+    def halfs(n: Int): Stream[Int] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if(n == 0) empty else cons(n, halfs(n/2))
 
     if(n == 0) empty else {

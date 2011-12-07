@@ -14,15 +14,28 @@ package statement
 
 /** An expression that calculates some value from fields. */
 @deprecated(DbcIsDeprecated, "2.9.0") abstract class Expression extends Relation {
+<<<<<<< HEAD
   
   def fieldTypes: List[DataType] = Nil
   
   /** A SQL-99 compliant string representation of the expression. */
   def sqlString: String = "SELECT " + sqlInnerString
   
+=======
+
+  def fieldTypes: List[DataType] = Nil
+
+  /** A SQL-99 compliant string representation of the expression. */
+  def sqlString: String = "SELECT " + sqlInnerString
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A SQL-99 compliant string representation of the relation sub-
    *  statement. This only has a meaning inside another statement.
    */
   def sqlInnerString: String
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

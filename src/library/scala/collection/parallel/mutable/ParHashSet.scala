@@ -14,6 +14,7 @@ import collection.parallel.Combiner
 import collection.mutable.UnrolledBuffer
 
 /** A parallel hash set.
+<<<<<<< HEAD
  *  
  *  `ParHashSet` is a parallel set which internally keeps elements within a hash table.
  *  It uses linear probing to resolve collisions.
@@ -23,6 +24,17 @@ import collection.mutable.UnrolledBuffer
  *  @define Coll ParHashSet
  *  @define coll parallel hash set
  *  
+=======
+ *
+ *  `ParHashSet` is a parallel set which internally keeps elements within a hash table.
+ *  It uses linear probing to resolve collisions.
+ *
+ *  @tparam T        type of the elements in the $coll.
+ *
+ *  @define Coll ParHashSet
+ *  @define coll parallel hash set
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author Aleksandar Prokopec
  */
 @SerialVersionUID(1L)
@@ -37,6 +49,7 @@ extends ParSet[T]
   // println("----> new par hash set!")
   // java.lang.Thread.dumpStack
   // println(debugInformation)
+<<<<<<< HEAD
   
   def this() = this(null)
   
@@ -52,15 +65,37 @@ extends ParSet[T]
   
   override def seq = new collection.mutable.HashSet(hashTableContents)
   
+=======
+
+  def this() = this(null)
+
+  override def companion = ParHashSet
+
+  override def empty = new ParHashSet
+
+  override def iterator = splitter
+
+  override def size = tableSize
+
+  def clear() = clearTable()
+
+  override def seq = new collection.mutable.HashSet(hashTableContents)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def +=(elem: T) = {
     addEntry(elem)
     this
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def -=(elem: T) = {
     removeEntry(elem)
     this
   }
+<<<<<<< HEAD
   
   override def stringPrefix = "ParHashSet"
   
@@ -70,11 +105,23 @@ extends ParSet[T]
   
   type SCPI = SignalContextPassingIterator[ParHashSetIterator]
   
+=======
+
+  override def stringPrefix = "ParHashSet"
+
+  def contains(elem: T) = containsEntry(elem)
+
+  def splitter = new ParHashSetIterator(0, table.length, size) with SCPI
+
+  type SCPI = SignalContextPassingIterator[ParHashSetIterator]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class ParHashSetIterator(start: Int, iteratesUntil: Int, totalElements: Int)
   extends ParFlatHashTableIterator(start, iteratesUntil, totalElements) with ParIterator {
   me: SCPI =>
     def newIterator(start: Int, until: Int, total: Int) = new ParHashSetIterator(start, until, total) with SCPI
   }
+<<<<<<< HEAD
   
   private def writeObject(s: java.io.ObjectOutputStream) {
     serializeTo(s)
@@ -84,6 +131,17 @@ extends ParSet[T]
     init(in, x => x)
   }
   
+=======
+
+  private def writeObject(s: java.io.ObjectOutputStream) {
+    serializeTo(s)
+  }
+
+  private def readObject(in: java.io.ObjectInputStream) {
+    init(in, x => x)
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   import collection.DebugUtils._
   override def debugInformation = buildString {
     append =>
@@ -95,7 +153,11 @@ extends ParSet[T]
     append("Sizemap: ")
     append(arrayString(sizemap, 0, sizemap.length))
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 
@@ -105,9 +167,15 @@ extends ParSet[T]
  */
 object ParHashSet extends ParSetFactory[ParHashSet] {
   implicit def canBuildFrom[T]: CanCombineFrom[Coll, T, ParHashSet[T]] = new GenericCanCombineFrom[T]
+<<<<<<< HEAD
   
   override def newBuilder[T]: Combiner[T, ParHashSet[T]] = newCombiner
   
+=======
+
+  override def newBuilder[T]: Combiner[T, ParHashSet[T]] = newCombiner
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def newCombiner[T]: Combiner[T, ParHashSet[T]] = ParHashSetCombiner.apply[T]
 }
 
@@ -119,7 +187,11 @@ with collection.mutable.FlatHashTable.HashUtils[T] {
   import collection.parallel.tasksupport._
   private var mask = ParHashSetCombiner.discriminantmask
   private var nonmasklen = ParHashSetCombiner.nonmasklength
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def +=(elem: T) = {
     sz += 1
     val hc = improve(elemHashCode(elem))
@@ -132,12 +204,20 @@ with collection.mutable.FlatHashTable.HashUtils[T] {
     buckets(pos) += elem
     this
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def result: ParHashSet[T] = {
     val contents = if (size >= ParHashSetCombiner.numblocks * sizeMapBucketSize) parPopulate else seqPopulate
     new ParHashSet(contents)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def parPopulate: FlatHashTable.Contents[T] = {
     // construct it in parallel
     val table = new AddingFlatHashTable(size, tableLoadFactor)
@@ -147,7 +227,11 @@ with collection.mutable.FlatHashTable.HashUtils[T] {
     table.setSize(leftinserts + inserted)
     table.hashTableContents
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def seqPopulate: FlatHashTable.Contents[T] = {
     // construct it sequentially
     // TODO parallelize by keeping separate size maps and merging them
@@ -161,14 +245,24 @@ with collection.mutable.FlatHashTable.HashUtils[T] {
     } tbl.addEntry(elem.asInstanceOf[T])
     tbl.hashTableContents
   }
+<<<<<<< HEAD
   
   /* classes */
   
+=======
+
+  /* classes */
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A flat hash table which doesn't resize itself. It accepts the number of elements
    *  it has to take and allocates the underlying hash table in advance.
    *  Elements can only be added to it. The final size has to be adjusted manually.
    *  It is internal to `ParHashSet` combiners.
+<<<<<<< HEAD
    *  
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */
   class AddingFlatHashTable(numelems: Int, lf: Int) extends FlatHashTable[T] {
     _loadFactor = lf
@@ -176,22 +270,39 @@ with collection.mutable.FlatHashTable.HashUtils[T] {
     tableSize = 0
     threshold = FlatHashTable.newThreshold(_loadFactor, table.length)
     sizeMapInit(table.length)
+<<<<<<< HEAD
     
     override def toString = "AFHT(%s)".format(table.length)
     
     def tableLength = table.length
     
+=======
+
+    override def toString = "AFHT(%s)".format(table.length)
+
+    def tableLength = table.length
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def setSize(sz: Int) = tableSize = sz
 
     /**
      *  The elements are added using the `insertEntry` method. This method accepts three
      *  arguments:
+<<<<<<< HEAD
      *  
      *  @param insertAt      where to add the element (set to -1 to use its hashcode)
      *  @param comesBefore   the position before which the element should be added to
      *  @param elem          the element to be added
      *  
      *  If the element is to be inserted at the position corresponding to its hash code, 
+=======
+     *
+     *  @param insertAt      where to add the element (set to -1 to use its hashcode)
+     *  @param comesBefore   the position before which the element should be added to
+     *  @param elem          the element to be added
+     *
+     *  If the element is to be inserted at the position corresponding to its hash code,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      *  the table will try to add the element in such a position if possible. Collisions are resolved
      *  using linear hashing, so the element may actually have to be added to a position
      *  that follows the specified one. In the case that the first unoccupied position
@@ -212,6 +323,7 @@ with collection.mutable.FlatHashTable.HashUtils[T] {
         entry = table(h)
       }
       table(h) = elem.asInstanceOf[AnyRef]
+<<<<<<< HEAD
       
       // this is incorrect since we set size afterwards anyway and a counter
       // like this would not even work:
@@ -221,13 +333,30 @@ with collection.mutable.FlatHashTable.HashUtils[T] {
       // furthermore, it completely bogs down the parallel
       // execution when there are multiple workers
       
+=======
+
+      // this is incorrect since we set size afterwards anyway and a counter
+      // like this would not even work:
+      //
+      //   tableSize = tableSize + 1
+      //
+      // furthermore, it completely bogs down the parallel
+      // execution when there are multiple workers
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       nnSizeMapAdd(h)
       1
     }
   }
+<<<<<<< HEAD
   
   /* tasks */
   
+=======
+
+  /* tasks */
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class FillBlocks(buckets: Array[UnrolledBuffer[Any]], table: AddingFlatHashTable, val offset: Int, val howmany: Int)
   extends Task[(Int, UnrolledBuffer[Any]), FillBlocks] {
     var result = (Int.MinValue, new UnrolledBuffer[Any]);
@@ -248,6 +377,7 @@ with collection.mutable.FlatHashTable.HashUtils[T] {
     private def nextBlockStart(block: Int) = (block + 1) * blocksize
     private def fillBlock(block: Int, elems: UnrolledBuffer[Any], leftovers: UnrolledBuffer[Any]): (Int, UnrolledBuffer[Any]) = {
       val beforePos = nextBlockStart(block)
+<<<<<<< HEAD
       
       // store the elems
       val (elemsIn, elemsLeft) = if (elems != null) insertAll(-1, beforePos, elems) else (0, UnrolledBuffer[Any]())
@@ -255,13 +385,26 @@ with collection.mutable.FlatHashTable.HashUtils[T] {
       // store the leftovers
       val (leftoversIn, leftoversLeft) = insertAll(blockStart(block), beforePos, leftovers)
       
+=======
+
+      // store the elems
+      val (elemsIn, elemsLeft) = if (elems != null) insertAll(-1, beforePos, elems) else (0, UnrolledBuffer[Any]())
+
+      // store the leftovers
+      val (leftoversIn, leftoversLeft) = insertAll(blockStart(block), beforePos, leftovers)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       // return the no. of stored elements tupled with leftovers
       (elemsIn + leftoversIn, elemsLeft concat leftoversLeft)
     }
     private def insertAll(atPos: Int, beforePos: Int, elems: UnrolledBuffer[Any]): (Int, UnrolledBuffer[Any]) = {
       var leftovers = new UnrolledBuffer[Any]
       var inserted = 0
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       var unrolled = elems.headPtr
       var i = 0
       var t = table
@@ -278,7 +421,11 @@ with collection.mutable.FlatHashTable.HashUtils[T] {
         i = 0
         unrolled = unrolled.next
       }
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       // slower:
       // var it = elems.iterator
       // while (it.hasNext) {
@@ -287,7 +434,11 @@ with collection.mutable.FlatHashTable.HashUtils[T] {
       //   if (res >= 0) inserted += res
       //   else leftovers += elem
       // }
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       (inserted, leftovers)
     }
     def split = {
@@ -299,7 +450,11 @@ with collection.mutable.FlatHashTable.HashUtils[T] {
       val atPos = blockStart(that.offset)
       val beforePos = blockStart(that.offset + that.howmany)
       val (inserted, remainingLeftovers) = insertAll(atPos, beforePos, this.result._2)
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       // anything left after trying the store the left leftovers is added to the right task leftovers
       // and a new leftovers set is produced in this way
       // the total number of successfully inserted elements is adjusted accordingly
@@ -307,7 +462,11 @@ with collection.mutable.FlatHashTable.HashUtils[T] {
     }
     def shouldSplitFurther = howmany > collection.parallel.thresholdFromSize(ParHashMapCombiner.numblocks, parallelismLevel)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 private[parallel] object ParHashSetCombiner {
@@ -315,7 +474,11 @@ private[parallel] object ParHashSetCombiner {
   private[mutable] val numblocks = 1 << discriminantbits
   private[mutable] val discriminantmask = ((1 << discriminantbits) - 1);
   private[mutable] val nonmasklength = 32 - discriminantbits
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def apply[T] = new ParHashSetCombiner[T](FlatHashTable.defaultLoadFactor) {} //with EnvironmentPassingCombiner[T, ParHashSet[T]]
 }
 

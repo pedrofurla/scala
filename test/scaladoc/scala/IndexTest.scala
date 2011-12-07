@@ -3,7 +3,11 @@ import org.scalacheck.Prop._
 
 import scala.tools.nsc.doc
 import scala.tools.nsc.doc.html.page.Index
+<<<<<<< HEAD
 import java.net.URLClassLoader
+=======
+import java.net.{URLClassLoader, URLDecoder}
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 object Test extends Properties("Index") {
 
@@ -12,8 +16,13 @@ object Test extends Properties("Index") {
     // this test previously relied on the assumption that the current thread's classloader is an url classloader and contains all the classpaths
     // does partest actually guarantee this? to quote Leonard Nimoy: The answer, of course, is no.
     // this test _will_ fail again some time in the future.
+<<<<<<< HEAD
     val paths = Thread.currentThread.getContextClassLoader.asInstanceOf[URLClassLoader].getURLs.map(_.getPath)
     val morepaths = Thread.currentThread.getContextClassLoader.getParent.asInstanceOf[URLClassLoader].getURLs.map(_.getPath)
+=======
+    val paths = Thread.currentThread.getContextClassLoader.asInstanceOf[URLClassLoader].getURLs.map(u => URLDecoder.decode(u.getPath))
+    val morepaths = Thread.currentThread.getContextClassLoader.getParent.asInstanceOf[URLClassLoader].getURLs.map(u => URLDecoder.decode(u.getPath))
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     (paths ++ morepaths).mkString(java.io.File.pathSeparator)
   }
   

@@ -76,12 +76,20 @@ trait Primitives { self: ICodes =>
 
   /** Pretty printer for primitives */
   class PrimitivePrinter(out: PrintWriter) {
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def print(s: String): PrimitivePrinter = {
       out.print(s)
       this
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def print(o: AnyRef): PrimitivePrinter = print(o.toString())
 
     def printPrimitive(prim: Primitive) = prim match {
@@ -93,7 +101,11 @@ trait Primitives { self: ICodes =>
 
       case Comparison(op, kind) =>
         print(op).print("(").print(kind)
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
   }
 
@@ -111,10 +123,17 @@ trait Primitives { self: ICodes =>
 
   /** A comparison operation with -1 default for NaNs */
   case object CMPL extends ComparisonOp
+<<<<<<< HEAD
   
   /** A comparison operation with no default for NaNs */
   case object CMP extends ComparisonOp
   
+=======
+
+  /** A comparison operation with no default for NaNs */
+  case object CMP extends ComparisonOp
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** A comparison operation with +1 default for NaNs */
   case object CMPG extends ComparisonOp
 
@@ -146,7 +165,11 @@ trait Primitives { self: ICodes =>
   }
   /** An equality test */
   case object EQ extends TestOp
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A non-equality test */
   case object NE extends TestOp
 
@@ -185,13 +208,21 @@ trait Primitives { self: ICodes =>
 
   /** An arithmetic multiplication operation */
   case object MUL extends ArithmeticOp
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** An arithmetic division operation */
   case object DIV extends ArithmeticOp
 
   /** An arithmetic remainder operation */
   case object REM extends ArithmeticOp
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Bitwise negation. */
   case object NOT extends ArithmeticOp
 
@@ -206,7 +237,11 @@ trait Primitives { self: ICodes =>
       case _  => throw new RuntimeException("ShitOp unknown case")
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A logical shift to the left */
   case object LSL extends ShiftOp
 
@@ -227,7 +262,11 @@ trait Primitives { self: ICodes =>
       case _  => throw new RuntimeException("LogicalOp unknown case")
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** A bitwise AND operation */
   case object AND extends LogicalOp
 

@@ -29,9 +29,15 @@ object StringLike {
 import StringLike._
 
 /** A trait describing stringlike collections.
+<<<<<<< HEAD
  *  
  *  @tparam Repr   The type of the actual collection inheriting `StringLike`.
  *  
+=======
+ *
+ *  @tparam Repr   The type of the actual collection inheriting `StringLike`.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @since 2.8
  *  @define Coll String
  *  @define coll string
@@ -77,11 +83,19 @@ self =>
 
   /**
    *  Strip trailing line end character from this string if it has one.
+<<<<<<< HEAD
    *  
    *  A line end character is one of
    *  - `LF` - line feed   (`0x0A` hex)
    *  - `FF` - form feed   (`0x0C` hex)
    *  
+=======
+   *
+   *  A line end character is one of
+   *  - `LF` - line feed   (`0x0A` hex)
+   *  - `FF` - form feed   (`0x0C` hex)
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  If a line feed character `LF` is preceded by a carriage return `CR`
    *  (`0x0D` hex), the `CR` character is also stripped (Windows convention).
    */
@@ -92,6 +106,7 @@ self =>
       val last = apply(len - 1)
       if (isLineBreak(last))
         toString.substring(0, if (last == LF && len >= 2 && apply(len - 2) == CR) len - 2 else len - 1)
+<<<<<<< HEAD
       else 
         toString
     }
@@ -100,13 +115,27 @@ self =>
   /** Return all lines in this string in an iterator, including trailing
    *  line end characters.
    * 
+=======
+      else
+        toString
+    }
+  }
+
+  /** Return all lines in this string in an iterator, including trailing
+   *  line end characters.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  The number of strings returned is one greater than the number of line
    *  end characters in this string. For an empty string, a single empty
    *  line is returned. A line end character is one of
    *  - `LF` - line feed   (`0x0A` hex)
    *  - `FF` - form feed   (`0x0C` hex)
    */
+<<<<<<< HEAD
   def linesWithSeparators: Iterator[String] = new Iterator[String] {
+=======
+  def linesWithSeparators: Iterator[String] = new AbstractIterator[String] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     val str = self.toString
     private val len = str.length
     private var index = 0
@@ -124,14 +153,22 @@ self =>
    *  end characters, i.e. apply `.stripLineEnd` to all lines
    *  returned by `linesWithSeparators`.
    */
+<<<<<<< HEAD
   def lines: Iterator[String] = 
+=======
+  def lines: Iterator[String] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     linesWithSeparators map (line => new WrappedString(line).stripLineEnd)
 
   /** Return all lines in this string in an iterator, excluding trailing line
    *  end characters, i.e. apply `.stripLineEnd` to all lines
    *  returned by `linesWithSeparators`.
    */
+<<<<<<< HEAD
   def linesIterator: Iterator[String] = 
+=======
+  def linesIterator: Iterator[String] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     linesWithSeparators map (line => new WrappedString(line).stripLineEnd)
 
   /** Returns this string with first character converted to upper case */
@@ -154,7 +191,11 @@ self =>
   def stripSuffix(suffix: String) =
     if (toString.endsWith(suffix)) toString.substring(0, toString.length() - suffix.length)
     else toString
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Replace all literal occurrences of `literal` with the string `replacement`.
    *  This is equivalent to [[java.lang.String#replaceAll]] except that both arguments
    *  are appropriately quoted to avoid being interpreted as metacharacters.
@@ -171,7 +212,11 @@ self =>
   }
 
   /** For every line in this string:
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  Strip a leading prefix consisting of blanks or control characters
    *  followed by `marginChar` from the line.
    */
@@ -188,7 +233,11 @@ self =>
   }
 
   /** For every line in this string:
+<<<<<<< HEAD
    *  
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  Strip a leading prefix consisting of blanks or control characters
    *  followed by `|` from the line.
    */
@@ -210,7 +259,11 @@ self =>
    *  """A\w*""".r   is the regular expression for identifiers starting with `A`.
    */
   def r: Regex = new Regex(toString)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def toBoolean: Boolean = parseBoolean(toString)
   def toByte: Byte       = java.lang.Byte.parseByte(toString)
   def toShort: Short     = java.lang.Short.parseShort(toString)
@@ -223,10 +276,17 @@ self =>
     if (s != null) s.toLowerCase match {
       case "true" => true
       case "false" => false
+<<<<<<< HEAD
       case _ => throw new NumberFormatException("For input string: \""+s+"\"")
     }
     else
       throw new NumberFormatException("For input string: \"null\"")
+=======
+      case _ => throw new IllegalArgumentException("For input string: \""+s+"\"")
+    }
+    else
+      throw new IllegalArgumentException("For input string: \"null\"")
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   override def toArray[B >: Char : ClassManifest]: Array[B] =
     toString.toCharArray.asInstanceOf[Array[B]]
@@ -255,7 +315,11 @@ self =>
 
   /** Like `format(args*)` but takes an initial `Locale` parameter
    *  which influences formatting as in `java.lang.String`'s format.
+<<<<<<< HEAD
    *  
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *    The interpretation of the formatting patterns is described in
    *    <a href="" target="contentFrame" class="java/util/Formatter">
    *    `java.util.Formatter`</a>, with the addition that

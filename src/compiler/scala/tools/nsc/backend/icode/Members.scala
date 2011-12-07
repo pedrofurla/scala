@@ -11,7 +11,11 @@ package icode
 import java.io.PrintWriter
 import scala.collection.{ mutable, immutable }
 import symtab.Flags.{ DEFERRED }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 trait ReferenceEquality {
   override def hashCode = System.identityHashCode(this)
   override def equals(that: Any) = this eq that.asInstanceOf[AnyRef]
@@ -20,7 +24,11 @@ trait ReferenceEquality {
 trait Members { self: ICodes =>
   import global._
 
+<<<<<<< HEAD
   /** 
+=======
+  /**
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * This class represents the intermediate code of a method or
    * other multi-block piece of code, like exception handlers.
    */
@@ -35,10 +43,17 @@ trait Members { self: ICodes =>
 
     /** The stack produced by this method */
     var producedStack: TypeStack = null
+<<<<<<< HEAD
     
     private var currentLabel: Int = 0
     private var _touched = false
     
+=======
+
+    private var currentLabel: Int = 0
+    private var _touched = false
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def blockCount       = blocks.size
     def instructionCount = blocks map (_.length) sum
 
@@ -46,7 +61,11 @@ trait Members { self: ICodes =>
     def touched_=(b: Boolean): Unit = {
       if (b)
         blocks foreach (_.touched = true)
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       _touched = b
     }
 
@@ -65,8 +84,13 @@ trait Members { self: ICodes =>
 
       if (b == startBlock)
         startBlock = b.successors.head
+<<<<<<< HEAD
         
       blocks -= b      
+=======
+
+      blocks -= b
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       assert(!blocks.contains(b))
       method.exh filter (_ covers b) foreach (_.covered -= b)
       touched = true
@@ -74,7 +98,11 @@ trait Members { self: ICodes =>
 
     /** This methods returns a string representation of the ICode */
     override def toString() : String = "ICode '" + label + "'";
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /* Compute a unique new label */
     def nextLabel: Int = {
       currentLabel += 1
@@ -88,6 +116,7 @@ trait Members { self: ICodes =>
       val block = new BasicBlock(nextLabel, method);
       blocks += block;
       block
+<<<<<<< HEAD
     }    
   }
   
@@ -96,6 +125,16 @@ trait Members { self: ICodes =>
     def symbol: Symbol
       
     def compare(other: IMember) = 
+=======
+    }
+  }
+
+  /** Common interface for IClass/IField/IMethod. */
+  trait IMember extends Ordered[IMember] {
+    def symbol: Symbol
+
+    def compare(other: IMember) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (symbol eq other.symbol) 0
       else if (symbol isLess other.symbol) -1
       else 1
@@ -106,7 +145,10 @@ trait Members { self: ICodes =>
     var fields: List[IField] = Nil
     var methods: List[IMethod] = Nil
     var cunit: CompilationUnit = _
+<<<<<<< HEAD
     var bootstrapClass: Option[String] = None
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
     def addField(f: IField): this.type = {
       fields = f :: fields;
@@ -136,11 +178,19 @@ trait Members { self: ICodes =>
   /** Represent a field in ICode */
   class IField(val symbol: Symbol) extends IMember { }
 
+<<<<<<< HEAD
   /** 
    * Represents a method in ICode. Local variables contain
    * both locals and parameters, similar to the way the JVM 
    * 'sees' them.
    * 
+=======
+  /**
+   * Represents a method in ICode. Local variables contain
+   * both locals and parameters, similar to the way the JVM
+   * 'sees' them.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    * Locals and parameters are added in reverse order, as they
    * are kept in cons-lists. The 'builder' is responsible for
    * reversing them and putting them back, when the generation is
@@ -194,18 +244,30 @@ trait Members { self: ICodes =>
     /** Is this method deferred ('abstract' in Java sense)?
      */
     def isAbstractMethod = symbol.isDeferred || symbol.owner.isInterface || native
+<<<<<<< HEAD
     
     def isStatic: Boolean = symbol.isStaticMember
     
     override def toString() = symbol.fullName
     
+=======
+
+    def isStatic: Boolean = symbol.isStaticMember
+
+    override def toString() = symbol.fullName
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     import opcodes._
     def checkLocals(): Unit = {
       def localsSet = code.blocks.flatten collect {
         case LOAD_LOCAL(l)  => l
         case STORE_LOCAL(l) => l
       } toSet
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (code != null) {
         log("[checking locals of " + this + "]")
         locals filterNot localsSet foreach { l =>
@@ -214,7 +276,11 @@ trait Members { self: ICodes =>
       }
     }
 
+<<<<<<< HEAD
     /** Merge together blocks that have a single successor which has a 
+=======
+    /** Merge together blocks that have a single successor which has a
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      * single predecessor. Exception handlers are taken into account (they
      * might force to break a block of straight line code like that).
      *
@@ -223,6 +289,7 @@ trait Members { self: ICodes =>
     def normalize(): Unit = if (this.code ne null) {
       val nextBlock: mutable.Map[BasicBlock, BasicBlock] = mutable.HashMap.empty
       for (b <- code.blocks.toList
+<<<<<<< HEAD
         if b.successors.length == 1; 
         val succ = b.successors.head; 
         if succ ne b;
@@ -233,6 +300,18 @@ trait Members { self: ICodes =>
           nextBlock(b) = succ
       }
           
+=======
+        if b.successors.length == 1;
+        succ = b.successors.head;
+        if succ ne b;
+        if succ.predecessors.length == 1;
+        if succ.predecessors.head eq b;
+        if !(exh.exists { (e: ExceptionHandler) =>
+            (e.covers(succ) && !e.covers(b)) || (e.covers(b) && !e.covers(succ)) })) {
+          nextBlock(b) = succ
+      }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       var bb = code.startBlock
       while (!nextBlock.isEmpty) {
         if (nextBlock.isDefinedAt(bb)) {
@@ -247,12 +326,20 @@ trait Members { self: ICodes =>
             exh foreach { e => e.covered = e.covered - succ }
           } while (nextBlock.isDefinedAt(succ))
           bb.close
+<<<<<<< HEAD
         } else 
+=======
+        } else
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           bb = nextBlock.keysIterator.next
       }
       checkValid(this)
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def dump() {
       Console.println("dumping IMethod(" + symbol + ")")
       newTextPrinter() printMethod this
@@ -265,10 +352,17 @@ trait Members { self: ICodes =>
 
     /** Starting PC for this local's visibility range. */
     var start: Int = _
+<<<<<<< HEAD
     
     /** Ending PC for this local's visibility range. */
     var end: Int = _
     
+=======
+
+    /** Ending PC for this local's visibility range. */
+    var end: Int = _
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     /** PC-based ranges for this local variable's visibility */
     var ranges: List[(Int, Int)] = Nil
 

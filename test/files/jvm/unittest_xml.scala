@@ -9,6 +9,7 @@ object Test {
 
   object MetaDataTest {
 
+<<<<<<< HEAD
     import scala.xml.{ HasKeyValue, TopScope, NamespaceBinding, Node, Atom, Text }
 
     def domatch(x:Node): Node = {
@@ -16,10 +17,21 @@ object Test {
       x match {
         //case Node("foo", hasBar(z), _*) => z
             case Node("foo", md, _*) if !hasBar.unapplySeq(md).isEmpty => 
+=======
+    import scala.xml.{ TopScope, NamespaceBinding, Node, Atom, Text }
+
+    def domatch(x:Node): Node = {
+      x match {
+            case Node("foo", md @ UnprefixedAttribute(_, value, _), _*) if !value.isEmpty =>
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                  md("bar")(0)
             case _ => new Atom(3)
       }
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def run() {
 
       var x: MetaData         = Null

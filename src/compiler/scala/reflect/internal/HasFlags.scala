@@ -2,7 +2,11 @@ package scala.reflect
 package internal
 
 /** ISSUE #1: Flag names vs. Test method names
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  The following methods from Symbol have a name of
  *  the form isFoo where FOO is the name of a flag, but where the method
  *  body tests for more than whether the flag is set.
@@ -25,15 +29,25 @@ package internal
     final def isLocal: Boolean = owner.isTerm
     final def isModuleVar: Boolean = isVariable && hasFlag(MODULEVAR)
     final def isStable =
+<<<<<<< HEAD
       isTerm && 
       !hasTraitFlag && 
       (!hasFlag(METHOD | BYNAMEPARAM) || hasFlag(STABLE)) && 
+=======
+      isTerm &&
+      !hasTraitFlag &&
+      (!hasFlag(METHOD | BYNAMEPARAM) || hasFlag(STABLE)) &&
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       !(tpe.isVolatile && !hasAnnotation(uncheckedStableClass))
     final def isStatic: Boolean =
       hasFlag(STATIC) || isRoot || owner.isStaticOwner
     override final def isTrait: Boolean =
       isClass && hasFlag(TRAIT | notDEFERRED)     // A virtual class becomes a trait (part of DEVIRTUALIZE)
+<<<<<<< HEAD
      
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // Defined in the library Symbol
     //
           def isTrait: Boolean = isClass && hasFlag(TRAIT) // refined later for virtual classes.
@@ -41,7 +55,11 @@ package internal
     final def isCovariant = isType && hasFlag(COVARIANT)
     final def isMethod = isTerm && hasFlag(METHOD)
     final def isModule = isTerm && hasFlag(MODULE)
+<<<<<<< HEAD
     final def isPackage = isModule && hasFlag(PACKAGE)    
+=======
+    final def isPackage = isModule && hasFlag(PACKAGE)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *
  */
 
@@ -57,6 +75,7 @@ package internal
    val m = new ModuleSymbol(this, pos, name).setFlag(MODULE | FINAL)
    setFlag(module.getFlag(ModuleToClassFlags) | MODULE | FINAL)
    sourceModule.flags = MODULE | FINAL
+<<<<<<< HEAD
  
  * However the same is not true of when the MODULE flag is cleared:
  
@@ -64,12 +83,25 @@ package internal
     .setFlag(sym.flags | STABLE).resetFlag(MODULE)
     sym.resetFlag(MODULE | FINAL | CASE)
  
+=======
+
+ * However the same is not true of when the MODULE flag is cleared:
+
+    sym.resetFlag(MODULE)
+    .setFlag(sym.flags | STABLE).resetFlag(MODULE)
+    sym.resetFlag(MODULE | FINAL | CASE)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  It's not relevant whether this example poses any issues: we must
  *  not tolerate these uncertainties.  If the flags are to move together
  *  then both setting and clearing have to be encapsulated.  If there
  *  is a useful and used distinction between the various permutations
  *  of on and off, then it must be documented.  It's the only way!
+<<<<<<< HEAD
  */ 
+=======
+ */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 import Flags._
 
@@ -80,14 +112,22 @@ trait HasFlags {
   type FlagsType
   type AccessBoundaryType
   type AnnotationType
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Though both Symbol and Modifiers widen this method to public, it's
    *  defined protected here to give us the option in the future to route
    *  flag methods through accessors and disallow raw flag manipulation.
    *  And after that, perhaps, on some magical day: a typesafe enumeration.
    */
   protected def flags: FlagsType
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** The printable representation of this entity's flags and access boundary,
    *  restricted to flags in the given mask.
    */
@@ -116,6 +156,7 @@ trait HasFlags {
    *  java public:      !hasFlag(PRIVATE | PROTECTED)   && !hasAccessBoundary
    */
   def privateWithin: AccessBoundaryType
+<<<<<<< HEAD
   
   /** A list of annotations attached to this entity.
    */
@@ -137,6 +178,29 @@ trait HasFlags {
    */
   def hasNoFlags(mask: Long): Boolean = !hasFlag(mask)
   
+=======
+
+  /** A list of annotations attached to this entity.
+   */
+  def annotations: List[AnnotationType]
+
+  /** Whether this entity has a "privateWithin" visibility barrier attached.
+   */
+  def hasAccessBoundary: Boolean
+
+  /** Whether this entity has ANY of the flags in the given mask.
+   */
+  def hasFlag(flag: Long): Boolean
+
+  /** Whether this entity has ALL of the flags in the given mask.
+   */
+  def hasAllFlags(mask: Long): Boolean
+
+  /** Whether this entity has NONE of the flags in the given mask.
+   */
+  def hasNoFlags(mask: Long): Boolean = !hasFlag(mask)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // Tests which come through cleanly: both Symbol and Modifiers use these
   // identically, testing for a single flag.
   def isCase      = hasFlag(CASE     )
@@ -149,10 +213,17 @@ trait HasFlags {
   def isProtected = hasFlag(PROTECTED)
   def isSynthetic = hasFlag(SYNTHETIC)
   def isInterface = hasFlag(INTERFACE)
+<<<<<<< HEAD
   
   // Newly introduced based on having a reasonably obvious clean translation.
   def isPrivateLocal   = hasAllFlags(PRIVATE | LOCAL)
   def isProtectedLocal = hasAllFlags(PROTECTED | LOCAL)
+=======
+
+  // Newly introduced based on having a reasonably obvious clean translation.
+  def isPrivateLocal   = hasAllFlags(PrivateLocal)
+  def isProtectedLocal = hasAllFlags(ProtectedLocal)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def isParamAccessor  = hasFlag(PARAMACCESSOR)
   def isCaseAccessor   = hasFlag(CASEACCESSOR)
   def isSuperAccessor  = hasFlag(SUPERACCESSOR)
@@ -161,20 +232,34 @@ trait HasFlags {
   // Formerly the Modifiers impl did not include the access boundary check,
   // which must have been a bug.
   def isPublic = hasNoFlags(PRIVATE | PROTECTED) && !hasAccessBoundary
+<<<<<<< HEAD
   
   // Renamed the Modifiers impl from isArgument.
   def isParameter = hasFlag(PARAM)
   
+=======
+
+  // Renamed the Modifiers impl from isArgument.
+  def isParameter = hasFlag(PARAM)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // Removed isClass qualification since the flag isn't overloaded and
   // sym.isClass is enforced in Namers#validate.
   def isSealed = hasFlag(SEALED)
 
   // Removed !isClass qualification since the flag isn't overloaded.
   def isDeferred = hasFlag(DEFERRED )
+<<<<<<< HEAD
   
   // Dropped isTerm condition because flag isn't overloaded.
   def isAbstractOverride = hasFlag(ABSOVERRIDE)
   
+=======
+
+  // Dropped isTerm condition because flag isn't overloaded.
+  def isAbstractOverride = hasFlag(ABSOVERRIDE)
+  def isAnyOverride = hasFlag(OVERRIDE | ABSOVERRIDE)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def isDefaultInit = hasFlag(DEFAULTINIT)
 
   // Disambiguating: DEFAULTPARAM, TRAIT
@@ -182,7 +267,11 @@ trait HasFlags {
   def isTrait        = hasFlag(TRAIT) && !hasFlag(PARAM)
   def hasTraitFlag   = hasFlag(TRAIT)
   def hasDefaultFlag = hasFlag(DEFAULTPARAM)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // Straightforwardly named accessors already being used differently.
   // These names are most likely temporary.
   def hasAbstractFlag      = hasFlag(ABSTRACT)
@@ -193,13 +282,21 @@ trait HasFlags {
   def hasPreSuperFlag      = hasFlag(PRESUPER)
   def hasStableFlag        = hasFlag(STABLE)
   def hasStaticFlag        = hasFlag(STATIC)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    // Disambiguating: BYNAMEPARAM, CAPTURED, COVARIANT.
   def isByNameParam      = hasAllFlags(BYNAMEPARAM | PARAM)
   // Nope, these aren't going to fly:
   // def isCapturedVariable = hasAllFlags(CAPTURED | MUTABLE)
   // def isCovariant        = hasFlag(COVARIANT) && hasNoFlags(PARAM | MUTABLE)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // Disambiguating: LABEL, CONTRAVARIANT, INCONSTRUCTOR
   def isLabel = hasAllFlags(LABEL | METHOD) && !hasAccessorFlag
   // Cannot effectively disambiguate the others at this level.
@@ -219,7 +316,11 @@ trait HasFlags {
   //
   // final def isAbstractClass = isClass && hasFlag(ABSTRACT)
   // def isAbstractType = false  // to be overridden
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // Question:
   // Which name? All other flags are isFlag so it's probably a mistake to
   // vary from that, but isAccessor does sound like it includes the other

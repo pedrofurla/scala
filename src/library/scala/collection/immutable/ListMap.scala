@@ -16,6 +16,12 @@ import annotation.{tailrec, bridge}
 
 /** $factoryInfo
  *  @since 1
+<<<<<<< HEAD
+=======
+ *  @see [[http://docs.scala-lang.org/overviews/collections/concrete-immutable-collection-classes.html#list_maps "Scala's Collection Library overview"]]
+ *  section on `List Maps` for more information.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define Coll immutable.ListMap
  *  @define coll immutable list map
  */
@@ -31,10 +37,17 @@ object ListMap extends ImmutableMapFactory[ListMap] {
 /** This class implements immutable maps using a list-based data structure.
  *  Instances of `ListMap` represent empty maps; they can be either created by
  *  calling the constructor directly, or by applying the function `ListMap.empty`.
+<<<<<<< HEAD
  *  
  *  @tparam A     the type of the keys in this list map.
  *  @tparam B     the type of the values associated with the keys.
  *  
+=======
+ *
+ *  @tparam A     the type of the keys in this list map.
+ *  @tparam B     the type of the values associated with the keys.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author  Matthias Zenger
  *  @author  Martin Odersky
  *  @version 2.0, 01/01/2007
@@ -45,7 +58,15 @@ object ListMap extends ImmutableMapFactory[ListMap] {
  *  @define willNotTerminateInf
  */
 @SerialVersionUID(301002838095710379L)
+<<<<<<< HEAD
 class ListMap[A, +B] extends Map[A, B] with MapLike[A, B, ListMap[A, B]] with Serializable {
+=======
+class ListMap[A, +B]
+extends AbstractMap[A, B]
+   with Map[A, B]
+   with MapLike[A, B, ListMap[A, B]]
+   with Serializable {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   override def empty = ListMap.empty
 
@@ -73,7 +94,11 @@ class ListMap[A, +B] extends Map[A, B] with MapLike[A, B, ListMap[A, B]] with Se
   override def updated [B1 >: B] (key: A, value: B1): ListMap[A, B1] =
     new Node[B1](key, value)
 
+<<<<<<< HEAD
   /** Add a key/value pair to this map. 
+=======
+  /** Add a key/value pair to this map.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param    kv the key/value pair
    *  @return   A new map with the new binding added to this map
    */
@@ -112,10 +137,17 @@ class ListMap[A, +B] extends Map[A, B] with MapLike[A, B, ListMap[A, B]] with Se
   /** Returns an iterator over key-value pairs.
    */
   def iterator: Iterator[(A,B)] =
+<<<<<<< HEAD
     new Iterator[(A,B)] {
       var self: ListMap[A,B] = ListMap.this
       def hasNext = !self.isEmpty
       def next: (A,B) =
+=======
+    new AbstractIterator[(A,B)] {
+      var self: ListMap[A,B] = ListMap.this
+      def hasNext = !self.isEmpty
+      def next(): (A,B) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         if (!hasNext) throw new NoSuchElementException("next on empty iterator")
         else { val res = (self.key, self.value); self = self.next; res }
     }.toList.reverseIterator
@@ -123,18 +155,30 @@ class ListMap[A, +B] extends Map[A, B] with MapLike[A, B, ListMap[A, B]] with Se
   protected def key: A = throw new NoSuchElementException("empty map")
   protected def value: B = throw new NoSuchElementException("empty map")
   protected def next: ListMap[A, B] = throw new NoSuchElementException("empty map")
+<<<<<<< HEAD
   
   /** This class represents an entry in the `ListMap`.
    */
   @SerialVersionUID(-6453056603889598734L)
   protected class Node[B1 >: B](override protected val key: A, 
+=======
+
+  /** This class represents an entry in the `ListMap`.
+   */
+  @SerialVersionUID(-6453056603889598734L)
+  protected class Node[B1 >: B](override protected val key: A,
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                                 override protected val value: B1) extends ListMap[A, B1] with Serializable {
     /** Returns the number of mappings in this map.
      *
      *  @return number of mappings.
      */
     override def size: Int = size0(this, 0)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // to allow tail recursion and prevent stack overflows
     @tailrec private def size0(cur: ListMap[A, B1], acc: Int): Int = if (cur.isEmpty) acc else size0(cur.next, acc + 1)
 
@@ -162,7 +206,11 @@ class ListMap[A, +B] extends Map[A, B] with MapLike[A, B, ListMap[A, B]] with Se
      *  @return     the value of the mapping, if it exists
      */
     override def get(k: A): Option[B1] = get0(this, k)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     @tailrec private def get0(cur: ListMap[A, B1], k: A): Option[B1] =
       if (k == cur.key) Some(cur.value)
       else if (cur.next.nonEmpty) get0(cur.next, k) else None
@@ -212,7 +260,11 @@ class ListMap[A, +B] extends Map[A, B] with MapLike[A, B, ListMap[A, B]] with Se
       acc
     }
 
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     override protected def next: ListMap[A, B1] = ListMap.this
   }
 }

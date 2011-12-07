@@ -16,17 +16,29 @@ import script._
 import annotation.{migration, bridge}
 
 /** A template trait for buffers of type `Buffer[A]`.
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  Buffers are used to create sequences of elements incrementally by
  *  appending, prepending, or inserting new elements. It is also
  *  possible to access and modify elements in a random access fashion
  *  via the index of the element in the current sequence.
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @tparam A    the type of the elements of the buffer
  *  @tparam This the type of the buffer itself.
  *
  *  $buffernote
+<<<<<<< HEAD
  * 
+=======
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @author  Martin Odersky
  *  @author  Matthias Zenger
  *  @version 2.8
@@ -59,7 +71,11 @@ import annotation.{migration, bridge}
  *  undeprecated methods throughout the collections hierarchy.
  */
 @cloneable
+<<<<<<< HEAD
 trait BufferLike[A, +This <: BufferLike[A, This] with Buffer[A]] 
+=======
+trait BufferLike[A, +This <: BufferLike[A, This] with Buffer[A]]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                 extends Growable[A]
                    with Shrinkable[A]
                    with Scriptable[A]
@@ -127,7 +143,11 @@ trait BufferLike[A, +This <: BufferLike[A, This] with Buffer[A]]
     if (i != -1) remove(i)
     this
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Prepends elements to this buffer.
    *
    *  @param xs  the TraversableOnce containing the elements to prepend.
@@ -149,7 +169,11 @@ trait BufferLike[A, +This <: BufferLike[A, This] with Buffer[A]]
   /** Prepends given elements to this buffer.
    *  @param elems  the elements to prepend.
    */
+<<<<<<< HEAD
   def prepend(elems: A*) { prependAll(elems) } 
+=======
+  def prepend(elems: A*) { prependAll(elems) }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** Prepends the elements contained in a traversable object to this buffer.
    *  @param elems  the collection containing the elements to prepend.
@@ -163,7 +187,11 @@ trait BufferLike[A, +This <: BufferLike[A, This] with Buffer[A]]
    *  @throws   IndexOutOfBoundsException if the index `n` is not in the valid range
    *            `0 <= n <= length`.
    */
+<<<<<<< HEAD
   def insert(n: Int, elems: A*) { insertAll(n, elems) } 
+=======
+  def insert(n: Int, elems: A*) { insertAll(n, elems) }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** Removes the first ''n'' elements of this buffer.
    *
@@ -188,16 +216,28 @@ trait BufferLike[A, +This <: BufferLike[A, This] with Buffer[A]]
     case Include(End, x)        => append(x)
     case Include(Index(n), x)   => insert(n, x)
     case Include(NoLo, x)       => this += x
+<<<<<<< HEAD
     
     case Update(Start, x)       => update(0, x)
     case Update(End, x)         => update(length - 1, x)
     case Update(Index(n), x)    => update(n, x)
     
+=======
+
+    case Update(Start, x)       => update(0, x)
+    case Update(End, x)         => update(length - 1, x)
+    case Update(Index(n), x)    => update(n, x)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     case Remove(Start, x)       => if (this(0) == x) remove(0)
     case Remove(End, x)         => if (this(length - 1) == x) remove(length - 1)
     case Remove(Index(n), x)    => if (this(n) == x) remove(n)
     case Remove(NoLo, x)        => this -= x
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     case Reset()                => clear
     case s: Script[_]           => s.iterator foreach <<
     case _                      => throw new UnsupportedOperationException("message " + cmd + " not understood")
@@ -208,12 +248,17 @@ trait BufferLike[A, +This <: BufferLike[A, This] with Buffer[A]]
    *           Unless overridden this is simply `"Buffer"`.
    */
   override def stringPrefix: String = "Buffer"
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Provide a read-only view of this buffer as a sequence
    *  @return  A sequence which refers to this buffer for all its operations.
    */
   def readOnly: scala.collection.Seq[A] = toSeq
 
+<<<<<<< HEAD
   /** Adds a number of elements in an array
    *
    *  @param src    the array
@@ -259,6 +304,8 @@ trait BufferLike[A, +This <: BufferLike[A, This] with Buffer[A]]
     repr
   } 
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Creates a new collection containing both the elements of this collection and the provided
    *  traversable object.
    *

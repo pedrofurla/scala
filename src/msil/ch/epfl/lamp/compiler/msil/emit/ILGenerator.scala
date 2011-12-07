@@ -174,9 +174,15 @@ import ILGenerator._
 	// push size is either 0 (void Method) either 1
 	assert(arg.ReturnType != null, "No ReturnType: " + arg.DeclaringType + "::" + arg.Name)
 
+<<<<<<< HEAD
 	val popush: Int = if (opcode == OpCode.Ldftn || 
             opcode == OpCode.Ldvirtftn || 
             opcode == OpCode.Jmp) 
+=======
+	val popush: Int = if (opcode == OpCode.Ldftn ||
+            opcode == OpCode.Ldvirtftn ||
+            opcode == OpCode.Jmp)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         {
            OpCode.PUSH_size(opcode.CEE_push) - OpCode.POP_size(opcode.CEE_pop)
         } else if (opcode == OpCode.Calli || opcode == OpCode.Callvirt) {
@@ -410,11 +416,19 @@ import ILGenerator._
     }
 
     def setPosition(startLine: Int, endLine: Int, startCol: Int, endCol: Int, filename: String) {
+<<<<<<< HEAD
       val lineRange = startLine + "," + endLine 
       val colRange  = startCol  + "," + endCol
 	  lineNums.put(lastLabel, lineRange + ":" + colRange + "  '" + filename + "'")
     }
    
+=======
+      val lineRange = startLine + "," + endLine
+      val colRange  = startCol  + "," + endCol
+	  lineNums.put(lastLabel, lineRange + ":" + colRange + "  '" + filename + "'")
+    }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    def getLocals(): Array[LocalBuilder] = localList.toArray
 
     def getLabelIterator() = labelList.iterator
@@ -519,10 +533,17 @@ import ILGenerator._
 
 
 object ILGenerator {
+<<<<<<< HEAD
   
    val VOID: Type = Type.GetType("System.Void")
    val NO_LABEL: String = ""
    
+=======
+
+   val VOID: Type = Type.GetType("System.Void")
+   val NO_LABEL: String = ""
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     private final class ExceptionStack {
         private val labels = new scala.collection.mutable.Stack[Label]()
         private val kinds = new scala.collection.mutable.Stack[Label]()
@@ -535,6 +556,10 @@ object ILGenerator {
         def peekLabel(): Label = labels.top
         def popLabel(): Label = { kinds.pop(); labels.pop() }
     }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 

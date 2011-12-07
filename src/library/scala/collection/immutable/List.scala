@@ -16,6 +16,7 @@ import mutable.{Builder, ListBuffer}
 import annotation.tailrec
 
 /** A class for immutable linked lists representing ordered collections
+<<<<<<< HEAD
  *  of elements of type. 
  *  
  *  This class comes with two implementing case classes `scala.Nil` 
@@ -29,6 +30,52 @@ import annotation.tailrec
  *  @tparam  A    the type of the list's elements
  *
  *  @define Coll List
+=======
+ *  of elements of type.
+ *
+ *  This class comes with two implementing case classes `scala.Nil`
+ *  and `scala.::` that implement the abstract members `isEmpty`,
+ *  `head` and `tail`.
+ *
+ *  This class is optimal for last-in-first-out (LIFO), stack-like access patterns. If you need another access
+ *  pattern, for example, random access or FIFO, consider using a collection more suited to this than `List`.
+ *
+ *  @example {{{
+ *  // Make a list via the companion object factory
+ *  val days = List("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
+ *
+ *  // Make a list element-by-element
+ *  val when = "AM" :: "PM" :: List()
+ *
+ *  // Pattern match
+ *  days match {
+ *    case firstDay :: otherDays =>
+ *      println("The first day of the week is: " + firstDay)
+ *    case List() =>
+ *      println("There don't seem to be any week days.")
+ *  }
+ *  }}}
+ *
+ *  ==Performance==
+ *  '''Time:''' `List` has `O(1)` prepend and head/tail access. Most other operations are `O(n)` on the number of elements in the list.
+ *  This includes the index-based lookup of elements, `length`, `append` and `reverse`.
+ *
+ *  '''Space:''' `List` implements '''structural sharing''' of the tail list. This means that many operations are either
+ *  zero- or constant-memory cost.
+ *  {{{
+ *  val mainList = List(3, 2, 1)
+ *  val with4 =    4 :: mainList  // re-uses mainList, costs one :: instance
+ *  val with42 =   42 :: mainList // also re-uses mainList, cost one :: instance
+ *  val shorter =  mainList.tail  // costs nothing as it uses the same 2::1::Nil instances as mainList
+ *  }}}
+ *
+ *  @author  Martin Odersky and others
+ *  @version 2.8
+ *  @since   1.0
+ *  @see  [["http://docs.scala-lang.org/overviews/collections/concrete-immutable-collection-classes.html#lists" "Scala's Collection Library overview"]]
+ *  section on `Lists` for more information.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define coll list
  *  @define thatinfo the class of the returned collection. In the standard library configuration,
  *    `That` is always `List[B]` because an implicit of type `CanBuildFrom[List, B, That]`
@@ -37,13 +84,23 @@ import annotation.tailrec
  *    result class `That` from the current representation type `Repr`
  *    and the new element type `B`. This is usually the `canBuildFrom` value
  *    defined in object `List`.
+<<<<<<< HEAD
  *  @define orderDependent 
+=======
+ *  @define orderDependent
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define orderDependentFold
  *  @define mayNotTerminateInf
  *  @define willNotTerminateInf
  */
+<<<<<<< HEAD
 sealed abstract class List[+A] extends LinearSeq[A] 
                                   with Product 
+=======
+sealed abstract class List[+A] extends AbstractSeq[A]
+                                  with LinearSeq[A]
+                                  with Product
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                                   with GenericTraversableTemplate[A, List]
                                   with LinearSeqOptimized[A, List[A]] {
   override def companion: GenericCompanion[List] = List
@@ -69,7 +126,11 @@ sealed abstract class List[+A] extends LinearSeq[A]
   /** Adds the elements of a given list in front of this list.
    *  @param prefix  The list elements to prepend.
    *  @return a list resulting from the concatenation of the given
+<<<<<<< HEAD
    *    list `prefix` and this list. 
+=======
+   *    list `prefix` and this list.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @example `List(1, 2) ::: List(3, 4) = List(3, 4).:::(List(1, 2)) = List(1, 2, 3, 4)`
    *  @usecase def :::(prefix: List[A]): List[A]
    */
@@ -99,12 +160,20 @@ sealed abstract class List[+A] extends LinearSeq[A]
   /** Builds a new list by applying a function to all elements of this list.
    *  Like `xs map f`, but returns `xs` unchanged if function
    *  `f` maps all elements to themselves (wrt eq).
+<<<<<<< HEAD
    * 
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param f      the function to apply to each element.
    *  @tparam B     the element type of the returned collection.
    *  @return       a list resulting from applying the given function
    *                `f` to each element of this list and collecting the results.
+<<<<<<< HEAD
    *  @usecase def mapConserve(f: A => A): List[A] 
+=======
+   *  @usecase def mapConserve(f: A => A): List[A]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    */
   def mapConserve[B >: A <: AnyRef](f: A => B): List[B] = {
     @tailrec
@@ -135,7 +204,11 @@ sealed abstract class List[+A] extends LinearSeq[A]
   }
 
   // Overridden methods from IterableLike and SeqLike or overloaded variants of such methods
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def ++[B >: A, That](that: GenTraversableOnce[B])(implicit bf: CanBuildFrom[List[A], B, That]): That = {
     val b = bf(this)
     if (b.isInstanceOf[ListBuffer[_]]) (this ::: that.seq.toList).asInstanceOf[That]
@@ -171,7 +244,11 @@ sealed abstract class List[+A] extends LinearSeq[A]
     }
     these
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def slice(from: Int, until: Int): List[A] = {
     val lo = math.max(from, 0)
     if (until <= lo || isEmpty) Nil
@@ -186,7 +263,11 @@ sealed abstract class List[+A] extends LinearSeq[A]
     }
     loop(drop(n), this)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // dropRight is inherited from LinearSeq
 
   override def splitAt(n: Int): (List[A], List[A]) = {
@@ -245,6 +326,7 @@ sealed abstract class List[+A] extends LinearSeq[A]
   override def toStream : Stream[A] =
     if (isEmpty) Stream.Empty
     else new Stream.Cons(head, tail.toStream)
+<<<<<<< HEAD
 
   /** Like `span` but with the predicate inverted.
    */
@@ -353,6 +435,8 @@ sealed abstract class List[+A] extends LinearSeq[A]
     ms(this)
   }
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 /** The empty list.
@@ -418,8 +502,11 @@ final case class ::[B](private var hd: B, private[scala] var tl: List[B]) extend
  *  @define Coll List
  */
 object List extends SeqFactory[List] {
+<<<<<<< HEAD
   
   import scala.collection.{Iterable, Seq, IndexedSeq}
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
   /** $genericCanBuildFromInfo */
   implicit def canBuildFrom[A]: CanBuildFrom[Coll, A, List[A]] =
@@ -430,6 +517,7 @@ object List extends SeqFactory[List] {
   override def empty[A]: List[A] = Nil
 
   override def apply[A](xs: A*): List[A] = xs.toList
+<<<<<<< HEAD
 
   /** Create a sorted list with element values `v,,>n+1,, = step(v,,n,,)`
    * where `v,,0,, = start` and elements are in the range between `start`
@@ -761,6 +849,8 @@ object List extends SeqFactory[List] {
     }
     buf.toList
   }
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 /** Only used for list serialization */

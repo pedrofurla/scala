@@ -15,19 +15,32 @@ import java.util.concurrent.LinkedBlockingQueue
 import java.nio.channels.ClosedChannelException
 import scala.xml.parsing.{ ExternalSources, MarkupHandler, MarkupParser }
 
+<<<<<<< HEAD
 /** 
  * Main entry point into creating an event-based XML parser.  Treating this 
+=======
+/**
+ * Main entry point into creating an event-based XML parser.  Treating this
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  * as a [[scala.collection.Iterator]] will provide access to the generated events.
  * @param src A [[scala.io.Source]] for XML data to parse
  *
  *  @author Burak Emir
  *  @author Paul Phillips
  */
+<<<<<<< HEAD
 class XMLEventReader(src: Source) extends ProducerConsumerIterator[XMLEvent] {
+=======
+class XMLEventReader(src: Source)
+extends collection.AbstractIterator[XMLEvent]
+   with ProducerConsumerIterator[XMLEvent] {
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // We implement a pull parser as an iterator, but since we may be operating on
   // a stream (e.g. XML over a network) there may be arbitrarily long periods when
   // the queue is empty.  Fortunately the ProducerConsumerIterator is ideally
   // suited to this task, possibly because it was written for use by this class.
+<<<<<<< HEAD
     
   // to override as necessary
   val preserveWS = true
@@ -36,6 +49,16 @@ class XMLEventReader(src: Source) extends ProducerConsumerIterator[XMLEvent] {
   protected case object POISON extends XMLEvent
   val EndOfStream = POISON
   
+=======
+
+  // to override as necessary
+  val preserveWS = true
+
+  override val MaxQueueSize = 1000
+  protected case object POISON extends XMLEvent
+  val EndOfStream = POISON
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // thread machinery
   private[this] val parser = new Parser(src)
   private[this] val parserThread = new Thread(parser, "XMLEventReader")
@@ -52,7 +75,11 @@ class XMLEventReader(src: Source) extends ProducerConsumerIterator[XMLEvent] {
     produce(POISON)
     parserThread.interrupt()
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private class Parser(val input: Source) extends MarkupHandler with MarkupParser with ExternalSources with Runnable {
     val preserveWS = XMLEventReader.this.preserveWS
     // track level for elem memory usage optimization
@@ -61,7 +88,11 @@ class XMLEventReader(src: Source) extends ProducerConsumerIterator[XMLEvent] {
     // this is Parser's way to add to the queue - the odd return type
     // is to conform to MarkupHandler's interface
     def setEvent(es: XMLEvent*): NodeSeq = {
+<<<<<<< HEAD
       es foreach produce        
+=======
+      es foreach produce
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       NodeSeq.Empty
     }
 
@@ -69,15 +100,26 @@ class XMLEventReader(src: Source) extends ProducerConsumerIterator[XMLEvent] {
       level += 1
       setEvent(EvElemStart(pre, label, attrs, scope))
     }
+<<<<<<< HEAD
     override def elemEnd(pos: Int, pre: String, label: String) { 
+=======
+    override def elemEnd(pos: Int, pre: String, label: String) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       setEvent(EvElemEnd(pre, label))
       level -= 1
     }
 
     // this is a dummy to satisfy MarkupHandler's API
+<<<<<<< HEAD
     // memory usage optimization return one <ignore/> for top level to satisfy MarkupParser.document() otherwise NodeSeq.Empty
     private var ignoreWritten = false
     final def elem(pos: Int, pre: String, label: String, attrs: MetaData, pscope: NamespaceBinding, nodes: NodeSeq): NodeSeq = 
+=======
+    // memory usage optimization return one <ignore/> for top level to satisfy
+    // MarkupParser.document() otherwise NodeSeq.Empty
+    private var ignoreWritten = false
+    final def elem(pos: Int, pre: String, label: String, attrs: MetaData, pscope: NamespaceBinding, nodes: NodeSeq): NodeSeq =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (level == 1 && !ignoreWritten) {ignoreWritten = true; <ignore/> } else NodeSeq.Empty
 
     def procInstr(pos: Int, target: String, txt: String)  = setEvent(EvProcInstr(target, txt))
@@ -106,6 +148,7 @@ class XMLEventReader(src: Source) extends ProducerConsumerIterator[XMLEvent] {
 trait ProducerConsumerIterator[T >: Null] extends Iterator[T] {
   // abstract - iterator-specific distinguished object for marking eos
   val EndOfStream: T
+<<<<<<< HEAD
   
   // defaults to unbounded - override to positive Int if desired
   val MaxQueueSize = -1
@@ -115,6 +158,17 @@ trait ProducerConsumerIterator[T >: Null] extends Iterator[T] {
     case _: ClosedChannelException  => None
   }    
   
+=======
+
+  // defaults to unbounded - override to positive Int if desired
+  val MaxQueueSize = -1
+
+  def interruptibly[T](body: => T): Option[T] = try Some(body) catch {
+    case _: InterruptedException    => Thread.currentThread.interrupt(); None
+    case _: ClosedChannelException  => None
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private[this] lazy val queue =
     if (MaxQueueSize < 0) new LinkedBlockingQueue[T]()
     else new LinkedBlockingQueue[T](MaxQueueSize)
@@ -123,9 +177,15 @@ trait ProducerConsumerIterator[T >: Null] extends Iterator[T] {
     buffer = interruptibly(queue.take) getOrElse EndOfStream
     isElement(buffer)
   }
+<<<<<<< HEAD
   private def isElement(x: T) = x != null && x != EndOfStream  
   private def eos() = buffer == EndOfStream
   
+=======
+  private def isElement(x: T) = x != null && x != EndOfStream
+  private def eos() = buffer == EndOfStream
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // public producer interface - this is the only method producers call, so
   // LinkedBlockingQueue's synchronization is all we need.
   def produce(x: T): Unit = if (!eos) interruptibly(queue put x)
@@ -133,6 +193,7 @@ trait ProducerConsumerIterator[T >: Null] extends Iterator[T] {
   // consumer/iterator interface - we need not synchronize access to buffer
   // because we required there to be only one consumer.
   def hasNext = !eos && (buffer != null || fillBuffer)
+<<<<<<< HEAD
   def next() = {
     if (eos) throw new NoSuchElementException("ProducerConsumerIterator")
     if (buffer == null) fillBuffer
@@ -141,6 +202,18 @@ trait ProducerConsumerIterator[T >: Null] extends Iterator[T] {
   }
   def available() = isElement(buffer) || isElement(queue.peek)
   
+=======
+
+  def next() = {
+    if (eos) throw new NoSuchElementException("ProducerConsumerIterator")
+    if (buffer == null) fillBuffer
+
+    drainBuffer
+  }
+
+  def available() = isElement(buffer) || isElement(queue.peek)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def drainBuffer() = {
     assert(!eos)
     val res = buffer

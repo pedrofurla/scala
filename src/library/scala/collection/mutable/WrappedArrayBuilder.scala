@@ -15,10 +15,17 @@ import generic._
 import scala.reflect.ClassManifest
 
 /** A builder class for arrays.
+<<<<<<< HEAD
  *  
  *  @tparam A         type of elements that can be added to this builder.
  *  @param manifest   class manifest for objects of type `A`.
  *  
+=======
+ *
+ *  @tparam A         type of elements that can be added to this builder.
+ *  @param manifest   class manifest for objects of type `A`.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @since 2.8
  */
 class WrappedArrayBuilder[A](manifest: ClassManifest[A]) extends Builder[A, WrappedArray[A]] {
@@ -37,7 +44,11 @@ class WrappedArrayBuilder[A](manifest: ClassManifest[A]) extends Builder[A, Wrap
     elems = mkArray(size)
     capacity = size
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def sizeHint(size: Int) {
     if (capacity < size) resize(size)
   }
@@ -48,8 +59,13 @@ class WrappedArrayBuilder[A](manifest: ClassManifest[A]) extends Builder[A, Wrap
       while (newsize < size) newsize *= 2
       resize(newsize)
     }
+<<<<<<< HEAD
   } 
   
+=======
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def +=(elem: A): this.type = {
     ensureSize(size + 1)
     elems(size) = elem
@@ -62,7 +78,11 @@ class WrappedArrayBuilder[A](manifest: ClassManifest[A]) extends Builder[A, Wrap
   }
 
   def result() = {
+<<<<<<< HEAD
     if (capacity != 0 && capacity == size) elems 
+=======
+    if (capacity != 0 && capacity == size) elems
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     else mkArray(size)
   }
 

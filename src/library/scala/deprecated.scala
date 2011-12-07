@@ -8,7 +8,11 @@
 
 package scala
 
+<<<<<<< HEAD
 import annotation.target._
+=======
+import annotation.meta._
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 /** An annotation that designates that a definition is deprecated.
  *  Access to the member then generates a deprecated warning.

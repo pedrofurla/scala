@@ -18,11 +18,19 @@ trait JLineHistory extends JHistory with History {
   def get(index: Int): CharSequence
   def add(line: CharSequence): Unit
   def replace(item: CharSequence): Unit
+<<<<<<< HEAD
   
   def entries(index: Int): JListIterator[JEntry]
   def entries(): JListIterator[JEntry]
   def iterator: JIterator[JEntry]
   
+=======
+
+  def entries(index: Int): JListIterator[JEntry]
+  def entries(): JListIterator[JEntry]
+  def iterator: JIterator[JEntry]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def current(): CharSequence
   def previous(): Boolean
   def next(): Boolean
@@ -44,7 +52,11 @@ object JLineHistory {
     }
     override def toString = "History(size = " + size + ", index = " + index + ")"
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def apply(): JLineHistory =
     try   { new JLineFileHistory }
     catch { case x: Exception =>

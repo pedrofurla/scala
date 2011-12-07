@@ -5,6 +5,13 @@
 
 package scala.man1
 
+<<<<<<< HEAD
+=======
+/**
+ *  @author Stephane Micheloud
+ *  @version 1.0
+ */
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 object sbaz extends Command {
   import _root_.scala.tools.docutil.ManPage._
 
@@ -63,13 +70,21 @@ object sbaz extends Command {
           "Display the version information"),
 
         Definition(
+<<<<<<< HEAD
           CmdOption("-univ") & Argument("name"),
+=======
+          CmdOptionLong("univ", Argument("name")),
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           "Operate on the named remote universe, selected from those " &
           "in the local managed directory's universe. Affects "&
           "the "&MBold("share")&" and "&MBold("retract")&" commands."),
 
         Definition(
+<<<<<<< HEAD
           CmdOption("-univ-url") & Argument("url"),
+=======
+          CmdOptionLong("univ-url", Argument("url")),
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           "Operate on the universe at the specified URL.  Affects "&
           "the "&MBold("share")&" and "&MBold("retract")&" commands."))),
 
@@ -186,7 +201,11 @@ object sbaz extends Command {
 
   def manpage = new Document {
     title = command
+<<<<<<< HEAD
     date = "August 24, 2006"
+=======
+    date = "August 2006"
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     author = "Stephane Micheloud"
     version = "0.3"
     sections = List(

@@ -14,10 +14,17 @@ import scala.collection._
   * defines how a template's type parameters are instantiated (as in `List[Cow]`), what the template's prefix is
   * (as in `johnsFarm.Cow`), and supports compound or structural types. */
 abstract class TypeEntity {
+<<<<<<< HEAD
   
   /** The human-readable representation of this type. */
   def name: String
   
+=======
+
+  /** The human-readable representation of this type. */
+  def name: String
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Maps which parts of this type's name reference entities. The map is indexed by the position of the first
     * character that reference some entity, and contains the entity and the position of the last referenced
     * character. The referenced character ranges do not to overlap or nest. The map is sorted by position. */
@@ -25,5 +32,9 @@ abstract class TypeEntity {
 
   /** The human-readable representation of this type. */
   override def toString = name
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

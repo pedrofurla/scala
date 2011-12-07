@@ -8,7 +8,11 @@
 
 package scala.xml
 
+<<<<<<< HEAD
 import collection.{ mutable, immutable, generic, SeqLike }
+=======
+import collection.{ mutable, immutable, generic, SeqLike, AbstractSeq }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 import mutable.{ Builder, ListBuffer }
 import generic.{ CanBuildFrom }
 
@@ -26,7 +30,11 @@ object NodeSeq {
   implicit def canBuildFrom: CanBuildFrom[Coll, Node, NodeSeq] =
     new CanBuildFrom[Coll, Node, NodeSeq] {
       def apply(from: Coll) = newBuilder
+<<<<<<< HEAD
       def apply() = newBuilder 
+=======
+      def apply() = newBuilder
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
   def newBuilder: Builder[Node, NodeSeq] = new ListBuffer[Node] mapResult fromSeq
   implicit def seqToNodeSeq(s: Seq[Node]): NodeSeq = fromSeq(s)
@@ -38,7 +46,11 @@ object NodeSeq {
  *  @author  Burak Emir
  *  @version 1.0
  */
+<<<<<<< HEAD
 abstract class NodeSeq extends immutable.Seq[Node] with SeqLike[Node, NodeSeq] with Equality {
+=======
+abstract class NodeSeq extends AbstractSeq[Node] with immutable.Seq[Node] with SeqLike[Node, NodeSeq] with Equality {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   import NodeSeq.seqToNodeSeq // import view magic for NodeSeq wrappers
 
   /** Creates a list buffer as builder for this class */
@@ -60,11 +72,21 @@ abstract class NodeSeq extends immutable.Seq[Node] with SeqLike[Node, NodeSeq] w
 
     !these.hasNext && !those.hasNext
   }
+<<<<<<< HEAD
   def basisForHashCode: Seq[Any] = theSeq
+=======
+
+  protected def basisForHashCode: Seq[Any] = theSeq
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def canEqual(other: Any) = other match {
     case _: NodeSeq   => true
     case _            => false
   }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def strict_==(other: Equality) = other match {
     case x: NodeSeq => (length == x.length) && (theSeq sameElements x.theSeq)
     case _          => false
@@ -92,11 +114,19 @@ abstract class NodeSeq extends immutable.Seq[Node] with SeqLike[Node, NodeSeq] w
     def fail = throw new IllegalArgumentException(that)
     def atResult = {
       lazy val y = this(0)
+<<<<<<< HEAD
       val attr = 
         if (that.length == 1) fail
         else if (that(1) == '{') {
           val i = that indexOf '}'
           if (i == -1) fail                  
+=======
+      val attr =
+        if (that.length == 1) fail
+        else if (that(1) == '{') {
+          val i = that indexOf '}'
+          if (i == -1) fail
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
           val (uri, key) = (that.substring(2,i), that.substring(i+1, that.length()))
           if (uri == "" || key == "") fail
           else y.attribute(uri, key)

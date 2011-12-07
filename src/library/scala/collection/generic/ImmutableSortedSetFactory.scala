@@ -12,10 +12,17 @@ package scala.collection
 package generic
 
 /** A template for companion objects of `SortedSet` and subclasses thereof.
+<<<<<<< HEAD
  *  
  *  @since 2.8
  *  @define Coll immutable.SortedSet
  *  @define coll immutable sorted 
+=======
+ *
+ *  @since 2.8
+ *  @define Coll immutable.SortedSet
+ *  @define coll immutable sorted
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define factoryInfo
  *    This object provides a set of operations needed to create sorted sets of type `$Coll`.
  *    @author Martin Odersky

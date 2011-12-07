@@ -8,6 +8,7 @@ import reflect.internal.Chars._
 
 object SourceInserter {
   def stripRight(cs: Array[Char]): Array[Char] = {
+<<<<<<< HEAD
     val lines = 
       new String(cs) split "\n"
     def leftPart(str: String) = 
@@ -17,10 +18,22 @@ object SourceInserter {
     def stripTrailingWS(str: String) = 
       str take (str lastIndexWhere (!isWhitespace(_))) + 1
     val prefixes = 
+=======
+    val lines =
+      new String(cs) split "\n"
+    def leftPart(str: String) =
+      (str split """//>|//\|""").head
+    def isContinuation(str: String) =
+      ((str contains "//>") || (str contains "//|")) && (leftPart(str) forall isWhitespace)
+    def stripTrailingWS(str: String) =
+      str take (str lastIndexWhere (!isWhitespace(_))) + 1
+    val prefixes =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       lines filterNot isContinuation map leftPart map stripTrailingWS
     (prefixes mkString "\n").toArray
   }
 }
+<<<<<<< HEAD
 
 class SourceInserter(contents: Array[Char], start: Int = 0, tabInc: Int = 8) extends Writer {
  
@@ -30,6 +43,16 @@ class SourceInserter(contents: Array[Char], start: Int = 0, tabInc: Int = 8) ext
   
   def length = offset + hilen
   
+=======
+class SourceInserter(contents: Array[Char], start: Int = 0, tabInc: Int = 8) extends Writer {
+
+  private var buf = contents
+  private var offset = start
+  private var hilen = contents.length
+
+  def length = offset + hilen
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def currentColumn: Int = {
     var i = offset
     while (i > 0 && !isLineBreakChar(buf(i - 1))) i -= 1
@@ -40,11 +63,19 @@ class SourceInserter(contents: Array[Char], start: Int = 0, tabInc: Int = 8) ext
     }
     col
   }
+<<<<<<< HEAD
   
   private var col = currentColumn
   
   def column = synchronized { col }
   
+=======
+
+  private var col = currentColumn
+
+  def column = synchronized { col }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def addCapacity(n: Int) = {
     val newlength = length + n
     while (newlength > buf.length) {
@@ -54,10 +85,17 @@ class SourceInserter(contents: Array[Char], start: Int = 0, tabInc: Int = 8) ext
       buf = buf1
     }
   }
+<<<<<<< HEAD
    
   private def insertChar(ch: Char) = {
 //  Console.err.print("["+ch+"]")
     buf(offset) = ch.toChar
+=======
+
+  private def insertChar(ch: Char) = {
+//  Console.err.print("["+ch+"]")
+    buf(offset) = ch
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     offset += 1
     ch match {
       case LF => col = 0
@@ -65,16 +103,25 @@ class SourceInserter(contents: Array[Char], start: Int = 0, tabInc: Int = 8) ext
       case _ => col += 1
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def write(ch: Int) = synchronized {
     addCapacity(1)
     insertChar(ch.toChar)
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def write(chs: Array[Char], off: Int, len: Int) = synchronized {
     addCapacity(len)
     for (i <- off until off + len) insertChar(chs(i))
   }
+<<<<<<< HEAD
     
   override def close() {
   }
@@ -83,6 +130,16 @@ class SourceInserter(contents: Array[Char], start: Int = 0, tabInc: Int = 8) ext
     // signal buffer change
   }
   
+=======
+
+  override def close() {
+  }
+
+  override def flush() {
+    // signal buffer change
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def currentContents = synchronized {
     if (length == buf.length) buf
     else {
@@ -92,6 +149,7 @@ class SourceInserter(contents: Array[Char], start: Int = 0, tabInc: Int = 8) ext
       res
     }
   }
+<<<<<<< HEAD
   
   def backspace() = synchronized {
     offset -= 1
@@ -102,6 +160,18 @@ class SourceInserter(contents: Array[Char], start: Int = 0, tabInc: Int = 8) ext
     buf(buf.length - hilen)
   }
   
+=======
+
+  def backspace() = synchronized {
+    offset -= 1
+    if (offset > 0 && buf(offset) == LF && buf(offset - 1) == CR) offset -=1
+  }
+
+  def currentChar = synchronized {
+    buf(buf.length - hilen)
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def skip(len: Int) = synchronized {
     for (i <- 0 until len) {
       val ch = currentChar

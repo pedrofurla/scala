@@ -19,7 +19,11 @@ object Which {
     val cp = global.classPath
 
     import cp._
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     for (name <- names) {
       def fail() = println("Could not find: %s".format(name))
       (cp findClass name) match {

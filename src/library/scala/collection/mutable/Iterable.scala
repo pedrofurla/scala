@@ -14,9 +14,15 @@ import parallel.mutable.ParIterable
 /** A base trait for iterable collections that can be mutated.
  *  $iterableInfo
  */
+<<<<<<< HEAD
 trait Iterable[A] extends Traversable[A] 
 //                     with GenIterable[A]
                      with scala.collection.Iterable[A] 
+=======
+trait Iterable[A] extends Traversable[A]
+//                     with GenIterable[A]
+                     with scala.collection.Iterable[A]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
                      with GenericTraversableTemplate[A, Iterable]
                      with IterableLike[A, Iterable[A]]
                      with Parallelizable[A, ParIterable[A]]
@@ -24,7 +30,11 @@ trait Iterable[A] extends Traversable[A]
   override def companion: GenericCompanion[Iterable] = Iterable
   protected[this] override def parCombiner = ParIterable.newCombiner[A] // if `mutable.IterableLike` gets introduced, please move this there!
   override def seq: Iterable[A] = this
+<<<<<<< HEAD
 }	
+=======
+}
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 
 /** $factoryInfo
  *  The current default implementation of a $Coll is an `ArrayBuffer`.
@@ -36,3 +46,8 @@ object Iterable extends TraversableFactory[Iterable] {
   def newBuilder[A]: Builder[A, Iterable[A]] = new ArrayBuffer
 }
 
+<<<<<<< HEAD
+=======
+/** Explicit instantiation of the `Iterable` trait to reduce class file size in subclasses. */
+private[scala] abstract class AbstractIterable[A] extends scala.collection.AbstractIterable[A] with Iterable[A]
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0

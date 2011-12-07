@@ -23,9 +23,15 @@ import script._
  *  @since   1
  */
 trait ObservableBuffer[A] extends Buffer[A] with Publisher[Message[A] with Undoable]
+<<<<<<< HEAD
 { 
   type Pub <: ObservableBuffer[A]
   
+=======
+{
+  type Pub <: ObservableBuffer[A]
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   abstract override def +=(element: A): this.type = {
     super.+=(element)
     publish(new Include(End, element) with Undoable {
@@ -33,12 +39,20 @@ trait ObservableBuffer[A] extends Buffer[A] with Publisher[Message[A] with Undoa
     })
     this
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   abstract override def ++=(xs: TraversableOnce[A]): this.type = {
     for (x <- xs) this += x
     this
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   abstract override def +=:(element: A): this.type = {
     super.+=:(element)
     publish(new Include(Start, element) with Undoable {
@@ -66,7 +80,11 @@ trait ObservableBuffer[A] extends Buffer[A] with Publisher[Message[A] with Undoa
 
   abstract override def clear(): Unit = {
     super.clear
+<<<<<<< HEAD
     publish(new Reset with Undoable { 
+=======
+    publish(new Reset with Undoable {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       def undo() { throw new UnsupportedOperationException("cannot undo") }
     })
   }

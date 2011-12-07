@@ -20,10 +20,17 @@ object Numeric {
      *  def plus[T: Numeric](x: T, y: T) = x + y
      *  }}}
      */
+<<<<<<< HEAD
     implicit def infixNumericOps[T](x: T)(implicit num: Numeric[T]): Numeric[T]#Ops = new num.Ops(x)    
   }
   object Implicits extends ExtraImplicits { }
   
+=======
+    implicit def infixNumericOps[T](x: T)(implicit num: Numeric[T]): Numeric[T]#Ops = new num.Ops(x)
+  }
+  object Implicits extends ExtraImplicits { }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait BigIntIsIntegral extends Integral[BigInt] {
     def plus(x: BigInt, y: BigInt): BigInt = x + y
     def minus(x: BigInt, y: BigInt): BigInt = x - y
@@ -38,7 +45,11 @@ object Numeric {
     def toDouble(x: BigInt): Double = x.longValue.toDouble
   }
   implicit object BigIntIsIntegral extends BigIntIsIntegral with Ordering.BigIntOrdering
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait IntIsIntegral extends Integral[Int] {
     def plus(x: Int, y: Int): Int = x + y
     def minus(x: Int, y: Int): Int = x - y
@@ -53,7 +64,11 @@ object Numeric {
     def toDouble(x: Int): Double = x
   }
   implicit object IntIsIntegral extends IntIsIntegral with Ordering.IntOrdering
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait ShortIsIntegral extends Integral[Short] {
     def plus(x: Short, y: Short): Short = (x + y).toShort
     def minus(x: Short, y: Short): Short = (x - y).toShort
@@ -68,7 +83,11 @@ object Numeric {
     def toDouble(x: Short): Double = x.toDouble
   }
   implicit object ShortIsIntegral extends ShortIsIntegral with Ordering.ShortOrdering
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait ByteIsIntegral extends Integral[Byte] {
     def plus(x: Byte, y: Byte): Byte = (x + y).toByte
     def minus(x: Byte, y: Byte): Byte = (x - y).toByte
@@ -83,7 +102,11 @@ object Numeric {
     def toDouble(x: Byte): Double = x.toDouble
   }
   implicit object ByteIsIntegral extends ByteIsIntegral with Ordering.ByteOrdering
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait CharIsIntegral extends Integral[Char] {
     def plus(x: Char, y: Char): Char = (x + y).toChar
     def minus(x: Char, y: Char): Char = (x - y).toChar
@@ -98,7 +121,11 @@ object Numeric {
     def toDouble(x: Char): Double = x.toDouble
   }
   implicit object CharIsIntegral extends CharIsIntegral with Ordering.CharOrdering
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait LongIsIntegral extends Integral[Long] {
     def plus(x: Long, y: Long): Long = x + y
     def minus(x: Long, y: Long): Long = x - y
@@ -113,11 +140,19 @@ object Numeric {
     def toDouble(x: Long): Double = x
   }
   implicit object LongIsIntegral extends LongIsIntegral with Ordering.LongOrdering
+<<<<<<< HEAD
   
   trait FloatIsConflicted extends Numeric[Float] {
     def plus(x: Float, y: Float): Float = x + y
     def minus(x: Float, y: Float): Float = x - y
     def times(x: Float, y: Float): Float = x * y 
+=======
+
+  trait FloatIsConflicted extends Numeric[Float] {
+    def plus(x: Float, y: Float): Float = x + y
+    def minus(x: Float, y: Float): Float = x - y
+    def times(x: Float, y: Float): Float = x * y
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def negate(x: Float): Float = -x
     def fromInt(x: Int): Float = x
     def toInt(x: Float): Int = x.toInt
@@ -135,7 +170,11 @@ object Numeric {
   implicit object FloatIsFractional extends FloatIsFractional with Ordering.FloatOrdering
   object FloatAsIfIntegral extends FloatAsIfIntegral with Ordering.FloatOrdering {
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait DoubleIsConflicted extends Numeric[Double] {
     def plus(x: Double, y: Double): Double = x + y
     def minus(x: Double, y: Double): Double = x - y
@@ -154,7 +193,11 @@ object Numeric {
     def quot(x: Double, y: Double): Double = (BigDecimal(x) / BigDecimal(y)).doubleValue
     def rem(x: Double, y: Double): Double = (BigDecimal(x) remainder BigDecimal(y)).doubleValue
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait BigDecimalIsConflicted extends Numeric[BigDecimal] {
     def plus(x: BigDecimal, y: BigDecimal): BigDecimal = x + y
     def minus(x: BigDecimal, y: BigDecimal): BigDecimal = x - y
@@ -166,7 +209,11 @@ object Numeric {
     def toFloat(x: BigDecimal): Float = x.floatValue
     def toDouble(x: BigDecimal): Double = x.doubleValue
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   trait BigDecimalIsFractional extends BigDecimalIsConflicted with Fractional[BigDecimal] {
     def div(x: BigDecimal, y: BigDecimal): BigDecimal = x / y
   }
@@ -177,9 +224,15 @@ object Numeric {
 
   // For Double and BigDecimal we offer implicit Fractional objects, but also one
   // which acts like an Integral type, which is useful in NumericRange.
+<<<<<<< HEAD
   implicit object BigDecimalIsFractional extends BigDecimalIsFractional with Ordering.BigDecimalOrdering  
   object BigDecimalAsIfIntegral extends BigDecimalAsIfIntegral with Ordering.BigDecimalOrdering
   
+=======
+  implicit object BigDecimalIsFractional extends BigDecimalIsFractional with Ordering.BigDecimalOrdering
+  object BigDecimalAsIfIntegral extends BigDecimalAsIfIntegral with Ordering.BigDecimalOrdering
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   implicit object DoubleIsFractional extends DoubleIsFractional with Ordering.DoubleOrdering
   object DoubleAsIfIntegral extends DoubleAsIfIntegral with Ordering.DoubleOrdering
 }
@@ -194,16 +247,27 @@ trait Numeric[T] extends Ordering[T] {
   def toLong(x: T): Long
   def toFloat(x: T): Float
   def toDouble(x: T): Double
+<<<<<<< HEAD
   
   def zero = fromInt(0)
   def one = fromInt(1)
   
+=======
+
+  def zero = fromInt(0)
+  def one = fromInt(1)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def abs(x: T): T = if (lt(x, zero)) negate(x) else x
   def signum(x: T): Int =
     if (lt(x, zero)) -1
     else if (gt(x, zero)) 1
     else 0
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class Ops(lhs: T) {
     def +(rhs: T) = plus(lhs, rhs)
     def -(rhs: T) = minus(lhs, rhs)
@@ -214,7 +278,11 @@ trait Numeric[T] extends Ordering[T] {
     def toInt(): Int = Numeric.this.toInt(lhs)
     def toLong(): Long = Numeric.this.toLong(lhs)
     def toFloat(): Float = Numeric.this.toFloat(lhs)
+<<<<<<< HEAD
     def toDouble(): Double = Numeric.this.toDouble(lhs)    
+=======
+    def toDouble(): Double = Numeric.this.toDouble(lhs)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   }
   implicit def mkNumericOps(lhs: T): Ops = new Ops(lhs)
 }

@@ -51,7 +51,11 @@ public enum Key
     CTRL_X(24),
 
     CTRL_OB(27),
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     CTRL_QM(127),
 
     BACKSPACE('\b'),

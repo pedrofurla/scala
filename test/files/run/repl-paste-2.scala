@@ -2,7 +2,11 @@ import scala.tools.partest.ReplTest
 
 object Test extends ReplTest {
   def code = """
+<<<<<<< HEAD
 scala> 0123
+=======
+scala> 999l
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 res4: Int = 0123
 
 scala> 123

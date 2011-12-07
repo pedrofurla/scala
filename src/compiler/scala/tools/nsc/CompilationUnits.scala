@@ -5,12 +5,27 @@
 
 package scala.tools.nsc
 
+<<<<<<< HEAD
 import util.{ FreshNameCreator,Position,NoPosition,SourceFile }
+=======
+import util.{ FreshNameCreator, Position, NoPosition, SourceFile, NoSourceFile }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 import scala.collection.mutable
 import scala.collection.mutable.{ LinkedHashSet, ListBuffer }
 
 trait CompilationUnits { self: Global =>
 
+<<<<<<< HEAD
+=======
+  /** An object representing a missing compilation unit.
+   */
+  object NoCompilationUnit extends CompilationUnit(NoSourceFile) {
+    override lazy val isJava = false
+    override def exists = false
+    override def toString() = "NoCompilationUnit"
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** One unit of compilation that has been submitted to the compiler.
     * It typically corresponds to a single file of source code.  It includes
     * error-reporting hooks.  */
@@ -18,13 +33,22 @@ trait CompilationUnits { self: Global =>
 
     /** the fresh name creator */
     var fresh: FreshNameCreator = new FreshNameCreator.Default
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def freshTermName(prefix: String): TermName = newTermName(fresh.newName(prefix))
     def freshTypeName(prefix: String): TypeName = newTypeName(fresh.newName(prefix))
 
     /** the content of the compilation unit in tree form */
     var body: Tree = EmptyTree
 
+<<<<<<< HEAD
+=======
+    def exists = source != NoSourceFile && source != null
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 //    def parseSettings() = {
 //      val argsmarker = "SCALAC_ARGS"
 //      if(comments nonEmpty) {
@@ -40,7 +64,11 @@ trait CompilationUnits { self: Global =>
      */
     val depends = mutable.HashSet[Symbol]()
 
+<<<<<<< HEAD
     /** so we can relink 
+=======
+    /** so we can relink
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
      */
     val defined = mutable.HashSet[Symbol]()
 
@@ -68,6 +96,7 @@ trait CompilationUnits { self: Global =>
     def error(pos: Position, msg: String) =
       reporter.error(pos, msg)
 
+<<<<<<< HEAD
     def warning(pos: Position, msg: String) = 
       reporter.warning(pos, msg)
 
@@ -88,6 +117,28 @@ trait CompilationUnits { self: Global =>
     /** Is this about a .java source file? */
     lazy val isJava = source.file.name.endsWith(".java")
     
+=======
+    def warning(pos: Position, msg: String) =
+      reporter.warning(pos, msg)
+
+    def deprecationWarning(pos: Position, msg: String) =
+      if (opt.deprecation) warning(pos, msg)
+      else currentRun.deprecationWarnings ::= ((pos, msg))
+
+    def uncheckedWarning(pos: Position, msg: String) =
+      if (opt.unchecked) warning(pos, msg)
+      else currentRun.uncheckedWarnings ::= ((pos, msg))
+
+    def incompleteInputError(pos: Position, msg:String) =
+      reporter.incompleteInputError(pos, msg)
+
+    def comment(pos: Position, msg: String) =
+      reporter.comment(pos, msg)
+
+    /** Is this about a .java source file? */
+    lazy val isJava = source.file.name.endsWith(".java")
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     override def toString() = source.toString()
 
     def clear() {

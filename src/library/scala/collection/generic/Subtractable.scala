@@ -12,7 +12,11 @@ package generic
 
 import annotation.bridge
 
+<<<<<<< HEAD
 /** This trait represents collection-like objects that can be reduced 
+=======
+/** This trait represents collection-like objects that can be reduced
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  using a '+' operator. It defines variants of `-` and `--`
  *  as convenience methods in terms of single-element removal `-`.
  *  @tparam   A    the type of the elements of the $coll.
@@ -52,7 +56,11 @@ trait Subtractable[A, +Repr <: Subtractable[A, Repr]] { self =>
 
   /** Creates a new $coll from this $coll by removing all elements of another
    *  collection.
+<<<<<<< HEAD
    *  
+=======
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @param elems     the collection containing the removed elements.
    *  @return a new $coll that contains all elements of the current $coll
    *  except one less occurrence of each of the elements of `elems`.

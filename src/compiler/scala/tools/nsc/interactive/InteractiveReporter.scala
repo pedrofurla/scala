@@ -9,12 +9,21 @@ import collection.mutable.ArrayBuffer
 import util.Position
 import reporters.Reporter
 
+<<<<<<< HEAD
 case class Problem(pos: Position, msg: String, severityLevel: Int) 
 
 abstract class InteractiveReporter extends Reporter {
   
   def compiler: Global
   
+=======
+case class Problem(pos: Position, msg: String, severityLevel: Int)
+
+abstract class InteractiveReporter extends Reporter {
+
+  def compiler: Global
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   val otherProblems = new ArrayBuffer[Problem]
 
   override def info0(pos: Position, msg: String, severity: Severity, force: Boolean): Unit = try {

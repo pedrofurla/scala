@@ -11,7 +11,16 @@ package process
 
 import processInternal._
 
+<<<<<<< HEAD
 /** Each method will be called in a separate thread.
+=======
+/** This class is used to control the I/O of every [[scala.sys.process.ProcessBuilder]].
+ *  Most of the time, there is no need to interact with `ProcessIO` directly. However, if
+ *  fine control over the I/O of a `ProcessBuilder` is desired, one can use the factories
+ *  on [[scala.sys.process.BasicIO]] stand-alone object to create one.
+ *
+ *  Each method will be called in a separate thread.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  If daemonizeThreads is true, they will all be marked daemon threads.
  */
 final class ProcessIO(

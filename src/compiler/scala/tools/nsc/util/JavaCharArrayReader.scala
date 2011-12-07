@@ -29,7 +29,11 @@ class JavaCharArrayReader(buf: IndexedSeq[Char], start: Int, /* startline: int, 
   var bp = start
   var oldBp = -1
   var oldCh: Char = _
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   //private var cline: Int = _
   //private var ccol: Int = _
   def cpos = bp
@@ -51,20 +55,32 @@ class JavaCharArrayReader(buf: IndexedSeq[Char], start: Int, /* startline: int, 
     //nextcol = 1
   }
 
+<<<<<<< HEAD
   def hasNext: Boolean = if (bp < buf.length) true 
+=======
+  def hasNext: Boolean = if (bp < buf.length) true
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   else {
     false
   }
 
   def last: Char = if (bp > start + 2) buf(bp - 2) else ' ' // XML literals
 
+<<<<<<< HEAD
   def next: Char = {
+=======
+  def next(): Char = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     //cline = nextline
     //ccol = nextcol
     val buf = this.buf.asInstanceOf[collection.mutable.WrappedArray[Char]].array
     if(!hasNext) {
       ch = SU
+<<<<<<< HEAD
       return SU  // there is an endless stream of SU's at the end 
+=======
+      return SU  // there is an endless stream of SU's at the end
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     }
     oldBp = bp
     oldCh = ch

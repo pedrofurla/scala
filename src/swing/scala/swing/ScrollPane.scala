@@ -41,19 +41,31 @@ object ScrollPane {
  */
 class ScrollPane extends Component with Container {
   import ScrollPane._
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override lazy val peer: JScrollPane = new JScrollPane with SuperMixin
   def this(c: Component) = {
     this()
     contents = c
+<<<<<<< HEAD
   } 
   def contents: Seq[Component] = 
     List(UIElement.cachedWrapper[Component](peer.getViewport.getView.asInstanceOf[javax.swing.JComponent]))
   
+=======
+  }
+  def contents: Seq[Component] =
+    List(UIElement.cachedWrapper[Component](peer.getViewport.getView.asInstanceOf[javax.swing.JComponent]))
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /**
    * Sets the single child.
    */
   def contents_=(c: Component) { peer.setViewportView(c.peer) }
+<<<<<<< HEAD
   
   /**
    * The component being displayed in this pane's row header. 
@@ -73,16 +85,44 @@ class ScrollPane extends Component with Container {
   def columnHeaderView_=(c: Option[Component]) = peer.setColumnHeaderView(c map (_.peer) orNull)
   
   def viewportView: Option[Component] = 
+=======
+
+  /**
+   * The component being displayed in this pane's row header.
+   *
+   * If you want to create a row header for lists or tables, you probably
+   * want to let the row header be a list view with the same row height as
+   * the viewport component.
+   */
+  def rowHeaderView: Option[Component] =
+    Option(peer.getRowHeader.getView) map UIElement.cachedWrapper[Component]
+  def rowHeaderView_=(c: Component) = peer.setRowHeaderView(c.peer)
+  def rowHeaderView_=(c: Option[Component]) = peer.setRowHeaderView(c map (_.peer) orNull)
+
+  def columnHeaderView: Option[Component] =
+    Option(peer.getColumnHeader.getView) map UIElement.cachedWrapper[Component]
+  def columnHeaderView_=(c: Component) = peer.setColumnHeaderView(c.peer)
+  def columnHeaderView_=(c: Option[Component]) = peer.setColumnHeaderView(c map (_.peer) orNull)
+
+  def viewportView: Option[Component] =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     Option(peer.getViewport.getView) map UIElement.cachedWrapper[Component]
   def viewportView_=(c: Component) = peer.setViewportView(c.peer)
   def viewportView_=(c: Option[Component]) = peer.setViewportView(c map (_.peer) orNull)
 
   def verticalScrollBarPolicy = BarPolicy.wrap(peer.getVerticalScrollBarPolicy)
   def verticalScrollBarPolicy_=(p: BarPolicy.Value) = peer.setVerticalScrollBarPolicy(p.verticalPeer)
+<<<<<<< HEAD
   
   def horizontalScrollBarPolicy = BarPolicy.wrap(peer.getHorizontalScrollBarPolicy)
   def horizontalScrollBarPolicy_=(p: BarPolicy.Value) = peer.setHorizontalScrollBarPolicy(p.horizontalPeer)
   
+=======
+
+  def horizontalScrollBarPolicy = BarPolicy.wrap(peer.getHorizontalScrollBarPolicy)
+  def horizontalScrollBarPolicy_=(p: BarPolicy.Value) = peer.setHorizontalScrollBarPolicy(p.horizontalPeer)
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def horizontalScrollBar = ScrollBar.wrap(peer.getHorizontalScrollBar)
   def verticalScrollBar = ScrollBar.wrap(peer.getVerticalScrollBar)
 }

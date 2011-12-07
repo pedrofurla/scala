@@ -17,7 +17,11 @@ trait ExprTyper {
   import global.{ reporter => _, Import => _, _ }
   import syntaxAnalyzer.{ UnitParser, UnitScanner, token2name }
   import naming.freshInternalVarName
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   object codeParser extends { val global: repl.global.type = repl.global } with CodeHandlers[Tree] {
     def applyRule[T](code: String, rule: UnitParser => T): T = {
       reporter.reset()
@@ -27,7 +31,11 @@ trait ExprTyper {
 
       if (!reporter.hasErrors)
         scanner.accept(EOF)
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       result
     }
     def tokens(code: String) = {
@@ -50,7 +58,11 @@ trait ExprTyper {
       case xs       => CodeHandlers.fail("Not a single statement: " + xs.mkString(", "))
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Parse a line into a sequence of trees. Returns None if the input is incomplete. */
   def parse(line: String): Option[List[Tree]] = {
     var isIncomplete = false
@@ -61,10 +73,17 @@ trait ExprTyper {
       else Some(trees)
     }
   }
+<<<<<<< HEAD
   def tokens(line: String) = codeParser.tokens(line)
   
   // TODO: integrate these into a CodeHandler[Type].
   
+=======
+  def tokens(line: String) = beSilentDuring(codeParser.tokens(line))
+
+  // TODO: integrate these into a CodeHandler[Type].
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // XXX literals.
   // 1) Identifiers defined in the repl.
   // 2) A path loadable via getModule.
@@ -98,7 +117,11 @@ trait ExprTyper {
       try typeOfTerm(expr) orElse asModule orElse asExpr orElse asQualifiedImport
       finally typeOfExpressionDepth -= 1
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     // Don't presently have a good way to suppress undesirable success output
     // while letting errors through, so it is first trying it silently: if there
     // is an error, and errors are desired, then it re-evaluates non-silently
@@ -106,7 +129,11 @@ trait ExprTyper {
     beSilentDuring(evaluate()) orElse beSilentDuring(typeOfDeclaration(expr)) orElse {
       if (!silent)
         evaluate()
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       None
     }
   }
@@ -115,7 +142,11 @@ trait ExprTyper {
   private def typeOfDeclaration(code: String): Option[Type] = {
     repltrace("typeOfDeclaration(" + code + ")")
     val obname = freshInternalVarName()
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     interpret("object " + obname + " {\n" + code + "\n}\n", true) match {
       case IR.Success =>
         val sym = symbolOfTerm(obname)
@@ -128,7 +159,11 @@ trait ExprTyper {
       case _          =>
         None
     }
+<<<<<<< HEAD
   }    
+=======
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   // def compileAndTypeExpr(expr: String): Option[Typer] = {
   //   class TyperRun extends Run {
   //     override def stopPhase(name: String) = name == "superaccessors"

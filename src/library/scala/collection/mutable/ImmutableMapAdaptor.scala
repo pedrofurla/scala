@@ -25,7 +25,13 @@ import annotation.migration
  *  @since   1
  */
 class ImmutableMapAdaptor[A, B](protected var imap: immutable.Map[A, B])
+<<<<<<< HEAD
 extends Map[A, B] with Serializable
+=======
+extends AbstractMap[A, B]
+   with Map[A, B]
+   with Serializable
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 {
 
   override def size: Int = imap.size
@@ -54,9 +60,12 @@ extends Map[A, B] with Serializable
 
   def iterator: Iterator[(A, B)] = imap.iterator
 
+<<<<<<< HEAD
   @deprecated("use `iterator` instead", "2.8.0")
   override def elements = iterator
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   override def toList: List[(A, B)] = imap.toList
 
   override def update(key: A, value: B): Unit = { imap = imap.updated(key, value) }
@@ -69,7 +78,11 @@ extends Map[A, B] with Serializable
 
   override def transform(f: (A, B) => B): this.type = { imap = imap.transform(f); this }
 
+<<<<<<< HEAD
   override def retain(p: (A, B) => Boolean): this.type = { 
+=======
+  override def retain(p: (A, B) => Boolean): this.type = {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     imap = imap.filter(xy => p(xy._1, xy._2))
     this
   }

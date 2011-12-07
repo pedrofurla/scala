@@ -11,7 +11,11 @@ package scala.tools.scalap
 
 class Classfile(in: ByteArrayReader) {
   import Classfiles._
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   type UTF8 = Pool#UTF8
 
   assert(in.nextInt == JAVA_MAGIC)
@@ -26,7 +30,11 @@ class Classfile(in: ByteArrayReader) {
   val methods = readMembers(false)
   val attribs = readAttribs
   def scalaSigAttribute = attribs find (_.toString == Main.SCALA_SIG)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   def readAttribs = {
     val n = in.nextChar
     var attribs: List[Attribute] = Nil
@@ -67,7 +75,11 @@ class Classfile(in: ByteArrayReader) {
     case class UTF8(str: String) extends PoolEntry(CONSTANT_UTF8) { override def toString = "\"" + str + "\"" }
     case class ClassRef(classId: Int) extends PoolEntry(CONSTANT_CLASS) { override def toString = "Class(%s)".format(entries(classId)) }
     case class FieldRef(classId: Int, memberId: Int) extends PoolEntry(CONSTANT_FIELDREF)
+<<<<<<< HEAD
     case class MethodRef(classId: Int, memberId: Int) extends PoolEntry(CONSTANT_METHODREF) { 
+=======
+    case class MethodRef(classId: Int, memberId: Int) extends PoolEntry(CONSTANT_METHODREF) {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       // //Method java/lang/Object."<init>":()V
       override def toString() = "Method %s.\"%s\"".format(entries(classId), entries(memberId))
     }
@@ -103,21 +115,37 @@ class Classfile(in: ByteArrayReader) {
           case CONSTANT_INTEGER         => IntegerConst(in.nextInt)
           case CONSTANT_FLOAT           => FloatConst(in.nextFloat)
         }
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         i += 1
       }
       pool
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     lazy val length = entries.length
     def apply(x: Int) = entries(x)
     def stringOf(x: Int) = apply(x).toString
     override def toString = (
+<<<<<<< HEAD
       for ((x, i) <- entries.zipWithIndex ; if x != null) yield 
         "const #%d = %s\t%s\n".format(i + 1, x.typeString, x)
     ).mkString
   }
     
+=======
+      for ((x, i) <- entries.zipWithIndex ; if x != null) yield
+        "const #%d = %s\t%s\n".format(i + 1, x.typeString, x)
+    ).mkString
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** **/
   case class Member(field: Boolean, flags: Int, name: Int, tpe: Int, attribs: List[Attribute])
   case class Attribute(name: Int, data: Array[Byte]) {

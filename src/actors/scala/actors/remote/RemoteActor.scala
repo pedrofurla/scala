@@ -81,10 +81,13 @@ object RemoteActor {
     kern
   }
 
+<<<<<<< HEAD
   @deprecated("this member is going to be removed in a future release", "2.8.0")
   def createKernelOnPort(port: Int): NetKernel =
     createNetKernelOnPort(port)
 
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /**
    * Registers <code>a</code> under <code>name</code> on this
    * node.
@@ -120,10 +123,13 @@ object RemoteActor {
 
   private[remote] def someNetKernel: NetKernel =
     kernels.valuesIterator.next
+<<<<<<< HEAD
 
   @deprecated("this member is going to be removed in a future release", "2.8.0")
   def someKernel: NetKernel =
     someNetKernel
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }
 
 

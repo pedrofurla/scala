@@ -17,7 +17,11 @@ abstract class Flatten extends InfoTransform {
 
   /** the following two members override abstract members in Transform */
   val phaseName: String = "flatten"
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Updates the owning scope with the given symbol; returns the old symbol.
    */
   private def replaceSymbolInCurrentScope(sym: Symbol): Symbol = {
@@ -26,12 +30,20 @@ abstract class Flatten extends InfoTransform {
       val old   = scope lookup sym.name
       if (old ne NoSymbol)
         scope unlink old
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       scope enter sym
       old
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def liftClass(sym: Symbol) {
     if (!sym.isLifted) {
       sym setFlag LIFTED
@@ -40,7 +52,11 @@ abstract class Flatten extends InfoTransform {
       if (old ne NoSymbol)
         debuglog("lifted " + sym.fullLocationString + ", unlinked " + old)
     }
+<<<<<<< HEAD
   }  
+=======
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   private def liftSymbol(sym: Symbol) {
     liftClass(sym)
     if (sym.needsImplClass)
@@ -64,6 +80,7 @@ abstract class Flatten extends InfoTransform {
         typeRef(sym.toplevelClass.owner.thisType, sym, Nil)
       case ClassInfoType(parents, decls, clazz) =>
         var parents1 = parents
+<<<<<<< HEAD
         val decls1 = new Scope
         if (clazz.isPackageClass) {
           atPhase(phase.next)(decls foreach (decls1 enter _))
@@ -82,6 +99,27 @@ abstract class Flatten extends InfoTransform {
             else if (sym.isClass)
               liftSymbol(sym)
           }
+=======
+        val decls1 = scopeTransform(clazz) {
+          val decls1 = new Scope()
+          if (clazz.isPackageClass) {
+            atPhase(phase.next)(decls foreach (decls1 enter _))
+          } else {
+            val oldowner = clazz.owner
+            atPhase(phase.next)(oldowner.info)
+            parents1 = parents mapConserve (this)
+
+            for (sym <- decls) {
+              if (sym.isTerm && !sym.isStaticModule) {
+                decls1 enter sym
+                if (sym.isModule)
+                  sym.moduleClass setFlag LIFTED
+              } else if (sym.isClass)
+                liftSymbol(sym)
+            }
+          }
+          decls1
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
         }
         ClassInfoType(parents1, decls1, clazz)
       case MethodType(params, restp) =>

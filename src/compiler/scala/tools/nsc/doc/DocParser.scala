@@ -17,7 +17,11 @@ import DocParser.Parsed
  *  otherwise cause the compiler to go haywire.
  */
 class DocParser(settings: nsc.Settings, reporter: Reporter)
+<<<<<<< HEAD
         extends Global(settings, reporter) 
+=======
+        extends Global(settings, reporter)
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
            with RangePositions {
 
   def this(settings: Settings) = this(settings, new ConsoleReporter(settings))
@@ -30,7 +34,11 @@ class DocParser(settings: nsc.Settings, reporter: Reporter)
   override protected def computeInternalPhases() {
     phasesSet += syntaxAnalyzer
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** Returns a list of `DocParser.Parseds`, which hold the DocDefs found
    *  in the given code along with the surrounding trees.
    */
@@ -70,5 +78,9 @@ object DocParser {
     override def toString = (
       nameChain.init.map(x => if (x.isTypeName) x + "#" else x + ".").mkString + nameChain.last
     )
+<<<<<<< HEAD
   }  
+=======
+  }
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

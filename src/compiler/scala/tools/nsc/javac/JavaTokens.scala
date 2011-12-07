@@ -27,7 +27,11 @@ object JavaTokens extends ast.parser.Tokens {
   final val CHAR = 27
   final val CLASS = 28
   final val CONST = 29
+<<<<<<< HEAD
   final val CONTINUE = 30 
+=======
+  final val CONTINUE = 30
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   final val DEFAULT = 31
   final val DO = 32
   final val DOUBLE = 33
@@ -70,7 +74,11 @@ object JavaTokens extends ast.parser.Tokens {
 
   def isKeyword(code : Int) =
     code >= ABSTRACT && code <= WHILE
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** special symbols */
   final val COMMA = 70
   final val SEMI = 71

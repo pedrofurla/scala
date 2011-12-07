@@ -22,10 +22,17 @@ abstract class Base
   abstract class RegExp {
     val isNullable: Boolean
   }
+<<<<<<< HEAD
   
   object Alt {
     /** `Alt( R,R,R* )`. */
     def apply(rs: _regexpT*) = 
+=======
+
+  object Alt {
+    /** `Alt( R,R,R* )`. */
+    def apply(rs: _regexpT*) =
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       if (rs.size < 2) throw new SyntaxError("need at least 2 branches in Alt")
       else new Alt(rs: _*)
     // Can't enforce that statically without changing the interface
@@ -36,6 +43,7 @@ abstract class Base
   class Alt private (val rs: _regexpT*) extends RegExp {
     final val isNullable = rs exists (_.isNullable)
   }
+<<<<<<< HEAD
   
   object Sequ {
     /** Sequ( R,R* ) */
@@ -43,6 +51,15 @@ abstract class Base
     def unapplySeq(x: Sequ) = Some(x.rs)  
   }
   
+=======
+
+  object Sequ {
+    /** Sequ( R,R* ) */
+    def apply(rs: _regexpT*) = if (rs.isEmpty) Eps else new Sequ(rs: _*)
+    def unapplySeq(x: Sequ) = Some(x.rs)
+  }
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   class Sequ private (val rs: _regexpT*) extends RegExp {
     final val isNullable = rs forall (_.isNullable)
   }

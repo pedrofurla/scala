@@ -14,6 +14,7 @@ package result;
 
 /** An ISO-9075:2003 (SQL) table row. This is equivalent to a tuple in the relational model. */
 @deprecated(DbcIsDeprecated, "2.9.0") abstract class Tuple {
+<<<<<<< HEAD
   
   /** All the fields contained in the tuple. */
   def fields: List[Field];
@@ -21,6 +22,15 @@ package result;
   /** The relation that contains the tuple. */
   def originatingRelation: Relation;
   
+=======
+
+  /** All the fields contained in the tuple. */
+  def fields: List[Field];
+
+  /** The relation that contains the tuple. */
+  def originatingRelation: Relation;
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** The field at the given index. If there is no such field (that is the index is out of bounds), <code>None</code> is returned instead. */
     def apply (index:Int): Field =
       try {
@@ -29,7 +39,11 @@ package result;
         case e =>
           throw new java.lang.IndexOutOfBoundsException("Field at index "+index+" does not exist in relation");
       }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
   /** The field with the given column name. If there is no such field, <code>None</code> is returned instead. */
   def apply (name:String): Field = {
     def findField (fields: List[Field], name:String): Field = fields match {

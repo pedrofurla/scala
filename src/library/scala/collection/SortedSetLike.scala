@@ -34,9 +34,15 @@ self =>
   override def range(from: A, until: A): This = rangeImpl(Some(from), Some(until))
 
   override def subsetOf(that: GenSet[A]): Boolean = that match {
+<<<<<<< HEAD
     // TODO: It may actually be pretty rare that the guard here ever 
     // passes. Is this really worth keeping? If it is, we should add
     // more sensible implementations of == to Ordering. 
+=======
+    // TODO: It may actually be pretty rare that the guard here ever
+    // passes. Is this really worth keeping? If it is, we should add
+    // more sensible implementations of == to Ordering.
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     case that: SortedSet[_] if that.ordering == ordering => that.hasAll(this.iterator)
     case that => super.subsetOf(that)
   }

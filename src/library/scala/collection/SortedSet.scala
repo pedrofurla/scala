@@ -27,5 +27,11 @@ trait SortedSet[A] extends Set[A] with SortedSetLike[A, SortedSet[A]] {
  */
 object SortedSet extends SortedSetFactory[SortedSet] {
   def empty[A](implicit ord: Ordering[A]): immutable.SortedSet[A] = immutable.SortedSet.empty[A](ord)
+<<<<<<< HEAD
   implicit def canBuildFrom[A](implicit ord: Ordering[A]): CanBuildFrom[Coll, A, SortedSet[A]] = new SortedSetCanBuildFrom[A]
+=======
+  def canBuildFrom[A](implicit ord: Ordering[A]): CanBuildFrom[Coll, A, SortedSet[A]] = newCanBuildFrom[A]
+  // Force a declaration here so that BitSet's (which does not inherit from SortedSetFactory) can be more specific
+  override implicit def newCanBuildFrom[A](implicit ord : Ordering[A]) : CanBuildFrom[Coll, A, SortedSet[A]] = super.newCanBuildFrom
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

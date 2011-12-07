@@ -14,10 +14,17 @@ import generic._
 
 /** A common supertrait of `ArrayOps` and `WrappedArray` that factors out most
  *  operations on arrays and wrapped arrays.
+<<<<<<< HEAD
  *  
  *  @tparam A     type of the elements contained in the array like object.
  *  @tparam Repr  the type of the actual collection containing the elements.
  *  
+=======
+ *
+ *  @tparam A     type of the elements contained in the array like object.
+ *  @tparam Repr  the type of the actual collection containing the elements.
+ *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
  *  @define Coll ArrayLike
  *  @version 2.8
  *  @since   2.8
@@ -38,7 +45,11 @@ trait ArrayLike[A, +Repr] extends IndexedSeqOptimized[A, Repr] { self =>
    *
    *  @return    An possibly nested indexed sequence of consisting of all the elements of the array.
    */
+<<<<<<< HEAD
   def deep: scala.collection.IndexedSeq[Any] = new scala.collection.IndexedSeq[Any] {
+=======
+  def deep: scala.collection.IndexedSeq[Any] = new scala.collection.AbstractSeq[Any] with scala.collection.IndexedSeq[Any] {
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
     def length = self.length
     def apply(idx: Int): Any = self.apply(idx) match {
       case x: AnyRef if x.getClass.isArray => WrappedArray.make(x).deep
@@ -46,6 +57,7 @@ trait ArrayLike[A, +Repr] extends IndexedSeqOptimized[A, Repr] { self =>
     }
     override def stringPrefix = "Array"
   }
+<<<<<<< HEAD
 
   @deprecated("use deep.toString instead", "2.8.0")
   final def deepToString() = 
@@ -64,4 +76,6 @@ trait ArrayLike[A, +Repr] extends IndexedSeqOptimized[A, Repr] { self =>
     case x: AnyRef if x.getClass.isArray => deep.equals(WrappedArray.make(x).deep)
     case _ => false
   }
+=======
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
 }

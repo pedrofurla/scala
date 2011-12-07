@@ -8,6 +8,7 @@
 
 package scala.collection.parallel
 
+<<<<<<< HEAD
 package object immutable {
   
   /* package level methods */
@@ -19,11 +20,17 @@ package object immutable {
   
   /** A (parallel) sequence consisting of `length` elements `elem`. Used in the `padTo` method. 
    *  
+=======
+package immutable {
+  /** A (parallel) sequence consisting of `length` elements `elem`. Used in the `padTo` method.
+   *
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
    *  @tparam T        type of the elements
    *  @param elem      the element in the repetition
    *  @param length    the length of the collection
    */
   private[parallel] class Repetition[T](elem: T, val length: Int) extends ParSeq[T] {
+<<<<<<< HEAD
   self =>
     def apply(idx: Int) = if (0 <= idx && idx < length) elem else throw new IndexOutOfBoundsException("" + idx)
     override def seq = throw new UnsupportedOperationException
@@ -33,6 +40,19 @@ package object immutable {
     
     class ParIterator(var i: Int = 0, val until: Int = length, elem: T = self.elem) extends super.ParIterator {
     me: SignalContextPassingIterator[ParIterator] =>
+=======
+    self =>
+
+    def apply(idx: Int) = if (0 <= idx && idx < length) elem else throw new IndexOutOfBoundsException("" + idx)
+    override def seq = throw new UnsupportedOperationException
+    def update(idx: Int, elem: T) = throw new UnsupportedOperationException
+
+    type SCPI = SignalContextPassingIterator[ParIterator]
+
+    class ParIterator(var i: Int = 0, val until: Int = length, elem: T = self.elem) extends super.ParIterator {
+      me: SignalContextPassingIterator[ParIterator] =>
+
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
       def remaining = until - i
       def hasNext = i < until
       def next = { i += 1; elem }
@@ -43,8 +63,20 @@ package object immutable {
       }
       def split = psplit(remaining / 2, remaining - remaining / 2)
     }
+<<<<<<< HEAD
     
     def splitter = new ParIterator with SCPI
     
   }
 }
+=======
+
+    def splitter = new ParIterator with SCPI
+  }
+}
+
+package object immutable {
+  /* package level methods */
+  def repetition[T](elem: T, len: Int) = new Repetition(elem, len)
+}
+>>>>>>> 426c65030df3df0c3e038931b64199fc4e83c1a0
